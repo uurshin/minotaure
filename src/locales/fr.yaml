@@ -1,0 +1,52 @@
+Créer une partie: 'Créer une partie'
+Gérer vos parties: 'Gérer vos parties'
+Rejoindre une partie: 'Rejoindre une partie'
+Gérer vos personnages: 'Gérer vos personnages'
+Characters help: "Vos personnages sont conservés dans votre navigateur, ce qui permet de les retrouver lors d'une connexion à une partie rejointe auparavant. Vous pouvez jouer sur un autre navigateur en exportant vos personnages."
+Characters nb: "Vous n'avez aucun personnage à exporter | Vous avez un personnage à exporter | Vous avez { count } personnages à exporter"
+challenge_success: "Vous avez réussi une épreuve de {stat}."
+challenge_failure: "Vous avez raté une épreuve de {stat}."
+result_bonus: "Vous gagnez {points} points de {name}."
+result_malus: "Vous perdez {points} points de {name}."
+
+#Admin
+Personnages: "Personnages"
+Jauges: "Jauges"
+Sondages: "Sondages"
+Épreuve: "Épreuve"
+Caractéristiques: "Caractéristiques"
+Tags: "Tags"
+Tirage: "Tirage"
+Aide: "Aide"
+Démarrer: "Démarrer"
+Inviter à jouer: "Inviter à jouer"
+Lien d'invitation copié !: "Lien d'invitation copié !"
+
+#Continue
+Continuer une partie: "Continuer une partie"
+count_personnage: "1 personnage | {count} personnages"
+Continuer la partie: "Continuer la partie"
+Supprimer la partie: "Supprimer la partie"
+Voir plus: "Voir plus"
+Vous n'avez créé aucune partie.: "Vous n'avez créé aucune partie."
+Identifiant public de votre partie: "Identifiant public de votre partie"
+Cet identifiant servira à rejoindre la partie pour les participants.: "Cet identifiant servira à rejoindre la partie pour les participants."
+Annuler: "Annuler"
+En attente: "En attente"
+Lancer la partie: "Lancer la partie"
+warning_version: "Les parties marquées d'un <span class='danger'>*</span> ne sont pas compatibles avec votre version de Minotaure ({version}), elles pourraient ne pas fonctionner correctement."
+
+#AdminTabPoll
+Ajouter un sondage: "Ajouter un sondage"
+Voir les sondages actifs: "Voir les sondages actifs"
+Voir les sondages passés: "Voir les sondages passés"
+Question: "Question"
+Choix possibles: "Choix possibles"
+Ajouter un choix: "Ajouter un choix"
+Lancer le sondage: "Lancer le sondage"
+Montrer les résultats: "Montrer les résultats"
+Terminer le sondage: "Terminer le sondage"
+
+#AdminTour
+Suivant: "Suivant"
+Terminer la visite: "Terminer la visite"

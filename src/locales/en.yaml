@@ -1,0 +1,53 @@
+Créer une partie: 'Create a game'
+Gérer vos parties: 'Manage your games'
+Rejoindre une partie: 'Join a game'
+Gérer vos personnages: 'Manage your characters'
+Characters help: 'Your characters are stored in your browser, so you can find them again when you connect to a previously joined game. You can play on another browser by exporting your characters.'
+Characters nb: 'You have no character to export | You have one character to export | You have { count } characters to export'
+challenge_success: "You've passed a {stat} challenge."
+challenge_failure: "You've failed a {stat} challenge."
+result_bonus: "You gain {points} points of {name}."
+result_malus: "You lose {points} points of {name}."
+
+#Admin
+Personnages: "Characters"
+Jauges: "Gauges"
+Sondages: "Polls"
+Épreuve: "Challenge"
+Caractéristiques: "Stats"
+Tags: "Tags"
+Tirage: "Draw"
+Aide: "Help"
+Démarrer: "Start"
+Inviter à jouer: "Invite to play"
+Lien d'invitation copié !: "Invite link copied !"
+
+#Continue
+Continuer une partie: "Continue a game"
+count_personnage: "1 character | {count} characters"
+Continuer la partie: "Continue the game"
+Supprimer la partie: "Delete the game"
+Voir plus: "See more"
+Vous n'avez créé aucune partie.: "You didn't create any game."
+Identifiant public de votre partie: "Public id of your game"
+Cet identifiant servira à rejoindre la partie pour les participants.: "This idea will allow the players to join your game."
+Annuler: "Cancel"
+En attente: "In progress"
+Lancer la partie: "Launch the game"
+warning_version: "The game marked with a <span class='danger'>*</span> are not compatible with your Minotaure version ({version}), they might not work properly."
+
+
+#AdminTabPoll
+Ajouter un sondage: "Add a poll"
+Voir les sondages actifs: "View active polls"
+Voir les sondages passés: "View past polls"
+Question: "Question"
+Choix possibles: "Possible choices"
+Ajouter un choix: "Add a choice"
+Lancer le sondage: "Launch the poll"
+Montrer les résultats: "Show the results"
+Terminer le sondage: "Close the poll"
+
+#AdminTour
+Suivant: "Next"
+Terminer la visite: "Finish the tour"

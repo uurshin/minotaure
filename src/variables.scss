@@ -1,0 +1,49 @@
+$breakpoints: (
+        phone: 640px,
+        tablet: 768px,
+        desktop: 1280px
+) !default;
+
+:root {
+  font-family: Helvetica, system-ui, Avenir, Inter, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  font-size: clamp(16px, 0.8vw, 1.2vw);
+
+  color-scheme: light dark;
+  --main-font: 'Ubuntu';
+  --font-color: white;
+  --input-font-color: white;
+  --link-color: #90B494;
+  --link-hover-color: #57A773;
+  --background-color: black;
+  --border-color: #777;
+  --failure-background: #8c3232;
+  --success-background: #277e27;
+  --danger-color: #8c3232;
+  --valid-color: #266226;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+[data-theme="dark"] {
+  &.picker {
+	background: black;
+  }
+}
+[data-theme="light"] {
+  --font-color: black;
+  --input-font-color: black;
+  --background-color: white;
+  --content-background: rgba(0,0,0,0.1);
+  --border-color: #777;
+  --warning-background: #804200;
+  $success: red;
+
+  &.picker {
+	background: white;
+  }
+}
