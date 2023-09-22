@@ -201,13 +201,16 @@ export default {
       <button :disabled="name_picked === ''" @click="sendCharacter()">Valider votre personnage</button>
     </div>
     <div class="vertical-wrapper polls" v-else-if="character.polls !== undefined && Object.keys(character.polls).length ">
-      <div class="poll-wrapper" v-for="(poll, key) in character.polls">
-        <span class="title">{{ poll.label }}</span>
-        <span v-for="(option, poll_key) in poll.options">
-          <input type="radio" :value="poll_key" :name="'poll_' + key" v-model="answer">
-          <label :for="'poll_' + key">{{ option }}</label>
-        </span>
-        <button @click="sendAnswer(key)">Envoyer mon choix</button>
+      <div class="poll-wrapper" v-for="(poll, key, index) in character.polls">
+        <template v-if="index === 0">
+          <span class="title">{{ poll.label }}</span>
+          <span v-for="(option, poll_key) in poll.options">
+            <input type="radio" :value="poll_key" :name="'poll_' + key" :id="'poll_' + poll_key" v-model="answer">
+            <label :for="'poll_' + poll_key">{{ option }}</label>
+          </span>
+          <button @click="sendAnswer(key)">Envoyer mon choix</button>
+        </template>
+        <span v-else>Sondage {{ index + 1 }} en attente</span>
       </div>
     </div>
     <div class="vertical-wrapper" id="sheet" v-else-if="character.alive">

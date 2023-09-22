@@ -38,7 +38,11 @@ export default {
         classes.push('result-neutral');
       }
 
-      if (character.connection !== null && character.connection.open === true) {
+      if (
+          character.connection !== null &&
+          this.store.connections[character.connection] !== undefined &&
+          this.store.connections[character.connection].open === true
+      ) {
         classes.push('connected');
       }
       return classes;
@@ -56,7 +60,11 @@ export default {
     },
     filterConnected(connection) {
       if (this.filters['connected'] !== undefined) {
-        return (connection !== null && connection.open === true);
+        return (
+          connection !== null &&
+          this.store.connections[connection] !== undefined &&
+          this.store.connections[connection].open === true
+        )
       }
       return true;
     },
@@ -100,7 +108,11 @@ export default {
       return (challenge !== undefined && challenge.date === this.store.last_challenge.date);
     },
     sortAsConnected(connection) {
-      return (connection !== null && connection.open === true);
+      return (
+          connection !== null &&
+          this.store.connections[connection] !== undefined &&
+          this.store.connections[connection].open === true
+      )
     },
     handleClick (event, item) {
       this.options_contextual = this.generateOptions(item)

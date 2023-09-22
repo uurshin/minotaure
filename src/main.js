@@ -49,6 +49,7 @@ export const usePlayerStore = defineStore('playerStore', {
         _current_game: null,
         _leaving: false,
         _temp_peer: null,
+        _connections: {},
         _message: '',
         _temp_connections: [],
         _last_challenge: {
@@ -61,11 +62,10 @@ export const usePlayerStore = defineStore('playerStore', {
     getters: {
         peer: (state) => state._user_peer,
         connection : (state) => state._player_connection,
+        connections : (state) => state._connections,
         current_game: (state) => state._current_game,
         characters: (state) => state._current_game.characters,
         alive_characters: (state) => state._current_game.characters.filter((character) => character.alive),
-        connected_characters: (state) => state._current_game.characters.filter((character) => character.connection != null && character.connection.open),
-        connected_alive_characters: (state) => state._current_game.characters.filter((character) => character.alive && character.connection != null && character.connection.open),
         tag_groups: (state) => state._current_game.tag_groups,
         stats: (state) => state._current_game.stats,
         gauges: (state) => state._current_game.gauges,
@@ -98,6 +98,17 @@ export const usePlayerStore = defineStore('playerStore', {
             }) : []
     },
     actions: {
+        connected_characters(alive = false) {
+            const temp = this;
+            return this.current_game.characters.filter(function(character) {
+                return (
+                    (alive ? character.alive : true) &&
+                    character.connection !== null &&
+                    temp.connections[character.connection] !== undefined &&
+                    temp.connections[character.connection].open
+                )
+            })
+        },
         setMessage(value) {
             this._message = value;
             setTimeout(() => {
@@ -120,9 +131,10 @@ export const usePlayerStore = defineStore('playerStore', {
             this._connections = connections;
         },
         disconnectAll() {
+            const vm = this;
             this.characters.forEach(function(character) {
-                if (character.connection != null) {
-                    character.connection.close()
+                if (character.connection != null && vm.connections[character.connection] !== undefined) {
+                    vm.connections[character.connection].close();
                 }
             });
             this.peer.disconnect();
@@ -148,10 +160,10 @@ export const usePlayerStore = defineStore('playerStore', {
             this._current_game = game;
         },
         addCharacter(new_character) {
-            let index = this.characters.push(new_character);
-            watch(this.characters[index-1], this.characterWatch);
+            this.characters.push(new_character);
         },
         characterWatch(new_character) {
+            console.log('characterWatch');
             let vm = this;
             for (const [key, gauge] of Object.entries(new_character.gauges)) {
                 if (gauge.value <= 0 && vm.gauges[key].deadly) {
@@ -159,24 +171,29 @@ export const usePlayerStore = defineStore('playerStore', {
                     new_character.alive = false;
                 }
             }
-            if (new_character.connection != null && new_character.connection.open) {
-                new_character.connection.send({
-                    handshake:'displayCharacter',
-                    game_token: vm.current_game.id,
-                    character: vm.prepareCharacter(new_character)
-                });
+            if (new_character.connection !== undefined && new_character.connection != null) {
+                if (
+                    vm.connections[new_character.connection] !== undefined &&
+                    vm.connections[new_character.connection].open
+                ) {
+                    vm.connections[new_character.connection].send({
+                        handshake: 'displayCharacter',
+                        game_token: vm.current_game.id,
+                        character: vm.prepareCharacter(new_character)
+                    });
+                }
             }
         },
         editCharacter(character) {
-            var foundIndex = this._current_game.characters.findIndex((element) => element.token === character.token)
-            this._current_game.characters[foundIndex] = character;
+            var foundIndex = this.current_game.characters.findIndex((element) => element.token === character.token)
+            this.current_game.characters[foundIndex] = character;
         },
         retrieveCharacter(token) {
-            if (this._current_game.characters.length === undefined) {
+            if (this.current_game.characters.length === undefined) {
                 return null;
             }
             else {
-                return this._current_game.characters.find((element) => element.token === token);
+                return this.current_game.characters.find((element) => element.token === token);
             }
         },
         updateCharacters(characters = false) {
@@ -225,7 +242,8 @@ export const usePlayerStore = defineStore('playerStore', {
                 alive: true,
                 challenge: {},
                 polls: {},
-                connection: conn != null ? conn : false
+                connection: conn != null ? conn : false,
+                watched: false
             }
 
             // Lancés de dés équilibrés de manière à faire un total de 10 x nombre de caracs.
@@ -354,6 +372,7 @@ export const usePlayerStore = defineStore('playerStore', {
                     console.log('connection opened');
                     vm.setPeer(peer_client);
                     vm.setConnection(conn);
+
                     if (set_temp_peer) {
                         console.log('temp peer is set');
                         vm.setTempPeer(true);

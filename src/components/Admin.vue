@@ -109,7 +109,8 @@ export default {
     else {
       this.store.current_game.characters.forEach(function(character) {
         character.connection = null;
-        watch(character, vm.store.characterWatch);
+        character.watched = false;
+        // watch(character, vm.store.characterWatch);
       });
     }
 
@@ -146,6 +147,8 @@ export default {
     });
 
     this.peer.on('connection', function (conn) {
+      vm.store.connections[conn.connectionId] = conn;
+
       conn.on('data', function (data) {
         // Joueur connecté et en attente de l'id de la partie.
         if (data.handshake === 'readyForCall') {
@@ -172,7 +175,13 @@ export default {
           let new_character;
           if (data.token !== undefined) {
             new_character = vm.store.retrieveCharacter(data.token);
-            new_character.connection = conn;
+            new_character.connection = conn.connectionId;
+
+            console.log('watch 1 set');
+            if (!new_character.watched) {
+              new_character.watched = true;
+              watch(new_character, vm.store.characterWatch);
+            }
           }
           // Nouveau personnage.
           if (new_character === undefined) {
@@ -182,18 +191,36 @@ export default {
             };
             conn.send(message);
           }
-
-          if (vm.is_live) {
-            vm.peer.call(conn.peer, vm.stream);
+          else {
+            conn.send({
+              handshake:'displayCharacter',
+              game_token: vm.store.current_game.id,
+              character: vm.store.prepareCharacter(new_character)
+            });
           }
+
+          // if (vm.is_live) {
+          //   vm.peer.call(conn.peer, vm.stream);
+          // }
         }
         else if (data.handshake === 'characterChoices') {
           let character = vm.store.generateCharacter(data, conn);
+          character.connection = conn.connectionId;
+          console.log('watch 2 set');
+
+          let retrieved_character = vm.store.retrieveCharacter(character.token);
+          retrieved_character.connection = conn.connectionId;
+          if (!retrieved_character.watched) {
+            retrieved_character.watched = true;
+            watch(retrieved_character, vm.store.characterWatch);
+          }
+
           conn.send({
             handshake:'displayCharacter',
             game_token: vm.store.current_game.id,
             character: vm.store.prepareCharacter(character)
           });
+
         }
         else if (data.handshake === 'pollAnswer') {
           let character = vm.store.retrieveCharacter(data.token);

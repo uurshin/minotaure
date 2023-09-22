@@ -101,7 +101,7 @@ export default {
           );
       }
       else {
-        selectedCharacters = this.store.connected_alive_characters;
+        selectedCharacters = this.store.connected_characters(true);
       }
 
       this.store.polls[poll.code].nb_targets = selectedCharacters.length;
@@ -110,7 +110,7 @@ export default {
       })
       this.nb_options = 0;
       this.label = '';
-      this.answers = [];
+      this.answers = {};
     },
     delete_poll(code) {
       delete this.store.polls[code];

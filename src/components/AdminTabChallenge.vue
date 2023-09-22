@@ -108,83 +108,83 @@ export default {
       this.chosen_modifier_tags_add[type].push(tag)
     },
     startChallenge() {
-      // const date = Date.now();
-      // let nb_success = 0;
-      // const vm = this;
-      // let selectedCharacters
-      // if (this.chosen_tags.length) {
-      //   selectedCharacters = this.store.alive_characters.filter(
-      //     function(character) {
-      //       return(
-      //         character.alive &&
-      //         character.tags.find(
-      //           (tag) => vm.chosen_tags.find((chosen_tag) => chosen_tag.code === tag.code)
-      //         )
-      //       )
-      //     }
-      //   );
-      // }
-      // else {
-      //   selectedCharacters = this.store.alive_characters;
-      // }
-      //
-      // selectedCharacters.forEach(function(character) {
-        // character.in_progress = true;
-        // let messages = [];
-        // let result = 'failure';
-        // let die_throw = Math.floor(Math.random() * 20 + 1) + vm.challenge_difficulty;
-        // if (die_throw === 1 || die_throw <= character.stats[vm.chosen_stat].value) {
-        //   result = 'success';
-        //   nb_success += 1;
-        // }
-        //
-        // messages.push(vm.$t('challenge_' + result, {stat: vm.store.current_game.stats[vm.chosen_stat].name}));
-        //
-        // if (vm.gauge_modifier[result] !== undefined) {
-        //   for (const [key, bonus] of Object.entries(vm.gauge_modifier[result])) {
-        //     messages.push(vm.$t('result_' + (bonus >= 0 ? 'bonus' : 'malus'), {points: bonus, name: vm.store.current_game.gauges[key].name}));
-        //     character.gauges[key].value += bonus;
-        //   }
-        // }
-        // if (vm.stat_modifier[result] !== undefined) {
-        //   for (const [key, bonus] of Object.entries(vm.stat_modifier[result])) {
-        //     messages.push(vm.$t('result_' + (bonus >= 0 ? 'bonus' : 'malus'), {points: bonus, name: vm.store.current_game.stats[key].name}));
-        //     character.stats[key].value += bonus;
-        //   }
-        // }
-        // if (vm.chosen_modifier_tags_add[result] !== undefined) {
-        //   vm.chosen_modifier_tags_add[result].forEach(function(tag) {
-        //     let found = character.tags.findIndex((character_tag) => character_tag.code === tag.code);
-        //     if (found === -1) {
-        //       character.tags.push(tag);
-        //       messages.push('tag ajouté : ' + tag.label);
-        //     }
-        //   });
-        // }
-        // if (vm.chosen_modifier_tags_remove[result] !== undefined) {
-        //   vm.chosen_modifier_tags_remove[result].forEach(function(tag) {
-        //     let found = character.tags.findIndex((character_tag) => character_tag.code === tag.code);
-        //     if (found !== -1) {
-        //       character.tags.splice(found, 1);
-        //       messages.push('tag enlevé : ' + tag.label);
-        //     }
-        //   });
-        // }
-        //
-        // character.challenge = {date: date, result: result, message: messages };
-        // delete character.in_progress;
-      // })
-      // let nb_failure = selectedCharacters.length - nb_success;
-      // this.store._last_challenge = {
-      //   date: date,
-      //   nb_success: nb_success,
-      //   nb_failure: nb_failure,
-      //   rate: Math.floor(100 / selectedCharacters.length * nb_success)
-      // }
-      // this.$parent.changeTab('characters');
-      // this.challenge_difficulty = 0;
-      // this.chosen_stat = '';
-      // this.chosen_tags = [];
+      const date = Date.now();
+      let nb_success = 0;
+      const vm = this;
+      let selectedCharacters
+      if (this.chosen_tags.length) {
+        selectedCharacters = this.store.alive_characters.filter(
+          function(character) {
+            return(
+              character.alive &&
+              character.tags.find(
+                (tag) => vm.chosen_tags.find((chosen_tag) => chosen_tag.code === tag.code)
+              )
+            )
+          }
+        );
+      }
+      else {
+        selectedCharacters = this.store.alive_characters;
+      }
+
+      selectedCharacters.forEach(function(character) {
+        character.in_progress = true;
+        let messages = [];
+        let result = 'failure';
+        let die_throw = Math.floor(Math.random() * 20 + 1) + vm.challenge_difficulty;
+        if (die_throw === 1 || die_throw <= character.stats[vm.chosen_stat].value) {
+          result = 'success';
+          nb_success += 1;
+        }
+
+        messages.push(vm.$t('challenge_' + result, {stat: vm.store.current_game.stats[vm.chosen_stat].name}));
+
+        if (vm.gauge_modifier[result] !== undefined) {
+          for (const [key, bonus] of Object.entries(vm.gauge_modifier[result])) {
+            messages.push(vm.$t('result_' + (bonus >= 0 ? 'bonus' : 'malus'), {points: bonus, name: vm.store.current_game.gauges[key].name}));
+            character.gauges[key].value += bonus;
+          }
+        }
+        if (vm.stat_modifier[result] !== undefined) {
+          for (const [key, bonus] of Object.entries(vm.stat_modifier[result])) {
+            messages.push(vm.$t('result_' + (bonus >= 0 ? 'bonus' : 'malus'), {points: bonus, name: vm.store.current_game.stats[key].name}));
+            character.stats[key].value += bonus;
+          }
+        }
+        if (vm.chosen_modifier_tags_add[result] !== undefined) {
+          vm.chosen_modifier_tags_add[result].forEach(function(tag) {
+            let found = character.tags.findIndex((character_tag) => character_tag.code === tag.code);
+            if (found === -1) {
+              character.tags.push(tag);
+              messages.push('tag ajouté : ' + tag.label);
+            }
+          });
+        }
+        if (vm.chosen_modifier_tags_remove[result] !== undefined) {
+          vm.chosen_modifier_tags_remove[result].forEach(function(tag) {
+            let found = character.tags.findIndex((character_tag) => character_tag.code === tag.code);
+            if (found !== -1) {
+              character.tags.splice(found, 1);
+              messages.push('tag enlevé : ' + tag.label);
+            }
+          });
+        }
+
+        character.challenge = {date: date, result: result, message: messages };
+        delete character.in_progress;
+      })
+      let nb_failure = selectedCharacters.length - nb_success;
+      this.store._last_challenge = {
+        date: date,
+        nb_success: nb_success,
+        nb_failure: nb_failure,
+        rate: Math.floor(100 / selectedCharacters.length * nb_success)
+      }
+      this.$parent.changeTab('characters');
+      this.challenge_difficulty = 0;
+      this.chosen_stat = '';
+      this.chosen_tags = [];
     }
   }
 }
