@@ -158,8 +158,11 @@ export default {
             delete tag.stat2;
             break;
           case 'color':
-            this.color = tag.color;
+            this.color.hue = tag.color[0];
             this.color_picked = tag;
+            this.$nextTick(() => {
+              this.$refs.color_picker.$el.focus()
+            });
             break;
         }
       }
@@ -176,7 +179,7 @@ export default {
         ref="context_menu_tags"
         @option-clicked="optionClicked"
     />
-    <div class="color-picker" v-if="color_picked != null">
+    <div class="color-picker" :class="{show: color_picked != null}">
       <color-picker
           ref="color_picker"
           v-bind="color"
@@ -213,8 +216,12 @@ export default {
               @remove="removeTag($event, key)"
           >
             <template #tag="tag" >
-                <span class="multiselect__tag" :style="{ background: tag.option.color }" @contextmenu.prevent.stop="handleClick($event, tag.option)">
-                  <div>
+                <div
+                    class="multiselect__tag"
+                    :style="{ background: 'hsl(' + tag.option.color[0] + ',' + tag.option.color[1] + '%' + ',' + tag.option.color[2] + '%)' }"
+                    >
+                  <div tabindex="0" @keyup.enter="handleClick($event, tag.option)" @click.prevent.stop="handleClick($event, tag.option)" title="Paramétrer ce tag">
+                    <span class="icon-settings hover-only"></span>
                     <span class="label-name">{{ tag.option.label }}</span>
                     <span v-if="tag.option.stat1">{{ tag.option.stat1 !== undefined ? ' Carac principale :  ' + store.stats[tag.option.stat1].name : '' }}</span>
                     <span v-if="tag.option.stat2">{{ tag.option.stat2 !== undefined ? ' Carac secondaire : ' + store.stats[tag.option.stat2].name : '' }}</span>
@@ -222,8 +229,8 @@ export default {
                       {{ store.stats[key].name }} {{ modifier.value > 0 ? '+' + modifier.value : modifier.value }}
                     </span>
                   </div>
-                  <i tabindex="1" class="multiselect__tag-icon" @click="tag.remove(tag.option)"></i>
-                </span>
+                  <i tabindex="0" class="multiselect__tag-icon" @click="tag.remove(tag.option)" @keyup.enter="tag.remove(tag.option)"></i>
+                </div>
             </template>
           </vue-multiselect>
           <div class="actions secondary">
@@ -274,6 +281,22 @@ export default {
     > div {
       display: flex;
       flex-direction: column;
+
+      .hover-only {
+        opacity: 0;
+        position: absolute;
+      }
+
+      &:hover {
+        cursor: pointer;
+        > span {
+          opacity: 0;
+        }
+
+        > span.hover-only {
+          opacity: 1;
+        }
+      }
     }
   }
   .multiselect__tag-icon {
@@ -297,9 +320,17 @@ export default {
     right: 0;
     width: 100vw;
     height: 100vh;
+    display: none;
+    opacity: 0;
 
     background: rgba(0,0,0, 0.7);
     z-index: 10000;
+    transition: all 0.3s ease-in-out;
+
+    &.show {
+      display: flex;
+      opacity: 1;
+    }
 
     > .rcp {
       margin: auto;

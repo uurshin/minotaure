@@ -332,6 +332,9 @@ export default {
 </script>
 
 <template>
+  <div>
+    <span></span>
+  </div>
   <admin-tour ref="admin_tour"></admin-tour>
   <div id="admin-wrapper">
     <div class="tabs">
@@ -455,7 +458,7 @@ export default {
         }
       }
 
-      > div {
+      > div:first-child {
         display: flex;
         flex-direction: column;
         gap: 15px;

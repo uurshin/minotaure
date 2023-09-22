@@ -207,7 +207,7 @@ export default {
                 <span v-for="stat in row.stats"><span>{{ stat.label }}</span><span>{{ stat.value }}</span></span>
               </div>
               <div class="tags">
-                <span class="tag" v-for="tag in row.tags" :style="{ background: store.getTagFromCode(tag.code) !== undefined ? store.getTagFromCode(tag.code).color : '' }">
+                <span class="tag" v-for="tag in row.tags" :style="{ background: store.getTagFromCode(tag.code) !== undefined ? store.getTagFromCode(tag.code).hsl_color : '' }">
                   {{ tag.label }}
                 </span>
               </div>
@@ -263,7 +263,8 @@ export default {
     > .character {
       display: flex;
       flex-direction: column;
-      padding: 3px 10px;
+      gap: 3px;
+      padding: 3px 6px 6px 6px;
       border: 1px solid var(--border-color);
       background: var(--background-color);
       border-radius: 8px;

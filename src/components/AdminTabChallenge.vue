@@ -235,7 +235,7 @@ export default {
 
       <template v-for="type in types">
         <div :id="'chosen-'+type"  v-if="chosen_stat !== ''" :class="'type-'+type" >
-          <span class="label-wrapper">Conséquences {{ type === 'bonus' ? 'positives' : 'négatives'}}</span>
+          <span class="label-wrapper">Conséquences {{ type === 'success' ? 'positives' : 'négatives'}}</span>
           <div>
             <div v-for="(gauge, key) in store.current_game.gauges">
               <span class="modifier-label">{{ gauge.name }}</span>
@@ -263,7 +263,7 @@ export default {
                 label="label"
                 track-by="code"
                 tag-placeholder="Ajouter un tag"
-                placeholder="Tappez un mot"
+                placeholder="Tapez un mot"
                 noOptions="Aucun autre tag, inventez-en un !"
                 :options="store.tags"
                 :multiple="true"
@@ -280,7 +280,7 @@ export default {
                 v-model="chosen_modifier_tags_remove[type]"
                 label="label"
                 track-by="code"
-                placeholder="Tappez un mot"
+                placeholder="Tapez un mot"
                 :showNoOptions="false"
                 :options="store.tags"
                 :multiple="true"
