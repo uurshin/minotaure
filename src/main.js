@@ -78,14 +78,14 @@ export const usePlayerStore = defineStore('playerStore', {
             let flatten_tags = [];
             if (state._current_game.tag_groups !== undefined) {
                 state._current_game.tag_groups.forEach(function(tag_group) {
-                    flatten_tags = [...flatten_tags, tag_group.tags];
+                    flatten_tags = [...flatten_tags, ...tag_group.tags];
                 });
-                flatten_tags[0].map(function (tag) {
+                flatten_tags.map(function (tag) {
                     tag.hsl_color = 'hsl(' + tag.color[0] + ',' + tag.color[1] + '%' + ',' + tag.color[2] + '%)';
                     return tag;
                 });
             }
-            return flatten_tags[0];
+            return flatten_tags;
         },
         polls: (state) => state._current_game.polls,
         active_polls: (state) => state._current_game.polls !== undefined ?
@@ -307,6 +307,7 @@ export const usePlayerStore = defineStore('playerStore', {
             }
         },
         prepareCharacter(character) {
+            // Todo : revenir à un simple spread.
             let prepared_character = {};
             prepared_character.name = character.name;
             prepared_character.alive = character.alive;

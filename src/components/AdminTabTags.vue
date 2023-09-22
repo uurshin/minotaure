@@ -52,7 +52,8 @@ export default {
       const tag = {
         label: tag_label,
         code: tag_label.substring(0, 2) + Math.floor((Math.random() * 10000000)),
-        color: [this.basic_colors[this.current_basic_color],71,50]
+        color: [this.basic_colors[this.current_basic_color],71,50],
+        group: key
       }
       this.current_basic_color = (this.current_basic_color === this.basic_colors.length ? 0 : this.current_basic_color + 1);
       // Todo recherche si code déjà existant.
@@ -70,13 +71,14 @@ export default {
     removeGroupTag: function(key) {
       this.store.tag_groups.splice(key, 1);
     },
-    shuffleGroupTag: function(key) {
+    allocateGroupTag: function(key) {
       let store = this.store;
       this.store.characters.forEach(function(character) {
-        if (store.tag_groups[key].tags.length > 0) {
-          character.tags = [store.tag_groups[key].tags[Math.floor(Math.random() * store.tag_groups[key].tags.length)]];
+        let found = character.tags.findIndex((tag) => tag.group !== key);
+        if (found === -1) {
+          character.tags.push(store.tag_groups[key].tags[Math.floor(Math.random() * store.tag_groups[key].tags.length)]);
         }
-      });
+      })
     },
     handleClick (event, item) {
       this.options_contextual = this.generateOptions(item)
@@ -240,7 +242,7 @@ export default {
               <option value="start">A choisir à la création du personnage</option>
               <option value="none">Pas de règle</option>
             </select>
-            <button @click="shuffleGroupTag(key)" title="Pour chaque personnage, un tag de ce groupe sera choisi et attribué (cela remplacera un tag de ce groupe déjà attribué)">Redistribuer</button>
+            <button @click="allocateGroupTag(key)" title="Pour chaque personnage n'ayant pas encore de tag de ce groupe, un tag lui sera attribué au hasard">Redistribuer</button>
             <button class="btn-danger" @click="removeGroupTag(key)" title="Tous les tags de ce groupe seront supprimés, et retirés des personnages.">Supprimer</button>
           </div>
         </div>
