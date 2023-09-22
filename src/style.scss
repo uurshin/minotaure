@@ -10,6 +10,25 @@
   font-display: block;
 }
 
+@font-face {
+  font-family: "Ubuntu";
+  src: url("./assets/fonts/Ubuntu-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Ubuntu";
+  src: url("./assets/fonts/Ubuntu-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Ubuntu";
+  src: url("./assets/fonts/Ubuntu-Bold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+}
+
 [class^="icon-"]:before, [class*=" icon-"]:before{
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: 'icomoon' !important;
@@ -43,6 +62,9 @@ button[class^="icon-"] {
 }
 .icon-email:before {
   content: "\e904";
+}
+.icon-settings:before {
+  content: "\e905";
 }
 
 
