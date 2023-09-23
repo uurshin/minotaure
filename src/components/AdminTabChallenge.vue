@@ -463,12 +463,6 @@ export default {
     width: auto;
   }
 
-  .multiselect__tags {
-    padding-top: 4px;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-  }
   .multiselect__placeholder {
     display: none;
   }

@@ -402,6 +402,7 @@ export default {
 
       .label-name {
         display: flex;
+        align-items: center;
         gap: 3px;
 
         &:before {

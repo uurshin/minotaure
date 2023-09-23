@@ -292,14 +292,9 @@ export default {
       flex: 1;
 
       .multiselect__tags-wrap {
-        display: flex;
-        align-items: flex-start;
-        flex-wrap: wrap;
-        flex: 1;
-
         .multiselect__tag {
-          padding: 10px 26px 10px 10px;
-          align-items: center;
+          padding: 6px 10px;
+          align-items: flex-start;
           display: flex;
           gap: 3px;
 
@@ -311,6 +306,7 @@ export default {
               font-size: 1.2em;
               font-weight: bold;
               display: flex;
+              align-items: center;
               gap: 3px;
 
               &:before {
@@ -346,6 +342,7 @@ export default {
   }
 
   .multiselect__tag-icon {
+    width: auto;
     &:after {
       font-size: 2em;
     }

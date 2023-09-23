@@ -392,20 +392,40 @@ export default {
     align-self: stretch;
   }
 
-  .multiselect__tags-wrap {
-    display: flex;
-  }
-  .multiselect__tag {
-    display: flex;
-    padding: 6px;
-    align-items: center;
-  }
-  .multiselect__tag-icon::after {
-    display: flex;
-    position: relative;
-  }
-  .multiselect__tag-icon {
-    position: relative;
+  .multiselect {
+    min-width: 200px;
+    
+    .multiselect__input {
+      color: black;
+    }
+    .multiselect__tags {
+      padding: 4px;
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+      align-items: center;
+      font-size: 0.8em;
+    }
+    .multiselect__tags-wrap {
+      display: flex;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 5px;
+      flex: 1;
+    }
+    .multiselect__tag {
+      display: flex;
+      padding: 6px;
+      align-items: center;
+      margin: 0;
+    }
+    .multiselect__tag-icon::after {
+      display: flex;
+      position: relative;
+    }
+    .multiselect__tag-icon {
+      position: relative;
+    }
   }
 
   .tabs {
