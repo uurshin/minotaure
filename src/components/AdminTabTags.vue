@@ -34,7 +34,7 @@ export default {
     }
   },
   mounted() {
-
+    this.generateCss();
   },
   methods: {
     onInput(hue) {
@@ -43,40 +43,52 @@ export default {
     onColorSelect(hue) {
       if (this.color_picked != null) {
         this.color_picked.color = [hue,71,50];
+        this.generateCss();
       }
     },
     handleFocusOut() {
       this.color_picked = null;
     },
-    addTag: function(tag_label, key) {
+    addTag: function(tag_label, group) {
       const tag = {
         label: tag_label,
         code: tag_label.substring(0, 2) + Math.floor((Math.random() * 10000000)),
         color: [this.basic_colors[this.current_basic_color],71,50],
-        group: key
+        group: group.code
       }
       this.current_basic_color = (this.current_basic_color === this.basic_colors.length ? 0 : this.current_basic_color + 1);
       // Todo recherche si code déjà existant.
-      this.store.tag_groups[key].tags.push(tag);
+      group.tags.push(tag);
+      this.generateCss();
+    },
+    generateCss() {
+      let game_css = document.getElementById('game_css');
+      let css_str = '';
+      this.store.tags.forEach((tag) => css_str += '.tag-' + tag.code + ' .label-name:before { background-color:hsl(' + tag.color[0] + ',' + tag.color[1] + '%' + ',' + tag.color[2] + '%)' + ' !important} ');
+      game_css.innerHTML = css_str;
     },
     removeTag: function(tag) {
       this.store.removeTagFromAll(tag);
+      this.generateCss();
     },
     addGroupTag: function() {
       this.store.tag_groups.push({
         tags: [],
-        start: 'random'
+        start: 'random',
+        code: Math.floor((Math.random() * 10000000))
       });
     },
     removeGroupTag: function(key) {
+      this.store.tag_groups[key].tags.forEach((tag) => this.removeTag(tag));
       this.store.tag_groups.splice(key, 1);
+      this.generateCss();
     },
-    allocateGroupTag: function(key) {
+    allocateGroupTag: function(group) {
       let store = this.store;
       this.store.characters.forEach(function(character) {
-        let found = character.tags.findIndex((tag) => tag.group !== key);
+        let found = character.tags.findIndex((tag) => tag.group === group.code);
         if (found === -1) {
-          character.tags.push(store.tag_groups[key].tags[Math.floor(Math.random() * store.tag_groups[key].tags.length)]);
+          character.tags.push(group.tags[Math.floor(Math.random() * group.tags.length)]);
         }
       })
     },
@@ -214,13 +226,14 @@ export default {
               :multiple="true"
               :taggable="true"
               :hideSelected="true"
-              @tag="addTag($event, key)"
-              @remove="removeTag($event, key)"
+              :show-no-results="false"
+              @tag="addTag($event, group)"
+              @remove="removeTag($event)"
           >
             <template #tag="tag" >
                 <div
                     class="multiselect__tag"
-                    :style="{ background: 'hsl(' + tag.option.color[0] + ',' + tag.option.color[1] + '%' + ',' + tag.option.color[2] + '%)' }"
+                    :class="'tag tag-' + tag.option.code"
                     >
                   <div tabindex="0" @keyup.enter="handleClick($event, tag.option)" @click.prevent.stop="handleClick($event, tag.option)" title="Paramétrer ce tag">
                     <span class="icon-settings hover-only"></span>
@@ -242,7 +255,7 @@ export default {
               <option value="start">A choisir à la création du personnage</option>
               <option value="none">Pas de règle</option>
             </select>
-            <button @click="allocateGroupTag(key)" title="Pour chaque personnage n'ayant pas encore de tag de ce groupe, un tag lui sera attribué au hasard">Redistribuer</button>
+            <button @click="allocateGroupTag(group)" title="Pour chaque personnage n'ayant pas encore de tag de ce groupe, un tag lui sera attribué au hasard">Redistribuer</button>
             <button class="btn-danger" @click="removeGroupTag(key)" title="Tous les tags de ce groupe seront supprimés, et retirés des personnages.">Supprimer</button>
           </div>
         </div>
@@ -251,7 +264,7 @@ export default {
   </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
   .group-tag {
     display: flex;
     align-items: center;
@@ -274,53 +287,78 @@ export default {
       display: flex;
       gap: 5px;
     }
-  }
 
-  .multiselect__tag {
-    padding: 10px 26px 10px 10px;
-    align-items: center;
+    .multiselect {
+      flex: 1;
 
-    > div {
-      display: flex;
-      flex-direction: column;
+      .multiselect__tags-wrap {
+        display: flex;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        flex: 1;
 
-      .hover-only {
-        opacity: 0;
-        position: absolute;
-      }
+        .multiselect__tag {
+          padding: 10px 26px 10px 10px;
+          align-items: center;
+          display: flex;
+          gap: 3px;
 
-      &:hover {
-        cursor: pointer;
-        > span {
-          opacity: 0;
-        }
+          > div {
+            display: flex;
+            flex-direction: column;
 
-        > span.hover-only {
-          opacity: 1;
+            .label-name {
+              font-size: 1.2em;
+              font-weight: bold;
+              display: flex;
+              gap: 3px;
+
+              &:before {
+                display: block;
+                content: "";
+                width: 20px;
+                height: 20px;
+                border-radius:100%;
+              }
+            }
+
+            .hover-only {
+              opacity: 0;
+              position: absolute;
+              display: none;
+            }
+
+            &:hover {
+              cursor: pointer;
+              > span {
+                opacity: 0;
+              }
+
+              > span.hover-only {
+                opacity: 1;
+                display: block;
+              }
+            }
+          }
         }
       }
     }
   }
+
   .multiselect__tag-icon {
-    line-height: 31px;
     &:after {
       font-size: 2em;
     }
   }
 
-  .label-name {
-    font-size: 1.2em;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-
   .color-picker {
-    position: absolute;
+    position: fixed;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
     width: 100vw;
+    height: 100vh;
     height: 100vh;
     display: none;
     opacity: 0;

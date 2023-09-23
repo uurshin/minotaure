@@ -207,8 +207,10 @@ export default {
                 <span v-for="stat in row.stats"><span>{{ stat.label }}</span><span>{{ stat.value }}</span></span>
               </div>
               <div class="tags">
-                <span class="tag" v-for="tag in row.tags" :style="{ background: store.getTagFromCode(tag.code) !== undefined ? store.getTagFromCode(tag.code).hsl_color : '' }">
-                  {{ tag.label }}
+                <span class="tag" v-for="tag in row.tags" :class="'tag-' + tag.code">
+                  <span class="label-name">
+                    {{ tag.label }}
+                  </span>
                 </span>
               </div>
             </div>
@@ -392,8 +394,29 @@ export default {
     > .tag {
       border-radius: 10px;
       padding: 1px 5px;
-      display: block;
+
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      justify-content: center;
+
+      .label-name {
+        display: flex;
+        gap: 3px;
+
+        &:before {
+          display: block;
+          content: "";
+          width: 10px;
+          height: 10px;
+          border-radius:100%;
+        }
+      }
     }
   }
 
+  #tag_filter {
+    font-size: 1em;
+    min-width: 125px;
+  }
 </style>

@@ -392,6 +392,22 @@ export default {
     align-self: stretch;
   }
 
+  .multiselect__tags-wrap {
+    display: flex;
+  }
+  .multiselect__tag {
+    display: flex;
+    padding: 6px;
+    align-items: center;
+  }
+  .multiselect__tag-icon::after {
+    display: flex;
+    position: relative;
+  }
+  .multiselect__tag-icon {
+    position: relative;
+  }
+
   .tabs {
     display: flex;
     flex-wrap: wrap;

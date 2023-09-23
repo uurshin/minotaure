@@ -473,8 +473,6 @@ export default {
     display: none;
   }
   .multiselect__input {
-    display: inline !important;
-    width: auto !important;
     position: relative !important;
   }
 
