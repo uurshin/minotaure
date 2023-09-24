@@ -50,3 +50,6 @@ Terminer le sondage: "Terminer le sondage"
 #AdminTour
 Suivant: "Suivant"
 Terminer la visite: "Terminer la visite"
+
+#AdminTabGauges
+gauge_start: "- démarre à {gauge_value}"
