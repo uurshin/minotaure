@@ -79,7 +79,7 @@ export default {
       <template v-for="(gauge, key) in store.gauges">
         <div class="gauge list-item">
           <label :for="'gauge_' + key" v-if="!change_label_enabled[key]">{{ gauge.name }}</label>
-          <span v-if="!change_label_enabled[key]">- démarre à {{ gauge.value }}</span>
+          <span v-if="!change_label_enabled[key]">{{ t('gauge_start', {gauge_value: gauge.value}) }}</span>
           <span v-if="gauge.deadly && !change_label_enabled[key]">- meurt à 0</span>
           <input :ref="'gauge_' + key" :value="gauge.name" id="'gauge_'+key" type="text" v-if="change_label_enabled[key]">
           <input :ref="'gauge_value_' + key" :value="gauge.value" min="1" id="'gauge_value'+key" type="number" v-if="change_label_enabled[key]">
