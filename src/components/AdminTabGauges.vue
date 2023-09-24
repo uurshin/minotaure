@@ -1,10 +1,12 @@
 <script>
 import router, { usePlayerStore } from '../main';
 import { ref } from 'vue'
+import {useI18n} from "vue-i18n";
 
 export default {
   data() {
     const store = usePlayerStore();
+    const { t } = useI18n();
     const gauges_input = [];
     const change_label_enabled = [];
     const add_gauge_enabled = false;
@@ -12,7 +14,7 @@ export default {
     const temp_gauge_value = 10;
 
     return {
-      store, gauges_input, change_label_enabled, add_gauge_enabled, temp_gauge_name, temp_gauge_value
+      store, t, gauges_input, change_label_enabled, add_gauge_enabled, temp_gauge_name, temp_gauge_value
     }
   },
   mounted() {
