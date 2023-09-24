@@ -11,7 +11,7 @@ result_malus: "You lose {points} points of {name}."
 
 #Admin
 Personnages: "Characters"
-Jauges: "Gauges"
+Jauges: "Status Bars"
 Sondages: "Polls"
 Épreuve: "Challenge"
 Caractéristiques: "Stats"
@@ -30,11 +30,11 @@ Supprimer la partie: "Delete the game"
 Voir plus: "See more"
 Vous n'avez créé aucune partie.: "You didn't create any game."
 Identifiant public de votre partie: "Public id of your game"
-Cet identifiant servira à rejoindre la partie pour les participants.: "This idea will allow the players to join your game."
+Cet identifiant servira à rejoindre la partie pour les participants.: "This id will allow the players to join your game."
 Annuler: "Cancel"
 En attente: "In progress"
 Lancer la partie: "Launch the game"
-warning_version: "The game marked with a <span class='danger'>*</span> are not compatible with your Minotaure version ({version}), they might not work properly."
+warning_version: "The game marked with a <span class='danger'>*</span> are not compatible with your Minotaure version ({version}), it might not work properly."
 
 
 #AdminTabPoll
@@ -53,4 +53,13 @@ Suivant: "Next"
 Terminer la visite: "Finish the tour"
 
 #AdminTabGauges
+Ajouter une jauge: "Add a status bar"
 gauge_start: "- starts at {gauge_value}"
+Meurt à 0: "- dies when 0 is reached"
+Valider: "Submit"
+Rendre non-létale: "Make non lethal"
+Rendre létale: "Make lethal"
+Modifier: "Modify"
+Supprimer: "Delete"
+Nom: "Name"
+Valeur de départ: "Start Value"

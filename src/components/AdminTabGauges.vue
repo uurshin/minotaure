@@ -76,31 +76,31 @@ export default {
   <div class="tab" ref="tab">
     <div id='tab-gauges-content'>
       <div class="actions">
-        <button ref="step2" class="icon-add" v-if="!add_gauge_enabled" @click="add_gauge_enabled = true">Ajouter une jauge</button>
+        <button ref="step2" class="icon-add" v-if="!add_gauge_enabled" @click="add_gauge_enabled = true">{{ t('Ajouter une jauge') }}</button>
       </div>
       <template v-for="(gauge, key) in store.gauges">
         <div class="gauge list-item">
           <label :for="'gauge_' + key" v-if="!change_label_enabled[key]">{{ gauge.name }}</label>
           <span v-if="!change_label_enabled[key]">{{ t('gauge_start', {gauge_value: gauge.value}) }}</span>
-          <span v-if="gauge.deadly && !change_label_enabled[key]">- meurt à 0</span>
+          <span v-if="gauge.deadly && !change_label_enabled[key]">{{ t('Meurt à 0') }}</span>
           <input :ref="'gauge_' + key" :value="gauge.name" id="'gauge_'+key" type="text" v-if="change_label_enabled[key]">
           <input :ref="'gauge_value_' + key" :value="gauge.value" min="1" id="'gauge_value'+key" type="number" v-if="change_label_enabled[key]">
-          <button @click="changeGauge(key)" v-if="change_label_enabled[key]">Valider</button>
-          <button @click="change_label_enabled[key] = false" v-if="change_label_enabled[key]">Annuler</button>
+          <button @click="changeGauge(key)" v-if="change_label_enabled[key]">{{ t('Valider') }}</button>
+          <button @click="change_label_enabled[key] = false" v-if="change_label_enabled[key]">{{ t('Annuler') }}</button>
           <div class="action">
-            <button @click="makeDeadly(key)" v-if="!change_label_enabled[key]">{{ gauge.deadly ?  'Rendre non-léthale' : 'Rendre léthale' }}</button>
-            <button @click="change_label_enabled[key] = true" v-if="!change_label_enabled[key]">Modifier</button>
-            <button @click="removeGauge(key)" v-if="!change_label_enabled[key]">Supprimer</button>
+            <button @click="makeDeadly(key)" v-if="!change_label_enabled[key]">{{ gauge.deadly ? t('Rendre non-létale') : t('Rendre létale') }}</button>
+            <button @click="change_label_enabled[key] = true" v-if="!change_label_enabled[key]">{{ t('Modifier') }}</button>
+            <button @click="removeGauge(key)" v-if="!change_label_enabled[key]">{{ t('Supprimer') }}</button>
           </div>
         </div>
       </template>
       <div class="action-group" v-if="add_gauge_enabled">
-        <label for="temp_gauge">Nom</label>
+        <label for="temp_gauge">{{ t('Nom') }}</label>
         <input id="temp_gauge" type="text" v-model="temp_gauge_name" @keyup.enter="addGauge()">
-        <label for="temp_gauge_value">Valeur de départ</label>
+        <label for="temp_gauge_value">{{ t('Valeur de départ') }}</label>
         <input id="temp_gauge_value" type="number" min="1" v-model="temp_gauge_value">
-        <button @click="addGauge()">Valider</button>
-        <button @click="add_gauge_enabled = false">Annuler</button>
+        <button @click="addGauge()">{{ t('Valider') }}</button>
+        <button @click="add_gauge_enabled = false">{{ t('Annuler') }}</button>
       </div>
     </div>
   </div>

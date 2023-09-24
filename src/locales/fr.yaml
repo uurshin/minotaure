@@ -52,4 +52,13 @@ Suivant: "Suivant"
 Terminer la visite: "Terminer la visite"
 
 #AdminTabGauges
+Ajouter une jauge: "Ajouter une jauge"
 gauge_start: "- démarre à {gauge_value}"
+Meurt à 0: "- meurt à 0"
+Valider: "Valider"
+Rendre non-létale: "Rendre non-létale"
+Rendre létale: "Rendre létale"
+Modifier: "Modifier"
+Supprimer: "Supprimer"
+Nom: "Nom"
+Valeur de départ: "Valeur de départ"
