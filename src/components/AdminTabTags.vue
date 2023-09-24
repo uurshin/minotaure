@@ -72,10 +72,14 @@ export default {
       this.generateCss();
     },
     addGroupTag: function() {
-      this.store.tag_groups.push({
+      let group = {
         tags: [],
         start: 'random',
         code: Math.floor((Math.random() * 10000000))
+      }
+      this.store.tag_groups.push(group);
+      this.$nextTick(() => {
+        this.$refs['group_tag_select_' + group.code][0].$el.focus()
       });
     },
     removeGroupTag: function(key) {
@@ -95,6 +99,7 @@ export default {
     handleClick (event, item) {
       this.options_contextual = this.generateOptions(item)
       this.$refs.context_menu_tags.showMenu(event, item)
+      this.$refs.context_menu_tags.$el.focus();
     },
     generateOptions (item) {
       let options = [];
@@ -213,7 +218,7 @@ export default {
         <div class="group-tag">
           <span v-if="group.freetag !== undefined">Groupe des tags créés depuis les épreuves</span>
           <vue-multiselect
-              ref="multiselect"
+              :ref="'group_tag_select_' + group.code"
               :id="'tag_'+key"
               v-model="store.current_game.tag_groups[key].tags"
               label="label"

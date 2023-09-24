@@ -394,7 +394,7 @@ export default {
 
   .multiselect {
     min-width: 200px;
-    
+
     .multiselect__input {
       color: black;
     }
@@ -418,6 +418,7 @@ export default {
       padding: 6px;
       align-items: center;
       margin: 0;
+      background: var(--tag-color);
     }
     .multiselect__tag-icon::after {
       display: flex;
