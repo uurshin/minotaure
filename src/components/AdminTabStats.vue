@@ -1,6 +1,7 @@
 <script>
 import router, { usePlayerStore } from '../main';
 import 'vue-simple-context-menu/dist/vue-simple-context-menu.css';
+import {useI18n} from "vue-i18n";
 
 export default {
   data() {
@@ -9,9 +10,10 @@ export default {
     const change_label_enabled = [];
     const add_stat_enabled = false;
     const temp_stat_name = '';
+    const { t } = useI18n();
 
     return {
-      store, stats_input, change_label_enabled, add_stat_enabled, temp_stat_name
+      store, t, stats_input, change_label_enabled, add_stat_enabled, temp_stat_name
     }
   },
   methods: {
@@ -48,24 +50,24 @@ export default {
   <div class="tab" ref="tab">
     <div id='tab-stats-content'>
       <div class="actions">
-        <button class="icon-add" v-if="!add_stat_enabled" @click="add_stat_enabled = true">Ajouter une caractéristique</button>
+        <button class="icon-add" v-if="!add_stat_enabled" @click="add_stat_enabled = true">{{ t('Ajouter une caractéristique') }}</button>
       </div>
       <template v-for="(stat, key) in store.stats">
         <div class="stat list-item">
           <label :for="'stat_' + key" v-if="!change_label_enabled[key]">{{ stat.name }}</label>
           <input :ref="'stat_' + key" :value="stat.name" id="'stat_'+key" type="text" v-if="change_label_enabled[key]">
-          <button @click="changeStatLabel(key)" v-if="change_label_enabled[key]">Valider</button>
-          <button @click="change_label_enabled[key] = false" v-if="change_label_enabled[key]">Annuler</button>
+          <button @click="changeStatLabel(key)" v-if="change_label_enabled[key]">{{ t('Valider') }}</button>
+          <button @click="change_label_enabled[key] = false" v-if="change_label_enabled[key]">{{ t('Annuler') }}</button>
           <div class="action">
-            <button @click="change_label_enabled[key] = true" v-if="!change_label_enabled[key]">Changer le nom</button>
-            <button @click="removeStat(key)" v-if="!change_label_enabled[key]">Supprimer</button>
+            <button @click="change_label_enabled[key] = true" v-if="!change_label_enabled[key]">{{ t('Changer le nom') }}</button>
+            <button @click="removeStat(key)" v-if="!change_label_enabled[key]">{{ t('Supprimer') }}</button>
           </div>
         </div>
       </template>
       <div class="action-group" v-if="add_stat_enabled">
-        <input @keyup.enter="addStat()" placeholder="Nom de la caractéristique" v-model="temp_stat_name" id="temp_stat" type="text">
-        <button @click="addStat()">Valider</button>
-        <button @click="add_stat_enabled = false">Annuler</button>
+        <input @keyup.enter="addStat()" :placeholder="$t('Nom de la caractéristique')" v-model="temp_stat_name" id="temp_stat" type="text">
+        <button @click="addStat()">{{ t('Valider') }}</button>
+        <button @click="add_stat_enabled = false">{{ t('Annuler') }}</button>
       </div>
     </div>
   </div>

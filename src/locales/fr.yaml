@@ -47,6 +47,10 @@ Lancer le sondage: "Lancer le sondage"
 Montrer les résultats: "Montrer les résultats"
 Terminer le sondage: "Terminer le sondage"
 
+#AdminTabIntro
+Bienvenue dans Minotaure: "Bienvenue dans Minotaure."
+Vous pouvez démarrer le didacticiel à tout moment en cliquant sur le bouton d'aide: "Vous pouvez démarrer le didacticiel à tout moment en cliquant sur le bouton d'aide."
+
 #AdminTour
 Suivant: "Suivant"
 Terminer la visite: "Terminer la visite"
@@ -100,3 +104,20 @@ obtiendront: " obtiendront : "
 Ces tags en plus: "Ces tags en plus : "
 Ces tags en moins (s'ils les ont): "Ces tags en moins (s'ils les ont) : "
 Lancer l'épreuve !: "Lancer l'épreuve !"
+
+#AdminTabCharacters
+La dernière épreuve a connu un pourcentage de réussite de: "La dernière épreuve a connu un pourcentage de réussite de "
+Filtrer sur un tag: "Filtrer sur un tag"
+Vivants: "Vivants"
+Connectés: "Connectés"
+Montrer tous les personnages: "Montrer tous les personnages"
+Générer un PNJ: "Générer un PNJ"
+sur: " sur "
+Aucun personnage ne correspond à ces filtres: "Aucun personnage ne correspond à ces filtres"
+Rechercher un personnage: "Rechercher un personnage"
+Commencez à taper: "Commencez à taper"
+
+#AdminTabStats
+Ajouter une caractéristique: "Ajouter une caractéristique"
+Changer le nom: "Changer le nom"
+Nom de la caractéristique: "Nom de la caractéristique"

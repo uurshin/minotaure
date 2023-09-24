@@ -3,6 +3,7 @@ import { usePlayerStore } from '../main';
 import VueMultiselect from 'vue-multiselect'
 import {Dataset, DatasetItem, DatasetSearch, DatasetInfo, DatasetShow} from "vue-dataset";
 import VueSimpleContextMenu from 'vue-simple-context-menu';
+import {useI18n} from "vue-i18n";
 
 export default {
   components: {
@@ -16,9 +17,11 @@ export default {
   },
   data() {
     const store = usePlayerStore();
+    const { t } = useI18n();
 
     return {
       store,
+      t,
       tag_filter: [],
       search_character: '',
       filters: {},
@@ -149,7 +152,7 @@ export default {
   <div class="tab" ref="tab">
     <div id='tab-characters-content'>
       <div class="full" v-if="this.store.last_challenge.date !== 0">
-        <span>La dernière épreuve a connu un pourcentage de réussite de
+        <span>{{ t('La dernière épreuve a connu un pourcentage de réussite de') }}
           <span class="result-challenge" :class="store.last_challenge.rate <= 50 ? (store.last_challenge.rate < 50 ? 'failure' : '') : 'success'">{{ store.last_challenge.rate}}%</span>
         </span>
       </div>
@@ -161,16 +164,16 @@ export default {
               v-model="tag_filter"
               label="label"
               track-by="code"
-              tag-placeholder="Ajouter un tag"
-              placeholder="Filtrer sur un tag"
+              :tag-placeholder="$t('Ajouter un tag')"
+              :placeholder="$t('Filtrer sur un tag')"
               :showNoOptions="false"
               :options="store.tags"
               :multiple="true"
               :hideSelected="true"
           ></vue-multiselect>
         </div>
-        <button @click="switchFilter('dead')" :class="{active : filters.dead !== undefined}">Vivants</button>
-        <button @click="switchFilter('connected')" :class="{active : filters.connected !== undefined}">Connectés</button>
+        <button @click="switchFilter('dead')" :class="{active : filters.dead !== undefined}">{{ t('Vivants') }}</button>
+        <button @click="switchFilter('connected')" :class="{active : filters.connected !== undefined}">{{ t('Connectés') }}</button>
         <div class="dual-button" v-if="store.last_challenge.date !== 0">
           <button @click="switchFilterChallenge('success')" class="success-button badge" :class="{active : filters.challenge !== undefined && filters.challenge === 'success'}">
             Réussites<span>{{ store.last_challenge.nb_success }}</span>
@@ -180,7 +183,7 @@ export default {
           </button>
         </div>
 
-        <button v-if="Object.keys(filters).length || tag_filter.length" class="reset-filters" @click="resetFilters">Montrer tous les personnages</button>
+        <button v-if="Object.keys(filters).length || tag_filter.length" class="reset-filters" @click="resetFilters">{{ t('Montrer tous les personnages') }}</button>
       </div>
       <dataset
           v-slot="{ ds }"
@@ -191,11 +194,11 @@ export default {
           :ds-sort-as="{ challenge: sortAsChallenge, connection: sortAsConnected }"
           ref="dataset"
       >
-        <button  ref="step1" @click="store.generateCharacters(1)">Générer un PNJ</button>
+        <button  ref="step1" @click="store.generateCharacters(1)">{{ t('Générer un PNJ') }}</button>
         <div class="wrapper-label">
-          <dataset-search placeholder="Rechercher un personnage" v-model="search_character" id="search-character" ds-search-placeholder="Commencez à taper" />
+          <dataset-search :placeholder="$t('Rechercher un personnage')" v-model="search_character" id="search-character" :ds-search-placeholder="$t('Commencez à taper')" />
         </div>
-        <div class="summary full">{{ ds.dsResultsNumber }} personnages sur {{ store.characters.length }}</div>
+        <div class="summary full">{{ t('count_personnage', {count: ds.dsResultsNumber}) }}{{ t('sur') }}{{ store.characters.length }}</div>
         <dataset-item class="full" id="character-list">
           <template #default="{ row, rowIndex }" >
             <div @contextmenu.prevent.stop="handleClick($event, row)" class="character" :class="[getClasses(row), !row.alive ? 'dead' : '']">
@@ -216,7 +219,7 @@ export default {
             </div>
           </template>
           <template v-slot:noDataFound>
-            <div v-if="store.characters.length > 0" class="no-found">Aucun personnage ne correspond à ces filtres.</div>
+            <div v-if="store.characters.length > 0" class="no-found">{{ t('Aucun personnage ne correspond à ces filtres') }}</div>
           </template>
         </dataset-item>
       </dataset>

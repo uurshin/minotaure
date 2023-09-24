@@ -48,6 +48,10 @@ Lancer le sondage: "Launch the poll"
 Montrer les résultats: "Show the results"
 Terminer le sondage: "Close the poll"
 
+#AdminTabIntro
+Bienvenue dans Minotaure: "Welcome to Minotaure."
+Vous pouvez démarrer le didacticiel à tout moment en cliquant sur le bouton d'aide: "You can begin the tutorial by clicking on the help button."
+
 #AdminTour
 Suivant: "Next"
 Terminer la visite: "Finish the tour"
@@ -101,3 +105,20 @@ obtiendront: " will have:"
 Ces tags en plus: "And get the following tags: "
 Ces tags en moins (s'ils les ont): "And lose the following tags (if possessed!): "
 Lancer l'épreuve !: "Start Challenge!"
+
+#AdminTabCharacters
+La dernière épreuve a connu un pourcentage de réussite de: "Success rate of last challenge: "
+Filtrer sur un tag: "Filter by tag"
+Vivants: "Alive"
+Connectés: "Connected"
+Montrer tous les personnages: "Show all characters"
+Générer un PNJ: "Spawn NPC"
+sur: " on "
+Aucun personnage ne correspond à ces filtres: "No characters to show here. Try a different filter."
+Rechercher un personnage: "Search for a character"
+Commencez à taper: "Start to type"
+
+#AdminTabStats
+Ajouter une caractéristique: "Add a stat"
+Changer le nom: "Change name"
+Nom de la caractéristique: "Stat name"
