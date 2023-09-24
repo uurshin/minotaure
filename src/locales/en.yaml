@@ -51,3 +51,6 @@ Terminer le sondage: "Close the poll"
 #AdminTour
 Suivant: "Next"
 Terminer la visite: "Finish the tour"
+
+#AdminTabGauges
+gauge_start: "- starts at {gauge_value}"
