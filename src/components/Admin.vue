@@ -377,12 +377,6 @@ export default {
 </template>
 
 <style lang="scss">
-  button {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
   .video-wrapper {
     position: absolute;
     bottom: 0;
@@ -403,6 +397,16 @@ export default {
 
   .multiselect {
     min-width: 200px;
+
+    .multiselect__option--group {
+      text-align: center;
+      background: black !important;
+      color: white !important;
+
+      &:after {
+        content: 'V'
+      }
+    }
 
     .multiselect__input {
       color: black;

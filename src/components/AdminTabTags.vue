@@ -6,9 +6,14 @@ import VueSimpleContextMenu from 'vue-simple-context-menu';
 import 'vue-simple-context-menu/dist/vue-simple-context-menu.css';
 import '@radial-color-picker/vue-color-picker/dist/vue-color-picker.min.css';
 import ColorPicker from '@radial-color-picker/vue-color-picker';
+import {useI18n} from "vue-i18n";
 
 export default {
   components: { VueMultiselect, VueSimpleContextMenu, ColorPicker },
+  setup() {
+    const { t } = useI18n()
+    return { t }
+  },
   data() {
     const store = usePlayerStore();
     const options_contextual = [{}];
@@ -59,7 +64,7 @@ export default {
         tags: [],
         start: 'random',
         code: Math.floor((Math.random() * 10000000)),
-        label: this.$t('Groupe {nb}', {nb: this.store.tag_groups.length + 1})
+        label: this.$t('Groupe nb', {nb: this.store.tag_groups.length + 1})
       }
       this.store.tag_groups.push(group);
       this.$nextTick(() => {
@@ -276,6 +281,12 @@ export default {
     border: 1px solid var(--border-color);
     border-radius: 10px;
     padding: 10px 15px;
+
+    button {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
     .group-label {
       display: flex;
