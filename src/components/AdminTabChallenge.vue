@@ -91,22 +91,18 @@ export default {
       }
     },
     addTag(tag_label, type) {
-      const tag = {
-        label: tag_label,
-        code: tag_label.substring(0, 2) + Math.floor((Math.random() * 10000000))
+      let group = this.store.tag_groups.find((element) => (element.code === 'freetag'));
+      if (group === undefined) {
+        group = {
+          label: this.$t('Tags des épreuves'),
+          code: 'freetag',
+          tags: [],
+          start: 'none',
+        };
+        this.store.tag_groups.push(group);
       }
-      let found = this.store.tag_groups.findIndex((element) => (element.freetag !== undefined));
-      if (found === -1) {
-        this.store.tag_groups.push({
-          tags:[tag],
-          start: false,
-          freetag: true
-        });
-      }
-      else {
-        this.store.tag_groups[found].tags.push(tag);
-      }
-      this.chosen_modifier_tags_add[type].push(tag)
+      this.store.addTag(tag_label, group);
+      this.chosen_modifier_tags_add[type].push(tag);
     },
     startChallenge() {
       const date = Date.now();
@@ -115,14 +111,7 @@ export default {
       let selectedCharacters
       if (this.chosen_tags.length) {
         selectedCharacters = this.store.alive_characters.filter(
-          function(character) {
-            return(
-              character.alive &&
-              character.tags.find(
-                (tag) => vm.chosen_tags.find((chosen_tag) => chosen_tag.code === tag.code)
-              )
-            )
-          }
+          vm.store.filterCharacterByTags(character)
         );
       }
       else {

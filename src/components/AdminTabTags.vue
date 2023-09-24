@@ -12,10 +12,6 @@ export default {
   data() {
     const store = usePlayerStore();
     const options_contextual = [{}];
-    const basic_colors = [
-        345, 128, 52, 227, 25, 286
-    ];
-    const current_basic_color = 0;
     const color = reactive({
       hue: 50,
       saturation: 71,
@@ -23,18 +19,18 @@ export default {
       alpha: 1,
     });
     const color_picked = null;
+    const group_selected = null;
 
     return {
       store,
       options_contextual,
       color,
       color_picked,
-      basic_colors,
-      current_basic_color
+      group_selected
     }
   },
   mounted() {
-    this.generateCss();
+    this.store.generateCss();
   },
   methods: {
     onInput(hue) {
@@ -43,39 +39,27 @@ export default {
     onColorSelect(hue) {
       if (this.color_picked != null) {
         this.color_picked.color = [hue,71,50];
-        this.generateCss();
+        this.store.generateCss();
       }
     },
     handleFocusOut() {
       this.color_picked = null;
     },
-    addTag: function(tag_label, group) {
-      const tag = {
-        label: tag_label,
-        code: tag_label.substring(0, 2) + Math.floor((Math.random() * 10000000)),
-        color: [this.basic_colors[this.current_basic_color],71,50],
-        group: group.code
-      }
-      this.current_basic_color = (this.current_basic_color === this.basic_colors.length ? 0 : this.current_basic_color + 1);
-      // Todo recherche si code déjà existant.
-      group.tags.push(tag);
-      this.generateCss();
-    },
-    generateCss() {
-      let game_css = document.getElementById('game_css');
-      let css_str = '';
-      this.store.tags.forEach((tag) => css_str += '.tag-' + tag.code + ' .label-name:before { background-color:hsl(' + tag.color[0] + ',' + tag.color[1] + '%' + ',' + tag.color[2] + '%)' + ' !important} ');
-      game_css.innerHTML = css_str;
-    },
     removeTag: function(tag) {
       this.store.removeTagFromAll(tag);
-      this.generateCss();
+      let groupIndex = this.store.tag_groups.findIndex((group) => group.code === tag.group);
+      let tagIndex = this.store.tag_groups[groupIndex].tags.findIndex((search_tag) => search_tag.code === tag.code);
+      if (tagIndex > -1) {
+        this.store.tag_groups[groupIndex].tags.splice(tagIndex, 1);
+      }
+      this.store.generateCss();
     },
     addGroupTag: function() {
       let group = {
         tags: [],
         start: 'random',
-        code: Math.floor((Math.random() * 10000000))
+        code: Math.floor((Math.random() * 10000000)),
+        label: this.$t('Groupe {nb}', {nb: this.store.tag_groups.length + 1})
       }
       this.store.tag_groups.push(group);
       this.$nextTick(() => {
@@ -85,7 +69,7 @@ export default {
     removeGroupTag: function(key) {
       this.store.tag_groups[key].tags.forEach((tag) => this.removeTag(tag));
       this.store.tag_groups.splice(key, 1);
-      this.generateCss();
+      this.store.generateCss();
     },
     allocateGroupTag: function(group) {
       let store = this.store;
@@ -96,6 +80,12 @@ export default {
         }
       })
     },
+    focusLabelGroup(event, key) {
+      this.group_selected = key;
+      this.$nextTick(() => {
+        this.$refs['group_name_input_' + key][0].focus();
+      });
+    },
     handleClick (event, item) {
       this.options_contextual = this.generateOptions(item)
       this.$refs.context_menu_tags.showMenu(event, item)
@@ -103,6 +93,9 @@ export default {
     },
     generateOptions (item) {
       let options = [];
+
+      options.push({name: 'Supprimer', effect:'remove'});
+
       for (const [key, stat] of Object.entries(this.store.stats)) {
         options.push({name: 'Augmenter ' + stat.name, effect:'bonus', target: key, value: 1 });
       }
@@ -144,6 +137,9 @@ export default {
       if (event.option.effect !== undefined) {
         let tag = this.store.getTagFromCode(event.item.code);
         switch (event.option.effect) {
+          case 'remove':
+            this.removeTag(event.item);
+            break;
           case 'bonus':
             if (tag.modifiers === undefined) {
               tag.modifiers = {};
@@ -192,31 +188,34 @@ export default {
 
 <template>
   <div class="tab" ref="tab">
-    <VueSimpleContextMenu
-        element-id="context_menu_tags"
-        :options="options_contextual"
-        ref="context_menu_tags"
-        @option-clicked="optionClicked"
-    />
-    <div class="color-picker" :class="{show: color_picked != null}">
-      <color-picker
-          ref="color_picker"
-          v-bind="color"
-          @input="onColorSelect"
-          @focusout="handleFocusOut"
-          :step="30"
-      >
-      </color-picker>
-    </div>
-
-    <div id="id='tab-tags-content">
+    <div id="tab-tags-content">
       <div class="actions">
+        <VueSimpleContextMenu
+            element-id="context_menu_tags"
+            :options="options_contextual"
+            ref="context_menu_tags"
+            @option-clicked="optionClicked"
+        />
         <button class="icon-add" @click="addGroupTag()">Ajouter un groupe de tags</button>
         <span>Clic droit sur un tag pour modifier ses caractéristiques</span>
       </div>
       <template v-for="(group, key) in store.current_game.tag_groups">
         <div class="group-tag">
-          <span v-if="group.freetag !== undefined">Groupe des tags créés depuis les épreuves</span>
+          <span class="group-label">
+            <input :ref="'group_name_input_'+ key" @keydown.enter="group_selected = null;" v-if="group_selected === key" type="text" v-model="store.current_game.tag_groups[key].label" />
+            <button v-show="group_selected !== key" @keyup.enter="focusLabelGroup($event, key)" @click="focusLabelGroup($event, key)" class="icon-edit">{{ store.current_game.tag_groups[key].label }}</button>
+            <button v-show="group_selected === key" @click="group_selected = null">Terminer</button>
+          </span>
+          <div class="actions secondary">
+            <label for="creation_rule">Règle d'attribution : </label>
+            <select id="creation_rule" v-model="store.current_game.tag_groups[key].start">
+              <option value="random">Répartis aléatoirement à la création</option>
+              <option value="start">A choisir à la création du personnage</option>
+              <option value="none">Pas de règle</option>
+            </select>
+            <button @click="allocateGroupTag(group)" title="Pour chaque personnage n'ayant pas encore de tag de ce groupe, un tag lui sera attribué au hasard">Redistribuer</button>
+            <button class="btn-danger" @click="removeGroupTag(key)" title="Tous les tags de ce groupe seront supprimés, et retirés des personnages.">Supprimer</button>
+          </div>
           <vue-multiselect
               :ref="'group_tag_select_' + group.code"
               :id="'tag_'+key"
@@ -232,7 +231,7 @@ export default {
               :taggable="true"
               :hideSelected="true"
               :show-no-results="false"
-              @tag="addTag($event, group)"
+              @tag="store.addTag($event, group)"
               @remove="removeTag($event)"
           >
             <template #tag="tag" >
@@ -249,20 +248,19 @@ export default {
                       {{ store.stats[key].name }} {{ modifier.value > 0 ? '+' + modifier.value : modifier.value }}
                     </span>
                   </div>
-                  <i tabindex="0" class="multiselect__tag-icon" @click="tag.remove(tag.option)" @keyup.enter="tag.remove(tag.option)"></i>
                 </div>
             </template>
           </vue-multiselect>
-          <div class="actions secondary">
-            <label for="creation_rule">Règle d'attribution</label>
-            <select id="creation_rule" v-model="store.current_game.tag_groups[key].start">
-              <option value="random">Répartis aléatoirement à la création</option>
-              <option value="start">A choisir à la création du personnage</option>
-              <option value="none">Pas de règle</option>
-            </select>
-            <button @click="allocateGroupTag(group)" title="Pour chaque personnage n'ayant pas encore de tag de ce groupe, un tag lui sera attribué au hasard">Redistribuer</button>
-            <button class="btn-danger" @click="removeGroupTag(key)" title="Tous les tags de ce groupe seront supprimés, et retirés des personnages.">Supprimer</button>
-          </div>
+        </div>
+        <div class="color-picker" :class="{show: color_picked != null}">
+          <color-picker
+              ref="color_picker"
+              v-bind="color"
+              @input="onColorSelect"
+              @focusout="handleFocusOut"
+              :step="30"
+          >
+          </color-picker>
         </div>
       </template>
     </div>
@@ -279,6 +277,20 @@ export default {
     border-radius: 10px;
     padding: 10px 15px;
 
+    .group-label {
+      display: flex;
+      gap: 10px;
+    }
+
+    .actions {
+      flex: 0;
+      margin-left: auto;
+
+      > label {
+        white-space: nowrap;
+      }
+    }
+
     > label:first-child {
       align-self: center;
     }
@@ -294,7 +306,7 @@ export default {
     }
 
     .multiselect {
-      flex: 1;
+      flex: 1 0 100%;
 
       .multiselect__tags-wrap {
         .multiselect__tag {
@@ -302,6 +314,12 @@ export default {
           align-items: flex-start;
           display: flex;
           gap: 3px;
+
+          button {
+            align-self: baseline;
+            padding: 0;
+            color: var(--font-color);
+          }
 
           > div {
             display: flex;
@@ -331,8 +349,11 @@ export default {
 
             &:hover {
               cursor: pointer;
-              > span {
-                opacity: 0;
+
+              .label-name:hover {
+                &:before {
+                  opacity: 0;
+                }
               }
 
               > span.hover-only {
@@ -343,13 +364,6 @@ export default {
           }
         }
       }
-    }
-  }
-
-  .multiselect__tag-icon {
-    width: auto;
-    &:after {
-      font-size: 2em;
     }
   }
 

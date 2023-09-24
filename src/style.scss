@@ -66,6 +66,10 @@ button[class^="icon-"] {
 .icon-settings:before {
   content: "\e905";
 }
+.icon-edit:before {
+  content: "\e906";
+}
+
 
 
 a {
@@ -108,7 +112,7 @@ button:focus-visible {
 }
 
 input[type="text"]:not(.multiselect__input), select {
-  height: 42px;
+  height: 40px;
   background: white;
   color: black;
   border-radius: 8px;

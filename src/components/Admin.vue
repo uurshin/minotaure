@@ -339,9 +339,12 @@ export default {
   <div id="admin-wrapper">
     <div class="tabs">
       <div
+          tabindex="0"
           v-for="tab in activeTabs"
           :ref="'tab_label_' + tab.id"
-          @click="changeTab(tab.id)" class="tab-label"
+          @keyup.enter="changeTab(tab.id)"
+          @click="changeTab(tab.id)"
+          class="tab-label"
           :class="{open: current_tab === tab.id, attention: tab.tutorial === 'blink' && this.store.current_game.tuto_on}"
       >
         {{ t(tab.label) }}
@@ -374,6 +377,12 @@ export default {
 </template>
 
 <style lang="scss">
+  button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
   .video-wrapper {
     position: absolute;
     bottom: 0;
@@ -397,7 +406,11 @@ export default {
 
     .multiselect__input {
       color: black;
+      width: auto;
+      min-width: 100px;
+      margin: 0;
     }
+
     .multiselect__tags {
       padding: 4px;
       display: flex;
@@ -405,14 +418,16 @@ export default {
       flex-wrap: wrap;
       align-items: center;
       font-size: 0.8em;
+      background: var(--background-select);
     }
+
     .multiselect__tags-wrap {
       display: flex;
       align-items: flex-start;
       flex-wrap: wrap;
       gap: 5px;
-      flex: 1;
     }
+
     .multiselect__tag {
       display: flex;
       padding: 6px;
@@ -420,12 +435,21 @@ export default {
       margin: 0;
       background: var(--tag-color);
     }
+
     .multiselect__tag-icon::after {
       display: flex;
       position: relative;
     }
+
     .multiselect__tag-icon {
       position: relative;
+      width: auto;
+      margin: 0;
+
+      &:after {
+        font-size: 2em;
+        color: var(--font-color);
+      }
     }
   }
 

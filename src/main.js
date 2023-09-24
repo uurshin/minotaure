@@ -80,10 +80,6 @@ export const usePlayerStore = defineStore('playerStore', {
                 state._current_game.tag_groups.forEach(function(tag_group) {
                     flatten_tags = [...flatten_tags, ...tag_group.tags];
                 });
-                flatten_tags.map(function (tag) {
-                    tag.hsl_color = 'hsl(' + tag.color[0] + ',' + tag.color[1] + '%' + ',' + tag.color[2] + '%)';
-                    return tag;
-                });
             }
             return flatten_tags;
         },
@@ -121,6 +117,34 @@ export const usePlayerStore = defineStore('playerStore', {
         },
         setTempPeer(value) {
             this._temp_peer = value;
+        },
+        addTag: function(tag_label, group) {
+            if (this.current_game.current_basic_color === undefined) {
+                this.current_game.current_basic_color = 0;
+                this.current_game.basic_color = 0;
+            }
+            this.current_game.current_basic_color += 40;
+
+            if (this.current_game.current_basic_color > 360) {
+                this.current_game.basic_color += 15;
+                this.current_game.current_basic_color = this.current_game.basic_color;
+            }
+
+            const tag = {
+                label: tag_label,
+                code: tag_label.substring(0, 2) + Math.floor((Math.random() * 10000000)),
+                color: [this.current_game.current_basic_color, 100, 40 + Math.floor(Math.random() * 40)],
+                group: group.code
+            }
+            // Todo recherche si code déjà existant.
+            group.tags.push(tag);
+            this.generateCss();
+        },
+        generateCss() {
+            let game_css = document.getElementById('game_css');
+            let css_str = '';
+            this.tags.forEach((tag) => css_str += '.tag-' + tag.code + ' .label-name:before { background-color:hsl(' + tag.color[0] + ',' + tag.color[1] + '%' + ',' + tag.color[2] + '%)' + ' !important} ');
+            game_css.innerHTML = css_str;
         },
         getStartTags() {
             return this.tag_groups.filter((group) => group.start === 'start' && group.tags.length > 0);
@@ -320,6 +344,13 @@ export const usePlayerStore = defineStore('playerStore', {
                 prepared_character.tags = character.tags.map(item => item.label);
             }
             return prepared_character;
+        },
+        filterCharacterByTags(character) {
+            return(
+                character.tags.find(
+                    (tag) => vm.chosen_tags.find((chosen_tag) => chosen_tag.code === tag.code)
+                )
+            )
         },
         removeTagFromAll(deleted_tag) {
             this.characters.forEach(function(character) {

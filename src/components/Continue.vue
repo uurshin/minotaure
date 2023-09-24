@@ -64,6 +64,18 @@ export default {
         this.activated = -1;
       }
     },
+    deleteAllGames(event) {
+      if (!this.confirmDelete) {
+        event.target.innerText = this.$t('Confirmer ?');
+        this.confirmDelete = true;
+      }
+      else {
+        this.games = [];
+        localStorage.setItem('games', JSON.stringify(this.games));
+        this.confirmDelete = false;
+        this.activated = -1;
+      }
+    },
     askPublicId(id) {
       this.ask_id = id;
     },
@@ -95,6 +107,7 @@ export default {
   <h1>{{ t('Continuer une partie') }}</h1>
   <div class="small-wrapper">
     <span v-html="$t('warning_version', {version: version})" v-if="hasDeprecatedGames"></span>
+    <button v-if="games.length > 1" class="btn-danger" @click="deleteAllGames($event)">{{ t('Supprimer toutes les parties') }}</button>
     <div class="game" v-for="(game, key) in games" v-if="!ask_id">
       <span>{{ game.name }}<span class="danger" v-if="game.version !== undefined && game.version !== version">*</span></span>
       <div v-if="activated !== key">
