@@ -159,16 +159,20 @@ export default {
       <div class="filter-data">
         <div v-if="store.tags.length">
           <vue-multiselect
-              ref="multiselect"
+              ref="tag_filter"
               id="tag_filter"
               v-model="tag_filter"
               label="label"
               track-by="code"
-              :tag-placeholder="$t('Ajouter un tag')"
-              :placeholder="$t('Filtrer sur un tag')"
-              :showNoOptions="false"
-              :options="store.tags"
+              group-values="tags"
+              group-label="label"
+              :group-select="true"
+              placeholder="Choisir un tag"
+              tagPlaceholder="Choisir un tag"
+              noOptions="Tout le monde"
+              :options=store.tag_groups
               :multiple="true"
+              :taggable="false"
               :hideSelected="true"
           ></vue-multiselect>
         </div>
@@ -194,7 +198,7 @@ export default {
           :ds-sort-as="{ challenge: sortAsChallenge, connection: sortAsConnected }"
           ref="dataset"
       >
-        <button  ref="step1" @click="store.generateCharacters(1)">{{ t('Générer un PNJ') }}</button>
+        <button ref="step2" @click="store.generateCharacters(1)">{{ t('Générer un PNJ') }}</button>
         <div class="wrapper-label">
           <dataset-search :placeholder="$t('Rechercher un personnage')" v-model="search_character" id="search-character" :ds-search-placeholder="$t('Commencez à taper')" />
         </div>

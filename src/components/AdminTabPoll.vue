@@ -131,16 +131,20 @@ export default {
       <div class="vertical-wrapper add-poll" v-if="poll_tab === 'add'">
         <label for="poll_targets">{{ t('Cibles') }}</label>
         <vue-multiselect
-            ref="multiselect"
+            ref="poll_targets"
             id="poll_targets"
             v-model="tags_poll"
             label="label"
             track-by="code"
-            tag-placeholder="Ajouter un tag"
-            placeholder="Choisissez un tag"
-            :showNoOptions="false"
-            :options="store.tags"
+            group-values="tags"
+            group-label="label"
+            :group-select="true"
+            placeholder="Choisir un tag"
+            tagPlaceholder="Choisir un tag"
+            noOptions="Tout le monde"
+            :options=store.tag_groups
             :multiple="true"
+            :taggable="false"
             :hideSelected="true"
         ></vue-multiselect>
         <label for="question">{{ t('Question') }}</label>

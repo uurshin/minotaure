@@ -351,7 +351,7 @@ export default {
       </div>
       <div class="tab-details">
         <button @click="startTour">{{ t('Aide')}}</button>
-        <button ref="step1" class="icon-email" v-if="peer !== undefined" @click="shareLink">
+        <button class="icon-email" v-if="peer !== undefined" @click="shareLink">
           {{ t("Inviter à jouer") }}
         </button>
         <button ref="start" class="icon-play" :class="{'btn-important': !store.current_game.tuto_on, attention: !this.store.current_game.tuto_on}" v-if="!store.current_game.game_started" @click="startGame">
@@ -377,19 +377,6 @@ export default {
 </template>
 
 <style lang="scss">
-  .video-wrapper {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    border: 2px solid white;
-    margin: 20px;
-    width: 200px;
-
-    > video {
-      max-width: 100%;
-    }
-  }
-
   #admin-wrapper {
     margin-bottom: auto;
     align-self: stretch;
@@ -561,6 +548,10 @@ export default {
     gap: 15px;
     flex-basis: 100%;
     align-items: center;
+
+    @include media("<tablet") {
+      flex-wrap: wrap;
+    }
 
     > label {
       display: flex;

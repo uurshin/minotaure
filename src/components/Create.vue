@@ -42,7 +42,8 @@ export default {
         characters: [],
         date: Date.now(),
         version: APP_VERSION,
-        init: true
+        init: true,
+        tag_groups: []
       };
       games_storage.push(new_game);
       store.setCurrentGame(new_game);

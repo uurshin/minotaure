@@ -104,7 +104,7 @@ export default {
 </script>
 
 <template>
-  <h1>{{ t('Continuer une partie') }}</h1>
+  <h1>{{ t('Gérer vos parties') }}</h1>
   <div class="small-wrapper">
     <span v-html="$t('warning_version', {version: version})" v-if="hasDeprecatedGames"></span>
     <button v-if="games.length > 1" class="btn-danger" @click="deleteAllGames($event)">{{ t('Supprimer toutes les parties') }}</button>
@@ -120,8 +120,8 @@ export default {
       </div>
       <button class="visible-mobile" @click="activated = key;" v-if="activated !== key">{{ t('Voir plus') }}</button>
     </div>
-    <div v-if="!games.length">
-      {{ t("Vous n'avez créé aucune partie.") }}
+    <div class="vertical-wrapper" v-if="!games.length">
+      <span>{{ t("Vous n'avez créé aucune partie.") }}</span>
       <router-link to="/create">{{ t("Créer une partie") }}</router-link>
     </div>
     <div class="vertical-wrapper" v-if="ask_id">

@@ -76,7 +76,7 @@ export default {
   <div class="tab" ref="tab">
     <div id='tab-gauges-content'>
       <div class="actions">
-        <button ref="step2" class="icon-add" v-if="!add_gauge_enabled" @click="add_gauge_enabled = true">{{ t('Ajouter une jauge') }}</button>
+        <button ref="step3" class="icon-add" v-if="!add_gauge_enabled" @click="add_gauge_enabled = true">{{ t('Ajouter une jauge') }}</button>
       </div>
       <template v-for="(gauge, key) in store.gauges">
         <div class="gauge list-item">

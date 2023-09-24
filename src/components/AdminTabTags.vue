@@ -201,6 +201,16 @@ export default {
             ref="context_menu_tags"
             @option-clicked="optionClicked"
         />
+        <div class="color-picker" :class="{show: color_picked != null}">
+          <color-picker
+              ref="color_picker"
+              v-bind="color"
+              @input="onColorSelect"
+              @focusout="handleFocusOut"
+              :step="30"
+          >
+          </color-picker>
+        </div>
         <button class="icon-add" @click="addGroupTag()">Ajouter un groupe de tags</button>
         <span>Clic droit sur un tag pour modifier ses caractéristiques</span>
       </div>
@@ -243,8 +253,9 @@ export default {
                 <div
                     class="multiselect__tag"
                     :class="'tag tag-' + tag.option.code"
+                    tabindex="0" @keyup.enter="handleClick($event, tag.option)" @click.prevent.stop="handleClick($event, tag.option)" title="Paramétrer ce tag"
                     >
-                  <div tabindex="0" @keyup.enter="handleClick($event, tag.option)" @click.prevent.stop="handleClick($event, tag.option)" title="Paramétrer ce tag">
+                  <div>
                     <span class="icon-settings hover-only"></span>
                     <span class="label-name">{{ tag.option.label }}</span>
                     <span v-if="tag.option.stat1">{{ tag.option.stat1 !== undefined ? ' Carac principale :  ' + store.stats[tag.option.stat1].name : '' }}</span>
@@ -256,16 +267,6 @@ export default {
                 </div>
             </template>
           </vue-multiselect>
-        </div>
-        <div class="color-picker" :class="{show: color_picked != null}">
-          <color-picker
-              ref="color_picker"
-              v-bind="color"
-              @input="onColorSelect"
-              @focusout="handleFocusOut"
-              :step="30"
-          >
-          </color-picker>
         </div>
       </template>
     </div>
@@ -357,20 +358,20 @@ export default {
               position: absolute;
               display: none;
             }
+          }
 
-            &:hover {
-              cursor: pointer;
+          &:hover {
+            cursor: pointer;
 
-              .label-name:hover {
-                &:before {
-                  opacity: 0;
-                }
+            .label-name {
+              &:before {
+                opacity: 0;
               }
+            }
 
-              > span.hover-only {
-                opacity: 1;
-                display: block;
-              }
+            span.hover-only {
+              opacity: 1;
+              display: block;
             }
           }
         }

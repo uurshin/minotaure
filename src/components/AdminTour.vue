@@ -18,8 +18,9 @@ export default {
       }
     });
     const steps = [
-      {text: 'Personnages', parent: 'characters', id: 'step1'},
-      {text: 'Jauges', parent: 'gauges', id: 'step2', finish:true},
+      {text: 'Ce didacticiel est en cours de conception.', parent: 'characters', id: 'step1'},
+      {text: 'Personnages', parent: 'characters', id: 'step2'},
+      {text: 'Jauges', parent: 'gauges', id: 'step3', finish:true},
     ];
 
     return {

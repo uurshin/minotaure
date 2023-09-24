@@ -32,30 +32,32 @@ export default {
 <template>
   <div class="tab" ref="tab">
     <div id='tab-pick-content'>
-      <input type="number" v-model="nb_targets" min=1>
-      <select v-model="type_pick">
-        <option value="all">Parmi les personnages ayant un de ces tags :</option>
-        <option value="all">Parmi les personnages ayant tous ces tags :</option>
-        <option value="each">{{ nb_targets }} personnages par tag :</option>
-      </select>
-      <vue-multiselect
-          ref="pick_multiselect"
-          id="pick_multiselect"
-          v-model="pick_multiselect"
-          label="label"
-          track-by="code"
-          group-values="tags"
-          group-label="label"
-          :group-select="true"
-          placeholder="Choisir un tag"
-          tagPlaceholder="Choisir un tag"
-          noOptions="Tout le monde"
-          :options=store.tag_groups
-          :multiple="true"
-          :taggable="false"
-          :hideSelected="true"
-      ></vue-multiselect>
-      <button @click="launchPick">{{ t('Lancer le tirage') }}</button>
+      <div class="vertical-wrapper">
+        <input type="number" v-model="nb_targets" min=1>
+        <select v-model="type_pick">
+          <option value="all">Parmi les personnages ayant un de ces tags :</option>
+          <option value="all">Parmi les personnages ayant tous ces tags :</option>
+          <option value="each">{{ nb_targets }} personnages par tag :</option>
+        </select>
+        <vue-multiselect
+            ref="pick_multiselect"
+            id="pick_multiselect"
+            v-model="pick_multiselect"
+            label="label"
+            track-by="code"
+            group-values="tags"
+            group-label="label"
+            :group-select="true"
+            placeholder="Choisir un tag"
+            tagPlaceholder="Choisir un tag"
+            noOptions="Tout le monde"
+            :options=store.tag_groups
+            :multiple="true"
+            :taggable="false"
+            :hideSelected="true"
+        ></vue-multiselect>
+        <button @click="launchPick">{{ t('Lancer le tirage') }}</button>
+      </div>
     </div>
   </div>
 </template>

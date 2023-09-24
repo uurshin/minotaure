@@ -206,15 +206,18 @@ export default {
         <div>
           <label for="chosen_tags">{{ t('Cibles') }}</label>
           <vue-multiselect
-              ref="multiselect"
+              ref="chosen_tags"
               id="chosen_tags"
               v-model="chosen_tags"
               label="label"
               track-by="code"
+              group-values="tags"
+              group-label="label"
+              :group-select="true"
               :placeholder="$t('Ajouter une cible')"
               :tagPlaceholder="$t('Ajouter une cible')"
               :noOptions="$t('Tout le monde')"
-              :options=store.tags
+              :options=store.tag_groups
               :multiple="true"
               :taggable="false"
               :hideSelected="true"
@@ -247,7 +250,6 @@ export default {
           <div>
             <label :for="'chosen_modifier_tags_add_'+type">{{ t('Ajouter les tags') }}</label>
             <vue-multiselect
-                ref="multiselect"
                 :id="'chosen_modifier_tags_add_'+type"
                 v-model="chosen_modifier_tags_add[type]"
                 label="label"
@@ -255,7 +257,10 @@ export default {
                 :tag-placeholder="$t('Ajouter un tag')"
                 :placeholder="$t('Tapez un mot')"
                 :noOptions="$t('Aucun autre tag, inventez-en un !')"
-                :options="store.tags"
+                group-values="tags"
+                group-label="label"
+                :group-select="false"
+                :options=store.tag_groups
                 :multiple="true"
                 :taggable="true"
                 :hideSelected="true"
@@ -265,16 +270,18 @@ export default {
           <div class="full">
             <label :for="'chosen_modifier_tags_remove_'+type">{{ t('Retirer les tags') }}</label>
             <vue-multiselect
-                ref="multiselect"
                 :id="'chosen_modifier_tags_remove_'+type"
                 v-model="chosen_modifier_tags_remove[type]"
                 label="label"
                 track-by="code"
                 :placeholder="$t('Tapez un mot')"
                 :showNoOptions="false"
-                :options="store.tags"
+                :group-select="false"
+                :options=store.tag_groups
                 :multiple="true"
+                :taggable="true"
                 :hideSelected="true"
+                @tag="addTag($event, type)"
             ></vue-multiselect>
           </div>
         </div>
