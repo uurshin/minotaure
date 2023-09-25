@@ -345,10 +345,10 @@ export const usePlayerStore = defineStore('playerStore', {
             }
             return prepared_character;
         },
-        filterCharacterByTags(character) {
+        filterCharacterByTags(character, chosen_tags) {
             return(
                 character.tags.find(
-                    (tag) => vm.chosen_tags.find((chosen_tag) => chosen_tag.code === tag.code)
+                    (tag) => chosen_tags.find((chosen_tag) => chosen_tag.code === tag.code)
                 )
             )
         },

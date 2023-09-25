@@ -110,9 +110,7 @@ export default {
       const vm = this;
       let selectedCharacters
       if (this.chosen_tags.length) {
-        selectedCharacters = this.store.alive_characters.filter(
-          vm.store.filterCharacterByTags(character)
-        );
+        selectedCharacters = this.store.alive_characters.filter((character) => vm.store.filterCharacterByTags(character, vm.chosen_tags));
       }
       else {
         selectedCharacters = this.store.alive_characters;
@@ -276,6 +274,8 @@ export default {
                 track-by="code"
                 :placeholder="$t('Tapez un mot')"
                 :showNoOptions="false"
+                group-values="tags"
+                group-label="label"
                 :group-select="false"
                 :options=store.tag_groups
                 :multiple="true"
