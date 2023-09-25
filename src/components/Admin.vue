@@ -12,7 +12,7 @@ import AdminTabPoll from '../components/AdminTabPoll.vue'
 import AdminTabChallenge from '../components/AdminTabChallenge.vue'
 import AdminTabPick from '../components/AdminTabPick.vue'
 import AdminTour from '../components/AdminTour.vue'
-import {useI18n} from "vue-i18n";
+import { useI18n } from "vue-i18n";
 
 export default {
   components: {
@@ -85,9 +85,9 @@ export default {
   },
   mounted() {
     window.onbeforeunload =  function () {
+      alert("admin onbefore unload");
       if (vm.store.current_game !== null) {
         let temp_game = {
-          // 'connections': this.store.connections,
           'id': vm.store.current_game.id,
           'peer': vm.store.peer.id
         };
@@ -140,11 +140,13 @@ export default {
     this.peer = this.store.peer;
 
     this.peer.on('error', function (err) {
-      if (err.type === 'peer-unavailable') {
-        alert('peer unavailable');
-        // vm.store.removeConnection(err);
-      }
+      console.log('Peer admin error : ' + err.type);
     });
+
+    this.peer.on('disconnected', function () {
+      console.log('Peer admin disconnect');
+    });
+
 
     this.peer.on('connection', function (conn) {
       vm.store.connections[conn.connectionId] = conn;
@@ -233,11 +235,11 @@ export default {
 
       conn.on('close', function() {
         // TODO ?
-        console.log('deco');
+        console.log('Connection admin alert : deco');
       })
 
       conn.on('error', function(err) {
-        alert(err.type);
+        console.log('Connection admin error : ' + err.type);
       })
     });
   },
@@ -305,8 +307,15 @@ export default {
     },
     shareLink(event) {
       const vm = this;
-      event.target.innerText = this.$t("Lien d'invitation copié !");
-      navigator.clipboard.writeText(window.location.origin + '#join?id=' + this.store.peer.id);
+      if (window.location.origin === 'null') {
+        navigator.clipboard.writeText(this.store.peer.id);
+        event.target.innerText = this.$t("Identifiant de partie copié !");
+      }
+      else {
+        navigator.clipboard.writeText(window.location.origin + '#join?id=' + this.store.peer.id);
+        event.target.innerText = this.$t("Lien d'invitation copié !");
+      }
+
       setTimeout(function() {
         event.target.innerText = vm.$t('Inviter à jouer');
       }, 2000)

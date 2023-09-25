@@ -21,6 +21,7 @@ Aide: "Aide"
 Démarrer: "Démarrer"
 Inviter à jouer: "Inviter à jouer"
 Lien d'invitation copié !: "Lien d'invitation copié !"
+Identifiant de partie copié !: "Identifiant de partie copié !"
 
 #Continue
 Continuer une partie: "Continuer une partie"
@@ -29,7 +30,7 @@ Continuer la partie: "Continuer la partie"
 Supprimer la partie: "Supprimer la partie"
 Voir plus: "Voir plus"
 Vous n'avez créé aucune partie.: "Vous n'avez créé aucune partie."
-Identifiant public de votre partie: "Identifiant public de votre partie"
+Identifiant de votre partie: "Identifiant de votre partie"
 Cet identifiant servira à rejoindre la partie pour les participants.: "Cet identifiant servira à rejoindre la partie pour les participants."
 Annuler: "Annuler"
 En attente: "En attente"
@@ -149,3 +150,7 @@ count_personnage_import: "1 personnage importé | {count_import} personnages imp
 QR code invalide: "QR code invalide"
 Exporter vos personnages: "Exporter vos personnages"
 Importer vos personnages: "Importer vos personnages"
+
+#Create
+Nom de votre partie: "Nom de votre partie"
+Ma partie: "Ma partie"

@@ -1,10 +1,12 @@
 <script>
 import router from '../main.js'
 import { usePlayerStore } from '../main';
+import {useI18n} from "vue-i18n";
 
 export default {
   setup() {
-
+    const { t } = useI18n()
+    return { t };
   },
   data() {
     return {
@@ -17,7 +19,7 @@ export default {
   },
   computed: {
     isBtnDisabled() {
-      if (this.id_admin.length === 0 || this.name.length === 0) {
+      if (this.name.length === 0) {
         this.btn_text =  'En attente';
         return true;
       }
@@ -35,10 +37,9 @@ export default {
       // Stockage de la partie dans le navigateur.
       let games_storage = localStorage.getItem('games');
       games_storage = (games_storage == null ? [] : JSON.parse(games_storage));
-      let name = document.getElementById('name').value;
       let new_game = {
         id: Date.now(),
-        name: name,
+        name: this.name,
         characters: [],
         date: Date.now(),
         version: APP_VERSION,
@@ -53,8 +54,7 @@ export default {
       localStorage.setItem('games', JSON.stringify(games_storage));
 
       // Ouverture de la connexion webrtc et passage sur l'écran d'admin.
-      let id_admin = document.getElementById('id_admin').value;
-      let peer = new Peer(id_admin);
+      let peer = new Peer(this.id_admin);
       peer.on('open', function (conn) {
         store.setPeer(peer);
         router.push('/admin');
@@ -64,17 +64,14 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
-
 <template>
   <h1>Créer une partie</h1>
   <div class="small-wrapper">
-    <label for="id_admin">Identifiant de votre partie</label>
-    <input v-model="id_admin" required type="text" id="id_admin" minlength="10" value="oiseauchapeau">
-    <label for="id_admin">Nom de votre partie</label>
+    <label for="name">Nom de votre partie</label>
     <input autocomplete="off" v-model="name" required type="text" id="name" value="Ma partie" placeholder="Ma partie">
+    <label for="id_admin">Identifiant public de votre partie</label>
+    <input type="text" v-model="id_admin" required id="id_admin">
+    <span class="description">{{ t("Cet identifiant servira à rejoindre la partie pour les participants. Laissez vide pour laisser le système choisir pour vous.") }}</span>
     <button :disabled="isBtnDisabled" v-on:click="launch">{{ btn_text }}</button>
   </div>
 </template>

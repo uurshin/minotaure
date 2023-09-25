@@ -1,7 +1,7 @@
 <script>
 import router, { usePlayerStore }  from '../main';
 import { ref } from 'vue'
-import {useI18n} from "vue-i18n";
+import { useI18n } from "vue-i18n";
 
 export default {
   setup() {
@@ -41,7 +41,13 @@ export default {
     },
     hasDeprecatedGames() {
       return (this.games.findIndex((game) => game.version !== undefined && game.version !== this.version) > -1);
-    }
+    },
+    titleContinue() {
+      if (this.ask_id) {
+        return this.$t('Continuer la partie');
+      }
+      return this.$t('Gérer vos parties');
+    },
   },
   methods: {
     formatDate(dateString) {
@@ -94,9 +100,6 @@ export default {
           store.setPeer(peer);
           router.push('/admin');
         });
-        peer.on('error', function(err) {
-          console.log(err);
-        });
       }
     }
   }
@@ -104,10 +107,10 @@ export default {
 </script>
 
 <template>
-  <h1>{{ t('Gérer vos parties') }}</h1>
+  <h1>{{ titleContinue }}</h1>
   <div class="small-wrapper">
     <span v-html="$t('warning_version', {version: version})" v-if="hasDeprecatedGames"></span>
-    <button v-if="games.length > 1" class="btn-danger" @click="deleteAllGames($event)">{{ t('Supprimer toutes les parties') }}</button>
+    <button v-if="games.length > 1 && !ask_id" class="btn-danger" @click="deleteAllGames($event)">{{ t('Supprimer toutes les parties') }}</button>
     <div class="game" v-for="(game, key) in games" v-if="!ask_id">
       <span>{{ game.name }}<span class="danger" v-if="game.version !== undefined && game.version !== version">*</span></span>
       <div v-if="activated !== key">
@@ -125,9 +128,9 @@ export default {
       <router-link to="/create">{{ t("Créer une partie") }}</router-link>
     </div>
     <div class="vertical-wrapper" v-if="ask_id">
-      <label for="id_admin">{{ t("Identifiant public de votre partie") }}</label>
+      <label for="id_admin">{{ t("Identifiant de votre partie") }}</label>
       <input name="id_admin" type="text" id="id_admin" v-model="id_admin">
-      <span class="description">{{ t("Cet identifiant servira à rejoindre la partie pour les participants.") }}</span>
+      <span class="description">{{ t("Cet identifiant servira à rejoindre la partie pour les participants. Laissez vide pour laisser le système choisir pour vous.") }}</span>
       <button @click="continueGame()" :disabled="isBtnDisabled" >{{ btn_text }}</button>
       <button @click="cancelContinue()" >{{ t('Annuler') }}</button>
     </div>

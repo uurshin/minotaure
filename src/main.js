@@ -159,10 +159,10 @@ export const usePlayerStore = defineStore('playerStore', {
             this._connections = connections;
         },
         disconnectAll() {
-            const vm = this;
-            this.characters.forEach(function(character) {
-                if (character.connection != null && vm.connections[character.connection] !== undefined) {
-                    vm.connections[character.connection].close();
+            Object.values(this.connections).forEach(function(connection) {
+                if (connection != null) {
+                    console.log('trigger deco');
+                    connection.close();
                 }
             });
             this.peer.disconnect();
@@ -383,16 +383,7 @@ export const usePlayerStore = defineStore('playerStore', {
                 games.push(this._current_game);
             }
 
-            function replacer(key, value){
-                if(key === 'characters') {
-                    value.forEach(function(character) {
-                        character.connection = null;
-                    });
-                    return value;
-                }
-                return value;
-            }
-            localStorage.setItem('games', JSON.stringify(games, replacer));
+            localStorage.setItem('games', JSON.stringify(games));
         },
         join(id, set_temp_peer = false) {
             let vm = this;
