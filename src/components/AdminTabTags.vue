@@ -16,6 +16,7 @@ export default {
   },
   data() {
     const store = usePlayerStore();
+    const { t } = useI18n();
     const options_contextual = [{}];
     const color = reactive({
       hue: 50,
@@ -28,6 +29,7 @@ export default {
 
     return {
       store,
+      t,
       options_contextual,
       color,
       color_picked,
@@ -98,43 +100,43 @@ export default {
     },
     generateOptions (item) {
       let options = [];
-
-      options.push({name: 'Supprimer', effect:'remove'});
+     
+      options.push({name: this.$t('Supprimer'), effect:'remove'});
 
       for (const [key, stat] of Object.entries(this.store.stats)) {
-        options.push({name: 'Augmenter ' + stat.name, effect:'bonus', target: key, value: 1 });
+        options.push({name: this.$t('Augmenter') + stat.name, effect:'bonus', target: key, value: 1 });
       }
       options.push({ type:'divider'})
 
       for (const [key, stat] of Object.entries(this.store.stats)) {
-        options.push({name: 'Diminuer ' + stat.name, effect:'bonus', target: key, value: -1 });
+        options.push({name: this.$t('Diminuer') + stat.name, effect:'bonus', target: key, value: -1 });
       }
       options.push({ type:'divider'})
 
       if (item.stat1 === undefined) {
         for (const [key, stat] of Object.entries(this.store.stats)) {
-          options.push({name: 'Associer à ' + stat.name + ' comme carac principale', effect:'stat1', target: key });
+          options.push({name: this.$t('linkStatToTag', {statname: stat.name}), effect:'stat1', target: key });
         }
         options.push({ type:'divider'})
       }
       else {
-        options.push({name: 'Ne plus associer ' + this.store.stats[item.stat1].name + ' comme carac principale', effect:'stat1_unset', target: item.stat1 });
+        options.push({name: this.$t('unlinkStatToTag', {statname: this.store.stats[item.stat1].name}), effect:'stat1_unset', target: item.stat1 });
       }
 
       if (item.stat1 !== undefined) {
         if (item.stat2 === undefined) {
           for (const [key, stat] of Object.entries(this.store.stats)) {
             if (item.stat1 !== key) {
-              options.push({name: 'Associer à ' + stat.name + ' comme carac secondaire', effect:'stat2', target: key });
+              options.push({name: this.$t('link2StatToTag', {statname: stat.name}), effect:'stat2', target: key });
             }
           }
         }
         else {
-          options.push({name: 'Ne plus associer à ' + this.store.stats[item.stat2].name + ' comme carac secondaire', effect:'stat2_unset', target: item.stat2 });
+          options.push({name: this.$t('unlink2StatToTag', {statname: this.store.stats[item.stat2].name}), effect:'stat2_unset', target: item.stat2 });
         }
       }
 
-      options.push({name: 'Changer la couleur', effect:'color'});
+      options.push({name: this.$t('Changer la couleur'), effect:'color'});
 
       return options;
     },
@@ -211,25 +213,25 @@ export default {
           >
           </color-picker>
         </div>
-        <button class="icon-add" @click="addGroupTag()">Ajouter un groupe de tags</button>
-        <span>Clic droit sur un tag pour modifier ses caractéristiques</span>
+        <button class="icon-add" @click="addGroupTag()">{{ t("Ajouter un groupe de tags") }}</button>
+        <span>{{ t("Clic gauche sur un tag pour modifier ses caractéristiques") }}</span>
       </div>
       <template v-for="(group, key) in store.current_game.tag_groups">
         <div class="group-tag">
           <span class="group-label">
             <input :ref="'group_name_input_'+ key" @keydown.enter="group_selected = null;" v-if="group_selected === key" type="text" v-model="store.current_game.tag_groups[key].label" />
             <button v-show="group_selected !== key" @keyup.enter="focusLabelGroup($event, key)" @click="focusLabelGroup($event, key)" class="icon-edit">{{ store.current_game.tag_groups[key].label }}</button>
-            <button v-show="group_selected === key" @click="group_selected = null">Terminer</button>
+            <button v-show="group_selected === key" @click="group_selected = null">{{ t("Terminer") }}</button>
           </span>
           <div class="actions secondary">
-            <label for="creation_rule">Règle d'attribution : </label>
+            <label for="creation_rule">{{ t("Règle d'attribution") }}</label>
             <select id="creation_rule" v-model="store.current_game.tag_groups[key].start">
-              <option value="random">Répartis aléatoirement à la création</option>
-              <option value="start">A choisir à la création du personnage</option>
-              <option value="none">Pas de règle</option>
+              <option value="random">{{ t("Répartis aléatoirement à la création") }}</option>
+              <option value="start">{{ t("A choisir à la création du personnage") }}</option>
+              <option value="none">{{ t("Pas de règle") }}</option>
             </select>
-            <button @click="allocateGroupTag(group)" title="Pour chaque personnage n'ayant pas encore de tag de ce groupe, un tag lui sera attribué au hasard">Redistribuer</button>
-            <button class="btn-danger" @click="removeGroupTag(key)" title="Tous les tags de ce groupe seront supprimés, et retirés des personnages.">Supprimer</button>
+            <button @click="allocateGroupTag(group)" :title="$t('Pour chaque personnage n\'ayant pas encore de tag de ce groupe, un tag lui sera attribué au hasard')">{{ t("Redistribuer") }}</button>
+            <button class="btn-danger" @click="removeGroupTag(key)" :title="$t('Tous les tags de ce groupe seront supprimés, et retirés des personnages')">{{ t("Supprimer") }}</button>
           </div>
           <vue-multiselect
               :ref="'group_tag_select_' + group.code"
@@ -237,8 +239,8 @@ export default {
               v-model="store.current_game.tag_groups[key].tags"
               label="label"
               track-by="code"
-              tag-placeholder="Ajouter un tag"
-              placeholder="Tapez un mot"
+              :tag-placeholder="$t('Ajouter un tag')"
+              :placeholder="$t('Tapez un mot')"
               :closeOnSelect="false"
               :showNoOptions="false"
               :options="store.current_game.tag_groups[key].tags"
@@ -258,8 +260,8 @@ export default {
                   <div>
                     <span class="icon-settings hover-only"></span>
                     <span class="label-name">{{ tag.option.label }}</span>
-                    <span v-if="tag.option.stat1">{{ tag.option.stat1 !== undefined ? ' Carac principale :  ' + store.stats[tag.option.stat1].name : '' }}</span>
-                    <span v-if="tag.option.stat2">{{ tag.option.stat2 !== undefined ? ' Carac secondaire : ' + store.stats[tag.option.stat2].name : '' }}</span>
+                    <span v-if="tag.option.stat1">{{ tag.option.stat1 !== undefined ? t('Carac principale') + store.stats[tag.option.stat1].name : '' }}</span>
+                    <span v-if="tag.option.stat2">{{ tag.option.stat2 !== undefined ? t('Carac secondaire') + store.stats[tag.option.stat2].name : '' }}</span>
                     <span v-if="tag.option.modifiers !== undefined" v-for="(modifier, key) in tag.option.modifiers">
                       {{ store.stats[key].name }} {{ modifier.value > 0 ? '+' + modifier.value : modifier.value }}
                     </span>

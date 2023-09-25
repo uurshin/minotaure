@@ -38,7 +38,7 @@
                 result.push({'game_token': character.game_token, 'character_token': character.character_token });
               }
             });
-            alert(result.length + ' personnage importés');
+            alert(this.$t('count_personnage_import', {count_import: result.length}));
             localStorage.setItem('games_player', JSON.stringify(result));
 
             this.characters = JSON.parse(localStorage.getItem('games_player'));
@@ -47,7 +47,7 @@
           }
         }
 
-        alert('QR code invalide');
+        alert(this.$t('QR code invalide'));
         this.paused = true
         await this.timeout(500)
         this.paused = false
@@ -63,12 +63,12 @@
 </script>
 
 <template>
-  <h1>Gérer vos personnages</h1>
+  <h1>{{ t("Gérer vos personnages") }}</h1>
   <div class="small-wrapper">
     <div>{{ t('Characters help') }}</div>
     <div>{{ t('Characters nb', characters !== null ? characters.length : 0)}}</div>
-    <button v-if="characters !== null" @click="type_action = 'export'">Exporter vos personnages</button>
-    <button @click="type_action = 'import'">Importer vos personnages</button>
+    <button v-if="characters !== null" @click="type_action = 'export'">{{ t("Exporter vos personnages") }}</button>
+    <button @click="type_action = 'import'">{{ t("Importer vos personnages") }}</button>
     <div id="export" v-if="type_action === 'export'">
       <div class="qr-code">
         <qrcode-vue :value="characters_string" :size="200" level="H" />
