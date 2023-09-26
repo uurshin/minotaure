@@ -129,8 +129,8 @@ export default {
     </div>
     <div class="vertical-wrapper" v-if="ask_id">
       <label for="id_admin">{{ t("Identifiant de votre partie") }}</label>
-      <input name="id_admin" type="text" id="id_admin" v-model="id_admin">
       <span class="description">{{ t("Cet identifiant servira à rejoindre la partie pour les participants. Laissez vide pour laisser le système choisir pour vous.") }}</span>
+      <input name="id_admin" type="text" id="id_admin" v-model="id_admin">
       <button @click="continueGame()" :disabled="isBtnDisabled" >{{ btn_text }}</button>
       <button @click="cancelContinue()" >{{ t('Annuler') }}</button>
     </div>

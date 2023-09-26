@@ -59,6 +59,8 @@ export default {
       peer: null,
       video: null,
       is_live: false,
+      game_name_focused: -1,
+      temp_game_name: '',
       tabs: [
         {id: 'intro', label: 'Introduction'},
         {id: 'characters', label: 'Personnages', tutorial: 'off' },
@@ -81,6 +83,9 @@ export default {
       else {
         return this.tabs.filter((tab) => tab.tutorial !== undefined );
       }
+    },
+    gameLabel: function() {
+      return (this.game_name_focused === 0 ? this.$t('Renommer la partie') : this.store.current_game.name);
     }
   },
   mounted() {
@@ -336,17 +341,28 @@ export default {
       this.store.current_game.tuto_on = false;
       this.changeTab('characters');
     },
+    gameStartRename() {
+      this.game_name_focused = 1;
+      this.$nextTick(() => {
+        this.$refs.input_game_name.focus();
+      });
+      this.temp_game_name = this.store.current_game.name;
+    },
+    gameConfirmRename() {
+      this.store.current_game.name = this.temp_game_name;
+      this.store.characters.forEach((character) => character.game_name = this.temp_game_name);
+      this.game_name_focused = -1;
+    }
   }
 }
 </script>
 
 <template>
-  <div>
-    <span></span>
-  </div>
   <admin-tour ref="admin_tour"></admin-tour>
   <div id="admin-wrapper">
     <div class="tabs">
+      <button v-if="game_name_focused < 1" class="game-name" @keyup.enter="gameStartRename" @click="gameStartRename">{{ gameLabel }}</button>
+      <input maxlength="25" ref="input_game_name" id="input-game-name" v-show="game_name_focused === 1" type="text" v-model="temp_game_name" @blur="gameConfirmRename" @keyup.enter="gameConfirmRename" />
       <div
           tabindex="0"
           v-for="tab in activeTabs"
@@ -389,6 +405,17 @@ export default {
   #admin-wrapper {
     margin-bottom: auto;
     align-self: stretch;
+
+    .game-name {
+      border-radius: 0;
+      background: var(--font-color);
+      color: var(--background-color);
+    }
+    #input-game-name {
+      border-radius: 0;
+      height: auto;
+      text-align: center;
+    }
   }
 
   .multiselect {
@@ -399,8 +426,8 @@ export default {
       background: black !important;
       color: white !important;
 
-      &:after {
-        content: 'V'
+      &.multiselect__option--highlight:after {
+        content: '+'
       }
     }
 
@@ -543,13 +570,6 @@ export default {
         align-items: center;
       }
     }
-  }
-
-  .id-game {
-    order: 1;
-    align-self: center;
-    display: block;
-    padding: 15px;
   }
 
   .actions {

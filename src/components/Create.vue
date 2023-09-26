@@ -68,11 +68,11 @@ export default {
   <h1>Créer une partie</h1>
   <div class="small-wrapper">
     <label for="name">Nom de votre partie</label>
-    <input autocomplete="off" v-model="name" required type="text" id="name" value="Ma partie" placeholder="Ma partie">
+    <input @keyup.enter="this.$refs.id_admin.focus()" autocomplete="off" v-model="name" required type="text" id="name" value="Ma partie" placeholder="Ma partie" maxlength="25">
     <label for="id_admin">Identifiant public de votre partie</label>
-    <input type="text" v-model="id_admin" required id="id_admin">
     <span class="description">{{ t("Cet identifiant servira à rejoindre la partie pour les participants. Laissez vide pour laisser le système choisir pour vous.") }}</span>
-    <button :disabled="isBtnDisabled" v-on:click="launch">{{ btn_text }}</button>
+    <input type="text" ref="id_admin" v-model="id_admin" id="id_admin" @keyup.enter="this.$refs.button_launch.focus()">
+    <button ref="button_launch" :disabled="isBtnDisabled" v-on:click="launch">{{ btn_text }}</button>
   </div>
 </template>
 

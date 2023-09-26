@@ -37,7 +37,7 @@ export default {
     store._leaving = false;
     store.setTempPeer( localStorage.getItem('temp_peer'));
     let gm_id = localStorage.getItem('gm_id');
-    if (store.temp_peer !== null) {
+    if (store.peer == null || store.temp_peer !== null) {
       store.join(gm_id, true);
     }
     else {
@@ -182,9 +182,11 @@ export default {
 </script>
 
 <template>
+  <span class="game-name" v-if="character.game_name !== undefined">{{ character.game_name }}</span>
   <div id="player-sheet" class="small-wrapper" :class="{ disabled: freeze }">
     <div class="lds-ripple"><div></div><div></div></div>
     <div class="game-wait" v-if="!gameStart">En attente du démarrage de la partie</div>
+
     <div id="creation" class="vertical-wrapper" v-if="creation_form">
       <label for="name">Nom de votre personnage</label>
       <input maxlength="12" type="text" id="name" v-model="name_picked"/>
@@ -200,6 +202,7 @@ export default {
       </template>
       <button :disabled="name_picked === ''" @click="sendCharacter()">Valider votre personnage</button>
     </div>
+
     <div class="vertical-wrapper polls" v-else-if="character.polls !== undefined && Object.keys(character.polls).length ">
       <div class="poll-wrapper" v-for="(poll, key, index) in character.polls">
         <template v-if="index === 0">
@@ -213,6 +216,7 @@ export default {
         <span v-else>Sondage {{ index + 1 }} en attente</span>
       </div>
     </div>
+
     <div class="vertical-wrapper" id="sheet" v-else-if="character.alive">
       <span class="character-name">{{ character.name }}</span>
       <div>
@@ -224,7 +228,7 @@ export default {
           <span>{{ stat.label }}</span><span class="indicator">{{ stat.value }}</span></span>
       </div>
       <div>
-        <span v-for="tag in character.tags">{{ tag }}</span>
+        <span v-for="tag in character.tags">{{ tag.label }}</span>
       </div>
       <ul v-if="character.challenge !== undefined">
         <li v-for="message in character.challenge.message">{{ message }}</li>
@@ -244,17 +248,27 @@ export default {
   .game-wait {
     color: white;
   }
+
+  .game-name {
+    font-size: 1.2em;
+    margin-top: 20px;
+  }
+
   #player-sheet {
     display: flex;
     border-radius: 10px;
-    color: black;
-    border: 1px solid black;
+    color: var(--background-color);
     flex-direction: column;
     gap: 10px;
-    background: #EEE;
+    margin-top: 20px;
+    background: var(--font-color);
     padding: 10px;
     align-items: center;
     justify-content: center;
+
+    input {
+      border: 1px solid var(--border-color);
+    }
 
     .character-name {
       font-size: 1.5em;
