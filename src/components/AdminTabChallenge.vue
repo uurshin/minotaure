@@ -101,7 +101,7 @@ export default {
         };
         this.store.tag_groups.push(group);
       }
-      this.store.addTag(tag_label, group);
+      let tag = this.store.addTag(tag_label, group);
       this.chosen_modifier_tags_add[type].push(tag);
     },
     startChallenge() {
