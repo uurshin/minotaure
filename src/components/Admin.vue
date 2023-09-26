@@ -406,6 +406,14 @@ export default {
     margin-bottom: auto;
     align-self: stretch;
 
+    button {
+      background-color: var(--button-background);
+
+      &.active {
+        border: 1px solid #39c6ff;
+      }
+    }
+
     .game-name {
       border-radius: 0;
       background: var(--font-color);
@@ -496,7 +504,7 @@ export default {
       font-weight: 500;
       border-bottom: 1px solid var(--font-color);
 
-      &:first-child {
+      &:first-of-type {
         border-left: none !important;
       }
 
