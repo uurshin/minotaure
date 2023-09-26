@@ -186,7 +186,6 @@ export default {
             Échecs<span>{{ store.last_challenge.nb_failure }}</span>
           </button>
         </div>
-
         <button v-if="Object.keys(filters).length || tag_filter.length" class="reset-filters" @click="resetFilters">{{ t('Montrer tous les personnages') }}</button>
       </div>
       <dataset
