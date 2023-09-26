@@ -180,7 +180,7 @@ export default {
 
 <template>
   <div class="tab" ref="tab">
-    <span v-if="store.stats !== undefined && Object.keys(store.stats).length === 0">{{ t("Vous devez d'abord") }}<button @click="$parent.changeTab('tab-stats')">{{ t('créer une caractéristique') }}</button></span>
+    <span v-if="store.stats !== undefined && Object.keys(store.stats).length === 0">{{ t("Vous devez d'abord") }}<button @click="$parent.changeTab('stats')">{{ t('créer une caractéristique') }}</button></span>
     <div id='tab-challenge-content' v-if="store.stats !== undefined && Object.keys(store.stats).length > 0">
       <div id="chosen-targets">
         <div>
