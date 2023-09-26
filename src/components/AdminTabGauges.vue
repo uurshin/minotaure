@@ -65,7 +65,7 @@ export default {
     removeGauge: function(key) {
       delete this.store.gauges[key];
       this.store.characters.forEach(function(character) {
-        delete character.gauges.key;
+        delete character.gauges[key];
       });
     },
   }
