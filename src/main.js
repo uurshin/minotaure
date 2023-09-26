@@ -139,6 +139,7 @@ export const usePlayerStore = defineStore('playerStore', {
             // Todo recherche si code déjà existant.
             group.tags.push(tag);
             this.generateCss();
+            return tag;
         },
         generateCss() {
             let game_css = document.getElementById('game_css');
@@ -262,6 +263,7 @@ export const usePlayerStore = defineStore('playerStore', {
             })
 
             let character = {
+                game_name: this.current_game.name,
                 token: token,
                 tags: tags,
                 stats: {},
@@ -271,7 +273,7 @@ export const usePlayerStore = defineStore('playerStore', {
                 challenge: {},
                 polls: {},
                 connection: conn != null ? conn : false,
-                watched: false
+                watched: false,
             }
 
             // Lancés de dés équilibrés de manière à faire un total de 10 x nombre de caracs.
@@ -331,19 +333,8 @@ export const usePlayerStore = defineStore('playerStore', {
             }
         },
         prepareCharacter(character) {
-            // Todo : revenir à un simple spread.
-            let prepared_character = {};
-            prepared_character.name = character.name;
-            prepared_character.alive = character.alive;
-            prepared_character.token = character.token;
-            prepared_character.stats = character.stats;
-            prepared_character.gauges = character.gauges;
-            prepared_character.challenge = character.challenge;
-            prepared_character.polls = character.polls;
-            if (character.tags.length > 0) {
-                prepared_character.tags = character.tags.map(item => item.label);
-            }
-            return prepared_character;
+            // Future manipulation of character.
+            return character;
         },
         filterCharacterByTags(character, chosen_tags) {
             return(
