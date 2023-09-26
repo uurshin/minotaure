@@ -89,16 +89,7 @@ export default {
 
       let selectedCharacters
       if (this.tags_poll.length) {
-          selectedCharacters = this.store.alive_characters.filter(
-              function(character) {
-                  return(
-                      character.alive &&
-                      character.tags.find(
-                          (tag) => vm.tags_poll.find((chosen_tag) => chosen_tag.code === tag.code)
-                      )
-                  )
-              }
-          );
+        selectedCharacters = this.store.connected_characters(true).filter((character) => vm.store.filterCharacterByTags(character, vm.tags_poll));
       }
       else {
         selectedCharacters = this.store.connected_characters(true);
@@ -156,15 +147,18 @@ export default {
       </div>
 
       <div class="vertical-wrapper" v-if="poll_tab === 'active'">
+        <!--  TODO : transition de disparition (opacity + scale3d(0,0,0) du sondage au clic sur terminer -->
         <div class="list-polls poll-active" :class="{show: poll_show[key]}" v-for="(poll, key) in store.active_polls">
           <span class="title">{{ poll[1].label}}</span>
-          <span>{{ t('Participation : ') }}{{ attendance(poll) }}%</span>
-          <button @click="poll_show[key] = poll_show[key] !== undefined ? !poll_show[key] : true">{{ t('Montrer les résultats')}}</button>
-          <button @click="finishPoll(poll[0])">{{ t('Terminer le sondage') }}</button>
+          <span :class="{full_attendance: attendance(poll) === '100.00'}">{{ t('Participation : ') }}{{ attendance(poll) }}%</span>
           <div class="results">
             <div v-for="option in Object.entries(poll[1].options).sort(function(a, b) { return b[1].count - a[1].count} )">
               {{ option[1].label }} : {{ option[1].count > 0 ? (100 / poll[1].nb_targets * option[1].count).toFixed(2) : 0 }}%
             </div>
+          </div>
+          <div class="actions">
+            <button @click="poll_show[key] = poll_show[key] !== undefined ? !poll_show[key] : true">{{ t('Montrer les résultats')}}</button>
+            <button class='btn-danger' @click="finishPoll(poll[0])">{{ t('Terminer le sondage') }}</button>
           </div>
         </div>
       </div>
@@ -185,9 +179,6 @@ export default {
 </template>
 
 <style scoped lang="scss">
-  .active {
-    background-color: var(--success-background);
-  }
   .add-poll {
     text-align: left;
   }
@@ -206,22 +197,31 @@ export default {
       }
     }
 
-    &.poll-active {
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: center;
+    .full_attendance {
+      color: var(--success-color);
+    }
 
-      > span, > div {
-        flex-basis: 100%;
-      }
+    &.poll-active {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      background: var(--poll-background);
+      border-radius: 10px;
+      padding: 10px 15px;
 
       .results {
+        flex-basis: 100%;
         filter: blur(10px);
         transition: all 1s ease;
       }
       &.show .results {
         filter: blur(0px);
       }
+
+      transition: all 0.5s ease-in-out;
+      transform-origin: top right;
     }
     &.poll-past {
       flex-direction: column;
@@ -235,7 +235,7 @@ export default {
         display: none;
       }
       &.open {
-        background: #242424;
+        background: var(--poll-background);
         padding: 10px;
         border-radius: 10px;
 
