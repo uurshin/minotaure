@@ -260,7 +260,7 @@ export default {
                 :group-select="false"
                 :options=store.tag_groups
                 :multiple="true"
-
+                :taggable="true"
                 :hideSelected="true"
                 @tag="addTag($event, type)"
             ></vue-multiselect>
@@ -279,7 +279,6 @@ export default {
                 :group-select="false"
                 :options=store.tag_groups
                 :multiple="true"
-                :taggable="true"
                 :hideSelected="true"
                 @tag="addTag($event, type)"
             ></vue-multiselect>
