@@ -242,7 +242,7 @@ export default {
           </span>
           <button @click="sendAnswer(key)">{{ t("Envoyer mon choix") }}</button>
         </template>
-        <span v-else>{{ t("Sondage") }} {{ index + 1 }} {{ t("en attente") }}</span>
+        <span v-else>{{ t('poll_pending', {pollnb: index + 1}) }}</span>
       </div>
     </div>
 
@@ -267,8 +267,8 @@ export default {
       </ul>
     </div>
     <div class="vertical-wrapper" v-else>
-      <span class="character-name">{{ character.name }} {{ t("est mort") }}</span>
-      <button @keyup.enter="newCharacter" @click="newCharacter">Créer un nouveau personnage</button>
+      <span class="character-name">{{ t('is_dead', {charname: character.name}) }}</span>
+      <button @keyup.enter="newCharacter" @click="newCharacter">{{ t('Créer un nouveau personnage') }}</button>
     </div>
 <!--    <video v-if="!creation_form"></video>-->
   </div>
