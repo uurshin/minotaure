@@ -26,7 +26,7 @@ export default {
     isBtnDisabled() {
       if (this.step === 0) {
         if (this.name.length === 0 || this.name.length === 1) {
-          this.btn_text =  'Valider';
+          this.btn_text =  this.$t('Valider');
         }
         if (this.name.length === 0) {
           return true;

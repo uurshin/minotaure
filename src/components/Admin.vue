@@ -122,12 +122,12 @@ export default {
     // Initialisation des éléments de personnages.
     if (vm.store.current_game.initialized === false) {
       vm.store.current_game.stats = {
-        fo1: {name: "Physique"},
-        me1: {name: "Mental"}
+        fo1: {name: vm.$t('Physique')},
+        me1: {name: vm.$t('Mental')}
       }
       vm.store.current_game.gauges = {
-        li1: {name: "Vie", value: 10, deadly: true},
-        wi1: {name: "Volonté", value: 10, deadly: false}
+        li1: {name: vm.$t('Vie'), value: 10, deadly: true},
+        wi1: {name: vm.$t('Volonté'), value: 10, deadly: false}
       }
       vm.store.current_game.tag_groups = [];
       vm.store.current_game.polls = {};
