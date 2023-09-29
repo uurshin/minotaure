@@ -195,7 +195,7 @@ export const usePlayerStore = defineStore('playerStore', {
             console.log('characterWatch');
             let vm = this;
             for (const [key, gauge] of Object.entries(new_character.gauges)) {
-                if (vm.gauges[key].deadly && gauge.value <= 0) {
+                if (vm.gauges[key] !== undefined && vm.gauges[key].deadly && gauge.value <= 0) {
                     new_character.gauges[key].value = 0;
                     new_character.alive = false;
                 }
@@ -268,7 +268,7 @@ export const usePlayerStore = defineStore('playerStore', {
                 tags: tags,
                 stats: {},
                 name: data != null ? data.name : 'Perso ' + Math.floor(Math.random() * Math.random() * 100000),
-                pseudo: data.pseudo,
+                pseudo: data != null ? data.pseudo : null,
                 gauges: {},
                 alive: true,
                 challenge: {},
