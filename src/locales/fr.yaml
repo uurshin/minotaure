@@ -2,6 +2,7 @@ Créer une partie: 'Créer une partie'
 Gérer vos parties: 'Gérer vos parties'
 Rejoindre une partie: 'Rejoindre une partie'
 Gérer vos personnages: 'Gérer vos personnages'
+En savoir plus: "En savoir plus"
 Characters help: "Vos personnages sont conservés dans votre navigateur, ce qui permet de les retrouver lors d'une connexion à une partie rejointe auparavant. Vous pouvez jouer sur un autre navigateur en exportant vos personnages."
 Characters nb: "Vous n'avez aucun personnage à exporter | Vous avez un personnage à exporter | Vous avez { count } personnages à exporter"
 challenge_success: "Vous avez réussi une épreuve de {stat}."
@@ -39,6 +40,7 @@ warning_version: "Les parties marquées d'un <span class='danger'>*</span> ne so
 #Create
 Nom de votre partie. Vous pourrez le changer plus tard.: "Nom de votre partie. Vous pourrez le changer plus tard."
 Ma partie: "Ma partie"
+Cet identifiant sera inclus dans votre lien d'invitation. Vous pouvez choisir le vôtre.: "Cet identifiant sera inclus dans votre lien d'invitation. Vous pouvez choisir le vôtre."
 
 #AdminTabPoll
 Ajouter un sondage: "Ajouter un sondage"
@@ -160,3 +162,18 @@ parmi les personnages ayant un de ces tags: "parmi les personnages ayant un de c
 parmi les personnages ayant tous ces tags: "parmi les personnages ayant tous ces tags :"
 characters_by_tag: "1 personnage par tag : | {nb_char} personnages par tag :"
 Lancer le tirage: "Lancer le tirage"
+
+#Join
+ID de la partie: "ID de la partie"
+
+#Main
+Retourner à l'accueil: "Retourner à l'accueil"
+
+#Player
+En attente du démarrage de la partie: "En attente du démarrage de la partie"
+Votre personnage est: "Votre personnage est "
+Valider votre personnage: "Valider votre personnage"
+Envoyer mon choix: "Envoyer mon choix"
+est mort: "est mort"
+Sondage : "Sondage"
+en attente: "en attente"

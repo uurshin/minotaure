@@ -2,6 +2,7 @@ Créer une partie: 'Create game'
 Gérer vos parties: 'Manage your games'
 Rejoindre une partie: 'Join game'
 Gérer vos personnages: 'Manage your characters'
+En savoir plus: "More about Minotaure"
 Characters help: 'Your characters are stored in your browser, so you can find them again when you connect to a previously joined game. You can play on another browser by exporting your characters.'
 Characters nb: 'You have no character to export | You have one character to export | You have { count } characters to export'
 challenge_success: "You've passed a {stat} challenge."
@@ -39,6 +40,7 @@ warning_version: "The game marked with <span class='danger'>*</span> are not com
 #Create
 Nom de votre partie. Vous pourrez le changer plus tard.: "Name your game. You can change it later."
 Ma partie: "My game"
+Cet identifiant sera inclus dans votre lien d'invitation. Vous pouvez choisir le vôtre.: "Your invite link contains this id. You may change this id."
 
 #AdminTabPoll
 Ajouter un sondage: "Add poll"
@@ -160,3 +162,18 @@ parmi les personnages ayant un de ces tags: "out of characters with any followin
 parmi les personnages ayant tous ces tags: "out of characters with all following tag:"
 characters_by_tag: "1 character for each tag: | {nb_char} characters for each tag:"
 Lancer le tirage: "Draw"
+
+#Join
+ID de la partie: "Game ID"
+
+#Main
+Retourner à l'accueil: "Back to Home"
+
+#Player
+En attente du démarrage de la partie: "Waiting for game start"
+Votre personnage est: "Your character is "
+Valider votre personnage: "Submit your character"
+Envoyer mon choix: "Send answer"
+est mort: "is dead"
+Sondage : "Poll"
+en attente: "pending"

@@ -41,7 +41,7 @@ export default {
     </div>
     <div class="small-wrapper infos">
       <span>Version : {{ version }}</span>
-      <a href="https://github.com/fibreville/minotaure">En savoir plus</a>
+      <a href="https://github.com/fibreville/minotaure">{{ t('En savoir plus') }}</a>
     </div>
   </div>
   <router-view></router-view>

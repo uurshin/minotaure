@@ -1,6 +1,7 @@
 <script>
 import router, { usePlayerStore } from '../main';
 import { ref } from 'vue'
+import {useI18n} from "vue-i18n";
 
 export default {
   setup() {
@@ -11,7 +12,9 @@ export default {
     }
   },
   data() {
+    const { t } = useI18n();
     return {
+      t,
       option_picked: [],
       name_picked: '',
       creation_form: false,
@@ -185,14 +188,14 @@ export default {
   <span class="game-name" v-if="character.game_name !== undefined">{{ character.game_name }}</span>
   <div id="player-sheet" class="small-wrapper" :class="{ disabled: freeze }">
     <div class="lds-ripple"><div></div><div></div></div>
-    <div class="game-wait" v-if="!gameStart">En attente du démarrage de la partie</div>
+    <div class="game-wait" v-if="!gameStart">{{ t("En attente du démarrage de la partie") }}</div>
 
     <div id="creation" class="vertical-wrapper" v-if="creation_form">
       <label for="name">Nom de votre personnage</label>
       <input maxlength="12" type="text" id="name" v-model="name_picked" @keyup.enter="sendCharacter()" />
       <template v-for="(option, group_key) in creation_form.options">
         <div class="group-choice">
-          <label :for="'tag-group-' + group_key">Votre personnage est </label>
+          <label :for="'tag-group-' + group_key">{{ t("Votre personnage est") }}</label>
           <select :id="'tag-group-' + group_key" v-model="option_picked[group_key]">
             <option v-for="(value, key, index) in option.tags" :value="value.code">
               {{ value.label }}
@@ -200,7 +203,7 @@ export default {
           </select>
         </div>
       </template>
-      <button :disabled="name_picked === ''" @click="sendCharacter()">Valider votre personnage</button>
+      <button :disabled="name_picked === ''" @click="sendCharacter()">{{ t("Valider votre personnage") }}</button>
     </div>
 
     <div class="vertical-wrapper polls" v-else-if="character.polls !== undefined && Object.keys(character.polls).length ">
@@ -211,9 +214,9 @@ export default {
             <input type="radio" :value="poll_key" :name="'poll_' + key" :id="'poll_' + poll_key" v-model="answer">
             <label :for="'poll_' + poll_key">{{ option }}</label>
           </span>
-          <button @click="sendAnswer(key)">Envoyer mon choix</button>
+          <button @click="sendAnswer(key)">{{ t("Envoyer mon choix") }}</button>
         </template>
-        <span v-else>Sondage {{ index + 1 }} en attente</span>
+        <span v-else>{{ t("Sondage") }} {{ index + 1 }} {{ t("en attente") }}</span>
       </div>
     </div>
 
@@ -235,7 +238,7 @@ export default {
       </ul>
     </div>
     <div class="vertical-wrapper" v-else>
-      <span class="character-name">{{ character.name }} est mort</span>
+      <span class="character-name">{{ character.name }} {{ t("est mort") }}</span>
     </div>
 <!--    <video v-if="!creation_form"></video>-->
   </div>

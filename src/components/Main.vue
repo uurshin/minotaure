@@ -38,7 +38,7 @@ export default {
       <div id="theme-switch">
         <div v-for="theme in themes" class="picker" :data-theme='theme' @click="changeTheme(theme)"></div>
       </div>
-      <router-link v-if="$route.path !== '/home'" to="/home">Retourner à l'accueil</router-link>
+      <router-link v-if="$route.path !== '/home'" to="/home">{{ t("Retourner à l'accueil") }}</router-link>
       <div>
         <select id="language-switch" v-model="$i18n.locale">
           <option v-for="locale in $i18n.availableLocales">{{ locale }}</option>

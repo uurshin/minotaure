@@ -1,5 +1,6 @@
 <script>
   import { usePlayerStore } from '../main';
+  import {useI18n} from "vue-i18n";
 
   export default {
     setup() {
@@ -10,7 +11,9 @@
       }
     },
     data() {
+    const { t } = useI18n();
       return {
+        t,
         peer_client: null,
         id_join: '',
         btn_text: 'En attente'
@@ -19,10 +22,10 @@
     computed: {
       isBtnDisabled() {
         if (this.id_join.length === 0) {
-          this.btn_text =  'En attente';
+          this.btn_text =  this.$t('En attente');
           return true;
         }
-        this.btn_text =  'Rejoindre';
+        this.btn_text =  this.$t('Rejoindre');
         return false;
       },
     },
@@ -43,9 +46,9 @@
     </div>
   </Transition>
 
-  <h1>Rejoindre une partie</h1>
+  <h1>{{ t("Rejoindre une partie") }}</h1>
   <div class="small-wrapper">
-    <label for="id_join">ID de la partie</label>
+    <label for="id_join">{{ t("ID de la partie") }}</label>
     <input name="id_join" autocomplete="off" type="text" id="id_join" v-model="id_join">
     <button id="join" :disabled="isBtnDisabled" v-on:click="store.join(id_join)">{{ btn_text }}</button>
   </div>
