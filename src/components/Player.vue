@@ -11,75 +11,74 @@ export default {
     }
   },
   data() {
+    const store = usePlayerStore();
     return {
+      store,
       option_picked: [],
       name_picked: '',
+      pseudo_picked: '',
       creation_form: false,
       gameStart: false,
       answer: 0
     }
   },
   beforeMount() {
-    const store = usePlayerStore();
-
     // Reprise d'une partie après un refresh
     window.addEventListener("beforeunload", event => {
-      if (store.connection !== null) {
+      if (this.store.connection !== null) {
         localStorage.setItem('temp_peer', true);
-        store.connection.close();
-        store._leaving = true;
+        this.store.connection.close();
+        this.store._leaving = true;
       }
     })
   },
   mounted() {
     this.freeze = true;
-    const store = usePlayerStore();
-    store._leaving = false;
-    store.setTempPeer( localStorage.getItem('temp_peer'));
+    this.store._leaving = false;
+    this.store.setTempPeer( localStorage.getItem('temp_peer'));
     let gm_id = localStorage.getItem('gm_id');
-    if (store.peer == null || store.temp_peer !== null) {
-      store.join(gm_id, true);
+    if (this.store.peer == null || this.store.temp_peer !== null) {
+      this.store.join(gm_id, true);
     }
     else {
       this.handshake();
     }
 
-    store.$subscribe((mutation, state) => {
+    this.store.$subscribe((mutation, state) => {
       console.log('subscribe trigger');
-      if (store.connection !== null && store.temp_peer !== null) {
+      if (this.store.connection !== null && this.store.temp_peer !== null) {
         console.log('subscribe trigger OK');
-        store.setTempPeer(null);
+        this.store.setTempPeer(null);
         this.handshake();
       }
     })
   },
   methods: {
     handshake() {
-      const store = usePlayerStore();
-      store._leaving = false;
       let vm = this;
+      this.store._leaving = false;
 
       // 1. Début de la poignée de main.
       console.log('handshake')
-      console.log(store.peer.id);
-      store.connection.send({
+      console.log(this.store.peer.id);
+      this.store.connection.send({
         handshake: 'readyForCall'
       });
 
       console.log('readyfortransaction')
 
-      store.connection.on('close', function() {
+      this.store.connection.on('close', function() {
         vm.freeze = true;
-        if (!store.leaving) {
-          store._leaving = false;
+        if (!vm.store.leaving) {
+          vm.store._leaving = false;
           const myTimeout = setTimeout(function() {
             console.log('reconnection attempted');
-            store.join(store.connection.peer, true);
+            vm.store.join(vm.store.connection.peer, true);
           }, 500);
         }
       });
 
-      store.connection.on('data', function (data) {
+      this.store.connection.on('data', function (data) {
         if (data.handshake !== undefined) {
           console.log(data.handshake);
           // 2. Réception des données de la partie.
@@ -89,20 +88,16 @@ export default {
 
           if (data.handshake === 'gameStart' || data.handshake === 'refresh') {
             vm.gameStart = true;
-            let games = localStorage.getItem('games_player');
-            let found;
-            if (games !== null) {
-              games = JSON.parse(games);
-              found = games.find((element) => element.game_token === data.game_token);
-            }
+
+            let found = vm.findGame(data.game_token);
 
             // 3. Partie trouvée, envoi du token du joueur.
             if (found !== undefined) {
-              store.connection.send({handshake: 'readyForCharacter', token: found.character_token});
+              vm.store.connection.send({handshake: 'readyForCharacter', token: found.character_token});
             }
             // 3bis. Partie introuvable, envoi du signal seulement.
             else {
-              store.connection.send({handshake: 'readyForCharacter'});
+              vm.store.connection.send({handshake: 'readyForCharacter'});
             }
           }
 
@@ -115,18 +110,12 @@ export default {
           // 5. Personnage créé, récupération des infos.
           else if (data.handshake === 'displayCharacter') {
             vm.freeze = false;
-            let games = localStorage.getItem('games_player');
-            let found = -1;
-            if (games !== null) {
-              games = JSON.parse(games);
-              found = games.findIndex((element) => element.game_token === data.game_token);
-            }
-            else {
-              games = [];
-            }
+
+            let found = vm.findGame(data.game_token)
 
             // 5bis. La partie n'existe pas, il faut la créer et stocker le personnage.
-            if (found === -1) {
+            if (found === undefined) {
+              let games = vm.getLocalGames();
               games.push({
                 game_token: data.game_token,
                 character_token: data.character.token
@@ -141,7 +130,7 @@ export default {
       });
 
       // Réception d'un appel vidéo du MJ.
-      store.peer.on('call', function(call) {
+      this.store.peer.on('call', function(call) {
         call.answer();
 
         call.on('stream', function(stream) {
@@ -153,28 +142,61 @@ export default {
         });
       });
     },
+    getLocalGames() {
+      let games_str = localStorage.getItem('games_player');
+      if (games_str !== null) {
+        return JSON.parse(games_str);
+      }
+      localStorage.setItem('games_player', JSON.stringify([]));
+      return [];
+    },
+    findGame(id) {
+      let games = localStorage.getItem('games_player');
+      if (games !== null) {
+        games = JSON.parse(games);
+        return games.find((element) => element.game_token === id);
+      }
+
+      return false;
+    },
     sendCharacter() {
       if (this.name_picked !== '') {
-        const store = usePlayerStore();
         let vm = this;
-
-        store.connection.send({
+        this.store.connection.send({
           handshake: 'characterChoices',
           choices: this.option_picked,
           name: this.name_picked,
+          pseudo: this.pseudo_picked,
           token: vm.character.token
         });
       }
     },
     sendAnswer(key) {
-      const store = usePlayerStore();
       let vm = this;
-
-      store.connection.send({
+      this.store.connection.send({
         handshake: 'pollAnswer',
         answer: this.answer,
         code: key,
         token: vm.character.token
+      });
+    },
+    newCharacter() {
+      let vm = this;
+
+      let foundIndex;
+      let games = this.getLocalGames();
+      if (games.length) {
+        foundIndex = games.findIndex((element) => element.game_token === vm.character.game_token);
+      }
+      if (foundIndex) {
+        games.splice(foundIndex, 1);
+        localStorage.setItem('games_player', JSON.stringify(games));
+      }
+
+      this.store.connection.send({
+        handshake: 'readyForCharacter',
+        token: vm.character.token,
+        reset: true
       });
     }
   }
@@ -189,7 +211,11 @@ export default {
 
     <div id="creation" class="vertical-wrapper" v-if="creation_form">
       <label for="name">Nom de votre personnage</label>
-      <input maxlength="12" type="text" id="name" v-model="name_picked" @keyup.enter="sendCharacter()" />
+      <input maxlength="12" type="text" id="name" v-model="name_picked" @keyup.enter="this.$refs['pseudo'].focus()" />
+      <label for="pseudo">Votre pseudo (optionnel)</label>
+      <input ref="pseudo" maxlength="12" type="text" id="pseudo" v-model="pseudo_picked" @keyup.enter="sendCharacter()" />
+
+
       <template v-for="(option, group_key) in creation_form.options">
         <div class="group-choice">
           <label :for="'tag-group-' + group_key">Votre personnage est </label>
@@ -218,7 +244,10 @@ export default {
     </div>
 
     <div class="vertical-wrapper" id="sheet" v-else-if="character.alive">
-      <span class="character-name">{{ character.name }}</span>
+      <div class="character-names">
+        <span class="character-name">{{ character.name }}</span>
+        <span v-if="character.pseudo" class="pseudo">{{ character.pseudo }}</span>
+      </div>
       <div>
         <span v-for="gauge in character.gauges">
           <span>{{ gauge.label }}</span><span class="indicator">{{ gauge.value }}</span></span>
@@ -236,6 +265,7 @@ export default {
     </div>
     <div class="vertical-wrapper" v-else>
       <span class="character-name">{{ character.name }} est mort</span>
+      <button @keyup.enter="newCharacter" @click="newCharacter">Créer un nouveau personnage</button>
     </div>
 <!--    <video v-if="!creation_form"></video>-->
   </div>
@@ -270,8 +300,14 @@ export default {
       border: 1px solid var(--border-color);
     }
 
-    .character-name {
-      font-size: 1.5em;
+    .character-names {
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+
+      .character-name {
+        font-size: 1.5em;
+      }
     }
 
     #sheet {

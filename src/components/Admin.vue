@@ -180,18 +180,27 @@ export default {
           };
 
           let new_character;
+
           if (data.token !== undefined) {
             new_character = vm.store.retrieveCharacter(data.token);
-            new_character.connection = conn.connectionId;
+            if (new_character !== undefined) {
+              if (data.reset === undefined) {
+                new_character.connection = conn.connectionId;
 
-            console.log('watch 1 set');
-            if (!new_character.watched) {
-              new_character.watched = true;
-              watch(new_character, vm.store.characterWatch);
+                console.log('watch 1 set');
+                if (!new_character.watched) {
+                  new_character.watched = true;
+                  watch(new_character, vm.store.characterWatch);
+                }
+              }
+              else {
+                new_character.connection = null;
+                new_character.token = null;
+              }
             }
           }
           // Nouveau personnage.
-          if (new_character === undefined) {
+          if (new_character === undefined || data.reset !== undefined) {
             message.handshake = 'initCharacter';
             message.creation_form = {
               options: vm.store.getStartTags()
@@ -211,29 +220,19 @@ export default {
           // }
         }
         else if (data.handshake === 'characterChoices') {
-          let character = vm.store.generateCharacter(data, conn);
-          character.connection = conn.connectionId;
-          console.log('watch 2 set');
-
-          let retrieved_character = vm.store.retrieveCharacter(character.token);
-          retrieved_character.connection = conn.connectionId;
-          if (!retrieved_character.watched) {
-            retrieved_character.watched = true;
-            watch(retrieved_character, vm.store.characterWatch);
-          }
-
-          conn.send({
-            handshake:'displayCharacter',
-            game_token: vm.store.current_game.id,
-            character: vm.store.prepareCharacter(character)
-          });
-
+          vm.sendNewCharacter(data, conn);
         }
         else if (data.handshake === 'pollAnswer') {
           let character = vm.store.retrieveCharacter(data.token);
           if (character && data.code !== undefined && character.polls[data.code] !== undefined) {
             vm.store.pollAddAnswer(data.code, data.answer);
             delete character.polls[data.code];
+          }
+        }
+        else if (data.handshake === 'newCharacter') {
+          let character = vm.store.retrieveCharacter(data.token);
+          if (character && !character.alive) {
+            vm.sendCharacterChoices(data, conn);
           }
         }
       });
@@ -352,6 +351,25 @@ export default {
       this.store.current_game.name = this.temp_game_name;
       this.store.characters.forEach((character) => character.game_name = this.temp_game_name);
       this.game_name_focused = -1;
+    },
+    sendNewCharacter(data, conn) {
+      let vm = this;
+      let character = this.store.generateCharacter(data, conn);
+      character.connection = conn.connectionId;
+      console.log('watch 2 set');
+
+      let retrieved_character = this.store.retrieveCharacter(character.token);
+      retrieved_character.connection = conn.connectionId;
+      if (!retrieved_character.watched) {
+        retrieved_character.watched = true;
+        watch(retrieved_character, this.store.characterWatch);
+      }
+
+      conn.send({
+        handshake:'displayCharacter',
+        game_token: vm.store.current_game.id,
+        character: vm.store.prepareCharacter(character)
+      });
     }
   }
 }
