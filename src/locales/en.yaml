@@ -1,6 +1,6 @@
-Créer une partie: 'Create a game'
+Créer une partie: 'Create game'
 Gérer vos parties: 'Manage your games'
-Rejoindre une partie: 'Join a game'
+Rejoindre une partie: 'Join game'
 Gérer vos personnages: 'Manage your characters'
 Characters help: 'Your characters are stored in your browser, so you can find them again when you connect to a previously joined game. You can play on another browser by exporting your characters.'
 Characters nb: 'You have no character to export | You have one character to export | You have { count } characters to export'
@@ -33,23 +33,23 @@ Identifiant de votre partie: "ID of your game"
 Cet identifiant servira à rejoindre la partie pour les participants.: "This id will allow the players to join your game."
 Annuler: "Cancel"
 En attente: "In progress"
-Lancer la partie: "Launch the game"
-warning_version: "The game marked with a <span class='danger'>*</span> are not compatible with your Minotaure version ({version}), it might not work properly."
+Lancer la partie: "Start game"
+warning_version: "The game marked with <span class='danger'>*</span> are not compatible with your Minotaure version ({version}), it might not work properly."
 
 #Create
 Nom de votre partie. Vous pourrez le changer plus tard.: "Name your game. You can change it later."
 Ma partie: "My game"
 
 #AdminTabPoll
-Ajouter un sondage: "Add a poll"
+Ajouter un sondage: "Add poll"
 Voir les sondages actifs: "View active polls"
 Voir les sondages passés: "View past polls"
 Question: "Question"
 Choix possibles: "Possible choices"
-Ajouter un choix: "Add a choice"
-Lancer le sondage: "Launch the poll"
-Montrer les résultats: "Show the results"
-Terminer le sondage: "Close the poll"
+Ajouter un choix: "Add choice"
+Lancer le sondage: "Poll"
+Montrer les résultats: "Show results"
+Terminer le sondage: "Close poll"
 
 #AdminTabIntro
 Bienvenue dans Minotaure: "Welcome to Minotaure."
@@ -57,10 +57,10 @@ Vous pouvez démarrer le didacticiel à tout moment en cliquant sur le bouton d'
 
 #AdminTour
 Suivant: "Next"
-Terminer la visite: "Finish the tour"
+Terminer la visite: "Finish tour"
 
-#AdminTabGauges
-Ajouter une jauge: "Add a bar"
+#AdminTabSettings
+Ajouter: "Add"
 gauge_start: "- starts at {gauge_value}"
 meurt à 0: "- dies when 0 is reached"
 Valider: "Submit"
@@ -70,6 +70,9 @@ Modifier: "Modify"
 Supprimer: "Delete"
 Nom: "Name"
 Démarre à: "Start at"
+
+Renommer: "Rename"
+Nom de la caractéristique: "Stat name"
 
 #AdminTabChallenge
 Trivial: "Piece of cake"
@@ -84,9 +87,9 @@ Cauchemardesque: "Impossible"
 tag ajouté: "added tag:{tag_label}"
 tag enlevé: "removed tag:{tag_label}"
 Vous devez d'abord: "You must first "
-créer une caractéristique: "add a stat"
+créer une caractéristique: "add stat"
 Caractéristique à tester: "Tested stat"
-Choisissez une caractéristique: "Choose a stat"
+Choisissez une caractéristique: "Choose stat"
 Difficulté: "Difficulty: "
 Cibles: "Targets"
 Ajouter une cible: "Add target"
@@ -94,10 +97,10 @@ Tout le monde: "Everyone"
 Conséquences positives: "Positive consequences"
 Conséquences négatives: "Negative consequences"
 Ajouter les tags: "Add these tags"
-Ajouter un tag: "Add a tag"
-Tapez un mot: "Input a word"
+Ajouter un tag: "Add tag"
+Tapez un mot: "Input word"
 Aucun autre tag, inventez-en un !: "No other tag, create one!"
-Retirer les tags: "Remove these tags"
+Retirer les tags: "Remove tags"
 Vous allez déclencher une épreuve de: "This will test: "
 Pour tout le monde: "For everyone"
 Pour chaque: "For every:"
@@ -105,26 +108,24 @@ Les personnages: "Characters "
 réussissant: "that pass"
 échouant: "that fail"
 obtiendront: " will have:"
-Ces tags en plus: "And get the following tags: "
-Ces tags en moins (s'ils les ont): "And lose the following tags (if possessed!): "
+Ces tags en plus: "And get following tags: "
+Ces tags en moins (s'ils les ont): "And lose following tags (if possessed!): "
 Lancer l'épreuve !: "Start Challenge!"
 
 #AdminTabCharacters
 La dernière épreuve a connu un pourcentage de réussite de: "Success rate of last challenge: "
+Choisir un tag: "Select tag"
 Filtrer sur un tag: "Filter by tag"
 Vivants: "Alive"
 Connectés: "Connected"
+Réussites: "Passed"
+Échecs: "Failed"
 Montrer tous les personnages: "Show all characters"
 Générer un PNJ: "Spawn NPC"
 sur: " on "
 Aucun personnage ne correspond à ces filtres: "No characters to show here. Try a different filter."
 Rechercher un personnage: "Search for a character"
 Commencez à taper: "Start to type"
-
-#AdminTabStats
-Ajouter une caractéristique: "Add a stat"
-Renommer: "Rename"
-Nom de la caractéristique: "Stat name"
 
 #AdminTabTags
 Groupe nb: "Group {nb}"
@@ -136,7 +137,7 @@ link2StatToTag: "Make {statname} as secondary stat"
 unlink2StatToTag: "Remove {statname} as secondary stat"
 Changer la couleur: "Change tag color"
 Ajouter un groupe de tags: "Add a group of tag"
-Clic gauche sur un tag pour modifier ses caractéristiques: "Left click to modify the stats"
+Clic gauche sur un tag pour modifier ses caractéristiques: "Left click to modify stats"
 Règle d'attribution: "Distribution mode: "
 Répartis aléatoirement à la création: "Randomly distributed at creation"
 A choisir à la création du personnage: "Chosen at character creation"
@@ -153,3 +154,9 @@ count_personnage_import: "1 imported character | {count_import} imported charact
 QR code invalide: "Invalid QR code"
 Exporter vos personnages: "Export characters"
 Importer vos personnages: "Import characters"
+
+#AdminTabPick
+parmi les personnages ayant un de ces tags: "out of characters with any following tag:"
+parmi les personnages ayant tous ces tags: "out of characters with all following tag:"
+characters_by_tag: "1 character for each tag: | {nb_char} characters for each tag:"
+Lancer le tirage: "Draw"

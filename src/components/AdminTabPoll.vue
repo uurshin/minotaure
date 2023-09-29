@@ -130,8 +130,8 @@ export default {
             group-values="tags"
             group-label="label"
             :group-select="true"
-            placeholder="Choisir un tag"
-            tagPlaceholder="Choisir un tag"
+            :placeholder="$t('Choisir un tag')"
+            :tagPlaceholder="$t('Choisir un tag')"
             noOptions="Tout le monde"
             :options=store.tag_groups
             :multiple="true"

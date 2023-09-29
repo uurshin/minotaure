@@ -35,9 +35,10 @@ export default {
       <div class="vertical-wrapper">
         <input type="number" v-model="nb_targets" min=1>
         <select v-model="type_pick">
-          <option value="all">Parmi les personnages ayant un de ces tags :</option>
-          <option value="all">Parmi les personnages ayant tous ces tags :</option>
-          <option value="each">{{ nb_targets }} personnages par tag :</option>
+          <option value="all">{{ t('parmi les personnages ayant un de ces tags') }}</option>
+          <option value="all">{{ t('parmi les personnages ayant tous ces tags') }}</option>
+          <!-- ca n'a pas l'air de marcher avec la trad : -->
+          <option value="each">{{ t('characters_by_tag', {nb_char: nb_targets}) }}</option>
         </select>
         <vue-multiselect
             ref="pick_multiselect"
@@ -48,8 +49,8 @@ export default {
             group-values="tags"
             group-label="label"
             :group-select="true"
-            placeholder="Choisir un tag"
-            tagPlaceholder="Choisir un tag"
+            :placeholder="$t('Choisir un tag')"
+            :tagPlaceholder="$t('Choisir un tag')"
             noOptions="Tout le monde"
             :options=store.tag_groups
             :multiple="true"

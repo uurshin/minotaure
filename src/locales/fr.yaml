@@ -59,8 +59,8 @@ Vous pouvez démarrer le didacticiel à tout moment en cliquant sur le bouton d'
 Suivant: "Suivant"
 Terminer la visite: "Terminer la visite"
 
-#AdminTabGauges
-Ajouter une jauge: "Ajouter une jauge"
+#AdminTabSettings
+Ajouter: "Ajouter"
 gauge_start: "Démarre à {gauge_value}"
 Tue à 0: "Tue à 0"
 Valider: "Valider"
@@ -70,6 +70,9 @@ Modifier: "Modifier"
 Supprimer: "Supprimer"
 Nom: "Nom"
 Démarre à: "Démarre à"
+
+Renommer: "Renommer"
+Nom de la caractéristique: "Nom de la caractéristique"
 
 #AdminTabChallenge
 Trivial: "Trivial"
@@ -111,20 +114,18 @@ Lancer l'épreuve !: "Lancer l'épreuve !"
 
 #AdminTabCharacters
 La dernière épreuve a connu un pourcentage de réussite de: "La dernière épreuve a connu un pourcentage de réussite de "
+Choisir un tag: "Choisir un tag"
 Filtrer sur un tag: "Filtrer sur un tag"
 Vivants: "Vivants"
 Connectés: "Connectés"
+Réussites: "Réussites"
+Échecs: "Échecs"
 Montrer tous les personnages: "Montrer tous les personnages"
 Générer un PNJ: "Générer un PNJ"
 sur: " sur "
 Aucun personnage ne correspond à ces filtres: "Aucun personnage ne correspond à ces filtres"
 Rechercher un personnage: "Rechercher un personnage"
 Commencez à taper: "Commencez à taper"
-
-#AdminTabStats
-Ajouter une caractéristique: "Ajouter une caractéristique"
-Renommer: "Renommer"
-Nom de la caractéristique: "Nom de la caractéristique"
 
 #AdminTabTags
 Groupe nb: "Groupe {nb}"
@@ -153,3 +154,9 @@ count_personnage_import: "1 personnage importé | {count_import} personnages imp
 QR code invalide: "QR code invalide"
 Exporter vos personnages: "Exporter vos personnages"
 Importer vos personnages: "Importer vos personnages"
+
+#AdminTabPick
+parmi les personnages ayant un de ces tags: "parmi les personnages ayant un de ces tags :"
+parmi les personnages ayant tous ces tags: "parmi les personnages ayant tous ces tags :"
+characters_by_tag: "1 personnage par tag : | {nb_char} personnages par tag :"
+Lancer le tirage: "Lancer le tirage"
