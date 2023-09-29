@@ -115,6 +115,10 @@ button {
   font-family: inherit;
   cursor: pointer;
   transition: border-color 0.25s;
+
+  &:disabled {
+    color: darkgrey;
+  }
 }
 button:hover {
   border-color: #646cff;
@@ -122,6 +126,12 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+.menu-wrapper {
+  input[type=text] {
+    min-height: 40px;
+  }
 }
 
 input[type="text"]:not(.multiselect__input), select {
