@@ -213,9 +213,9 @@ export default {
     <div class="game-wait" v-if="!gameStart">{{ t("En attente du démarrage de la partie") }}</div>
 
     <div id="creation" class="vertical-wrapper" v-if="creation_form">
-      <label for="name">Nom de votre personnage</label>
+      <label for="name">{{ t("Nom de votre personnage") }}</label>
       <input maxlength="12" type="text" id="name" v-model="name_picked" @keyup.enter="this.$refs['pseudo'].focus()" />
-      <label for="pseudo">Votre pseudo (optionnel)</label>
+      <label for="pseudo">{{ t("Votre pseudo (optionnel)") }}</label>
       <input ref="pseudo" maxlength="12" type="text" id="pseudo" v-model="pseudo_picked" @keyup.enter="sendCharacter()" />
 
 
