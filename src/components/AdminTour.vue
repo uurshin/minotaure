@@ -20,7 +20,7 @@ export default {
     const steps = [
       {text: 'Ce didacticiel est en cours de conception.', parent: 'characters', id: 'step1'},
       {text: 'Personnages', parent: 'characters', id: 'step2'},
-      {text: 'Jauges', parent: 'gauges', id: 'step3', finish:true},
+      {text: 'Jauges', parent: 'settings', id: 'step3', finish:true},
     ];
 
     return {
