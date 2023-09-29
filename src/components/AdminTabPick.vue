@@ -25,7 +25,13 @@ export default {
   },
   methods: {
     launchPick: function() {
-
+      const vm = this;
+      let characters = this.store.characters.find(function(character) {
+        return character.tags.find(
+            (tag) => vm.pick_multiselect.find((chosen_tag) => chosen_tag.code === tag.code)
+        )
+      });
+      console.log(characters);
     }
   }
 }
@@ -65,7 +71,10 @@ export default {
 </template>
 
 <style scoped lang="scss">
-  #tab-pick-content {
+  .vertical-wrapper {
     flex-direction: row;
+  }
+  .multiselect {
+    width: auto;
   }
 </style>

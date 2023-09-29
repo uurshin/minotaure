@@ -306,12 +306,12 @@ export default {
         }
       }
 
-      > .gauges, > .stats {
-        margin-top: auto;
-      }
-      > .gauges + .stats {
-        margin-top: 0;
-      }
+      //> .gauges, > .stats {
+      //  margin-top: auto;
+      //}
+      //> .gauges + .stats {
+      //  margin-top: 0;
+      //}
 
       > .stats, .gauges {
         display: flex;

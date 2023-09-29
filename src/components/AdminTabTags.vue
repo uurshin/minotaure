@@ -74,7 +74,7 @@ export default {
       });
     },
     removeGroupTag: function(key) {
-      this.store.tag_groups[key].tags.forEach((tag) => this.removeTag(tag));
+      this.store.tag_groups[key].tags.forEach((tag) => this.store.removeTagFromAll(tag));
       this.store.tag_groups.splice(key, 1);
       this.store.generateCss();
     },
