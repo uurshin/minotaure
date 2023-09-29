@@ -63,8 +63,8 @@ Terminer la visite: "Finish tour"
 
 #AdminTabSettings
 Ajouter: "Add"
-gauge_start: "- starts at {gauge_value}"
-meurt à 0: "- dies when 0 is reached"
+gauge_start: "Starts at {gauge_value}"
+Tue à 0: "Kills at 0"
 Valider: "Submit"
 Rendre normale: "Make normal"
 Rendre fatale: "Make fatal"
