@@ -11,11 +11,13 @@ export default {
   },
   data() {
     return {
+      locale: localStorage.getItem('locale_name') ?? this.$i18n.locale,
       themes: ['dark', 'light', 'blue'],
       root: null
     };
   },
   mounted: function() {
+    this.$i18n.locale = this.locale;
     this.root = document.documentElement;
     const theme_name = localStorage.getItem('theme_name');
     document.documentElement.setAttribute('data-theme', theme_name ?? 'dark');
@@ -24,6 +26,10 @@ export default {
     changeTheme(name) {
       localStorage.setItem('theme_name', name);
       document.documentElement.setAttribute('data-theme', name);
+    },
+    changeLocale() {
+      this.$i18n.locale = this.locale;
+      localStorage.setItem('locale_name', this.locale);
     }
   },
 }
@@ -40,7 +46,7 @@ export default {
       </div>
       <router-link v-if="$route.path !== '/home'" to="/home">{{ t("Retourner à l'accueil") }}</router-link>
       <div>
-        <select id="language-switch" v-model="$i18n.locale">
+        <select @change="changeLocale()" id="language-switch" v-model="locale">
           <option v-for="locale in $i18n.availableLocales">{{ locale }}</option>
         </select>
       </div>
