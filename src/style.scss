@@ -70,11 +70,6 @@ button[class^="icon-"] {
   content: "\e906";
 }
 
-a {
-  color: var(--link-color);
-  text-decoration: inherit;
-}
-
 body {
   margin: 0;
   display: flex;
@@ -85,12 +80,33 @@ body {
   background: var(--background-color);
 }
 
+#app {
+  display: flex;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  justify-content: stretch;
+  align-items: stretch;
+  position: relative;
+}
+
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+
+  @include media("<tablet") {
+    font-size: 2.2em;
+  }
+}
+
+a {
+  color: var(--link-color);
+  text-decoration: inherit;
 }
 
 button {
+  background-color: #2b2a33;
+  color: var(--button-color);
   border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
@@ -109,25 +125,15 @@ button:focus-visible {
 }
 
 input[type="text"]:not(.multiselect__input), select {
-  height: 40px;
   background: white;
   color: black;
   border-radius: 8px;
-  border: none;
+  border: var(--border-input);
+  font-size: 1em;
 }
 
-.card {
-  padding: 2em;
-}
-
-#app {
-  display: flex;
-  width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  justify-content: stretch;
-  align-items: stretch;
-  position: relative;
+.picker {
+  cursor: pointer;
 }
 
 .vertical-wrapper {
@@ -195,16 +201,19 @@ input[type="text"]:not(.multiselect__input), select {
   font-size: 0.8em;
 }
 
+input, select {
+  border: var(--select-border);
+}
 
-button.btn-valid {
-  background: var(--valid-color);
+button.btn-valid:not(:disabled) {
+  background-color: var(--valid-color) !important;
   border: 1px solid var(--valid-color);
   &:hover {
     border-color: var(--border-color);
   }
 }
 button.btn-danger {
-  background: var(--danger-color);
+  background-color: var(--danger-color)  !important;
 }
 .danger {
   color: var(--danger-color);

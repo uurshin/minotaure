@@ -11,16 +11,19 @@ export default {
   },
   data() {
     return {
+      themes: ['dark', 'light', 'blue'],
       root: null
     };
   },
   mounted: function() {
     this.root = document.documentElement;
+    const theme_name = localStorage.getItem('theme_name');
+    document.documentElement.setAttribute('data-theme', theme_name ?? 'dark');
   },
   methods: {
     changeTheme(name) {
-      localStorage.setItem('theme_name', name)
-      document.documentElement.setAttribute('data-theme', name)
+      localStorage.setItem('theme_name', name);
+      document.documentElement.setAttribute('data-theme', name);
     }
   },
 }
@@ -33,14 +36,14 @@ export default {
     </div>
     <div class="options-switch">
       <div id="theme-switch">
-        <div class="picker" data-theme='dark' @click="changeTheme('dark')"></div>
-        <div class="picker" data-theme='light' @click="changeTheme('light')"></div>
+        <div v-for="theme in themes" class="picker" :data-theme='theme' @click="changeTheme(theme)"></div>
       </div>
       <router-link v-if="$route.path !== '/home'" to="/home">Retourner à l'accueil</router-link>
-      <select id="language-switch" v-model="$i18n.locale">
-        <option>en</option>
-        <option>fr</option>
-      </select>
+      <div>
+        <select id="language-switch" v-model="$i18n.locale">
+          <option v-for="locale in $i18n.availableLocales">{{ locale }}</option>
+        </select>
+      </div>
     </div>
   </div>
 </template>
@@ -79,6 +82,16 @@ export default {
     align-self: stretch;
     justify-content: space-between;
     padding: 15px;
+
+    > :last-child,
+    > :first-child {
+      flex-grow: 1;
+      flex-basis: 0;
+    }
+
+    :last-child {
+      text-align: right;
+    }
 
     #theme-switch {
       display: flex;

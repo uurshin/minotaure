@@ -24,10 +24,9 @@ Lien d'invitation copié !: "Invite link copied!"
 Identifiant de partie copié !: "Game ID copied !"
 
 #Continue
-Continuer une partie: "Continue a game"
+continue_game: "Continue - {name}"
 count_personnage: "1 character | {count} characters"
-Continuer la partie: "Continue the game"
-Supprimer la partie: "Delete the game"
+Continuer: "Continue"
 Voir plus: "See more"
 Vous n'avez créé aucune partie.: "You didn't create any game."
 Identifiant de votre partie: "ID of your game"
@@ -36,6 +35,10 @@ Annuler: "Cancel"
 En attente: "In progress"
 Lancer la partie: "Launch the game"
 warning_version: "The game marked with a <span class='danger'>*</span> are not compatible with your Minotaure version ({version}), it might not work properly."
+
+#Create
+Nom de votre partie. Vous pourrez le changer plus tard.: "Name your game. You can change it later."
+Ma partie: "My game"
 
 #AdminTabPoll
 Ajouter un sondage: "Add a poll"
@@ -61,12 +64,12 @@ Ajouter une jauge: "Add a bar"
 gauge_start: "- starts at {gauge_value}"
 meurt à 0: "- dies when 0 is reached"
 Valider: "Submit"
-Rendre non-létale: "Make non lethal"
-Rendre létale: "Make lethal"
+Rendre normale: "Make normal"
+Rendre fatale: "Make fatal"
 Modifier: "Modify"
 Supprimer: "Delete"
 Nom: "Name"
-Valeur de départ: "Start Value"
+Démarre à: "Start at"
 
 #AdminTabChallenge
 Trivial: "Piece of cake"
@@ -120,7 +123,7 @@ Commencez à taper: "Start to type"
 
 #AdminTabStats
 Ajouter une caractéristique: "Add a stat"
-Changer le nom: "Change name"
+Renommer: "Rename"
 Nom de la caractéristique: "Stat name"
 
 #AdminTabTags
@@ -150,7 +153,3 @@ count_personnage_import: "1 imported character | {count_import} imported charact
 QR code invalide: "Invalid QR code"
 Exporter vos personnages: "Export characters"
 Importer vos personnages: "Import characters"
-
-#Create
-Nom de votre partie: "Name of your game"
-Ma partie: "My game"

@@ -189,7 +189,7 @@ export default {
 
     <div id="creation" class="vertical-wrapper" v-if="creation_form">
       <label for="name">Nom de votre personnage</label>
-      <input maxlength="12" type="text" id="name" v-model="name_picked"/>
+      <input maxlength="12" type="text" id="name" v-model="name_picked" @keyup.enter="sendCharacter()" />
       <template v-for="(option, group_key) in creation_form.options">
         <div class="group-choice">
           <label :for="'tag-group-' + group_key">Votre personnage est </label>

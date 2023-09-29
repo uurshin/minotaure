@@ -180,7 +180,7 @@ export default {
 
 <template>
   <div class="tab" ref="tab">
-    <span v-if="store.stats !== undefined && Object.keys(store.stats).length === 0">{{ t("Vous devez d'abord") }}<button @click="$parent.changeTab('stats')">{{ t('créer une caractéristique') }}</button></span>
+    <span v-if="store.stats !== undefined && Object.keys(store.stats).length === 0">{{ t("Vous devez d'abord") }}<button @click="$parent.changeTab('settings')">{{ t('créer une caractéristique') }}</button></span>
     <div id='tab-challenge-content' v-if="store.stats !== undefined && Object.keys(store.stats).length > 0">
       <div id="chosen-targets">
         <div>
@@ -228,7 +228,7 @@ export default {
         <div :id="'chosen-'+type"  v-if="chosen_stat !== ''" :class="'type-'+type" >
           <span class="label-wrapper">{{ type === 'success' ?  t('Conséquences positives')  :  t('Conséquences négatives') }}</span>
           <div>
-            <div v-for="(gauge, key) in store.current_game.gauges">
+            <div class="modifiers-buttons" v-for="(gauge, key) in store.current_game.gauges">
               <span class="modifier-label">{{ gauge.name }}</span>
               <div>
                 <button @click="modifier_change('gauge', type, key,  -1)">-</button>
@@ -236,7 +236,7 @@ export default {
                 <button @click="modifier_change('gauge', type, key, +1)">+</button>
               </div>
             </div>
-            <div v-for="(stat, key) in store.current_game.stats">
+            <div class="modifiers-buttons" v-for="(stat, key) in store.current_game.stats">
               <span class="modifier-label">{{ stat.name }}</span>
               <div>
                 <button @click="modifier_change('stat', type, key, -1)">-</button>
@@ -260,7 +260,7 @@ export default {
                 :group-select="false"
                 :options=store.tag_groups
                 :multiple="true"
-                :taggable="true"
+
                 :hideSelected="true"
                 @tag="addTag($event, type)"
             ></vue-multiselect>
@@ -288,36 +288,41 @@ export default {
       </template>
 
       <div id="summary-target" v-if="chosen_stat !== ''">
-        <span>{{ t('Vous allez déclencher une épreuve de') }}{{ store.stats[chosen_stat].name.toLowerCase() }}</span>
-        <span v-if="chosen_tags.length === 0">{{ t('Pour tout le monde') }}</span>
-        <div v-if="chosen_tags.length > 0">
-          <span>{{ t('Pour chaque') }}</span>
-          <span v-for="(tag, key) in chosen_tags">
+        <div>
+          <span>{{ t('Vous allez déclencher une épreuve de') }}{{ store.stats[chosen_stat].name.toLowerCase() }}</span>
+          <span v-if="chosen_tags.length === 0">{{ t('Pour tout le monde') }}</span>
+          <div v-if="chosen_tags.length > 0">
+            <span>{{ t('Pour chaque') }}</span>
+            <span v-for="(tag, key) in chosen_tags">
             {{ (key > 0) ? ',' : '' }}
             {{ tag.label }}
           </span>
+          </div>
         </div>
+
         <template v-for="type in types">
-          <span>{{ t('Les personnages') }}{{ type === 'success' ? t('réussissant') : t('échouant') }}{{ t('obtiendront') }}</span>
-          <div class="inline">
-            <span v-for="(modifier, key) in gauge_modifier[type]">
-              {{ store.gauges[key].name }} {{ modifier > 0 ? '+' + modifier : modifier }}
-            </span>
-            <span v-for="(modifier, key) in stat_modifier[type]">
-              {{ store.stats[key].name }} {{ modifier > 0 ? '+' + modifier : modifier }}
-            </span>
-          </div>
-          <div class="full" v-if="chosen_modifier_tags_add[type].length > 0">
-            <span>{{ t('Ces tags en plus') }}</span>
-            <span v-for="tag in chosen_modifier_tags_add[type]">
-            {{ tag.label }}
-          </span>
-          </div>
-          <div class="full" v-if="chosen_modifier_tags_remove[type].length > 0">
-            <span>{{ t("Ces tags en moins (s'ils les ont)") }}</span>
-            <span v-for="tag in chosen_modifier_tags_remove[type]">
-            {{ tag.label }}
-          </span>
+          <div>
+            <span v-if="Object.keys(gauge_modifier[type]).length || Object.keys(stat_modifier[type]).length || chosen_modifier_tags_add[type].length || chosen_modifier_tags_remove[type].length">{{ t('Les personnages') }}{{ type === 'success' ? t('réussissant') : t('échouant') }}{{ t('obtiendront') }}</span>
+            <div class="inline">
+              <span v-for="(modifier, key) in gauge_modifier[type]">
+                {{ store.gauges[key].name }} {{ modifier > 0 ? '+' + modifier : modifier }}
+              </span>
+                <span v-for="(modifier, key) in stat_modifier[type]">
+                {{ store.stats[key].name }} {{ modifier > 0 ? '+' + modifier : modifier }}
+              </span>
+            </div>
+            <div class="full" v-if="chosen_modifier_tags_add[type].length > 0">
+              <span>{{ t('Ces tags en plus') }}</span>
+              <span v-for="tag in chosen_modifier_tags_add[type]">
+                {{ tag.label }}
+              </span>
+            </div>
+            <div class="full" v-if="chosen_modifier_tags_remove[type].length > 0">
+              <span>{{ t("Ces tags en moins (s'ils les ont)") }}</span>
+              <span v-for="tag in chosen_modifier_tags_remove[type]">
+                {{ tag.label }}
+              </span>
+            </div>
           </div>
         </template>
         <button @click="startChallenge()">{{ t("Lancer l'épreuve !") }}</button>
@@ -348,9 +353,12 @@ export default {
       display: flex;
       flex-basis: 100%;
       flex-direction: column;
-      border: 1px solid var(--font-color);
+      background: var(--background-card-color);;
+      border-radius: 10px;
       padding: 15px;
       align-items: center;
+      justify-content: center;
+      gap: 30px;
 
       > div {
         display: flex;
@@ -365,12 +373,20 @@ export default {
           flex-basis: 100%;
         }
       }
-
-      gap: 15px;
     }
 
     #summary-target {
       flex: 1;
+
+      > div {
+        display: flex;
+        flex-direction: column;
+
+        > div {
+          display: flex;
+          gap: 10px;
+        }
+      }
     }
     #chosen-success,
     #chosen-failure {
@@ -388,7 +404,7 @@ export default {
         align-items: center;
         gap: 30px;
 
-        > div {
+        > div.modifiers-buttons {
           display: flex;
           align-items: center;
           justify-content: center;
@@ -434,7 +450,7 @@ export default {
     width: 100%;
   }
   .slider-tooltip {
-    background: var(--background-color);
+    background: var(--background-card-color);
     border: 1px solid var(--font-color);
     color: var(--font-color);
   }
@@ -456,15 +472,8 @@ export default {
     border: 1px solid var(--font-color);
   }
 
-  .multiselect {
-    width: auto;
-  }
-
   .multiselect__placeholder {
     display: none;
-  }
-  .multiselect__input {
-    position: relative !important;
   }
 
   :root {

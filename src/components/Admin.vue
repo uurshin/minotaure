@@ -6,8 +6,7 @@ import 'vue-simple-context-menu/dist/vue-simple-context-menu.css'
 import AdminTabIntro from '../components/AdminTabIntro.vue'
 import AdminTabCharacters from '../components/AdminTabCharacters.vue'
 import AdminTabTags from '../components/AdminTabTags.vue'
-import AdminTabStats from '../components/AdminTabStats.vue'
-import AdminTabGauges from '../components/AdminTabGauges.vue'
+import AdminTabSettings from '../components/AdminTabSettings.vue'
 import AdminTabPoll from '../components/AdminTabPoll.vue'
 import AdminTabChallenge from '../components/AdminTabChallenge.vue'
 import AdminTabPick from '../components/AdminTabPick.vue'
@@ -18,9 +17,8 @@ export default {
   components: {
     AdminTabIntro,
     AdminTabCharacters,
-    AdminTabStats,
     AdminTabTags,
-    AdminTabGauges,
+    AdminTabSettings,
     AdminTabPoll,
     AdminTabChallenge,
     AdminTabPick,
@@ -40,6 +38,9 @@ export default {
         peer.reconnect();
         this.store.setPeer(peer);
       }
+    }
+    else if (this.store.current_game === null) {
+      router.push('/home');
     }
   },
   setup() {
@@ -67,9 +68,8 @@ export default {
         {id: 'poll', label: 'Sondages', tutorial: 'off' },
         {id: 'challenge', label: 'Épreuve', tutorial: 'off' },
         {id: 'pick', label: 'Tirage', tutorial: 'off' },
-        {id: 'gauges', label: 'Jauges', tutorial: 'blink' },
-        {id: 'stats', label: 'Caractéristiques', tutorial: 'blink' },
         {id: 'tags', label: 'Tags', tutorial: 'blink' },
+        {id: 'settings', label: 'Paramètres', tutorial: 'blink' }
       ]
     }
   },
@@ -89,6 +89,9 @@ export default {
     }
   },
   mounted() {
+    let vm = this;
+    // Initialisation ou reprise de la partie.
+
     window.onbeforeunload =  function () {
       alert("admin onbefore unload");
       if (vm.store.current_game !== null) {
@@ -104,9 +107,6 @@ export default {
     this.current_tab = this.store.current_game.tuto_on ? 'intro' : 'characters';
     this.changeTab(this.current_tab);
 
-    let vm = this;
-    // Initialisation ou reprise de la partie.
-
     // Personnages.
     if (this.store.current_game.characters === undefined) {
       this.store.current_game.characters = [];
@@ -114,8 +114,8 @@ export default {
     else {
       this.store.current_game.characters.forEach(function(character) {
         character.connection = null;
-        character.watched = false;
-        // watch(character, vm.store.characterWatch);
+        character.watched = true;
+        watch(character, vm.store.characterWatch);
       });
     }
 
@@ -387,8 +387,7 @@ export default {
     <div class="tabs-content">
       <admin-tab-intro ref="admin_tab_intro"></admin-tab-intro>
       <admin-tab-characters ref="admin_tab_characters"></admin-tab-characters>
-      <admin-tab-gauges ref="admin_tab_gauges"></admin-tab-gauges>
-      <admin-tab-stats ref="admin_tab_stats"></admin-tab-stats>
+      <admin-tab-settings ref="admin_tab_settings"></admin-tab-settings>
       <admin-tab-tags ref="admin_tab_tags"></admin-tab-tags>
       <admin-tab-challenge ref="admin_tab_challenge"></admin-tab-challenge>
       <admin-tab-poll ref="admin_tab_poll"></admin-tab-poll>
@@ -417,7 +416,7 @@ export default {
     .game-name {
       border-radius: 0;
       background: var(--font-color);
-      color: var(--background-color);
+      color: var(--inverse-font-color);
     }
     #input-game-name {
       border-radius: 0;
@@ -428,11 +427,31 @@ export default {
 
   .multiselect {
     min-width: 200px;
+    margin-top: 20px;
+    //outline: var(--multiselect-border);
+    //border-radius: 5px 0 5px 5px;
+    box-sizing: unset;
+
+    &:after {
+      content: '';
+      border-right: var(--border-input);
+      height: 8px;
+      position: absolute;
+      right: 0;
+      z-index: 1000;
+      width: 20px;
+      display: block;
+      top: -5px;
+    }
 
     .multiselect__option--group {
       text-align: center;
       background: black !important;
       color: white !important;
+
+      &.multiselect__option--highlight.multiselect__option--group-selected:after {
+        content: '-'
+      }
 
       &.multiselect__option--highlight:after {
         content: '+'
@@ -440,13 +459,21 @@ export default {
     }
 
     .multiselect__input {
-      color: black;
+      position: absolute;
+      top: -21px;
+      right: 0;
       width: auto;
-      min-width: 100px;
-      margin: 0;
+      min-width: 120px;
+      margin: var(--margin-multiselect);
+      text-align: center;
+      color: black;
+      border: var(--multiselect-border);
+      border-bottom: 1px solid white;
+      border-radius: 5px 5px 0 0;
     }
 
     .multiselect__tags {
+      position: relative;
       padding: 4px;
       display: flex;
       gap: 5px;
@@ -454,6 +481,17 @@ export default {
       align-items: center;
       font-size: 0.8em;
       background: var(--background-select);
+      border: var(--border-input);
+      border-radius: 5px 0 5px 5px;
+    }
+    &.multiselect--active {
+      .multiselect__tags {
+        border-top-right-radius: 0;
+        border-top-left-radius: 0;
+      }
+      //.multiselect__input {
+      //  left: 0;
+      //}
     }
 
     .multiselect__tags-wrap {
@@ -483,7 +521,7 @@ export default {
 
       &:after {
         font-size: 2em;
-        color: var(--font-color);
+        color: var(--button-color);
       }
     }
   }
@@ -558,24 +596,6 @@ export default {
         display: flex;
         flex-direction: column;
         gap: 15px;
-
-        .list-item {
-          display: flex;
-          gap: 10px;
-          align-items: center;
-        }
-
-        .action {
-          margin-left: auto;
-          display: flex;
-          gap: 10px;
-        }
-      }
-
-      .action-group {
-        display: flex;
-        gap: 15px;
-        align-items: center;
       }
     }
   }
@@ -643,5 +663,4 @@ export default {
       background-color: black;
     }
   }
-
 </style>

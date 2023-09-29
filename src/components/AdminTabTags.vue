@@ -214,7 +214,6 @@ export default {
           </color-picker>
         </div>
         <button class="icon-add" @click="addGroupTag()">{{ t("Ajouter un groupe de tags") }}</button>
-        <span>{{ t("Clic gauche sur un tag pour modifier ses caractéristiques") }}</span>
       </div>
       <template v-for="(group, key) in store.current_game.tag_groups">
         <div class="group-tag">
@@ -281,6 +280,7 @@ export default {
     align-items: center;
     flex-wrap: wrap;
     gap: 10px;
+    background: var(--background-card-color);
     border: 1px solid var(--border-color);
     border-radius: 10px;
     padding: 10px 15px;
@@ -321,6 +321,14 @@ export default {
 
     .multiselect {
       flex: 1 0 100%;
+
+      .multiselect__input {
+        position: relative !important;
+        border: none;
+        right: unset;
+        top: unset;
+        text-align: left;
+      }
 
       .multiselect__tags-wrap {
         .multiselect__tag {

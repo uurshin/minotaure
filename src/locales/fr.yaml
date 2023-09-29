@@ -24,10 +24,9 @@ Lien d'invitation copié !: "Lien d'invitation copié !"
 Identifiant de partie copié !: "Identifiant de partie copié !"
 
 #Continue
-Continuer une partie: "Continuer une partie"
+continue_game: "Continuer - {name}"
 count_personnage: "1 personnage | {count} personnages"
-Continuer la partie: "Continuer la partie"
-Supprimer la partie: "Supprimer la partie"
+Continuer: "Continuer"
 Voir plus: "Voir plus"
 Vous n'avez créé aucune partie.: "Vous n'avez créé aucune partie."
 Identifiant de votre partie: "Identifiant de votre partie"
@@ -36,6 +35,10 @@ Annuler: "Annuler"
 En attente: "En attente"
 Lancer la partie: "Lancer la partie"
 warning_version: "Les parties marquées d'un <span class='danger'>*</span> ne sont pas compatibles avec votre version de Minotaure ({version}), elles pourraient ne pas fonctionner correctement."
+
+#Create
+Nom de votre partie. Vous pourrez le changer plus tard.: "Nom de votre partie. Vous pourrez le changer plus tard."
+Ma partie: "Ma partie"
 
 #AdminTabPoll
 Ajouter un sondage: "Ajouter un sondage"
@@ -58,15 +61,15 @@ Terminer la visite: "Terminer la visite"
 
 #AdminTabGauges
 Ajouter une jauge: "Ajouter une jauge"
-gauge_start: "- démarre à {gauge_value}"
-meurt à 0: "- meurt à 0"
+gauge_start: "Démarre à {gauge_value}"
+Tue à 0: "Tue à 0"
 Valider: "Valider"
-Rendre non-létale: "Rendre non-létale"
-Rendre létale: "Rendre létale"
+Rendre normale: "Rendre normale"
+Rendre fatale: "Rendre fatale"
 Modifier: "Modifier"
 Supprimer: "Supprimer"
 Nom: "Nom"
-Valeur de départ: "Valeur de départ"
+Démarre à: "Démarre à"
 
 #AdminTabChallenge
 Trivial: "Trivial"
@@ -120,7 +123,7 @@ Commencez à taper: "Commencez à taper"
 
 #AdminTabStats
 Ajouter une caractéristique: "Ajouter une caractéristique"
-Changer le nom: "Changer le nom"
+Renommer: "Renommer"
 Nom de la caractéristique: "Nom de la caractéristique"
 
 #AdminTabTags
@@ -150,7 +153,3 @@ count_personnage_import: "1 personnage importé | {count_import} personnages imp
 QR code invalide: "QR code invalide"
 Exporter vos personnages: "Exporter vos personnages"
 Importer vos personnages: "Importer vos personnages"
-
-#Create
-Nom de votre partie: "Nom de votre partie"
-Ma partie: "Ma partie"

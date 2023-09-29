@@ -13,10 +13,14 @@ $breakpoints: (
   color-scheme: light dark;
   --main-font: 'Ubuntu';
   --font-color: white;
+  --inverse-font-color: black;
   --input-font-color: white;
   --link-color: #90B494;
   --link-hover-color: #57A773;
   --background-color: black;
+  --button-color: white;
+  --background-card-color: #222;
+  --border-input: none;
   --border-color: #777;
   --failure-background: #8c3232;
   --success-background: #277e27;
@@ -27,6 +31,8 @@ $breakpoints: (
   --background-select: white;
   --poll-background: #242424;
   --button-background: #0b6488;
+  --select-border: none;
+  --margin-multiselect: 0;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -41,14 +47,40 @@ $breakpoints: (
 }
 [data-theme="light"] {
   --font-color: black;
+  --inverse-font-color: white;
   --input-font-color: black;
   --background-color: white;
+  --button-background: black;
+  --button-color: white;
+  --background-card-color: #b9b9b9;
+  --border-input: 1px solid black;
   --content-background: rgba(0,0,0,0.1);
   --border-color: #777;
   --warning-background: #804200;
+  --margin-multiselect: 0 -1px 0 -1px;
   $success: red;
 
   &.picker {
 	background: white;
+  }
+}
+
+[data-theme="blue"] {
+  --font-color: black;
+  --inverse-font-color: white;
+  --input-font-color: white;
+  --background-color: #5858c4;
+  --background-card-color: #87BCDE;
+  --button-background: black;
+  --button-color: white;
+  --content-background: rgba(0,0,0,0.1);
+  --border-color: #777;
+  --warning-background: #804200;
+  --valid-color: #379634;
+  --danger-color: #A63A50;
+  $success: red;
+
+  &.picker {
+    background: #5858c4;
   }
 }

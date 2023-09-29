@@ -123,13 +123,17 @@ export default {
       }
 
       a {
-        background: var(--font-color);
-        color: var(--background-color);
+        background: var(--button-background);
+        color: var(--button-color);
         border-radius: 10px;
         padding: 10px;
 
         &:hover {
-          background: var(--link-color);
+          outline: 1px solid #646cff;
+        }
+        &:focus,
+        &:focus-visible {
+          outline: 4px auto -webkit-focus-ring-color;
         }
       }
     }

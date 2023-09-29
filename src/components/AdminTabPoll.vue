@@ -150,7 +150,10 @@ export default {
         <!--  TODO : transition de disparition (opacity + scale3d(0,0,0) du sondage au clic sur terminer -->
         <div class="list-polls poll-active" :class="{show: poll_show[key]}" v-for="(poll, key) in store.active_polls">
           <span class="title">{{ poll[1].label}}</span>
-          <span :class="{full_attendance: attendance(poll) === '100.00'}">{{ t('Participation : ') }}{{ attendance(poll) }}%</span>
+          <span>
+            <span>{{ t('Participation : ') }}</span>
+            <span  :class="{full_attendance: attendance(poll) === '100.00'}">{{ attendance(poll) }}%</span>
+          </span>
           <div class="results">
             <div v-for="option in Object.entries(poll[1].options).sort(function(a, b) { return b[1].count - a[1].count} )">
               {{ option[1].label }} : {{ option[1].count > 0 ? (100 / poll[1].nb_targets * option[1].count).toFixed(2) : 0 }}%
@@ -207,7 +210,7 @@ export default {
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 10px;
-      background: var(--poll-background);
+      background: var(--background-card-color);
       border-radius: 10px;
       padding: 10px 15px;
 
@@ -235,7 +238,7 @@ export default {
         display: none;
       }
       &.open {
-        background: var(--poll-background);
+        background: var(--background-card-color);
         padding: 10px;
         border-radius: 10px;
 

@@ -195,8 +195,8 @@ export const usePlayerStore = defineStore('playerStore', {
             console.log('characterWatch');
             let vm = this;
             for (const [key, gauge] of Object.entries(new_character.gauges)) {
-                if (gauge.value <= 0 && vm.gauges[key].deadly) {
-                    gauge.value = 0;
+                if (vm.gauges[key].deadly && gauge.value <= 0) {
+                    new_character.gauges[key].value = 0;
                     new_character.alive = false;
                 }
             }
@@ -452,13 +452,20 @@ router.beforeEach((to, from, next) => {
     }
 
     else if (from.path === '/admin' && to !== from) {
-        if (window.confirm("Si vous quittez cet onglet, la partie sera interrompue après avoir été sauvegardée. " +
-            "Souhaitez-vous vraiment quitter ?")) {
+        if (store.current_game !== null) {
+            if (window.confirm("Si vous quittez cet onglet, la partie sera interrompue après avoir été sauvegardée. " +
+                "Souhaitez-vous vraiment quitter ?")) {
+                localStorage.removeItem('temp_game');
+                store.disconnectAll();
+                store.saveQuit();
+                next();
+            }
+        }
+        else {
             localStorage.removeItem('temp_game');
-            store.disconnectAll();
-            store.saveQuit();
             next();
         }
+
         next(false)
         return ''
     }

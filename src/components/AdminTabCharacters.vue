@@ -246,12 +246,11 @@ export default {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    align-items: center;
+    align-items: flex-end;
     justify-content: space-between;
 
     input:not(.multiselect__input) {
-      height: 40px;
-      padding: 0 10px;
+      padding: 0.6em 1.2em;
     }
   }
 
@@ -274,12 +273,11 @@ export default {
       gap: 3px;
       padding: 3px 6px 6px 6px;
       border: 1px solid var(--border-color);
-      background: var(--background-color);
+      background: var(--background-card-color);
       border-radius: 8px;
       color: var(--font-color);
 
       &:not(.connected) {
-        background: none;
         opacity: 0.6;
       }
       &.result-success {
@@ -289,9 +287,19 @@ export default {
         background: var(--failure-background);
       }
       &.dead {
+        position: relative;
         opacity: 0.5;
         &:before {
-          content:"💀";
+          content: "💀";
+          position: absolute;
+          top: 13px;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          font-size: 68px;
+          opacity: 0.6;
+          text-shadow: 7px 12px rgba(0,0,0,0.6);
+          transition: all 0.2s ease-in-out;
         }
       }
 
@@ -420,10 +428,5 @@ export default {
         }
       }
     }
-  }
-
-  #tag_filter {
-    font-size: 1em;
-    min-width: 125px;
   }
 </style>
