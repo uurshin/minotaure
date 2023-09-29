@@ -46,8 +46,8 @@
     </div>
   </Transition>
 
-  <h1>{{ t("Rejoindre une partie") }}</h1>
-  <div class="small-wrapper">
+  <h1>Rejoindre une partie</h1>
+  <div class="small-wrapper menu-wrapper">
     <label for="id_join">{{ t("ID de la partie") }}</label>
     <input name="id_join" autocomplete="off" type="text" id="id_join" v-model="id_join">
     <button id="join" :disabled="isBtnDisabled" v-on:click="store.join(id_join)">{{ btn_text }}</button>

@@ -268,6 +268,7 @@ export const usePlayerStore = defineStore('playerStore', {
                 tags: tags,
                 stats: {},
                 name: data != null ? data.name : 'Perso ' + Math.floor(Math.random() * Math.random() * 100000),
+                pseudo: data.pseudo,
                 gauges: {},
                 alive: true,
                 challenge: {},

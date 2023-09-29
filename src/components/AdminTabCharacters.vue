@@ -205,14 +205,17 @@ export default {
         <dataset-item class="full" id="character-list">
           <template #default="{ row, rowIndex }" >
             <div @contextmenu.prevent.stop="handleClick($event, row)" class="character" :class="[getClasses(row), !row.alive ? 'dead' : '']">
-              <span class="character-name">{{ row.name }}</span>
+              <div class="character-names">
+                <span class="character-name">{{ row.name }}</span>
+                <span class="pseudo">{{ row.pseudo }}</span>
+              </div>
               <div class="gauges">
                 <span v-for="gauge in row.gauges"><span>{{ gauge.label }}</span><span>{{ gauge.value }}</span></span>
               </div>
               <div class="stats">
                 <span v-for="stat in row.stats"><span>{{ stat.label }}</span><span>{{ stat.value }}</span></span>
               </div>
-              <div class="tags">
+              <div class="tags" v-if="row.tags !== undefined && row.tags.length">
                 <span class="tag" v-for="tag in row.tags" :class="'tag-' + tag.code">
                   <span class="label-name">
                     {{ tag.label }}
@@ -303,6 +306,13 @@ export default {
         }
       }
 
+      > .gauges, > .stats {
+        margin-top: auto;
+      }
+      > .gauges + .stats {
+        margin-top: 0;
+      }
+
       > .stats, .gauges {
         display: flex;
         flex-direction: column;
@@ -313,10 +323,15 @@ export default {
         }
       }
 
-      .character-name {
-        font-size: 1.2em;
-        font-weight: bold;
-        margin-bottom: 10px;
+      .character-names {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 6px;
+
+        .character-name {
+          font-size: 1.2em;
+          font-weight: bold;
+        }
       }
     }
   }

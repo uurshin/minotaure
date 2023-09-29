@@ -25,12 +25,11 @@ export default {
   computed: {
     isBtnDisabled() {
       if (this.step === 0) {
-        if (this.name.length === 0) {
-          this.btn_text =  this.$t('En attente');
-          return true;
+        if (this.name.length === 0 || this.name.length === 1) {
+          this.btn_text =  'Valider';
         }
-        else if (this.name.length === 1) {
-          this.btn_text =  this.$t('Valider');
+        if (this.name.length === 0) {
+          return true;
         }
       }
       else if (this.step === 1) {
@@ -102,9 +101,9 @@ export default {
 
 <template>
   <h1>{{ t("Créer une partie") }}</h1>
-  <div class="small-wrapper">
+  <div class="small-wrapper menu-wrapper">
     <label v-if="step === 0" for="name">{{ t("Nom de votre partie. Vous pourrez le changer plus tard.") }}</label>
-    <input v-if="step === 0" @keyup.enter="ask_id" autocomplete="off" v-model="name" required type="text" id="name" value="Ma partie" :placeholder="$t('Ma partie')" maxlength="25">
+    <input v-if="step === 0" @keyup.enter="ask_id" autocomplete="off" v-model="name" type="text" id="name" value="Ma partie" :placeholder="$t('Ma partie')" maxlength="25">
     <label v-if="step === 1" for="id_admin">{{ t("Cet identifiant sera inclus dans votre lien d'invitation. Vous pouvez choisir le vôtre.") }}</label>
     <input v-if="step === 1" type="text" ref="id_admin" v-model="id_admin" id="id_admin" @keyup.enter="launch">
     <button class="btn-valid" :disabled="isBtnDisabled" @click="ask_id" @keyup.enter="ask_id">{{ btn_text }}</button>

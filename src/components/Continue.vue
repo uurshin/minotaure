@@ -119,7 +119,7 @@ export default {
 
 <template>
   <h1>{{ titleContinue }}</h1>
-  <div class="small-wrapper">
+  <div class="small-wrapper menu-wrapper">
     <span v-html="$t('warning_version', {version: version})" v-if="hasDeprecatedGames"></span>
     <div class="game" v-for="(game, key) in games" v-if="!ask_id">
       <div class="title">
