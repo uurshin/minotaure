@@ -22,7 +22,7 @@ export default {
       pseudo_picked: '',
       creation_form: false,
       gameStart: false,
-      answer: 0
+      answers: []
     }
   },
   beforeMount() {
@@ -34,6 +34,21 @@ export default {
         this.store._leaving = true;
       }
     })
+  },
+  computed: {
+    characterIsInvalid: function () {
+      return (this.name_picked === '' || (this.creation_form !== false && this.option_picked !== undefined && this.option_picked.length !== this.creation_form.options.length));
+    },
+    activePolls: function () {
+      // Todo optimize.
+      if (this.character.polls !== undefined && Object.entries(this.character.polls).length) {
+        let active_polls = Object.values(this.character.polls).filter(function(poll) {
+          return poll.active !== undefined && poll.active && poll.answer === undefined;
+        });
+        return active_polls.length > 0;
+      }
+      return false;
+    }
   },
   mounted() {
     this.freeze = true;
@@ -133,17 +148,17 @@ export default {
       });
 
       // Réception d'un appel vidéo du MJ.
-      this.store.peer.on('call', function(call) {
-        call.answer();
-
-        call.on('stream', function(stream) {
-          const video = document.querySelector("video");
-          video.srcObject = stream;
-          video.onloadedmetadata = () => {
-            video.play();
-          };
-        });
-      });
+      // this.store.peer.on('call', function(call) {
+      //   call.answer();
+      //
+      //   call.on('stream', function(stream) {
+      //     const video = document.querySelector("video");
+      //     video.srcObject = stream;
+      //     video.onloadedmetadata = () => {
+      //       video.play();
+      //     };
+      //   });
+      // });
     },
     getLocalGames() {
       let games_str = localStorage.getItem('games_player');
@@ -160,11 +175,15 @@ export default {
         return games.find((element) => element.game_token === id);
       }
 
-      return false;
+      return undefined;
     },
     sendCharacter() {
+      let vm = this;
+      if (this.creation_form.options.length && (this.option_picked === undefined || this.option_picked.length !== this.creation_form.options.length)) {
+        return true;
+      }
+
       if (this.name_picked !== '') {
-        let vm = this;
         this.store.connection.send({
           handshake: 'characterChoices',
           choices: this.option_picked,
@@ -173,12 +192,16 @@ export default {
           token: vm.character.token
         });
       }
+
+      this.name_picked = '';
+      this.option_picked = [];
+      this.creation_form = false;
     },
     sendAnswer(key) {
       let vm = this;
       this.store.connection.send({
         handshake: 'pollAnswer',
-        answer: this.answer,
+        answer: this.answers[key],
         code: key,
         token: vm.character.token
       });
@@ -229,20 +252,19 @@ export default {
           </select>
         </div>
       </template>
-      <button :disabled="name_picked === ''" @click="sendCharacter()">{{ t("Valider votre personnage") }}</button>
+      <button :disabled="characterIsInvalid" @click="sendCharacter()">{{ t("Valider votre personnage") }}</button>
     </div>
 
-    <div class="vertical-wrapper polls" v-else-if="character.polls !== undefined && Object.keys(character.polls).length ">
+    <div class="vertical-wrapper polls" v-else-if="activePolls">
       <div class="poll-wrapper" v-for="(poll, key, index) in character.polls">
-        <template v-if="index === 0">
+        <div class="poll-content" v-if="poll.active && poll.answer === undefined">
           <span class="title">{{ poll.label }}</span>
           <span v-for="(option, poll_key) in poll.options">
-            <input type="radio" :value="poll_key" :name="'poll_' + key" :id="'poll_' + poll_key" v-model="answer">
-            <label :for="'poll_' + poll_key">{{ option }}</label>
-          </span>
+              <input type="radio" :value="poll_key" :name="'poll_' + key" :id="'poll_' + key + '_' + poll_key" v-model="answers[key]">
+              <label :for="'poll_' + key + '_' + poll_key">{{ option }}</label>
+            </span>
           <button @click="sendAnswer(key)">{{ t("Envoyer mon choix") }}</button>
-        </template>
-        <span v-else>{{ t('poll_pending', {pollnb: index + 1}) }}</span>
+        </div>
       </div>
     </div>
 
@@ -259,10 +281,10 @@ export default {
         <span v-for="stat in character.stats">
           <span>{{ stat.label }}</span><span class="indicator">{{ stat.value }}</span></span>
       </div>
-      <div>
+      <div class="tags">
         <span v-for="tag in character.tags">{{ tag.label }}</span>
       </div>
-      <ul v-if="character.challenge !== undefined">
+      <ul v-if="character.challenge !== undefined && Object.entries(character.challenge).length">
         <li v-for="message in character.challenge.message">{{ message }}</li>
       </ul>
     </div>
@@ -313,10 +335,24 @@ export default {
       }
     }
 
+    .tags {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      > span {
+        border-radius: 10px;
+        background: var(--background-color);
+        color: var(--font-color);
+        padding: 5px;
+        text-align: center;
+      }
+    }
+
     #sheet {
       width: 90%;
 
-      > div {
+      > div:not(.tags)  {
         display: flex;
         flex-direction: column;
         gap: 10px;
@@ -399,22 +435,33 @@ export default {
     }
   }
 
+
   .poll-wrapper {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
-    border: 1px solid black;
-    padding: 15px;
 
-    > span {
+    > .poll-content {
       display: flex;
-      align-items: center;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+
+      > span {
+        display: flex;
+        align-items: center;
+      }
+
+      > .title {
+        font-weight: bold;
+        align-self: center;
+      }
     }
 
-    > .title {
-      font-weight: bold;
-      align-self: center;
+    > div, > span {
+      border: 1px solid black;
+      padding: 15px;
     }
   }
 </style>

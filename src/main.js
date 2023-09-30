@@ -66,7 +66,18 @@ export const usePlayerStore = defineStore('playerStore', {
         current_game: (state) => state._current_game,
         characters: (state) => state._current_game.characters,
         alive_characters: (state) => state._current_game.characters.filter((character) => character.alive),
+        picked_characters: (state) => state._current_game.picked_characters.filter((character) => character.picked),
         tag_groups: (state) => state._current_game.tag_groups,
+        tag_groups_plus_targets: function(state) {
+            if (state._current_game.has_picked) {
+                let altered_group = [...state._current_game.tag_groups];
+                altered_group.unshift({code: 'targets', label: 'Tirés au sort', tags: [{code: 'targets', label: 'Tirés au sort'}]});
+                return altered_group;
+            }
+            else {
+                return state._current_game.tag_groups;
+            }
+        },
         stats: (state) => state._current_game.stats,
         gauges: (state) => state._current_game.gauges,
         leaving: (state) => state._leaving,
@@ -257,6 +268,7 @@ export const usePlayerStore = defineStore('playerStore', {
                 });
             }
 
+            // Todo creation tag for NPCs.
             this.getRandomTags().forEach(function(group_tags) {
                 let choice = group_tags.tags[Math.floor(Math.random() * group_tags.tags.length)];
                 tags.push(choice);
@@ -273,6 +285,7 @@ export const usePlayerStore = defineStore('playerStore', {
                 alive: true,
                 challenge: {},
                 polls: {},
+                picked: false,
                 connection: conn != null ? conn : false,
                 watched: false,
             }
@@ -330,7 +343,12 @@ export const usePlayerStore = defineStore('playerStore', {
         },
         generateCharacters(nb) {
             for (let i = 0 ; i < nb ; i++) {
-                this.generateCharacter();
+                let character = this.generateCharacter();
+                let retrieved_character = this.retrieveCharacter(character.token);
+                if (!retrieved_character.watched) {
+                    retrieved_character.watched = true;
+                    watch(retrieved_character, this.characterWatch);
+                }
             }
         },
         prepareCharacter(character) {
@@ -343,6 +361,19 @@ export const usePlayerStore = defineStore('playerStore', {
                     (tag) => chosen_tags.find((chosen_tag) => chosen_tag.code === tag.code)
                 )
             )
+        },
+        filterCharacterByTagsAndPicked(character, chosen_tags) {
+            // Todo separate UX
+            if (chosen_tags.findIndex((tag) => tag.code === 'targets') > -1) {
+                return (character.picked !== undefined && character.picked);
+            }
+            else {
+                return(
+                    character.tags.find(
+                        (tag) => chosen_tags.find((chosen_tag) => chosen_tag.code === tag.code)
+                    )
+                )
+            }
         },
         removeTagFromAll(deleted_tag) {
             this.characters.forEach(function(character) {
@@ -428,6 +459,31 @@ export const usePlayerStore = defineStore('playerStore', {
                     alert('erreur :' + err.type);
                 }
             })
+        },
+        setPickedCharacters(picked_characters) {
+            picked_characters.forEach((character) => character.picked = true);
+        },
+        resetPickedCharacters() {
+            this.current_game.has_picked = false;
+            this.characters.map(function (character) {
+                if (character.picked) {
+                    character.picked = false;
+                }
+            });
+        },
+        getRandom(arr, n) {
+            let result = new Array(n);
+            let len = arr.length;
+            let taken = new Array(len);
+            if (n > len) {
+                n = len;
+            }
+            while (n--) {
+                var x = Math.floor(Math.random() * len);
+                result[n] = arr[x in taken ? taken[x] : x];
+                taken[x] = --len in taken ? taken[len] : len;
+            }
+            return result;
         }
     },
 })

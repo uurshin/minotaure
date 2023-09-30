@@ -18,9 +18,10 @@ export default {
     const open_past_poll = ref(null);
     const poll_show = [];
     const tags_poll = [];
+    const chosen_tags = [];
 
     return {
-      store, t, nb_options, answers, label, poll_tab, open_past_poll, poll_show, tags_poll
+      store, t, nb_options, answers, label, poll_tab, open_past_poll, poll_show, tags_poll, chosen_tags
     }
   },
   mounted() {
@@ -33,6 +34,7 @@ export default {
         code: date,
         label: this.label,
         answers: this.answers,
+        active: true
       }
       this.addPoll(poll);
       this.poll_tab = 'active';
@@ -45,9 +47,14 @@ export default {
       this.open_past_poll[0].classList.add('open');
     },
     finishPoll(id_poll) {
+      const vm = this;
       this.store.polls[id_poll].active = false;
       this.store.characters.forEach(function(character) {
         if (character.polls[id_poll] !== undefined) {
+          if (character.polls[id_poll].answer !== undefined && vm.store.polls[id_poll].options[character.polls[id_poll].answer].tags !== undefined) {
+            let new_tags = vm.store.polls[id_poll].options[character.polls[id_poll].answer].tags;
+            new_tags.forEach((tag) => character.tags.push(tag));
+          }
           delete character.polls[id_poll];
         }
       })
@@ -83,7 +90,8 @@ export default {
       for (const key in poll.answers) {
         this.store.polls[poll.code].options[key] = {
           label: poll.answers[key],
-          count: 0
+          count: 0,
+          tags: this.chosen_tags[key]
         }
       }
 
@@ -97,15 +105,34 @@ export default {
 
       this.store.polls[poll.code].nb_targets = selectedCharacters.length;
       selectedCharacters.forEach(function(character) {
-        character.polls[poll.code] = { label: poll.label, options: poll.answers };
+        character.polls[poll.code] = { label: poll.label, options: poll.answers, active: true };
       })
       this.nb_options = 0;
       this.label = '';
+      this.tags_poll = [];
+      this.chosen_tags = [];
       this.answers = {};
     },
     delete_poll(code) {
       delete this.store.polls[code];
-    }
+    },
+    addTag(tag_label, key) {
+      let group = this.store.tag_groups.find((element) => (element.code === 'freetag'));
+      if (group === undefined) {
+        group = {
+          label: this.$t('Tags des épreuves'),
+          code: 'freetag',
+          tags: [],
+          start: 'none',
+        };
+        this.store.tag_groups.push(group);
+      }
+      let tag = this.store.addTag(tag_label, group);
+      if (this.chosen_tags[key] === undefined) {
+        this.chosen_tags[key] = [];
+      }
+      this.chosen_tags[key].push(tag);
+    },
   }
 }
 </script>
@@ -120,29 +147,62 @@ export default {
       </div>
 
       <div class="vertical-wrapper add-poll" v-if="poll_tab === 'add'">
-        <label for="poll_targets">{{ t('Cibles') }}</label>
-        <vue-multiselect
-            ref="poll_targets"
-            id="poll_targets"
-            v-model="tags_poll"
-            label="label"
-            track-by="code"
-            group-values="tags"
-            group-label="label"
-            :group-select="true"
-            :placeholder="$t('Choisir un tag')"
-            :tagPlaceholder="$t('Choisir un tag')"
-            noOptions="Tout le monde"
-            :options=store.tag_groups
-            :multiple="true"
-            :taggable="false"
-            :hideSelected="true"
-        ></vue-multiselect>
-        <label for="question">{{ t('Question') }}</label>
-        <input @keyup.enter="focus(0)" id="question" v-model=label type='text'>
-        <span>{{ t('Choix possibles') }}</span>
-        <input :ref="'choice_' + n" @keyup.enter="focus(n)" v-model=answers[n] type='text' v-for="n in nb_options">
-        <button @click="nb_options += 1">{{ t('Ajouter un choix') }}</button>
+        <div>
+          <label for="poll_targets">{{ t('Cibles') }}</label>
+          <vue-multiselect
+              ref="poll_targets"
+              id="poll_targets"
+              class="left-multiselect"
+              v-model="tags_poll"
+              label="label"
+              track-by="code"
+              group-values="tags"
+              group-label="label"
+              :group-select="true"
+              :placeholder="$t('Choisir un tag')"
+              :tagPlaceholder="$t('Choisir un tag')"
+              noOptions="Tout le monde"
+              :options=store.tag_groups
+              :multiple="true"
+              :taggable="false"
+              :hideSelected="true"
+          ></vue-multiselect>
+        </div>
+        <div>
+          <label for="question">{{ t('Question') }}</label>
+          <input @keyup.enter="focus(0)" id="question" v-model=label type='text'>
+        </div>
+        <div>
+          <span>{{ t('Choix possibles') }}</span>
+          <div v-for="n in nb_options" class="poll-choice">
+            <div>
+              <label :for="'choice_' + n">{{ t('nb_choice', {'nb':n}) }}</label>
+              <input :id="'choice_' + n" :ref="'choice_' + n" @keyup.enter="focus(n)" v-model=answers[n] type='text'>
+            </div>
+            <div>
+              <label :for="'chosen_tags_' + n">{{ t('Ce choix donnera le tag suivant') }}</label>
+              <vue-multiselect
+                  :id="'chosen_tags_' + n"
+                  v-model="chosen_tags[n]"
+                  class="left-multiselect"
+                  label="label"
+                  track-by="code"
+                  :tag-placeholder="$t('Ajouter un tag')"
+                  :placeholder="$t('Tapez un mot')"
+                  :noOptions="$t('Aucun autre tag, inventez-en un !')"
+                  group-values="tags"
+                  group-label="label"
+                  :group-select="false"
+                  :options=store.tag_groups
+                  :multiple="true"
+                  :taggable="true"
+                  :hideSelected="true"
+                  @tag="addTag($event, n)"
+              ></vue-multiselect>
+            </div>
+          </div>
+          <button @click="nb_options += 1">{{ t('Ajouter un choix') }}</button>
+        </div>
         <button class="btn-valid" :disabled="nb_options < 2 || label === ''" @click="startPoll">{{ t('Lancer le sondage') }}</button>
       </div>
 
@@ -182,6 +242,32 @@ export default {
 </template>
 
 <style scoped lang="scss">
+  .vertical-wrapper {
+    > div {
+      background: var(--background-card-color);
+      padding: 10px;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    input[type=text] {
+      height: 40px;
+    }
+  }
+
+  .poll-choice {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+
+    > div {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+  }
   .add-poll {
     text-align: left;
   }

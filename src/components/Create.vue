@@ -81,6 +81,7 @@ export default {
       this.store.current_game.tuto_on = true;
       this.store.current_game.game_started = false;
       localStorage.setItem('games', JSON.stringify(games_storage));
+      localStorage.removeItem('temp_game');
 
       // Ouverture de la connexion webrtc et passage sur l'écran d'admin.
       if (this.id_admin !== '' && this.store.peer.id !== this.id_admin) {

@@ -48,6 +48,10 @@ export default {
       ) {
         classes.push('connected');
       }
+
+      if (character.picked) {
+        classes.push('picked');
+      }
       return classes;
     },
     filterOnTag(tags) {
@@ -71,6 +75,12 @@ export default {
       }
       return true;
     },
+    filterPicked(picked) {
+      if (this.filters['picked'] !== undefined) {
+        return picked;
+      }
+      return true;
+    },
     filterDead(dead) {
       if (this.filters['dead'] !== undefined) {
         return dead;
@@ -79,11 +89,15 @@ export default {
     },
     filterChallenge(challenge) {
       if (this.filters['challenge'] !== undefined) {
-        console.log('challenge defined');
-        if (challenge !== undefined && challenge.date === this.store.last_challenge.date) {
+        if (challenge.date === undefined) {
+          return false;
+        }
+        // Todo challenge per game.
+        else if (challenge.date === this.store.last_challenge.date) {
           return challenge.result === this.filters['challenge'];
         }
       }
+      // Todo fix dead characters displayed.
       return true;
     },
     switchFilter(name) {
@@ -178,6 +192,8 @@ export default {
         </div>
         <button @click="switchFilter('dead')" :class="{active : filters.dead !== undefined}">{{ t('Vivants') }}</button>
         <button @click="switchFilter('connected')" :class="{active : filters.connected !== undefined}">{{ t('Connectés') }}</button>
+        <button v-if="store.current_game.has_picked" @click="switchFilter('picked')" :class="{active : filters.picked !== undefined}">{{ t('Tirés au sort') }}</button>
+        <button class='btn-valid' v-if="store.current_game.has_picked" @click="this.store.resetPickedCharacters()">{{ t('Effacer le tirage') }}</button>
         <div class="dual-button" v-if="store.last_challenge.date !== 0">
           <button @click="switchFilterChallenge('success')" class="success-button badge" :class="{active : filters.challenge !== undefined && filters.challenge === 'success'}">
             {{ t('Réussites') }}<span>{{ store.last_challenge.nb_success }}</span>
@@ -191,9 +207,9 @@ export default {
       <dataset
           v-slot="{ ds }"
           :ds-data="store.characters"
-          :ds-sortby="['-alive', '-challenge', '-connection', 'name']"
+          :ds-sortby="['-alive', '-picked', '-challenge', '-connection', 'name']"
           :ds-search-in="['name']"
-          :ds-filter-fields="{ tags: filterOnTag, connection: filterConnected, alive: filterDead, challenge: filterChallenge }"
+          :ds-filter-fields="{ tags: filterOnTag, connection: filterConnected, alive: filterDead, challenge: filterChallenge, picked: filterPicked }"
           :ds-sort-as="{ challenge: sortAsChallenge, connection: sortAsConnected }"
           ref="dataset"
       >
@@ -282,6 +298,9 @@ export default {
 
       &:not(.connected) {
         opacity: 0.6;
+      }
+      &.picked {
+        border: 3px solid gold;
       }
       &.result-success {
         background: var(--success-background);
@@ -376,10 +395,10 @@ export default {
     }
     button.active {
       &.success-button {
-        background: var(--success-background);
+        background: var(--success-background) !important;
       }
       &.failure-button {
-        background: var(--failure-background);
+        background: var(--failure-background) !important;
       }
     }
   }

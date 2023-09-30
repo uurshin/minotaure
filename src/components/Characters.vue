@@ -52,11 +52,14 @@
         await this.timeout(500)
         this.paused = false
       },
-
       timeout(ms) {
         return new Promise((resolve) => {
           window.setTimeout(resolve, ms)
         })
+      },
+      deleteAllCharacters() {
+        this.characters = null;
+        localStorage.removeItem('games_player');
       }
     }
   }
@@ -69,6 +72,8 @@
     <div>{{ t('Characters nb', characters !== null ? characters.length : 0)}}</div>
     <button v-if="characters !== null" @click="type_action = 'export'">{{ t("Exporter vos personnages") }}</button>
     <button @click="type_action = 'import'">{{ t("Importer vos personnages") }}</button>
+    <button v-if="characters !== null" class='btn-danger' @click="deleteAllCharacters">{{ t("Supprimer tous vos personnages") }}</button>
+
     <div id="export" v-if="type_action === 'export'">
       <div class="qr-code">
         <qrcode-vue :value="characters_string" :size="200" level="H" />

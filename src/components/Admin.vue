@@ -226,13 +226,7 @@ export default {
           let character = vm.store.retrieveCharacter(data.token);
           if (character && data.code !== undefined && character.polls[data.code] !== undefined) {
             vm.store.pollAddAnswer(data.code, data.answer);
-            delete character.polls[data.code];
-          }
-        }
-        else if (data.handshake === 'newCharacter') {
-          let character = vm.store.retrieveCharacter(data.token);
-          if (character && !character.alive) {
-            vm.sendCharacterChoices(data, conn);
+            character.polls[data.code].answer = data.answer;
           }
         }
       });
@@ -502,6 +496,18 @@ export default {
       border: var(--border-input);
       border-radius: 5px 0 5px 5px;
     }
+
+    &.left-multiselect {
+      width: auto;
+
+      .multiselect__input {
+        left: 0;
+      }
+      .multiselect__tags {
+        border-radius: 0 5px 5px 5px;
+      }
+    }
+
     &.multiselect--active {
       .multiselect__tags {
         border-top-right-radius: 0;

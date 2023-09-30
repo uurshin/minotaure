@@ -79,7 +79,7 @@ export default {
       let rgba = 'rgba(' + red + ',' + green + ',0,1)';
       document.documentElement.style.setProperty('--slider-connect-bg', rgba);
     },
-    modifier_change(name, type, key, value) {
+    modifierChange(name, type, key, value) {
       if (this[name + '_modifier'][type][key] === undefined) {
         this[name + '_modifier'][type][key] = value;
       }
@@ -110,7 +110,11 @@ export default {
       const vm = this;
       let selectedCharacters
       if (this.chosen_tags.length) {
-        selectedCharacters = this.store.alive_characters.filter((character) => vm.store.filterCharacterByTags(character, vm.chosen_tags));
+        selectedCharacters = this.store.alive_characters.filter(
+          function(character) {
+            return vm.store.filterCharacterByTagsAndPicked(character, vm.chosen_tags);
+          }
+        )
       }
       else {
         selectedCharacters = this.store.alive_characters;
@@ -173,6 +177,16 @@ export default {
       this.challenge_difficulty = 0;
       this.chosen_stat = '';
       this.chosen_tags = [];
+
+      //Todo better.
+      this.stat_modifier.success = {};
+      this.stat_modifier.failure = {};
+      this.gauge_modifier.success = {};
+      this.gauge_modifier.failure = {};
+      this.chosen_modifier_tags_add.success = [];
+      this.chosen_modifier_tags_add.failure = [];
+      this.chosen_modifier_tags_remove.success = [];
+      this.chosen_modifier_tags_remove.failure = [];
     }
   }
 }
@@ -215,7 +229,7 @@ export default {
               :placeholder="$t('Ajouter une cible')"
               :tagPlaceholder="$t('Ajouter une cible')"
               :noOptions="$t('Tout le monde')"
-              :options=store.tag_groups
+              :options=store.tag_groups_plus_targets
               :multiple="true"
               :taggable="false"
               :hideSelected="true"
@@ -231,17 +245,17 @@ export default {
             <div class="modifiers-buttons" v-for="(gauge, key) in store.current_game.gauges">
               <span class="modifier-label">{{ gauge.name }}</span>
               <div>
-                <button @click="modifier_change('gauge', type, key,  -1)">-</button>
+                <button @click="modifierChange('gauge', type, key,  -1)">-</button>
                 <span class="modifier-value">{{ gauge_modifier[type][key] !== undefined ? (gauge_modifier[type][key] >= 0 ? "+" : '') + gauge_modifier[type][key] : "+0" }}</span>
-                <button @click="modifier_change('gauge', type, key, +1)">+</button>
+                <button @click="modifierChange('gauge', type, key, +1)">+</button>
               </div>
             </div>
             <div class="modifiers-buttons" v-for="(stat, key) in store.current_game.stats">
               <span class="modifier-label">{{ stat.name }}</span>
               <div>
-                <button @click="modifier_change('stat', type, key, -1)">-</button>
+                <button @click="modifierChange('stat', type, key, -1)">-</button>
                 <span class="modifier-value">{{ stat_modifier[type][key] !== undefined ? (stat_modifier[type][key] >= 0 ? "+" : '') + stat_modifier[type][key] : "+0" }}</span>
-                <button @click="modifier_change('stat', type, key, +1)">+</button>
+                <button @click="modifierChange('stat', type, key, +1)">+</button>
               </div>
             </div>
           </div>
@@ -338,6 +352,10 @@ export default {
     flex-direction: row;
     flex-wrap: wrap;
     grid-gap: 15px;
+
+    #chosen_stat {
+      height: 40px;
+    }
 
     #chosen-targets {
       flex-direction: row;

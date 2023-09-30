@@ -58,6 +58,7 @@ Ajouter un choix: "Add choice"
 Lancer le sondage: "Poll"
 Montrer les résultats: "Show results"
 Terminer le sondage: "Close poll"
+nb_choice: "Choix {nb}"
 
 #AdminTabIntro
 Bienvenue dans Minotaure: "Welcome to Minotaure."
@@ -162,6 +163,7 @@ count_personnage_import: "1 imported character | {count_import} imported charact
 QR code invalide: "Invalid QR code"
 Exporter vos personnages: "Export characters"
 Importer vos personnages: "Import characters"
+Supprimer tous vos personnages: "Delete all your characters"
 
 #AdminTabPick
 parmi les personnages ayant un de ces tags: "out of characters with any following tag:"
