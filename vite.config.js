@@ -15,7 +15,7 @@ let default_config = {
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: '@import "./node_modules/include-media/dist/_include-media.scss"; @import "./src/variables.scss";'
+        additionalData: '@import "./node_modules/include-media/dist/_include-media.scss"; @import "./src/assets/css/variables.scss";'
       },
     },
   },

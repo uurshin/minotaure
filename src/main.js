@@ -170,9 +170,6 @@ export const usePlayerStore = defineStore('playerStore', {
         getTagFromCode(code) {
             return this.tags.find((tag) => tag.code === code);
         },
-        setConnections(connections) {
-            this._connections = connections;
-        },
         setShouldReconnect(value) {
             this._should_reconnect = value;
         },
@@ -220,10 +217,6 @@ export const usePlayerStore = defineStore('playerStore', {
                 }
             }
         },
-        editCharacter(character) {
-            var foundIndex = this.current_game.characters.findIndex((element) => element.token === character.token)
-            this.current_game.characters[foundIndex] = character;
-        },
         retrieveCharacter(token) {
             if (this.current_game.characters.length === undefined) {
                 return null;
@@ -231,17 +224,6 @@ export const usePlayerStore = defineStore('playerStore', {
             else {
                 return this.current_game.characters.find((element) => element.token === token);
             }
-        },
-        updateCharacters(characters = false) {
-            let game = this._current_game;
-            characters.forEach(function(character) {
-                if (character.connection != null) {
-                    character.connection.send({
-                        handshake:'refresh',
-                        game_token: game.id,
-                    });
-                }
-            })
         },
         generateCharacter(data = null, conn = null) {
             const vm = this;
