@@ -1,3 +1,4 @@
+[![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/uurshin/minotaure/blob/main/README-EN.md)
 # Comment utiliser Minotaure ?
 
 Ce projet est prévu pour être utilisé de 2 façons, au choix :
@@ -17,4 +18,4 @@ Ensuite, vous pouvez créer une build pour, au choix :
 ## Contribution au dépôt
 ### Les icônes sont générées via l'application Icomoon
 Les icônes utilisés dans ce projet sont injectés dans une webfont produite grâce à IcoMoon : https://icomoon.io/#faq
-Si un de vos développements nécessite un nouvel icône, importez le fichier icomoon_minotaure.json, effectuez vos modifications, puis exportez le projet et la police avant de soumette vos modification sur le dépôt.
+Si un de vos développements nécessite un nouvel icône, importez le fichier icomoon_minotaure.json, effectuez vos modifications, puis exportez le projet et la police avant de soumettre vos modification sur le dépôt.
