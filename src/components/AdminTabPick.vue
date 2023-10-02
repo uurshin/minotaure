@@ -75,7 +75,6 @@ export default {
 
       if (relevant_characters.length) {
         let picked_characters = this.store.getRandom(relevant_characters, this.nb_targets);
-        console.log(picked_characters);
         this.store.setPickedCharacters(picked_characters);
 
         picked_characters.forEach(function(character) {

@@ -265,50 +265,6 @@ export default {
     });
   },
   methods: {
-    start_video() {
-      let vm = this;
-      if (this.is_live) {
-        this.calls.forEach((call) => call.close());
-        this.video.pause();
-        this.is_live = false;
-        this.btn_live = 'Démarrer la vidéo';
-      }
-      else {
-        this.video.play();
-        this.is_live = true;
-
-        // this.store.connections.forEach(function(connection) {
-        //   if (connection.open) {
-        //     let call = vm.peer.call(connection.peer, vm.stream);
-        //     vm.calls.push(call);
-        //   }
-        // });
-        this.btn_live = 'Arrêter la vidéo';
-      }
-    },
-    broadcast_video() {
-      if (this.video === null) {
-        navigator.mediaDevices
-            .getUserMedia({
-              video: true,
-            })
-            .then((stream) => {
-              const video = document.querySelector("video");
-              video.srcObject = stream;
-              video.onloadedmetadata = () => {
-                this.video = video;
-                this.stream = stream;
-                this.start_video();
-              };
-            })
-            .catch((err) => {
-              console.error(`${err.name}: ${err.message}`);
-            });
-      }
-      else {
-        this.start_video();
-      }
-    },
     changeTab(nameRef) {
       if (this.store.current_game.tuto_on) {
         let tab_found = this.tabs.find((tab) => tab.id === nameRef);
@@ -429,10 +385,6 @@ export default {
       <admin-tab-pick ref="admin_tab_pick"></admin-tab-pick>
     </div>
   </div>
-<!--  <div class="video-wrapper">-->
-<!--    <video muted></video>-->
-<!--    <button @click="broadcast_video">{{ btn_live }}</button>-->
-<!--  </div>-->
 </template>
 
 <style lang="scss">
