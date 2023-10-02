@@ -73,10 +73,10 @@ export default {
       }
     },
     attendance(poll) {
-      let count = Object.entries(poll[1].options).map(obj => obj[1].count).reduce((accumulator, current) => accumulator + current, 0);
+      let count = Object.entries(poll.options).map(obj => obj[1].count).reduce((accumulator, current) => accumulator + current, 0);
       if (count === 0) { return 0 }
       else {
-        return (100 / poll[1].nb_targets * count).toFixed(2)
+        return (100 / poll.nb_targets * count).toFixed(2)
       }
     },
     addPoll(poll) {
@@ -207,33 +207,32 @@ export default {
       </div>
 
       <div class="vertical-wrapper" v-if="poll_tab === 'active'">
-        <!--  TODO : transition de disparition (opacity + scale3d(0,0,0) du sondage au clic sur terminer -->
         <div class="list-polls poll-active" :class="{show: poll_show[key]}" v-for="(poll, key) in store.active_polls">
-          <span class="title">{{ poll[1].label}}</span>
+          <span class="title">{{ poll.label}}</span>
           <span>
             <span>{{ t('Participation : ') }}</span>
             <span  :class="{full_attendance: attendance(poll) === '100.00'}">{{ attendance(poll) }}%</span>
           </span>
           <div class="results">
-            <div v-for="option in Object.entries(poll[1].options).sort(function(a, b) { return b[1].count - a[1].count} )">
-              {{ option[1].label }} : {{ option[1].count > 0 ? (100 / poll[1].nb_targets * option[1].count).toFixed(2) : 0 }}%
+            <div v-for="option in Object.entries(poll.options).sort(function(a, b) { return b.count - a.count} )">
+              {{ option[1].label }} : {{ option[1].count > 0 ? (100 / poll.nb_targets * option[1].count).toFixed(2) : 0 }}%
             </div>
           </div>
           <div class="actions">
             <button @click="poll_show[key] = poll_show[key] !== undefined ? !poll_show[key] : true">{{ t('Montrer les résultats')}}</button>
-            <button class='btn-danger' @click="finishPoll(poll[0])">{{ t('Terminer le sondage') }}</button>
+            <button class='btn-danger' @click="finishPoll(key)">{{ t('Terminer le sondage') }}</button>
           </div>
         </div>
       </div>
       <div class="vertical-wrapper" v-if="poll_tab === 'past'">
-        <div :ref="'past_poll_'+ poll[0]" class="list-polls poll-past" v-for="poll in store.past_polls">
+        <div :ref="'past_poll_'+ key" class="list-polls poll-past" v-for="(poll, key) in store.past_polls">
           <div class="wrapper-title">
-            <span class="title">{{ poll[1].label}}</span>
-            <button class='see-more' @click="toggle_poll(poll[0])">{{ t('Voir plus') }}</button>
-            <button class="btn-danger" @click="delete_poll(poll[0])">{{ t('Supprimer') }}</button>
+            <span class="title">{{ poll.label}}</span>
+            <button class='see-more' @click="toggle_poll(key)">{{ t('Voir plus') }}</button>
+            <button class="btn-danger" @click="delete_poll(key)">{{ t('Supprimer') }}</button>
           </div>
-          <div v-for="option in Object.entries(poll[1].options).sort(function(a, b) { return a[1].count - b[1].count} )">
-            {{ option[1].label }} : {{ option[1].count > 0 ? (100 / poll[1].nb_targets * option[1].count).toFixed(2) : 0 }}%
+          <div v-for="option in Object.entries(poll.options).sort(function(a, b) { return a.count - b.count} )">
+            {{ option.label }} : {{ option.count > 0 ? (100 / poll.nb_targets * option.count).toFixed(2) : 0 }}%
           </div>
         </div>
       </div>

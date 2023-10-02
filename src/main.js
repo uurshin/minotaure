@@ -99,17 +99,17 @@ export const usePlayerStore = defineStore('playerStore', {
         },
         polls: (state) => state._current_game.polls,
         active_polls: (state) => state._current_game.polls !== undefined ?
-            Object.entries(state._current_game.polls)
+            Object.fromEntries(Object.entries(state._current_game.polls)
             .filter((poll) => poll[1].active)
             .sort(function(a, b) {
                 return b[0] - a[0];
-            }) : [],
+            })) : [],
         past_polls: (state) => state._current_game.polls !== undefined ?
-            Object.entries(state._current_game.polls)
+            Object.fromEntries(Object.entries(state._current_game.polls)
             .filter((poll) => !poll[1].active)
             .sort(function(a, b) {
                 return b[0] - a[0];
-            }) : []
+            })) : []
     },
     actions: {
         connected_characters(alive = false) {
