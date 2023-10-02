@@ -51,6 +51,7 @@ export const usePlayerStore = defineStore('playerStore', {
         _leaving: false,
         _temp_peer: null,
         _connections: {},
+        _should_reconnect: false,
         _message: '',
         _temp_connections: [],
         _last_challenge: {
@@ -64,6 +65,7 @@ export const usePlayerStore = defineStore('playerStore', {
         peer: (state) => state._user_peer,
         connection : (state) => state._player_connection,
         connections : (state) => state._connections,
+        should_reconnect: (state) => state._should_reconnect,
         current_game: (state) => state._current_game,
         characters: (state) => state._current_game.characters,
         alive_characters: (state) => state._current_game.characters.filter((character) => character.alive),
@@ -171,14 +173,19 @@ export const usePlayerStore = defineStore('playerStore', {
         setConnections(connections) {
             this._connections = connections;
         },
+        setShouldReconnect(value) {
+            this._should_reconnect = value;
+        },
         disconnectAll() {
+            console.log('Minotaure : send gracefully disconnect to all connections');
             Object.values(this.connections).forEach(function(connection) {
-                if (connection != null) {
-                    console.log('trigger deco');
+                if (connection !== null) {
+                    connection.send({handshake: 'disconnectGracefully'});
                     connection.close();
                 }
             });
             this.peer.disconnect();
+            this.peer.destroy();
         },
         // removeConnection(conn) {
         //     let foundIndex = this.connections.findIndex((connection) => connection.id === conn.id);
@@ -410,8 +417,10 @@ export const usePlayerStore = defineStore('playerStore', {
             localStorage.setItem('games', JSON.stringify(games));
         },
         join(id, set_temp_peer = false) {
+            this.setShouldReconnect(true);
             let vm = this;
             let peer_client;
+            let attempting_reconnect = false;
             let join_id = Math.floor(Math.random() * (10000000) + 1)
             peer_client = new Peer(join_id);
             localStorage.setItem('gm_id', id);
@@ -421,6 +430,7 @@ export const usePlayerStore = defineStore('playerStore', {
 
                 conn.on('open', function() {
                     console.log('connection opened');
+                    vm.setShouldReconnect(true);
                     vm.setPeer(peer_client);
                     vm.setConnection(conn);
 
@@ -432,11 +442,42 @@ export const usePlayerStore = defineStore('playerStore', {
                 });
 
                 conn.on('error', function(err) {
-                    alert('error 1 :' + err.type + ' ' + err.message);
+                    console.log('error 1 :' + err.type + ' ' + err.message);
                 });
             })
 
+            peer_client.on("disconnected", function(){
+                let count = 0;
+                console.log('Peer client disconnected');
+                if (!vm.should_reconnect) {
+                    console.log('Disconnected but should not reconnect');
+                    peer_client.destroy();
+                }
+                else if (!attempting_reconnect) {
+                    vm.setMessage('Minotaure - reconnection attempt');
+                    attempting_reconnect = true;
+                    let interval = setInterval(function() {
+                        if (peer_client.open === true || peer_client.destroyed === true) {
+                            console.log('Reconnection attempt successfull');
+                            attempting_reconnect = false;
+                            clearInterval(interval);
+                        }
+                        else if (count < 10) {
+                            count += 1;
+                            console.log('Reconnection attempt number ' + count);
+                            peer_client.reconnect();
+                        }
+                        else if (router.currentRoute.value.path === '/player') {
+                            router.push('/join');
+                            vm.setMessage('Déconnexion imprévue');
+                        }
+                        }, 3000
+                    )
+                }
+            });
+
             peer_client.on('error', function(err) {
+                console.log('peerjs received error : ' + err.type);
                 if (err.type === 'unavailable-id') {
                     vm.setMessage('Identifiant déjà pris');
                 }
@@ -449,15 +490,6 @@ export const usePlayerStore = defineStore('playerStore', {
                     else {
                         vm.setMessage('MJ indisponible');
                     }
-                }
-                else if (err.type === 'network') {
-                    if (router.currentRoute.value.path === '/player') {
-                        router.push('/join');
-                        vm.setMessage('Déconnexion imprévue');
-                    }
-                }
-                else {
-                    alert('erreur :' + err.type);
                 }
             })
         },

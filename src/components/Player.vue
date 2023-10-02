@@ -99,6 +99,10 @@ export default {
       this.store.connection.on('data', function (data) {
         if (data.handshake !== undefined) {
           console.log(data.handshake);
+
+          if (data.handshake === 'disconnectGracefully') {
+            vm.store.setShouldReconnect(false);
+          }
           // 2. Réception des données de la partie.
           if (data.handshake === 'gameWait') {
             vm.gameStart = false;

@@ -91,10 +91,12 @@ export default {
   },
   mounted() {
     let vm = this;
+    let attempting_reconnect = false;
+
     // Initialisation ou reprise de la partie.
 
     window.onbeforeunload =  function () {
-      alert("admin onbefore unload");
+      console.log("Minotaure : admin onbefore unload");
       if (vm.store.current_game !== null) {
         let temp_game = {
           'id': vm.store.current_game.id,
@@ -149,10 +151,30 @@ export default {
       console.log('Peer admin error : ' + err.type);
     });
 
-    this.peer.on('disconnected', function () {
-      console.log('Peer admin disconnect');
+    this.peer.on("disconnected", function(){
+      let count = 0;
+      console.log('Minotaure : Peer admin disconnected');
+      if (!attempting_reconnect) {
+        attempting_reconnect = true;
+        let interval = setInterval(function () {
+          if (vm.peer.open === true || vm.peer.destroyed === true) {
+            clearInterval(interval);
+            attempting_reconnect = false;
+            if (vm.peer.open === true) {
+              console.log('Minotaure : Reconnection successfull');
+            }
+            else if (vm.peer.destroyed === true) {
+              console.log('Minotaure : Peer destroyed');
+            }
+          }
+          else if (count < 10) {
+            count += 1;
+            console.log('Reconnection attempt number ' + count);
+            vm.peer.reconnect();
+          }
+        }, 4000)
+      }
     });
-
 
     this.peer.on('connection', function (conn) {
       vm.store.connections[conn.connectionId] = conn;
@@ -234,7 +256,7 @@ export default {
 
       conn.on('close', function() {
         // TODO ?
-        console.log('Connection admin alert : deco');
+        console.log('PJ disconnected');
       })
 
       conn.on('error', function(err) {
