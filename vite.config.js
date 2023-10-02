@@ -41,18 +41,6 @@ export default defineConfig(({ mode }) => {
     default_config.base = './';
     return default_config;
   }
-
-  else if (mode === 'twitch') {
-    default_config.build = {
-      rollupOptions: {
-        input: {
-          app: './index-twitch.html',
-        },
-      },
-      minify: false,
-      outDir: 'dist/twitch'
-    }
-    return default_config;
-  }
+  
   return {}
 });
