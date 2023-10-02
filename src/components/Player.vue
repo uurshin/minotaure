@@ -63,9 +63,7 @@ export default {
     }
 
     this.store.$subscribe((mutation, state) => {
-      console.log('subscribe trigger');
       if (this.store.connection !== null && this.store.temp_peer !== null) {
-        console.log('subscribe trigger OK');
         this.store.setTempPeer(null);
         this.handshake();
       }
@@ -77,20 +75,20 @@ export default {
       this.store._leaving = false;
 
       // 1. Début de la poignée de main.
-      console.log('handshake')
+      console.log('Minotaure : handshake received')
       console.log(this.store.peer.id);
       this.store.connection.send({
         handshake: 'readyForCall'
       });
 
-      console.log('readyfortransaction')
+      console.log('Minotaure : ready for transaction');
 
       this.store.connection.on('close', function() {
         vm.freeze = true;
         if (!vm.store.leaving) {
           vm.store._leaving = false;
           const myTimeout = setTimeout(function() {
-            console.log('reconnection attempted');
+            console.log('Minotaure : reconnection attempted');
             vm.store.join(vm.store.connection.peer, true);
           }, 500);
         }
@@ -98,8 +96,6 @@ export default {
 
       this.store.connection.on('data', function (data) {
         if (data.handshake !== undefined) {
-          console.log(data.handshake);
-
           if (data.handshake === 'disconnectGracefully') {
             vm.store.setShouldReconnect(false);
           }

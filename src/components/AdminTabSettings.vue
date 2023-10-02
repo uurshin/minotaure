@@ -39,7 +39,6 @@ export default {
       let deadly = this.store.gauges[key].deadly = !this.store.gauges[key].deadly;
       if (deadly) {
         this.store.characters.forEach(function(character) {
-          console.log(character.gauges[key].value);
           if (character.gauges[key].value <= 0) {
             character.alive = false;
           }

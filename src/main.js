@@ -187,17 +187,6 @@ export const usePlayerStore = defineStore('playerStore', {
             this.peer.disconnect();
             this.peer.destroy();
         },
-        // removeConnection(conn) {
-        //     let foundIndex = this.connections.findIndex((connection) => connection.id === conn.id);
-        //     if (foundIndex) {
-        //         this._connections.splice(foundIndex, 1);
-        //     }
-        //     let character = this.characters.find((character) => character.connection === conn.id);
-        //     if (character !== undefined) {
-        //         character.connection = null;
-        //         this.editCharacter(character);
-        //     }
-        // },
         setPeer(peer) {
             this._user_peer = peer;
         },
@@ -211,7 +200,6 @@ export const usePlayerStore = defineStore('playerStore', {
             this.characters.push(new_character);
         },
         characterWatch(new_character) {
-            console.log('characterWatch');
             let vm = this;
             for (const [key, gauge] of Object.entries(new_character.gauges)) {
                 if (vm.gauges[key] !== undefined && vm.gauges[key].deadly && gauge.value <= 0) {
@@ -298,7 +286,7 @@ export const usePlayerStore = defineStore('playerStore', {
                 watched: false,
             }
 
-            // Lancés de dés équilibrés de manière à faire un total de 10 x nombre de caracs.
+            // The sum of all dice throws should be 10 * number of stats.
             let dice_throws = [];
             let pool_max = 9;
             for(let i = 0; i < Object.keys(this.stats).length; ++i) {
@@ -317,7 +305,7 @@ export const usePlayerStore = defineStore('playerStore', {
                 }
             }
 
-            // Stockage des 2 meilleurs lancers pour les tags qui privilégient des caracs.
+            // Store the two best dice throws for tags that prioritize these stats.
             dice_throws.sort(function(a, b){return a - b})
             let max_throws = [];
             if (ranking_stat[0] !== undefined) {
@@ -327,7 +315,7 @@ export const usePlayerStore = defineStore('playerStore', {
                 max_throws.push(dice_throws.pop());
             }
 
-            // Répartition des lancers dans les caractéristiques.
+            // Distribution of the throws for each stat.
             for (const [key, stat] of Object.entries(this.stats)) {
                 let die_choice;
                 if (max_throws[0] !== undefined && ranking_stat[0] === key) {
@@ -429,28 +417,27 @@ export const usePlayerStore = defineStore('playerStore', {
                 let conn = peer_client.connect(id);
 
                 conn.on('open', function() {
-                    console.log('connection opened');
+                    console.log('Minotaure : connection opened');
                     vm.setShouldReconnect(true);
                     vm.setPeer(peer_client);
                     vm.setConnection(conn);
 
                     if (set_temp_peer) {
-                        console.log('temp peer is set');
                         vm.setTempPeer(true);
                     }
                     router.push('/player');
                 });
 
                 conn.on('error', function(err) {
-                    console.log('error 1 :' + err.type + ' ' + err.message);
+                    console.log('Minotaure : error - ' + err.type + ' ' + err.message);
                 });
             })
 
             peer_client.on("disconnected", function(){
                 let count = 0;
-                console.log('Peer client disconnected');
+                console.log('Minotaure : peer client disconnected');
                 if (!vm.should_reconnect) {
-                    console.log('Disconnected but should not reconnect');
+                    console.log('Minotaure : Disconnected but should not reconnect');
                     peer_client.destroy();
                 }
                 else if (!attempting_reconnect) {
@@ -458,18 +445,18 @@ export const usePlayerStore = defineStore('playerStore', {
                     attempting_reconnect = true;
                     let interval = setInterval(function() {
                         if (peer_client.open === true || peer_client.destroyed === true) {
-                            console.log('Reconnection attempt successfull');
+                            console.log('Minotaure : reconnection attempt successful !');
                             attempting_reconnect = false;
                             clearInterval(interval);
                         }
                         else if (count < 10) {
                             count += 1;
-                            console.log('Reconnection attempt number ' + count);
+                            console.log('Minotaure : reconnection attempt number ' + count);
                             peer_client.reconnect();
                         }
                         else if (router.currentRoute.value.path === '/player') {
                             router.push('/join');
-                            vm.setMessage('Déconnexion imprévue');
+                            vm.setMessage('Minotaure : déconnexion imprévue');
                         }
                         }, 3000
                     )
@@ -477,7 +464,7 @@ export const usePlayerStore = defineStore('playerStore', {
             });
 
             peer_client.on('error', function(err) {
-                console.log('peerjs received error : ' + err.type);
+                console.log('Minotaure : peer received error - ' + err.type);
                 if (err.type === 'unavailable-id') {
                     vm.setMessage('Identifiant déjà pris');
                 }

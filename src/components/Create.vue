@@ -64,7 +64,7 @@ export default {
     launch() {
       const vm = this;
 
-      // Stockage de la partie dans le navigateur.
+      // Store the game in the local storage of the browser.
       let games_storage = localStorage.getItem('games');
       games_storage = (games_storage == null ? [] : JSON.parse(games_storage));
       let new_game = {
@@ -84,7 +84,7 @@ export default {
       localStorage.setItem('games', JSON.stringify(games_storage));
       localStorage.removeItem('temp_game');
 
-      // Ouverture de la connexion webrtc et passage sur l'écran d'admin.
+      // Open the webrtc connection.
       if (this.id_admin !== '' && this.store.peer.id !== this.id_admin) {
         this.store.peer.destroy();
         let peer = new Peer(this.id_admin);

@@ -76,11 +76,11 @@ export default {
   },
   computed: {
     activeTabs: function () {
-      // Partie jamais démarrée : préparation
+      // The game never started so it's preparation mode.
       if (this.store.current_game.tuto_on) {
         return this.tabs;
       }
-      // Partie déjà démarrée
+      // The game has already been started all least one time.
       else {
         return this.tabs.filter((tab) => tab.tutorial !== undefined );
       }
@@ -93,8 +93,8 @@ export default {
     let vm = this;
     let attempting_reconnect = false;
 
-    // Initialisation ou reprise de la partie.
-
+    // Before the GM quit the page, save the game and store some info to
+    // resume the game if it's a page refresh.
     window.onbeforeunload =  function () {
       console.log("Minotaure : admin onbefore unload");
       if (vm.store.current_game !== null) {
@@ -110,7 +110,7 @@ export default {
     this.current_tab = this.store.current_game.tuto_on ? 'intro' : 'characters';
     this.changeTab(this.current_tab);
 
-    // Personnages.
+    // Characters loading.
     if (this.store.current_game.characters === undefined) {
       this.store.current_game.characters = [];
     }
@@ -122,7 +122,7 @@ export default {
       });
     }
 
-    // Initialisation des éléments de personnages.
+    // It's the first time the game is loaded, so initialize some data.
     if (vm.store.current_game.initialized === false) {
       vm.store.current_game.stats = {
         fo1: {name: vm.$t('Physique')},
@@ -148,12 +148,12 @@ export default {
     this.peer = this.store.peer;
 
     this.peer.on('error', function (err) {
-      console.log('Peer admin error : ' + err.type);
+      console.log('Minotaure : peer admin error - ' + err.type);
     });
 
     this.peer.on("disconnected", function(){
       let count = 0;
-      console.log('Minotaure : Peer admin disconnected');
+      console.log('Minotaure : peer admin disconnected');
       if (!attempting_reconnect) {
         attempting_reconnect = true;
         let interval = setInterval(function () {
@@ -161,15 +161,15 @@ export default {
             clearInterval(interval);
             attempting_reconnect = false;
             if (vm.peer.open === true) {
-              console.log('Minotaure : Reconnection successfull');
+              console.log('Minotaure : reconnection successfull');
             }
             else if (vm.peer.destroyed === true) {
-              console.log('Minotaure : Peer destroyed');
+              console.log('Minotaure : peer destroyed');
             }
           }
           else if (count < 10) {
             count += 1;
-            console.log('Reconnection attempt number ' + count);
+            console.log('Minotaure : reconnection attempt number ' + count);
             vm.peer.reconnect();
           }
         }, 4000)
@@ -180,8 +180,9 @@ export default {
       vm.store.connections[conn.connectionId] = conn;
 
       conn.on('data', function (data) {
-        // Joueur connecté et en attente de l'id de la partie.
+        // Player connected and waiting for the game ID.
         if (data.handshake === 'readyForCall') {
+          // The game has already started, send the corresponding signal.
           if (vm.store.current_game.game_started) {
             conn.send({
               handshake:'gameStart',
@@ -189,6 +190,7 @@ export default {
             });
           }
           else {
+            // The game has not started, send the corresponding signal.
             vm.store.temp_connections.push(conn);
             conn.send({
               handshake:'gameWait',
@@ -196,7 +198,7 @@ export default {
             });
           }
         }
-        // Joueur connecté avec id de partie, en attente d'un personnage.
+        // The player is connected and waiting for a character.
         else if (data.handshake === 'readyForCharacter') {
           let message = {
             game_token: vm.store.current_game.id,
@@ -204,25 +206,27 @@ export default {
 
           let new_character;
 
+          // The player submitted a character token to retrieve a (possibly) existing character.
           if (data.token !== undefined) {
             new_character = vm.store.retrieveCharacter(data.token);
+            // The character exists and should be sent to the player.
             if (new_character !== undefined) {
+              // It's not a character requested after the death or a previous one.
               if (data.reset === undefined) {
                 new_character.connection = conn.connectionId;
-
-                console.log('watch 1 set');
                 if (!new_character.watched) {
                   new_character.watched = true;
                   watch(new_character, vm.store.characterWatch);
                 }
               }
+              // It's a death reset and we should erase some data of the dead.
               else {
                 new_character.connection = null;
                 new_character.token = null;
               }
             }
           }
-          // Nouveau personnage.
+          // New character should be created (it could be after death), send a creation form.
           if (new_character === undefined || data.reset !== undefined) {
             message.handshake = 'initCharacter';
             message.creation_form = {
@@ -230,6 +234,7 @@ export default {
             };
             conn.send(message);
           }
+          // It's not a new character, send it.
           else {
             conn.send({
               handshake:'displayCharacter',
@@ -237,14 +242,12 @@ export default {
               character: vm.store.prepareCharacter(new_character)
             });
           }
-
-          // if (vm.is_live) {
-          //   vm.peer.call(conn.peer, vm.stream);
-          // }
         }
+        // Creation form was filled and received, create a new character and send it.
         else if (data.handshake === 'characterChoices') {
           vm.sendNewCharacter(data, conn);
         }
+        // Answer to a poll was received, add it to the right poll.
         else if (data.handshake === 'pollAnswer') {
           let character = vm.store.retrieveCharacter(data.token);
           if (character && data.code !== undefined && character.polls[data.code] !== undefined) {
@@ -255,12 +258,11 @@ export default {
       });
 
       conn.on('close', function() {
-        // TODO ?
-        console.log('PJ disconnected');
+        console.log('Minotaure : PJ disconnected');
       })
 
       conn.on('error', function(err) {
-        console.log('Connection admin error : ' + err.type);
+        console.log('Minotaure : connection admin error : ' + err.type);
       })
     });
   },
@@ -329,7 +331,6 @@ export default {
       let vm = this;
       let character = this.store.generateCharacter(data, conn);
       character.connection = conn.connectionId;
-      console.log('watch 2 set');
 
       let retrieved_character = this.store.retrieveCharacter(character.token);
       retrieved_character.connection = conn.connectionId;
@@ -415,8 +416,6 @@ export default {
   .multiselect {
     min-width: 200px;
     margin-top: 20px;
-    //outline: var(--multiselect-border);
-    //border-radius: 5px 0 5px 5px;
     box-sizing: unset;
 
     &:after {

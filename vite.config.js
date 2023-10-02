@@ -41,6 +41,6 @@ export default defineConfig(({ mode }) => {
     default_config.base = './';
     return default_config;
   }
-  
+
   return {}
 });

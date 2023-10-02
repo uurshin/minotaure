@@ -148,7 +148,7 @@ export default {
         let character = event.item;
         switch (event.option.effect) {
           case 'rename':
-            console.log(character.character_token);
+            // Todo rename.
         }
       }
     }
