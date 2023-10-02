@@ -2,6 +2,7 @@
 import router from '../main.js'
 import { usePlayerStore } from '../main';
 import {useI18n} from "vue-i18n";
+import { Peer } from "peerjs";
 
 export default {
   setup() {

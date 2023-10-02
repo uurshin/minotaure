@@ -2,6 +2,7 @@ import {createApp, watch} from 'vue'
 import { createPinia, defineStore } from 'pinia'
 import { createWebHashHistory, createRouter } from 'vue-router'
 import { createI18n } from "vue-i18n";
+import { Peer } from "peerjs";
 
 import messages from '@intlify/unplugin-vue-i18n/messages'
 

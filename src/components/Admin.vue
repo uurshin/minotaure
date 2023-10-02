@@ -12,6 +12,7 @@ import AdminTabChallenge from '../components/AdminTabChallenge.vue'
 import AdminTabPick from '../components/AdminTabPick.vue'
 import AdminTour from '../components/AdminTour.vue'
 import { useI18n } from "vue-i18n";
+import { Peer } from "peerjs";
 
 export default {
   components: {
