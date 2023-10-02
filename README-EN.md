@@ -1,20 +1,22 @@
-Comment utiliser Minotaure ?
+[![en](https://img.shields.io/badge/lang-fr-red.svg)](https://github.com/uurshin/minotaure/blob/main/README.md)
 
-Ce projet est prévu pour être utilisé de 2 façons, au choix :
+# How to use Minotaure
 
-    en lancant le fichier index.html dans votre navigateur
-    en hébergeant le fichier index.html sur un serveur puis en naviguant vers l'adresse de ce fichier
+This project is designed to be used in 2 different ways:
 
-Contribuer au développement
-Installation des sources
+1. by launching the index.html file in your browser
+2. by hosting the index.html file on a server, then navigating to the file's address.
 
-Pour construire le projet, clonez le puis lancez les commandes suivantes (la commande npm doit être disponible) : npm ci
+# Contribute to development
+## Installing sources
+To build the project, clone it, then run the following commands (the npm command must be available):
+ `npm ci`
 
-Ensuite, vous pouvez créer une build pour, au choix :
+Next, you can create a build for either :
+- a local environment with `npm run build -- --mode=offline` (the index.html file can be found in the /dist/offline folder)
+- a hosted environment with `npm run build` (the index.html file can be found in the /dist/online folder)
 
-    un environnement local avec npm run build -- --mode=offline (le fichier index.html pourra être trouvé dans le dossier /dist/offline)
-    un environnement hébergé avec npm run build (le fichier index.html pourra être trouvé dans le dossier /dist/online)
-
-Contribution au dépôt
-Les icônes sont générées via l'application Icomoon
-Les icônes utilisés dans ce projet sont injectés dans une webfont produite grâce à IcoMoon : https://icomoon.io/#faq Si un de vos développements nécessite un nouvel icône, importez le fichier icomoon_minotaure.json, effectuez vos modifications, puis exportez le projet et la police avant de soumette vos modification sur le dépôt.
+## Repository contribution
+### Icons are generated using the Icomoon application
+The icons used in this project are injected into a webfont produced by IcoMoon: https://icomoon.io/#faq
+If one of your developments requires a new icon, import the icomoon_minotaure.json file, make your modifications, then export the project and font before submitting your changes to the repository.
