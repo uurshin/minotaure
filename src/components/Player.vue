@@ -312,7 +312,7 @@ export default {
   #player-sheet {
     display: flex;
     border-radius: 10px;
-    color: var(--background-color);
+    color: var(--background-card-color);
     flex-direction: column;
     gap: 10px;
     margin-top: 20px;
