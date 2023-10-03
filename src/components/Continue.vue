@@ -11,12 +11,13 @@ export default {
       warnHtmlInMessage: 'off'
     });
     const version = APP_VERSION;
+    const versions = version.split('.');
     let games_storage = localStorage.getItem('games');
     games_storage = (games_storage == null ? [] : JSON.parse(games_storage));
     const games = ref(games_storage);
 
     return {
-      games, t, version
+      games, t, versions, version
     }
   },
   data() {
@@ -35,7 +36,7 @@ export default {
   },
   computed: {
     hasDeprecatedGames() {
-      return (this.games.findIndex((game) => game.version !== undefined && game.version !== this.version) > -1);
+      return this.games.findIndex((game) => this.versionIsDeprecated(game.version)) > -1;
     },
     titleContinue() {
       const vm = this;
@@ -49,6 +50,18 @@ export default {
     },
   },
   methods: {
+    versionIsDeprecated(game_version) {
+      if (game_version === undefined) {
+        return false
+      }
+      else {
+        let numbers = game_version.split('.');
+        return (
+            numbers[0] !== this.versions[0] ||
+            numbers[1] !== this.versions[1]
+        );
+      }
+    },
     formatDate(dateString) {
       const date = new Date(dateString);
       return new Intl.DateTimeFormat('en-GB').format(date);
@@ -123,7 +136,7 @@ export default {
     <span v-html="$t('warning_version', {version: version})" v-if="hasDeprecatedGames"></span>
     <div class="game" v-for="(game, key) in games" v-if="!ask_id">
       <div class="title">
-        <span>{{ game.name }}<span class="danger" v-if="game.version !== undefined && game.version !== version">*</span></span>
+        <span>{{ game.name }}<span class="danger" v-if="game.version !== undefined && versionIsDeprecated(game.version)">*</span></span>
         <span class="date" v-if="activated !== key">{{ formatDate(game.date) }}</span>
       </div>
       <span v-if="activated !== key">{{ t('count_personnage', {count: game.characters.length}) }}</span>
