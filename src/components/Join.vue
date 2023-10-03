@@ -30,7 +30,7 @@
       },
     },
     mounted() {
-      if (this.$route.query.id !== undefined) {
+      if (this.$route.query.id !== undefined && this.$route.query.id !== '') {
         this.id_join = this.$route.query.id;
         this.store.join(this.$route.query.id)
       }
