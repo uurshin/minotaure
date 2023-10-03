@@ -138,9 +138,9 @@ export default {
     generateOptions (item) {
       let options = [];
       options.push({ name: 'Renommer (à venir)', effect:'rename'});
-      options.push({ name: 'Supprimer (à venir)', effect:'rename'});
-      options.push({ name: 'Modifier (à venir)', effect:'rename'});
-      options.push({ type:'divider'})
+      options.push({ name: 'Supprimer (à venir)', effect:'delete'});
+      options.push({ name: 'Modifier (à venir)', effect:'edit'});
+      options.push({ name: 'Ajouter au tirage (à venir)', effect:'add'});
       return options;
     },
     optionClicked (event) {
@@ -149,6 +149,16 @@ export default {
         switch (event.option.effect) {
           case 'rename':
             // Todo rename.
+             break;
+          case 'delete':
+            // Todo delete.
+            break;
+          case 'edit':
+            // Todo edit.
+            break;
+          case 'add':
+            // Todo edit.
+            break;
         }
       }
     }
