@@ -100,17 +100,8 @@ export default {
     },
     generateOptions (item) {
       let options = [];
-     
+
       options.push({name: this.$t('Supprimer'), effect:'remove'});
-
-      for (const [key, stat] of Object.entries(this.store.stats)) {
-        options.push({name: this.$t('Augmenter') + stat.name, effect:'bonus', target: key, value: 1 });
-      }
-      options.push({ type:'divider'})
-
-      for (const [key, stat] of Object.entries(this.store.stats)) {
-        options.push({name: this.$t('Diminuer') + stat.name, effect:'bonus', target: key, value: -1 });
-      }
       options.push({ type:'divider'})
 
       if (item.stat1 === undefined) {
@@ -135,6 +126,19 @@ export default {
           options.push({name: this.$t('unlink2StatToTag', {statname: this.store.stats[item.stat2].name}), effect:'stat2_unset', target: item.stat2 });
         }
       }
+      options.push({ type:'divider'})
+
+      for (const [key, gauge] of Object.entries(this.store.gauges)) {
+        options.push({name: this.$t('bonus_gauge', {name : gauge.name}), effect:'bonus_gauge', target: key, value: 1 });
+        options.push({name: this.$t('malus_gauge', {name : gauge.name}), effect:'bonus_gauge', target: key, value: -1 });
+      }
+      options.push({ type:'divider'})
+
+      for (const [key, stat] of Object.entries(this.store.stats)) {
+        options.push({name: this.$t('bonus_stat', {name : stat.name}), effect:'bonus_stat', target: key, value: 1 });
+        options.push({name: this.$t('bonus_stat', {name : stat.name}), effect:'bonus_stat', target: key, value: -1 });
+      }
+      options.push({ type:'divider'})
 
       options.push({name: this.$t('Changer la couleur'), effect:'color'});
 
@@ -147,18 +151,32 @@ export default {
           case 'remove':
             this.removeTag(event.item);
             break;
-          case 'bonus':
-            if (tag.modifiers === undefined) {
-              tag.modifiers = {};
+          case 'bonus_stat':
+            if (tag.stat_modifiers === undefined) {
+              tag.stat_modifiers = {};
             }
-            if (tag.modifiers[event.option.target]  === undefined) {
-              tag.modifiers[event.option.target] = {value: event.option.value};
+            if (tag.stat_modifiers[event.option.target]  === undefined) {
+              tag.stat_modifiers[event.option.target] = {value: event.option.value};
             }
             else {
-              tag.modifiers[event.option.target].value += event.option.value;
+              tag.stat_modifiers[event.option.target].value += event.option.value;
             }
-            if (tag.modifiers[event.option.target].value === 0) {
-              delete tag.modifiers[event.option.target];
+            if (tag.stat_modifiers[event.option.target].value === 0) {
+              delete tag.stat_modifiers[event.option.target];
+            }
+            break;
+          case 'bonus_gauge':
+            if (tag.gauge_modifiers === undefined) {
+              tag.gauge_modifiers = {};
+            }
+            if (tag.gauge_modifiers[event.option.target]  === undefined) {
+              tag.gauge_modifiers[event.option.target] = {value: event.option.value};
+            }
+            else {
+              tag.gauge_modifiers[event.option.target].value += event.option.value;
+            }
+            if (tag.gauge_modifiers[event.option.target].value === 0) {
+              delete tag.gauge_modifiers[event.option.target];
             }
             break;
           case 'stat1':
@@ -261,7 +279,10 @@ export default {
                     <span class="label-name">{{ tag.option.label }}</span>
                     <span v-if="tag.option.stat1">{{ tag.option.stat1 !== undefined ? t('Carac principale') + store.stats[tag.option.stat1].name : '' }}</span>
                     <span v-if="tag.option.stat2">{{ tag.option.stat2 !== undefined ? t('Carac secondaire') + store.stats[tag.option.stat2].name : '' }}</span>
-                    <span v-if="tag.option.modifiers !== undefined" v-for="(modifier, key) in tag.option.modifiers">
+                    <span v-if="tag.option.gauge_modifiers !== undefined" v-for="(modifier, key) in tag.option.gauge_modifiers">
+                      {{ store.gauges[key].name }} {{ modifier.value > 0 ? '+' + modifier.value : modifier.value }}
+                    </span>
+                    <span v-if="tag.option.modifiers !== undefined" v-for="(modifier, key) in tag.option.stat_modifiers">
                       {{ store.stats[key].name }} {{ modifier.value > 0 ? '+' + modifier.value : modifier.value }}
                     </span>
                   </div>

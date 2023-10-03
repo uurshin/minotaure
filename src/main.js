@@ -230,18 +230,12 @@ export const usePlayerStore = defineStore('playerStore', {
             let token = Math.random() + Math.random();
             let tags = [];
             let ranking_stat = [];
+
             if (data != null) {
                 data.choices.forEach(function(code) {
                     let found_tag = vm.getTagFromCode(code);
                     if (found_tag) {
                         tags.push(found_tag);
-                        if (found_tag.stat1) {
-                            ranking_stat[0] = found_tag.stat1;
-                        }
-                        if (found_tag.stat2) {
-                            ranking_stat[1] = found_tag.stat2;
-                        }
-                        // TODO modifiers
                     }
                 });
             }
@@ -255,7 +249,6 @@ export const usePlayerStore = defineStore('playerStore', {
             let character = {
                 game_name: this.current_game.name,
                 token: token,
-                tags: tags,
                 stats: {},
                 name: data != null ? data.name : 'Perso ' + Math.floor(Math.random() * Math.random() * 100000),
                 pseudo: data != null ? data.pseudo : null,
@@ -316,6 +309,37 @@ export const usePlayerStore = defineStore('playerStore', {
             for (const [key, gauge] of Object.entries(this.gauges)) {
                 character.gauges[key] = {label: gauge.name, value: gauge.value}
             }
+
+            tags.forEach(function(tag) {
+                if (tag.stat1 && ranking_stat[0] === undefined) {
+                    ranking_stat[0] = tag.stat1;
+                }
+                if (tag.stat2 && ranking_stat[1] === undefined) {
+                    ranking_stat[1] = tag.stat2;
+                }
+                if (tag.stat_modifiers !== undefined) {
+                    for (const [key, stat] of Object.entries(tag.stat_modifiers)) {
+                        if (character.stats[key] !== undefined) {
+                            character.stats[key].value += stat.value;
+                            if (character.stats[key].value <= 0) {
+                                character.stats[key].value = 1;
+                            }
+                        }
+                    }
+                }
+                if (tag.gauge_modifiers !== undefined) {
+                    for (const [key, gauge] of Object.entries(tag.gauge_modifiers)) {
+                        if (character.gauges[key] !== undefined) {
+                            character.gauges[key].value += gauge.value;
+                            if (character.gauges[key].value <= 0) {
+                                character.gauges[key].value = 1;
+                            }
+                        }
+                    }
+                }
+            });
+            character.tags = tags;
+
             this.addCharacter(character);
             return character;
         },
@@ -438,7 +462,8 @@ export const usePlayerStore = defineStore('playerStore', {
                         }
                         else if (router.currentRoute.value.path === '/player') {
                             router.push('/join');
-                            vm.setMessage('Minotaure : déconnexion imprévue');
+                            attempting_reconnect = false;
+                            vm.setMessage('Déconnexion imprévue');
                         }
                         }, 3000
                     )

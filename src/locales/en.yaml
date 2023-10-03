@@ -138,8 +138,10 @@ Commencez à taper: "Start to type"
 
 #AdminTabTags
 Groupe nb: "Group {nb}"
-Augmenter: "Boost "
-Diminuer: "Nerf "
+bonus_gauge: "Boost the bar {name}"
+malus_gauge: "Nerf the bar {name}"
+bonus_stat: "Boost the stat {name}"
+malus_stat: "Nerf the stat {name}"
 linkStatToTag: "Make {statname} as main stat"
 unlinkStatToTag: "Remove {statname} as main stat"
 link2StatToTag: "Make {statname} as secondary stat"

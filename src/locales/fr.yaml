@@ -138,8 +138,10 @@ Commencez à taper: "Commencez à taper"
 
 #AdminTabTags
 Groupe nb: "Groupe {nb}"
-Augmenter: "Augmenter "
-Diminuer: "Diminuer "
+bonus_gauge: "Augmenter la jauge {name}"
+malus_gauge: "Diminuer la jauge {name}"
+bonus_stat: "Augmenter la caractéristique {name}"
+malus_stat: "Diminuer la caractéristique {name}"
 linkStatToTag: "Associer à {statname} comme carac principale"
 unlinkStatToTag: "Ne plus associer à {statname} comme carac principale"
 link2StatToTag: "Associer à {statname} comme carac secondaire"
