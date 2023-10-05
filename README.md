@@ -60,6 +60,9 @@ Si vous avez créé une partie, vous pouvez la continuer à l'état où vous l'a
 2. Si la partie a déjà démarré, vous pourrez créer un personnage. Sinon, vous serez en attente du démarrage.
 
 Si vous accédez à une partie où vous possédez déjà un personnage, il vous sera automatiquement attribué, mais il faut que vous utilisiez le même appareil et le même navigateur que lorsque vous avez accédé à la partie la dernière fois. Pour utiliser un autre appareil ou navigateur (par exemple pour rejoindre sur votre téléphone au lieu de votre ordinateur), consultez le wiki pour en savoir plus sur l'import/export de personnage. Pas d'inquiétude, c'est très simple !
+
+### Où trouver des parties ?
+![Discord Banner 1](https://discordapp.com/api/guilds/828320530444451880/widget.png?style=banner2)
    
 ## Contribuer au développement
 
