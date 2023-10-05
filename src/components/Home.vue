@@ -48,19 +48,6 @@ export default {
 </template>
 
 <style lang="scss">
-  body {
-    @font-face {
-      font-family: "Ubuntu";
-    }
-    @font-face {
-      font-family: "Ubuntu";
-      font-weight: 500;
-    }
-    @font-face {
-      font-family: "Ubuntu";
-      font-weight: 700;
-    }
-  }
   .small-wrapper {
     display: flex;
     flex-direction: column;

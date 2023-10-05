@@ -1,0 +1,35 @@
+@font-face {
+	font-family: 'icomoon';
+	src:
+					url('/src/assets/fonts/icomoon/icomoon.ttf?677nr0') format('truetype'),
+					url('/src/assets/fonts/icomoon/icomoon.woff?677nr0') format('woff'),
+					url('/src/assets/fonts/icomoon/icomoon.svg?677nr0#icomoon') format('svg');
+	font-weight: normal;
+	font-style: normal;
+	font-display: block;
+}
+
+@font-face {
+	font-family: "Ubuntu";
+	src:
+					url("/src/assets/fonts/ubuntu/ubuntu-regular-webfont.woff2") format("woff2"),
+					url("/src/assets/fonts/ubuntu/Ubuntu-Regular.ttf") format("truetype");
+	font-weight: 400;
+	font-style: normal;
+}
+@font-face {
+	font-family: "Ubuntu";
+	src:
+					url("/src/assets/fonts/ubuntu/ubuntu-medium-webfont.woff2") format("woff2"),
+					url("/src/assets/fonts/ubuntu/Ubuntu-Medium.ttf") format("truetype");
+	font-weight: 500;
+	font-style: normal;
+}
+@font-face {
+	font-family: "Ubuntu";
+	src:
+					url("/src/assets/fonts/ubuntu/ubuntu-bold-webfont.woff2") format("woff2"),
+					url("/src/assets/fonts/ubuntu/Ubuntu-Bold.ttf") format("truetype");
+	font-weight: 600;
+	font-style: normal;
+}
