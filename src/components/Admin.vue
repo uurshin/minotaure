@@ -544,17 +544,21 @@ export default {
         padding: 15px 10px;
       }
 
-      &.open:not(:first-of-type)  {
+      &.open  {
         position: relative;
         &:before {
           position: absolute;
           content: '';
-          border-left: 1px solid white;
-          border-right: 1px solid white;
+          border-left: 1px solid var(--tab-border-color);
+          border-right: 1px solid var(--tab-border-color);
           border-bottom: 2px solid var(--background-color);
           width: 100%;
           height: 100%;
           left: 0;
+        }
+
+        &:first-of-type:before {
+          border-left: none;
         }
       }
     }

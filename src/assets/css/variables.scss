@@ -33,6 +33,7 @@ $breakpoints: (
   --button-background: #0b6488;
   --select-border: none;
   --margin-multiselect: 0;
+  --tab-border-color: white;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -42,7 +43,7 @@ $breakpoints: (
 }
 [data-theme="dark"] {
   &.picker {
-	background: black;
+	  background: black;
   }
 }
 [data-theme="light"] {
@@ -58,10 +59,10 @@ $breakpoints: (
   --border-color: #777;
   --warning-background: #804200;
   --margin-multiselect: 0 -1px 0 -1px;
-  $success: red;
+  --tab-border-color: black;
 
   &.picker {
-	background: white;
+	  background: white;
   }
 }
 
@@ -78,7 +79,7 @@ $breakpoints: (
   --warning-background: #804200;
   --valid-color: #379634;
   --danger-color: #A63A50;
-  $success: red;
+  --tab-border-color: black;
 
   &.picker {
     background: #5858c4;
