@@ -1,5 +1,5 @@
 [![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/uurshin/minotaure/blob/main/README-EN.md)
-![alt text](https://github.com/uurshin/minotaure/blob/main/src/assets/images/minotaure_logo.svg)?raw=true)
+<img src="[https://github.com/favicon.ico](https://github.com/uurshin/minotaure/blob/main/src/assets/images/minotaure_logo.svg)" width="48">
 
 # Comment utiliser Minotaure ?
 
