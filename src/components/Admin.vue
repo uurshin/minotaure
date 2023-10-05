@@ -540,18 +540,22 @@ export default {
       font-weight: 500;
       border-bottom: 1px solid var(--font-color);
 
-      &:first-of-type {
-        border-left: none !important;
-      }
-
       @include media("<desktop") {
         padding: 15px 10px;
       }
 
-      &.open {
-        border: 1px solid var(--font-color);
-        border-bottom: none;
-        border-top: none;
+      &.open:not(:first-of-type)  {
+        position: relative;
+        &:before {
+          position: absolute;
+          content: '';
+          border-left: 1px solid white;
+          border-right: 1px solid white;
+          border-bottom: 2px solid var(--background-color);
+          width: 100%;
+          height: 100%;
+          left: 0;
+        }
       }
     }
 
