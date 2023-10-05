@@ -3,7 +3,7 @@
  <span>Minotaure</span>
 </h1>
 
-[![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/uurshin/minotaure/blob/main/README-EN.md)
+[![fr](https://img.shields.io/badge/lang-fr-red.svg)](https://github.com/uurshin/minotaure/blob/main/README.md)
  
 ## What is it for?
 
