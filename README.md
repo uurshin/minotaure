@@ -7,16 +7,21 @@
  
 ## A quoi ça sert ?
 
-Minotaure est un outil vous aidant à animer une aventure pour plusieurs dizaines ou centaines de personnes, dont les mécanismes sont en partie empruntés à un jeu de rôle classique mais appliqués à une population plus large. Minotaure s'inspire du fonctionnement d'un outil plus ancien créé par FibreTigre sous le nom ATRPG.
+Minotaure est un outil vous aidant à animer une aventure pour plusieurs dizaines ou centaines de personnes.
+Ses mécanismes sont en partie empruntés au jeu de rôle classique mais appliqués à une population plus large. Minotaure s'inspire du fonctionnement d'un outil plus ancien créé par [FibreTigre](https://www.fibretigre.com/) sous le nom ATRPG.
 
 L'application est à utiliser en complément d'une application de streaming vidéo et d'un système de messagerie instantané (Twitch, Discord, etc.)
 Chaque personne rejoignant votre partie disposera d'une fiche de personnage minimaliste.
+
 Vous pourrez ranger ces personnages dans des catégories (**tags**) différentes (genre, espèce, classe, couleur, faction, etc.). Cela pourra influencer leurs **caractéristiques** (force, agilité, etc.) et leurs **jauges** (vie, volonté, etc.).
-Vous allez proposer des choix grâce aux **sondages** à des personnages.
-Vous pourrez aussi leur faire passer des **épreuves**.
+
+Vous allez proposer des choix aux participants grâce aux **sondages**.
+
+Vous pourrez aussi leur faire passer des **épreuves** (similiare à des jets de dés).
+
 Les épreuves et les sondages pourront avoir, en plus de leurs conséquences sur l'aventure, des **conséquences** sur les fiches des personnages (ajout / suppression de tags, modification de caractéristiques et/ou de jauges).
 
-Vous voulez en savoir plus ? Vous cherchez des exemples de situation de parties ? Tout est sur le wiki.
+Vous voulez en savoir plus ? Vous cherchez des exemples de situation de parties ? Tout est sur le [wiki](https://github.com/uurshin/minotaure/wiki).
 
 ## Comment utiliser Minotaure ?
 
@@ -24,12 +29,17 @@ Vous voulez en savoir plus ? Vous cherchez des exemples de situation de parties 
 
 Ce projet est prévu pour être utilisé de 2 façons, au choix :
 
-1. en lancant le fichier index.html dans votre navigateur (surnommée la version "offline")
-2. en hébergeant le fichier index.html sur un serveur puis en naviguant vers l'adresse de ce fichier
+1. en hébergeant le fichier index.html sur un serveur puis en naviguant vers l'adresse de ce fichier. Très pratique, vous n'avez ensuite qu'à partager aux participants le lien fourni lors du démarrage de partie.
+2. en lancant le fichier index.html dans votre navigateur. Cette méthode ne nécessite aucune connaissance technique mais ne fonctionne pas sur certains navigateurs mobile. Les participants doivent tous avoir le fichier pour entrer vos identifiant de partie à la main.
+   
+Consultez le wiki pour des suggestions d'hébergement gratuit pour la 1ère méthode.
 
 ### Où sont conservés les parties et personnages ?
-<sup> Il est difficile de comprendre cette partie. Pour chacun des utilisateurs (MJ, PJ) il faut mieux expliquer ce qui est sur quel navigateur </sup>
-Minotaure fonctionne **sans serveur distant** pour stocker des données. Les parties sont conservées dans le stockage local de **votre navigateur**. Les identifiants de vos personnages y sont également stockés pour qu'une partie distante sache quel personnage vous possédez et vous l'attribuer lorsque vous rejoignez la partie. Cet avantage nécessite que vous utilisez toujours le même appareil et navigateur pour retrouver vos parties et personnages, ou que vous exportiez ces données (en savoir plus sur le wiki).
+Minotaure fonctionne **sans serveur distant** pour stocker des données. 
+Si vous créez une partie, ses données (y compris les fiches de personnages créées par les participants) sont conservées dans le stockage local de **votre navigateur** . 
+Si vous avez rejoint une partie, l'identifiant de votre personnages est conservé dans le stockage local de **votre navigateur**.  
+Lors que vous rejoignez une partie distante dans laquelle vous avez déjà un personnage, la partie vous réattribuera le même personnage si vous la rejoignez avec le même appareil et navigateur.
+Vous pouvez exporter vos parties et vos personnages pour jouer à partir d'autres appareils ou navigateurs.
 
 ### Créer une partie
 
@@ -53,7 +63,8 @@ Si vous accédez à une partie où vous possédez déjà un personnage, il vous 
    
 ## Contribuer au développement
 
-Minotaure est un logiciel open source. Nous vous invitons à contribuer à ses futures versions, à travers le code, la traduction, la rédaction ou la documentation.
+Minotaure est un logiciel open source. Nous vous invitons à contribuer à ses futures versions à travers notamment du code, de la traduction, des tests et de la documentation.
+N'hésitez pas à nous avertir de bugs ou à nous proposer des évolutions en ouvrant des [tickets](https://github.com/uurshin/minotaure/issues).
 
 ### Installation des sources
 Pour construire le projet, clonez le puis lancez les commandes suivantes (la commande npm doit être disponible) :
@@ -64,5 +75,5 @@ Ensuite, vous pouvez créer une build pour, au choix :
 - un environnement hébergé avec `npm run build` (le fichier index.html pourra être trouvé dans le dossier /dist/online)
 
 ### Icônes de l'application
-Les icônes utilisés dans ce projet sont injectés dans une webfont produite grâce à IcoMoon : https://icomoon.io/#faq
+Les icônes utilisés dans ce projet sont injectés dans une webfont produite grâce à : [IcoMoon](https://icomoon.io/#faq)
 Si un de vos développements nécessite un nouvel icône, importez le fichier icomoon_minotaure.json, effectuez vos modifications puis exportez le projet et la police avant de soumettre vos modifications sur le dépôt. Assurez-vous de ne proposer que des icônes libres de droit.
