@@ -1,4 +1,6 @@
 [![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/uurshin/minotaure/blob/main/README-EN.md)
+![alt text](https://github.com/uurshin/minotaure/blob/main/src/assets/images/minotaure_logo.svg)?raw=true)
+
 # Comment utiliser Minotaure ?
 
 Ce projet est prévu pour être utilisé de 2 façons, au choix :
