@@ -24,7 +24,7 @@ Want to learn more? Looking for examples of game situations? Everything is on th
 ### Installation
 
 
-[Download the last version](https://github.com/uurshin/minotaure/releases/latest/download/minotaure.html)
+[Download the last version](https://github.com/uurshin/minotaure/releases/latest/download/index.html)
 
 This file is designed to be used in two ways, as you prefer:
 
