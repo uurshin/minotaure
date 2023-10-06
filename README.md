@@ -25,7 +25,7 @@ Vous voulez en savoir plus ? Vous cherchez des exemples de situation de parties 
 
 ### Installation
 
-[Téléchargez la dernière version](https://github.com/uurshin/minotaure/releases/latest/download/minotaure.html)
+[Téléchargez la dernière version](https://github.com/uurshin/minotaure/releases/latest/download/index.html)
 
 Ce fichier est prévu pour être utilisé de 2 façons, au choix :
 
