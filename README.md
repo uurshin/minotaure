@@ -28,6 +28,7 @@ Vous voulez en savoir plus ? Vous cherchez des exemples de situation de parties 
 ### Installation
 
 [Téléchargez la dernière version](https://github.com/uurshin/minotaure/releases/latest/download/minotaure.html)
+
 Ce projet est prévu pour être utilisé de 2 façons, au choix :
 
 1. en hébergeant le fichier minotaure.html sur un serveur puis en naviguant vers l'adresse de ce fichier. Très pratique, vous n'avez ensuite qu'à partager aux participants le lien fourni lors du démarrage de partie.
