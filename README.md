@@ -27,10 +27,11 @@ Vous voulez en savoir plus ? Vous cherchez des exemples de situation de parties 
 
 ### Installation
 
+[Téléchargez la dernière version](https://github.com/uurshin/minotaure/releases/latest/download/minotaure.html)
 Ce projet est prévu pour être utilisé de 2 façons, au choix :
 
-1. en hébergeant le fichier index.html sur un serveur puis en naviguant vers l'adresse de ce fichier. Très pratique, vous n'avez ensuite qu'à partager aux participants le lien fourni lors du démarrage de partie.
-2. en lancant le fichier index.html dans votre navigateur. Cette méthode ne nécessite aucune connaissance technique mais ne fonctionne pas sur certains navigateurs mobile. Les participants doivent tous avoir le fichier pour entrer vos identifiant de partie à la main.
+1. en hébergeant le fichier minotaure.html sur un serveur puis en naviguant vers l'adresse de ce fichier. Très pratique, vous n'avez ensuite qu'à partager aux participants le lien fourni lors du démarrage de partie.
+2. en lancant le fichier minotaure.html dans votre navigateur. Cette méthode ne nécessite aucune connaissance technique mais ne fonctionne pas sur certains navigateurs mobile. Les participants doivent tous avoir le fichier pour entrer vos identifiant de partie à la main.
    
 Consultez le wiki pour des suggestions d'hébergement gratuit pour la 1ère méthode.
 
