@@ -4,8 +4,6 @@
 </h1>
 
 [![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/uurshin/minotaure/blob/main/README-EN.md)
- 
-## A quoi ça sert ?
 
 Minotaure est un outil vous aidant à animer une aventure pour plusieurs dizaines ou centaines de personnes.
 Ses mécanismes sont en partie empruntés au jeu de rôle classique mais appliqués à une population plus large. Minotaure s'inspire du fonctionnement d'un outil plus ancien créé par [FibreTigre](https://www.fibretigre.com/) sous le nom ATRPG.
