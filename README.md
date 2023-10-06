@@ -17,7 +17,7 @@ Vous pourrez ranger ces personnages dans des catégories (**tags**) différentes
 
 Vous allez proposer des choix aux participants grâce aux **sondages**.
 
-Vous pourrez aussi leur faire passer des **épreuves** (similiare à des jets de dés).
+Vous pourrez aussi leur faire passer des **épreuves** (similaire à des jets de dés).
 
 Les épreuves et les sondages pourront avoir, en plus de leurs conséquences sur l'aventure, des **conséquences** sur les fiches des personnages (ajout / suppression de tags, modification de caractéristiques et/ou de jauges).
 
