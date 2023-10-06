@@ -25,6 +25,9 @@ Want to learn more? Looking for examples of game situations? Everything is on th
 
 ### Installation
 
+
+[Download the last version](https://github.com/uurshin/minotaure/releases/latest/download/minotaure.html)
+
 This project is designed to be used in two ways, as you prefer:
 
 1. By hosting the index.html file on a server and then navigating to the address of this file. Very convenient, as you only need to share the link provided at the start of the game with participants.
