@@ -5,8 +5,6 @@
 
 [![fr](https://img.shields.io/badge/lang-fr-red.svg)](https://github.com/uurshin/minotaure/blob/main/README.md)
  
-## What is it for?
-
 Minotaure is a tool that helps you run an adventure for dozens or hundreds of people. Its mechanics are partly borrowed from classic role-playing games but applied to a larger population. Minotaure is inspired by an older tool created by [FibreTigre](https://www.fibretigre.com/) called ATRPG.
 
 The application is meant to be used in conjunction with a video streaming application and instant messaging system (Twitch, Discord, etc.). Each person joining your game will have a minimalist character sheet.
