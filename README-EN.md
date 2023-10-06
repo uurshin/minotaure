@@ -26,7 +26,7 @@ Want to learn more? Looking for examples of game situations? Everything is on th
 
 [Download the last version](https://github.com/uurshin/minotaure/releases/latest/download/minotaure.html)
 
-This project is designed to be used in two ways, as you prefer:
+This file is designed to be used in two ways, as you prefer:
 
 1. By hosting the index.html file on a server and then navigating to the address of this file. Very convenient, as you only need to share the link provided at the start of the game with participants.
 2. By launching the index.html file in your browser. This method does not require any technical knowledge but may not work on some mobile browsers. Participants will need to have the file to enter your game identifier manually.
