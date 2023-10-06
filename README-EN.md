@@ -58,6 +58,9 @@ If you have created a game, you can continue it from where you left off.
 2. If the game has already started, you will be able to create a character. Otherwise, you will be waiting for the start.
 
 If you access a game where you already have a character, it will be automatically assigned to you, but you must use the same device and browser as when you last accessed the game. To use another device or browser (e.g., to join on your phone instead of your computer), check the wiki for more information on importing/exporting characters. Don't worry; it's straightforward!
+
+### Where can I find a game ?
+![Discord Banner 1](https://discordapp.com/api/guilds/828320530444451880/widget.png?style=banner2)
    
 ## Contributing to Development
 
