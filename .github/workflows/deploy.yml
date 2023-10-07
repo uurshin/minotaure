@@ -29,6 +29,7 @@ jobs:
       - name: Load dependencies
         run: npm install
 
+      # Build the dist
       - name: Build project
         run: npm run build
         
