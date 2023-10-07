@@ -21,6 +21,8 @@ Les épreuves et les sondages pourront avoir, en plus de leurs conséquences sur
 
 Vous voulez en savoir plus ? Vous cherchez des exemples de situation de parties ? Tout est sur le [wiki](https://github.com/uurshin/minotaure/wiki).
 
+[https://uurshin.github.io/minotaure](Utiliser le site de démo)
+
 ## Comment utiliser Minotaure ?
 
 ### Installation
