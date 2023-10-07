@@ -19,6 +19,8 @@ Trials and polls can have consequences not only on the adventure but also on the
 
 Want to learn more? Looking for examples of game situations? Everything is on the [wiki](https://github.com/uurshin/minotaure/wiki).
 
+[Use the demo site](https://uurshin.github.io/minotaure)
+
 ## How to use Minotaure?
 
 ### Installation
