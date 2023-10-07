@@ -73,8 +73,8 @@ To build the project, clone it and then run the following commands (npm command 
  `npm ci`
 
 Afterwards, you can create a build for either:
-- A local environment with `npm run build -- --mode=offline` (the index.html file can be found in the /dist/offline folder)
-- A hosted environment with `npm run build` (the index.html file can be found in the /dist/online folder)
+- one self-sufficient .html file with `npm run build --` (the index.html file can be found in the /dist/single folder)
+- a tree of files with `npm run build -- --mode=multiple` (the index.html file can be found in the /dist/multiple folder)
 
 ### Application Icons
 The icons used in this project are injected into a web font produced using: [IcoMoon](https://icomoon.io/#faq)
