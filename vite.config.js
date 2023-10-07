@@ -30,17 +30,17 @@ let default_config = {
 }
 
 export default defineConfig(({ mode }) => {
-  if (mode === 'offline') {
+  if (mode === 'production') {
+    default_config.build.outDir = 'dist/single';
     default_config.plugins.push(viteSingleFile());
-    default_config.build.outDir = 'dist/offline';
-    default_config.css.preprocessorOptions.scss.additionalData += '@import "./src/assets/css/font_offline.scss";';
+    default_config.css.preprocessorOptions.scss.additionalData += '@import "./src/assets/css/font_single.scss";';
     return default_config;
   }
 
-  else if (mode === 'production') {
-    default_config.build.outDir = 'dist/online';
+  else if (mode === 'multiple') {
+    default_config.build.outDir = 'dist/multiple';
     default_config.base = './';
-    default_config.css.preprocessorOptions.scss.additionalData += '@import "./src/assets/css/font_online.scss";';
+    default_config.css.preprocessorOptions.scss.additionalData += '@import "./src/assets/css/font_multiple.scss";';
     return default_config;
   }
 

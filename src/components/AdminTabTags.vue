@@ -282,7 +282,7 @@ export default {
                     <span v-if="tag.option.gauge_modifiers !== undefined" v-for="(modifier, key) in tag.option.gauge_modifiers">
                       {{ store.gauges[key].name }} {{ modifier.value > 0 ? '+' + modifier.value : modifier.value }}
                     </span>
-                    <span v-if="tag.option.modifiers !== undefined" v-for="(modifier, key) in tag.option.stat_modifiers">
+                    <span v-if="tag.option.stat_modifiers !== undefined" v-for="(modifier, key) in tag.option.stat_modifiers">
                       {{ store.stats[key].name }} {{ modifier.value > 0 ? '+' + modifier.value : modifier.value }}
                     </span>
                   </div>

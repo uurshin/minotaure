@@ -74,8 +74,8 @@ Pour construire le projet, clonez le puis lancez les commandes suivantes (la com
  `npm ci`
 
 Ensuite, vous pouvez créer une build pour, au choix :
-- un environnement local avec `npm run build -- --mode=offline` (le fichier index.html pourra être trouvé dans le dossier /dist/offline)
-- un environnement hébergé avec `npm run build` (le fichier index.html pourra être trouvé dans le dossier /dist/online)
+- un seul fichier .html auto-suffisant `npm run build --` (le fichier index.html pourra être trouvé dans le dossier /dist/single)
+- une arborescence de fichiers avec `npm run build -- --mode=multiple` (le fichier index.html pourra être trouvé dans le dossier /dist/multiple)
 
 ### Icônes de l'application
 Les icônes utilisés dans ce projet sont injectés dans une webfont produite grâce à : [IcoMoon](https://icomoon.io/#faq)

@@ -280,6 +280,16 @@ export const usePlayerStore = defineStore('playerStore', {
                 }
             }
 
+            // Determine if some tags have stat priorities.
+            tags.forEach(function(tag) {
+                if (tag.stat1 && ranking_stat[0] === undefined) {
+                    ranking_stat[0] = tag.stat1;
+                }
+                if (tag.stat2 && ranking_stat[1] === undefined) {
+                    ranking_stat[1] = tag.stat2;
+                }
+            });
+
             // Store the two best dice throws for tags that prioritize these stats.
             dice_throws.sort(function(a, b){return a - b})
             let max_throws = [];
@@ -310,13 +320,8 @@ export const usePlayerStore = defineStore('playerStore', {
                 character.gauges[key] = {label: gauge.name, value: gauge.value}
             }
 
+            // Apply tag modifiers to stats and gauges.
             tags.forEach(function(tag) {
-                if (tag.stat1 && ranking_stat[0] === undefined) {
-                    ranking_stat[0] = tag.stat1;
-                }
-                if (tag.stat2 && ranking_stat[1] === undefined) {
-                    ranking_stat[1] = tag.stat2;
-                }
                 if (tag.stat_modifiers !== undefined) {
                     for (const [key, stat] of Object.entries(tag.stat_modifiers)) {
                         if (character.stats[key] !== undefined) {
