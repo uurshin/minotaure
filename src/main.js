@@ -566,9 +566,6 @@ router.beforeEach((to, from, next) => {
     if (to.path === '/admin') {
         document.getElementsByClassName('main-wrapper')[0].classList.add('wide');
     }
-    else {
-        document.getElementsByClassName('main-wrapper')[0].classList.remove('wide');
-    }
 
     if (from.path === '/player' && to !== from && to.path !== '/join') {
         if (window.confirm("Si vous quittez cet onglet, votre connexion au MJ sera interrompue mais vous pourrez revenir dans la partie.")) {
@@ -589,6 +586,7 @@ router.beforeEach((to, from, next) => {
                 localStorage.removeItem('temp_game');
                 store.disconnectAll();
                 store.saveQuit();
+                document.getElementsByClassName('main-wrapper')[0].classList.remove('wide');
                 next();
             }
         }
