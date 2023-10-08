@@ -232,7 +232,7 @@ export default {
           if (new_character === undefined || data.reset !== undefined) {
             message.handshake = 'initCharacter';
             message.creation_form = {
-              options: vm.store.getStartTags()
+              options: vm.store.getStartGroupTags()
             };
             conn.send(message);
           }

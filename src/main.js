@@ -163,10 +163,10 @@ export const usePlayerStore = defineStore('playerStore', {
             this.tags.forEach((tag) => css_str += '.tag-' + tag.code + ' .label-name:before { background-color:hsl(' + tag.color[0] + ',' + tag.color[1] + '%' + ',' + tag.color[2] + '%)' + ' !important} ');
             game_css.innerHTML = css_str;
         },
-        getStartTags() {
+        getStartGroupTags() {
             return this.tag_groups.filter((group) => group.start === 'start' && group.tags.length > 0);
         },
-        getRandomTags() {
+        getRandomGroupTags() {
             return this.tag_groups.filter((group) => group.start === 'random' && group.tags.length > 0);
         },
         getTagFromCode(code) {
