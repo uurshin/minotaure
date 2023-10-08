@@ -6,7 +6,7 @@
 [![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/uurshin/minotaure/blob/main/README-EN.md)
 
 Minotaure est un outil vous aidant à animer une aventure pour plusieurs dizaines ou centaines de personnes.
-Ses mécanismes sont en partie empruntés au jeu de rôle classique mais appliquées à une population plus large. Minotaure s'inspire du fonctionnement d'un outil plus ancien créé par [FibreTigre](https://www.fibretigre.com/) sous le nom ATRPG.
+Ses mécanismes sont en partie empruntées au jeu de rôle classique mais appliquées à une population plus large. Minotaure s'inspire du fonctionnement d'un outil plus ancien créé par [FibreTigre](https://www.fibretigre.com/) sous le nom ATRPG.
 
 L'application est à utiliser en complément d'une application de streaming vidéo et d'un système de messagerie instantané (Twitch, Discord, etc.)
 Chaque personne rejoignant votre partie disposera d'une fiche de personnage minimaliste.
