@@ -291,7 +291,7 @@ export default {
         event.target.innerText = this.$t("Identifiant de partie copié !");
       }
       else {
-        navigator.clipboard.writeText(window.location.origin + '#join?id=' + this.store.peer.id);
+        navigator.clipboard.writeText(window.location.href.slice(0, location.href.lastIndexOf("/")) + 'join?id=' + this.store.peer.id);
         event.target.innerText = this.$t("Lien d'invitation copié !");
       }
 
