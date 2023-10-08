@@ -51,7 +51,9 @@ export const usePlayerStore = defineStore('playerStore', {
         _leaving: false,
         _temp_peer: null,
         _connections: {},
-        _should_reconnect: false,
+        _should_reconnect: -1,
+        _reconnect_interval: null,
+        _reconnect_timeout: null,
         _message: '',
         _temp_connections: [],
         _last_challenge: {
@@ -416,7 +418,7 @@ export const usePlayerStore = defineStore('playerStore', {
             localStorage.setItem('games', JSON.stringify(games));
         },
         join(id, set_temp_peer = false) {
-            this.setShouldReconnect(true);
+            this.setShouldReconnect(0);
             let vm = this;
             let peer_client;
             let attempting_reconnect = false;
@@ -426,10 +428,11 @@ export const usePlayerStore = defineStore('playerStore', {
 
             peer_client.on('open', function () {
                 let conn = peer_client.connect(id);
+                vm.stopReconnect();
 
                 conn.on('open', function() {
                     console.log('Minotaure : connection opened');
-                    vm.setShouldReconnect(true);
+                    vm.setShouldReconnect(0);
                     vm.setPeer(peer_client);
                     vm.setConnection(conn);
 
@@ -444,47 +447,66 @@ export const usePlayerStore = defineStore('playerStore', {
                 });
             })
 
-            peer_client.on("disconnected", function(){
-                let count = 0;
+            peer_client.once("disconnected", function(){
+                vm.stopReconnect();
                 console.log('Minotaure : peer client disconnected');
-                if (!vm.should_reconnect) {
+                if (vm.should_reconnect === -1) {
                     console.log('Minotaure : Disconnected but should not reconnect');
                     peer_client.destroy();
                 }
-                else if (!attempting_reconnect) {
-                    vm.setMessage('Minotaure - reconnection attempt');
+                else if (vm.should_reconnect === 0) {
+                    vm.setMessage('Minotaure - starting attempts to reconnect after disconnect');
                     attempting_reconnect = true;
                     let interval = setInterval(function() {
-                        if (peer_client.open === true || peer_client.destroyed === true) {
-                            console.log('Minotaure : reconnection attempt successful !');
+                        if (vm.should_reconnect === -1) {
+                            console.log('Minotaure : Disconnected but should not reconnect');
+                            peer_client.destroy();
                             attempting_reconnect = false;
-                            clearInterval(interval);
                         }
-                        else if (count < 10) {
-                            count += 1;
-                            console.log('Minotaure : reconnection attempt number ' + count);
-                            peer_client.reconnect();
+                        else {
+                            if (peer_client.open === true) {
+                                console.log('Minotaure : reconnection attempt successful :) !');
+                                router.push('/player');
+                                attempting_reconnect = false;
+                            }
+                            else if (peer_client.destroyed === true) {
+                                console.log('Minotaure : reconnection attempt unsuccessful :( !');
+                                attempting_reconnect = false;
+                            }
+                            else if (vm.should_reconnect < 10) {
+                                vm.setShouldReconnect(vm.should_reconnect + 1);
+                                console.log('Minotaure : reconnection attempt number ' + vm.should_reconnect);
+                                peer_client.reconnect();
+                            }
+                            else if (router.currentRoute.value.path === '/player') {
+                                router.push('/join');
+                                vm.setMessage('Déconnexion imprévue');
+                                attempting_reconnect = false;
+                            }
+
+                            if (!attempting_reconnect) {
+                                clearInterval(interval);
+                                vm.setShouldReconnect(0);
+                            }
                         }
-                        else if (router.currentRoute.value.path === '/player') {
-                            router.push('/join');
-                            attempting_reconnect = false;
-                            vm.setMessage('Déconnexion imprévue');
-                        }
-                        }, 3000
+                        },
+                        3000
                     )
                 }
             });
 
             peer_client.on('error', function(err) {
                 console.log('Minotaure : peer received error - ' + err.type);
-                if (err.type === 'unavailable-id') {
-                    vm.setMessage('Identifiant déjà pris');
-                }
-                else if (err.type === 'peer-unavailable') {
-                    peer_client.disconnect();
-                    if (router.currentRoute.value.path === '/player') {
-                        router.push('/join');
-                        vm.setMessage('MJ déconnecté');
+
+                if (err.type === 'peer-unavailable') {
+                    if (this.should_reconnect > 0) {
+                        if (router.currentRoute.value.path === '/player') {
+                            router.push('/join');
+                            vm.setMessage('MJ déconnecté');
+                        }
+                        else {
+                            vm.setMessage('MJ indisponible');
+                        }
                     }
                     else {
                         vm.setMessage('MJ indisponible');
@@ -516,6 +538,24 @@ export const usePlayerStore = defineStore('playerStore', {
                 taken[x] = --len in taken ? taken[len] : len;
             }
             return result;
+        },
+        // Reconnects the player after the connection closed, in 1s if possible, or repeat until 10s.
+        startReconnect() {
+            const vm = this;
+            vm.setMessage('Minotaure - starting attempts to reconnect after connection closed.');
+            this._reconnect_timeout = setTimeout(function() {
+                console.log('Minotaure : reconnection attempts unsuccessful');
+                vm.stopReconnect();
+            }, 10000);
+            this._reconnect_interval = setInterval(function() {
+                console.log('Minotaure : trying to reconnect after connection closed');
+                vm.join(vm.connection.peer, true);
+            }, 2000);
+        },
+        // Interrupts reconnection attempts after connection closed (it's not related to peer disconnection).
+        stopReconnect() {
+            clearInterval(this._reconnect_interval);
+            clearInterval(this._reconnect_timeout);
         }
     },
 })
@@ -533,10 +573,12 @@ router.beforeEach((to, from, next) => {
     if (from.path === '/player' && to !== from && to.path !== '/join') {
         if (window.confirm("Si vous quittez cet onglet, votre connexion au MJ sera interrompue mais vous pourrez revenir dans la partie.")) {
             store._leaving = true;
-            store.connection.close();
+            if (store.connection !== null) {
+                store.connection.close();
+            }
             next();
         }
-        next(false)
+        next(false);
         return ''
     }
 

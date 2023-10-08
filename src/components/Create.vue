@@ -49,7 +49,7 @@ export default {
         this.step = 1;
 
         let peer = new Peer(this.id_admin);
-        peer.on('open', function () {
+        peer.once('open', function () {
           vm.store.setPeer(peer);
           vm.id_admin = peer.id;
           vm.$nextTick(() => {

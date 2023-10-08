@@ -26,7 +26,7 @@ export default {
     AdminTour
   },
   beforeMount() {
-    // Reprise d'une partie après un refresh
+    // Recover of a game after a refresh
     let temp_game = localStorage.getItem('temp_game');
     if (temp_game) {
       let temp_game_parsed = JSON.parse(temp_game);
@@ -89,13 +89,11 @@ export default {
       return (this.game_name_focused === 0 ? this.$t('Renommer la partie') : this.store.current_game.name);
     }
   },
-  mounted() {
+  created() {
     let vm = this;
-    let attempting_reconnect = false;
-
     // Before the GM quit the page, save the game and store some info to
     // resume the game if it's a page refresh.
-    window.onbeforeunload =  function () {
+    window.addEventListener("beforeunload", function() {
       console.log("Minotaure : admin onbefore unload");
       if (vm.store.current_game !== null) {
         let temp_game = {
@@ -105,7 +103,11 @@ export default {
         localStorage.setItem('temp_game', JSON.stringify(temp_game));
         vm.store.saveQuit();
       }
-    }
+    });
+  },
+  mounted() {
+    let vm = this;
+    let attempting_reconnect = false;
 
     this.current_tab = this.store.current_game.tuto_on ? 'intro' : 'characters';
     this.changeTab(this.current_tab);
@@ -351,7 +353,7 @@ export default {
 
 <template>
   <admin-tour ref="admin_tour"></admin-tour>
-  <div id="admin-wrapper">
+  <div id="admin-wrapper" v-if="store.current_game != null">
     <div class="tabs">
       <button v-if="game_name_focused < 1" class="game-name" @keyup.enter="gameStartRename" @click="gameStartRename">{{ gameLabel }}</button>
       <input maxlength="25" ref="input_game_name" id="input-game-name" v-show="game_name_focused === 1" type="text" v-model="temp_game_name" @blur="gameConfirmRename" @keyup.enter="gameConfirmRename" />
