@@ -146,14 +146,19 @@ export const usePlayerStore = defineStore('playerStore', {
                 this.current_game.current_basic_color = this.current_game.basic_color;
             }
 
+            let code;
+            do {
+                code = tag_label.substring(0, 2) + Math.floor((Math.random() * 10000000));
+            } while (this.tags.findIndex((tag) => tag.code === code) !== -1);
+
             const tag = {
                 label: tag_label,
-                code: tag_label.substring(0, 2) + Math.floor((Math.random() * 10000000)),
+                code: code,
                 color: [this.current_game.current_basic_color, 100, 40 + Math.floor(Math.random() * 40)],
                 group: group.code
             }
-            // Todo recherche si code déjà existant.
             group.tags.push(tag);
+            // Refresh the css rules to display the color fo the new tag.
             this.generateCss();
             return tag;
         },
@@ -233,6 +238,7 @@ export const usePlayerStore = defineStore('playerStore', {
             let tags = [];
             let ranking_stat = [];
 
+            // Gather the tags selected by the player.
             if (data != null) {
                 data.choices.forEach(function(code) {
                     let found_tag = vm.getTagFromCode(code);
@@ -242,7 +248,6 @@ export const usePlayerStore = defineStore('playerStore', {
                 });
             }
 
-            // Todo creation tag for NPCs.
             this.getRandomTags().forEach(function(group_tags) {
                 let choice = group_tags.tags[Math.floor(Math.random() * group_tags.tags.length)];
                 tags.push(choice);
@@ -251,9 +256,9 @@ export const usePlayerStore = defineStore('playerStore', {
             let character = {
                 game_name: this.current_game.name,
                 token: token,
-                stats: {},
                 name: data != null ? data.name : 'Perso ' + Math.floor(Math.random() * Math.random() * 100000),
                 pseudo: data != null ? data.pseudo : null,
+                stats: {},
                 gauges: {},
                 alive: true,
                 challenge: {},
@@ -263,22 +268,27 @@ export const usePlayerStore = defineStore('playerStore', {
                 watched: false,
             }
 
-            // The sum of all dice throws should be 10 * number of stats.
-            let dice_throws = [];
-            let pool_max = 9;
+            // Roll the dices to determine the character's stats.
+            // The sum of all dice rolls should be (10 * number of stats).
+            let dice_rolls = [];
+            let pool_max = 9; // Stores the distance between the last roll and 10.
             for(let i = 0; i < Object.keys(this.stats).length; ++i) {
+                // The first roll is not corrected and serve has to base for the next roll corrections.
                 if (i === 0) {
-                    let pool_throw = Math.floor(Math.random() * pool_max);
-                    pool_max = - pool_throw;
-                    dice_throws.push(10 + pool_throw);
+                    let roll = Math.floor(Math.random() * pool_max);
+                    pool_max = - roll;
+                    dice_rolls.push(10 + roll);
                 }
-                else if (i === Object.keys(this.stats).length - 1) {
-                    dice_throws.push(10 + pool_max);
+                // Each roll between the first and the last rolls are corrected.
+                // That prevents producing often a single extreme last roll (closer to 1 or 20).
+                else if (i < Object.keys(this.stats).length - 1) {
+                    let roll = Math.floor(Math.random() * pool_max);
+                    pool_max = pool_max - roll;
+                    dice_rolls.push(10 + roll);
                 }
+                // The last roll is corrected to make the sum of all rolls equal to (10 * number of stats).
                 else {
-                    let pool_throw = Math.floor(Math.random() * pool_max);
-                    pool_max = pool_max - pool_throw;
-                    dice_throws.push(10 + pool_throw);
+                    dice_rolls.push(10 + pool_max);
                 }
             }
 
@@ -292,28 +302,28 @@ export const usePlayerStore = defineStore('playerStore', {
                 }
             });
 
-            // Store the two best dice throws for tags that prioritize these stats.
-            dice_throws.sort(function(a, b){return a - b})
-            let max_throws = [];
+            // Store the two best dice rolls so they can be assigned to tags that prioritize these stats.
+            dice_rolls.sort(function(a, b){return a - b})
+            let max_rolls = [];
             if (ranking_stat[0] !== undefined) {
-                max_throws.push(dice_throws.pop());
+                max_rolls.push(dice_rolls.pop());
             }
             if (ranking_stat[1] !== undefined) {
-                max_throws.push(dice_throws.pop());
+                max_rolls.push(dice_rolls.pop());
             }
 
-            // Distribution of the throws for each stat.
+            // Distribution of the rolls for each stat.
             for (const [key, stat] of Object.entries(this.stats)) {
                 let die_choice;
-                if (max_throws[0] !== undefined && ranking_stat[0] === key) {
-                    die_choice = max_throws[0];
+                if (max_rolls[0] !== undefined && ranking_stat[0] === key) {
+                    die_choice = max_rolls[0];
                 }
-                else if (max_throws[1] !== undefined && ranking_stat[1] === key) {
-                    die_choice = max_throws[1];
+                else if (max_rolls[1] !== undefined && ranking_stat[1] === key) {
+                    die_choice = max_rolls[1];
                 }
                 else {
-                    let choice = Math.floor(dice_throws.length * Math.random());
-                    die_choice = dice_throws.splice(choice, 1)[0]
+                    let choice = Math.floor(dice_rolls.length * Math.random());
+                    die_choice = dice_rolls.splice(choice, 1)[0]
                 }
                 character.stats[key] = {label: stat.name, value: die_choice}
             }
