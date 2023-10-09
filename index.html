@@ -19577,7 +19577,7 @@ function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
   ], 64);
 }
 const Home = /* @__PURE__ */ _export_sfc(_sfc_main$f, [["render", _sfc_render$e]]);
-const Create_vue_vue_type_style_index_0_scoped_5e4c74bb_lang = "";
+const Create_vue_vue_type_style_index_0_scoped_5b459b86_lang = "";
 const _sfc_main$e = {
   setup() {
     const { t } = useI18n();
@@ -19620,7 +19620,7 @@ const _sfc_main$e = {
       if (this.step === 0) {
         this.step = 1;
         let peer = new $416260bce337df90$export$ecd1fc136c422448(this.id_admin);
-        peer.on("open", function() {
+        peer.once("open", function() {
           vm.store.setPeer(peer);
           vm.id_admin = peer.id;
           vm.$nextTick(() => {
@@ -19713,7 +19713,7 @@ function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
     ])
   ], 64);
 }
-const Create = /* @__PURE__ */ _export_sfc(_sfc_main$e, [["render", _sfc_render$d], ["__scopeId", "data-v-5e4c74bb"]]);
+const Create = /* @__PURE__ */ _export_sfc(_sfc_main$e, [["render", _sfc_render$d], ["__scopeId", "data-v-5b459b86"]]);
 const Join_vue_vue_type_style_index_0_lang = "";
 const _sfc_main$d = {
   setup() {
@@ -29513,10 +29513,9 @@ const _sfc_main$3 = {
       return this.game_name_focused === 0 ? this.$t("Renommer la partie") : this.store.current_game.name;
     }
   },
-  mounted() {
+  created() {
     let vm = this;
-    let attempting_reconnect = false;
-    window.onbeforeunload = function() {
+    window.addEventListener("beforeunload", function() {
       console.log("Minotaure : admin onbefore unload");
       if (vm.store.current_game !== null) {
         let temp_game = {
@@ -29526,7 +29525,11 @@ const _sfc_main$3 = {
         localStorage.setItem("temp_game", JSON.stringify(temp_game));
         vm.store.saveQuit();
       }
-    };
+    });
+  },
+  mounted() {
+    let vm = this;
+    let attempting_reconnect = false;
     this.current_tab = this.store.current_game.tuto_on ? "intro" : "characters";
     this.changeTab(this.current_tab);
     if (this.store.current_game.characters === void 0) {
@@ -29623,7 +29626,7 @@ const _sfc_main$3 = {
           if (new_character === void 0 || data2.reset !== void 0) {
             message.handshake = "initCharacter";
             message.creation_form = {
-              options: vm.store.getStartTags()
+              options: vm.store.getStartGroupTags()
             };
             conn.send(message);
           } else {
@@ -29728,7 +29731,10 @@ const _sfc_main$3 = {
     }
   }
 };
-const _hoisted_1$3 = { id: "admin-wrapper" };
+const _hoisted_1$3 = {
+  key: 0,
+  id: "admin-wrapper"
+};
 const _hoisted_2$3 = { class: "tabs" };
 const _hoisted_3$3 = ["onKeyup", "onClick"];
 const _hoisted_4$3 = { class: "tab-details" };
@@ -29744,7 +29750,7 @@ function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_admin_tab_pick = resolveComponent("admin-tab-pick");
   return openBlock(), createElementBlock(Fragment, null, [
     createVNode(_component_admin_tour, { ref: "admin_tour" }, null, 512),
-    createBaseVNode("div", _hoisted_1$3, [
+    $setup.store.current_game != null ? (openBlock(), createElementBlock("div", _hoisted_1$3, [
       createBaseVNode("div", _hoisted_2$3, [
         $data.game_name_focused < 1 ? (openBlock(), createElementBlock("button", {
           key: 0,
@@ -29800,11 +29806,11 @@ function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
         createVNode(_component_admin_tab_poll, { ref: "admin_tab_poll" }, null, 512),
         createVNode(_component_admin_tab_pick, { ref: "admin_tab_pick" }, null, 512)
       ])
-    ])
+    ])) : createCommentVNode("", true)
   ], 64);
 }
 const Admin = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["render", _sfc_render$3]]);
-const Player_vue_vue_type_style_index_0_scoped_53586a2a_lang = "";
+const Player_vue_vue_type_style_index_0_scoped_cf668d4d_lang = "";
 const _sfc_main$2 = {
   setup() {
     const character = ref({});
@@ -29852,6 +29858,7 @@ const _sfc_main$2 = {
     }
   },
   mounted() {
+    this.store.stopReconnect();
     this.freeze = true;
     this.store._leaving = false;
     this.store.setTempPeer(localStorage.getItem("temp_peer"));
@@ -29878,25 +29885,28 @@ const _sfc_main$2 = {
         handshake: "readyForCall"
       });
       console.log("Minotaure : ready for transaction");
-      this.store.connection.on("close", function() {
+      this.store.connection.once("close", function() {
+        console.log("Minotaure - connection closed");
         vm.freeze = true;
         if (!vm.store.leaving) {
           vm.store._leaving = false;
-          setTimeout(function() {
-            console.log("Minotaure : reconnection attempted");
-            vm.store.join(vm.store.connection.peer, true);
-          }, 500);
+          if (vm.store.should_reconnect === -1) {
+            router.push("/join");
+            vm.store.setMessage("Partie terminée");
+          } else if (vm.store.should_reconnect === 0) {
+            vm.store.startReconnect();
+          }
         }
       });
       this.store.connection.on("data", function(data2) {
+        console.log("data received");
         if (data2.handshake !== void 0) {
+          console.log(data2.handshake);
           if (data2.handshake === "disconnectGracefully") {
-            vm.store.setShouldReconnect(false);
-          }
-          if (data2.handshake === "gameWait") {
+            vm.store.setShouldReconnect(-1);
+          } else if (data2.handshake === "gameWait") {
             vm.gameStart = false;
-          }
-          if (data2.handshake === "gameStart" || data2.handshake === "refresh") {
+          } else if (data2.handshake === "gameStart") {
             vm.gameStart = true;
             let found = vm.findGame(data2.game_token);
             if (found !== void 0) {
@@ -29905,9 +29915,11 @@ const _sfc_main$2 = {
               vm.store.connection.send({ handshake: "readyForCharacter" });
             }
           } else if (data2.handshake === "initCharacter") {
+            vm.gameStart = true;
             vm.freeze = false;
             vm.creation_form = data2.creation_form;
           } else if (data2.handshake === "displayCharacter") {
+            vm.gameStart = true;
             vm.freeze = false;
             let found = vm.findGame(data2.game_token);
             if (found === void 0) {
@@ -29986,7 +29998,7 @@ const _sfc_main$2 = {
     }
   }
 };
-const _withScopeId = (n) => (pushScopeId("data-v-53586a2a"), n = n(), popScopeId(), n);
+const _withScopeId = (n) => (pushScopeId("data-v-cf668d4d"), n = n(), popScopeId(), n);
 const _hoisted_1$2 = {
   key: 0,
   class: "game-name"
@@ -30166,7 +30178,7 @@ function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
     ], 2)
   ], 64);
 }
-const Player = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["render", _sfc_render$2], ["__scopeId", "data-v-53586a2a"]]);
+const Player = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["render", _sfc_render$2], ["__scopeId", "data-v-cf668d4d"]]);
 const Continue_vue_vue_type_style_index_0_scoped_36074174_lang = "";
 const _sfc_main$1 = {
   setup() {
@@ -34341,7 +34353,9 @@ const usePlayerStore = defineStore("playerStore", {
     _leaving: false,
     _temp_peer: null,
     _connections: {},
-    _should_reconnect: false,
+    _should_reconnect: -1,
+    _reconnect_interval: null,
+    _reconnect_timeout: null,
     _message: "",
     _temp_connections: [],
     _last_challenge: {
@@ -34420,9 +34434,13 @@ const usePlayerStore = defineStore("playerStore", {
         this.current_game.basic_color += 15;
         this.current_game.current_basic_color = this.current_game.basic_color;
       }
+      let code2;
+      do {
+        code2 = tag_label.substring(0, 2) + Math.floor(Math.random() * 1e7);
+      } while (this.tags.findIndex((tag2) => tag2.code === code2) !== -1);
       const tag = {
         label: tag_label,
-        code: tag_label.substring(0, 2) + Math.floor(Math.random() * 1e7),
+        code: code2,
         color: [this.current_game.current_basic_color, 100, 40 + Math.floor(Math.random() * 40)],
         group: group.code
       };
@@ -34436,10 +34454,10 @@ const usePlayerStore = defineStore("playerStore", {
       this.tags.forEach((tag) => css_str += ".tag-" + tag.code + " .label-name:before { background-color:hsl(" + tag.color[0] + "," + tag.color[1] + "%," + tag.color[2] + "%) !important} ");
       game_css.innerHTML = css_str;
     },
-    getStartTags() {
+    getStartGroupTags() {
       return this.tag_groups.filter((group) => group.start === "start" && group.tags.length > 0);
     },
-    getRandomTags() {
+    getRandomGroupTags() {
       return this.tag_groups.filter((group) => group.start === "random" && group.tags.length > 0);
     },
     getTagFromCode(code2) {
@@ -34516,9 +34534,9 @@ const usePlayerStore = defineStore("playerStore", {
       let character = {
         game_name: this.current_game.name,
         token,
-        stats: {},
         name: data2 != null ? data2.name : "Perso " + Math.floor(Math.random() * Math.random() * 1e5),
         pseudo: data2 != null ? data2.pseudo : null,
+        stats: {},
         gauges: {},
         alive: true,
         challenge: {},
@@ -34527,19 +34545,19 @@ const usePlayerStore = defineStore("playerStore", {
         connection: conn != null ? conn : false,
         watched: false
       };
-      let dice_throws = [];
+      let dice_rolls = [];
       let pool_max = 9;
       for (let i = 0; i < Object.keys(this.stats).length; ++i) {
         if (i === 0) {
-          let pool_throw = Math.floor(Math.random() * pool_max);
-          pool_max = -pool_throw;
-          dice_throws.push(10 + pool_throw);
-        } else if (i === Object.keys(this.stats).length - 1) {
-          dice_throws.push(10 + pool_max);
+          let roll = Math.floor(Math.random() * pool_max);
+          pool_max = -roll;
+          dice_rolls.push(10 + roll);
+        } else if (i < Object.keys(this.stats).length - 1) {
+          let roll = Math.floor(Math.random() * pool_max);
+          pool_max = pool_max - roll;
+          dice_rolls.push(10 + roll);
         } else {
-          let pool_throw = Math.floor(Math.random() * pool_max);
-          pool_max = pool_max - pool_throw;
-          dice_throws.push(10 + pool_throw);
+          dice_rolls.push(10 + pool_max);
         }
       }
       tags.forEach(function(tag) {
@@ -34550,25 +34568,25 @@ const usePlayerStore = defineStore("playerStore", {
           ranking_stat[1] = tag.stat2;
         }
       });
-      dice_throws.sort(function(a, b) {
+      dice_rolls.sort(function(a, b) {
         return a - b;
       });
-      let max_throws = [];
+      let max_rolls = [];
       if (ranking_stat[0] !== void 0) {
-        max_throws.push(dice_throws.pop());
+        max_rolls.push(dice_rolls.pop());
       }
       if (ranking_stat[1] !== void 0) {
-        max_throws.push(dice_throws.pop());
+        max_rolls.push(dice_rolls.pop());
       }
       for (const [key, stat] of Object.entries(this.stats)) {
         let die_choice;
-        if (max_throws[0] !== void 0 && ranking_stat[0] === key) {
-          die_choice = max_throws[0];
-        } else if (max_throws[1] !== void 0 && ranking_stat[1] === key) {
-          die_choice = max_throws[1];
+        if (max_rolls[0] !== void 0 && ranking_stat[0] === key) {
+          die_choice = max_rolls[0];
+        } else if (max_rolls[1] !== void 0 && ranking_stat[1] === key) {
+          die_choice = max_rolls[1];
         } else {
-          let choice = Math.floor(dice_throws.length * Math.random());
-          die_choice = dice_throws.splice(choice, 1)[0];
+          let choice = Math.floor(dice_rolls.length * Math.random());
+          die_choice = dice_rolls.splice(choice, 1)[0];
         }
         character.stats[key] = { label: stat.name, value: die_choice };
       }
@@ -34660,7 +34678,7 @@ const usePlayerStore = defineStore("playerStore", {
       localStorage.setItem("games", JSON.stringify(games));
     },
     join(id, set_temp_peer = false) {
-      this.setShouldReconnect(true);
+      this.setShouldReconnect(0);
       let vm = this;
       let peer_client;
       let attempting_reconnect = false;
@@ -34669,9 +34687,10 @@ const usePlayerStore = defineStore("playerStore", {
       localStorage.setItem("gm_id", id);
       peer_client.on("open", function() {
         let conn = peer_client.connect(id);
+        vm.stopReconnect();
         conn.on("open", function() {
           console.log("Minotaure : connection opened");
-          vm.setShouldReconnect(true);
+          vm.setShouldReconnect(0);
           vm.setPeer(peer_client);
           vm.setConnection(conn);
           if (set_temp_peer) {
@@ -34683,29 +34702,42 @@ const usePlayerStore = defineStore("playerStore", {
           console.log("Minotaure : error - " + err.type + " " + err.message);
         });
       });
-      peer_client.on("disconnected", function() {
-        let count = 0;
+      peer_client.once("disconnected", function() {
+        vm.stopReconnect();
         console.log("Minotaure : peer client disconnected");
-        if (!vm.should_reconnect) {
+        if (vm.should_reconnect === -1) {
           console.log("Minotaure : Disconnected but should not reconnect");
           peer_client.destroy();
-        } else if (!attempting_reconnect) {
-          vm.setMessage("Minotaure - reconnection attempt");
+        } else if (vm.should_reconnect === 0) {
+          vm.setMessage("Minotaure - starting attempts to reconnect after disconnect");
           attempting_reconnect = true;
           let interval = setInterval(
             function() {
-              if (peer_client.open === true || peer_client.destroyed === true) {
-                console.log("Minotaure : reconnection attempt successful !");
+              if (vm.should_reconnect === -1) {
+                console.log("Minotaure : Disconnected but should not reconnect");
+                peer_client.destroy();
                 attempting_reconnect = false;
-                clearInterval(interval);
-              } else if (count < 10) {
-                count += 1;
-                console.log("Minotaure : reconnection attempt number " + count);
-                peer_client.reconnect();
-              } else if (router.currentRoute.value.path === "/player") {
-                router.push("/join");
-                attempting_reconnect = false;
-                vm.setMessage("Déconnexion imprévue");
+              } else {
+                if (peer_client.open === true) {
+                  console.log("Minotaure : reconnection attempt successful :) !");
+                  router.push("/player");
+                  attempting_reconnect = false;
+                } else if (peer_client.destroyed === true) {
+                  console.log("Minotaure : reconnection attempt unsuccessful :( !");
+                  attempting_reconnect = false;
+                } else if (vm.should_reconnect < 10) {
+                  vm.setShouldReconnect(vm.should_reconnect + 1);
+                  console.log("Minotaure : reconnection attempt number " + vm.should_reconnect);
+                  peer_client.reconnect();
+                } else if (router.currentRoute.value.path === "/player") {
+                  router.push("/join");
+                  vm.setMessage("Déconnexion imprévue");
+                  attempting_reconnect = false;
+                }
+                if (!attempting_reconnect) {
+                  clearInterval(interval);
+                  vm.setShouldReconnect(0);
+                }
               }
             },
             3e3
@@ -34714,13 +34746,14 @@ const usePlayerStore = defineStore("playerStore", {
       });
       peer_client.on("error", function(err) {
         console.log("Minotaure : peer received error - " + err.type);
-        if (err.type === "unavailable-id") {
-          vm.setMessage("Identifiant déjà pris");
-        } else if (err.type === "peer-unavailable") {
-          peer_client.disconnect();
-          if (router.currentRoute.value.path === "/player") {
-            router.push("/join");
-            vm.setMessage("MJ déconnecté");
+        if (err.type === "peer-unavailable") {
+          if (this.should_reconnect > 0) {
+            if (router.currentRoute.value.path === "/player") {
+              router.push("/join");
+              vm.setMessage("MJ déconnecté");
+            } else {
+              vm.setMessage("MJ indisponible");
+            }
           } else {
             vm.setMessage("MJ indisponible");
           }
@@ -34751,6 +34784,24 @@ const usePlayerStore = defineStore("playerStore", {
         taken[x] = --len in taken ? taken[len] : len;
       }
       return result;
+    },
+    // Reconnects the player after the connection closed, in 1s if possible, or repeat until 10s.
+    startReconnect() {
+      const vm = this;
+      vm.setMessage("Minotaure - starting attempts to reconnect after connection closed.");
+      this._reconnect_timeout = setTimeout(function() {
+        console.log("Minotaure : reconnection attempts unsuccessful");
+        vm.stopReconnect();
+      }, 1e4);
+      this._reconnect_interval = setInterval(function() {
+        console.log("Minotaure : trying to reconnect after connection closed");
+        vm.join(vm.connection.peer, true);
+      }, 2e3);
+    },
+    // Interrupts reconnection attempts after connection closed (it's not related to peer disconnection).
+    stopReconnect() {
+      clearInterval(this._reconnect_interval);
+      clearInterval(this._reconnect_timeout);
     }
   }
 });
@@ -34758,13 +34809,13 @@ router.beforeEach((to, from, next) => {
   const store = usePlayerStore();
   if (to.path === "/admin") {
     document.getElementsByClassName("main-wrapper")[0].classList.add("wide");
-  } else {
-    document.getElementsByClassName("main-wrapper")[0].classList.remove("wide");
   }
   if (from.path === "/player" && to !== from && to.path !== "/join") {
     if (window.confirm("Si vous quittez cet onglet, votre connexion au MJ sera interrompue mais vous pourrez revenir dans la partie.")) {
       store._leaving = true;
-      store.connection.close();
+      if (store.connection !== null) {
+        store.connection.close();
+      }
       next();
     }
     next(false);
@@ -34775,6 +34826,7 @@ router.beforeEach((to, from, next) => {
         localStorage.removeItem("temp_game");
         store.disconnectAll();
         store.saveQuit();
+        document.getElementsByClassName("main-wrapper")[0].classList.remove("wide");
         next();
       }
     } else {
@@ -35919,7 +35971,7 @@ ul li {
 #home > .menu a:focus, #home > .menu a:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
-[data-v-5e4c74bb]:root {
+[data-v-5b459b86]:root {
   font-family: Helvetica, system-ui, Avenir, Inter, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -35954,10 +36006,10 @@ ul li {
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
-[data-theme=dark].picker[data-v-5e4c74bb] {
+[data-theme=dark].picker[data-v-5b459b86] {
   background: black;
 }
-[data-theme=light][data-v-5e4c74bb] {
+[data-theme=light][data-v-5b459b86] {
   --font-color: black;
   --inverse-font-color: white;
   --input-font-color: black;
@@ -35972,10 +36024,10 @@ ul li {
   --margin-multiselect: 0 -1px 0 -1px;
   --tab-border-color: black;
 }
-[data-theme=light].picker[data-v-5e4c74bb] {
+[data-theme=light].picker[data-v-5b459b86] {
   background: white;
 }
-[data-theme=blue][data-v-5e4c74bb] {
+[data-theme=blue][data-v-5b459b86] {
   --font-color: black;
   --inverse-font-color: white;
   --input-font-color: white;
@@ -35990,7 +36042,7 @@ ul li {
   --danger-color: #A63A50;
   --tab-border-color: black;
 }
-[data-theme=blue].picker[data-v-5e4c74bb] {
+[data-theme=blue].picker[data-v-5b459b86] {
   background: #5858c4;
 }
 @font-face {
@@ -36015,7 +36067,7 @@ ul li {
   font-weight: 600;
   font-style: normal;
 }
-#id_admin[data-v-5e4c74bb] {
+#id_admin[data-v-5b459b86] {
   padding: 10px;
   text-align: center;
   border-radius: 10px;
@@ -36023,7 +36075,7 @@ ul li {
   flex: 1;
 }
 @media (max-width: 767px) {
-#id_admin[data-v-5e4c74bb] {
+#id_admin[data-v-5b459b86] {
     flex-basis: 100%;
     font-size: 0.9em;
 }
@@ -37732,7 +37784,7 @@ h2[data-v-b3dadfc2] {
     background-color: black;
 }
 }
-[data-v-53586a2a]:root {
+[data-v-cf668d4d]:root {
   font-family: Helvetica, system-ui, Avenir, Inter, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -37767,10 +37819,10 @@ h2[data-v-b3dadfc2] {
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
-[data-theme=dark].picker[data-v-53586a2a] {
+[data-theme=dark].picker[data-v-cf668d4d] {
   background: black;
 }
-[data-theme=light][data-v-53586a2a] {
+[data-theme=light][data-v-cf668d4d] {
   --font-color: black;
   --inverse-font-color: white;
   --input-font-color: black;
@@ -37785,10 +37837,10 @@ h2[data-v-b3dadfc2] {
   --margin-multiselect: 0 -1px 0 -1px;
   --tab-border-color: black;
 }
-[data-theme=light].picker[data-v-53586a2a] {
+[data-theme=light].picker[data-v-cf668d4d] {
   background: white;
 }
-[data-theme=blue][data-v-53586a2a] {
+[data-theme=blue][data-v-cf668d4d] {
   --font-color: black;
   --inverse-font-color: white;
   --input-font-color: white;
@@ -37803,7 +37855,7 @@ h2[data-v-b3dadfc2] {
   --danger-color: #A63A50;
   --tab-border-color: black;
 }
-[data-theme=blue].picker[data-v-53586a2a] {
+[data-theme=blue].picker[data-v-cf668d4d] {
   background: #5858c4;
 }
 @font-face {
@@ -37828,17 +37880,17 @@ h2[data-v-b3dadfc2] {
   font-weight: 600;
   font-style: normal;
 }
-input[data-v-53586a2a] {
+input[data-v-cf668d4d] {
   height: auto;
 }
-.game-wait[data-v-53586a2a] {
+.game-wait[data-v-cf668d4d] {
   color: white;
 }
-.game-name[data-v-53586a2a] {
+.game-name[data-v-cf668d4d] {
   font-size: 1.2em;
   margin-top: 20px;
 }
-#player-sheet[data-v-53586a2a] {
+#player-sheet[data-v-cf668d4d] {
   display: flex;
   border-radius: 10px;
   color: var(--background-card-color);
@@ -37850,44 +37902,44 @@ input[data-v-53586a2a] {
   align-items: center;
   justify-content: center;
 }
-#player-sheet input[data-v-53586a2a] {
+#player-sheet input[data-v-cf668d4d] {
   border: 1px solid var(--border-color);
 }
-#player-sheet .character-names[data-v-53586a2a] {
+#player-sheet .character-names[data-v-cf668d4d] {
   display: flex;
   flex-direction: column;
   text-align: center;
 }
-#player-sheet .character-names .character-name[data-v-53586a2a] {
+#player-sheet .character-names .character-name[data-v-cf668d4d] {
   font-size: 1.5em;
 }
-#player-sheet .tags[data-v-53586a2a] {
+#player-sheet .tags[data-v-cf668d4d] {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
-#player-sheet .tags > span[data-v-53586a2a] {
+#player-sheet .tags > span[data-v-cf668d4d] {
   border-radius: 10px;
   background: var(--background-color);
   color: var(--font-color);
   padding: 5px;
   text-align: center;
 }
-#player-sheet #sheet[data-v-53586a2a] {
+#player-sheet #sheet[data-v-cf668d4d] {
   width: 90%;
 }
-#player-sheet #sheet > div[data-v-53586a2a]:not(.tags) {
+#player-sheet #sheet > div[data-v-cf668d4d]:not(.tags) {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
-#player-sheet #sheet > div:not(.tags) > span[data-v-53586a2a] {
+#player-sheet #sheet > div:not(.tags) > span[data-v-cf668d4d] {
   display: flex;
   justify-content: space-between;
   gap: 15px;
   align-items: center;
 }
-#player-sheet .indicator[data-v-53586a2a] {
+#player-sheet .indicator[data-v-cf668d4d] {
   padding: 5px;
   border-radius: 100%;
   border: 1px solid black;
@@ -37895,33 +37947,33 @@ input[data-v-53586a2a] {
   color: white;
   width: 24px;
 }
-#player-sheet.disabled[data-v-53586a2a] {
+#player-sheet.disabled[data-v-cf668d4d] {
   background: none;
   border: none;
 }
-#player-sheet.disabled .vertical-wrapper[data-v-53586a2a] {
+#player-sheet.disabled .vertical-wrapper[data-v-cf668d4d] {
   display: none;
 }
-#player-sheet.disabled .lds-ripple[data-v-53586a2a] {
+#player-sheet.disabled .lds-ripple[data-v-cf668d4d] {
   display: inline-block;
 }
-#player-sheet .lds-ripple[data-v-53586a2a] {
+#player-sheet .lds-ripple[data-v-cf668d4d] {
   display: none;
   position: relative;
   width: 80px;
   height: 80px;
 }
-#player-sheet .lds-ripple div[data-v-53586a2a] {
+#player-sheet .lds-ripple div[data-v-cf668d4d] {
   position: absolute;
   border: 4px solid #fff;
   opacity: 1;
   border-radius: 50%;
-  animation: lds-ripple-53586a2a 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+  animation: lds-ripple-cf668d4d 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
 }
-#player-sheet .lds-ripple div[data-v-53586a2a]:nth-child(2) {
+#player-sheet .lds-ripple div[data-v-cf668d4d]:nth-child(2) {
   animation-delay: -0.5s;
 }
-@keyframes lds-ripple-53586a2a {
+@keyframes lds-ripple-cf668d4d {
 0% {
     top: 36px;
     left: 36px;
@@ -37951,27 +38003,27 @@ input[data-v-53586a2a] {
     opacity: 0;
 }
 }
-.poll-wrapper[data-v-53586a2a] {
+.poll-wrapper[data-v-cf668d4d] {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 10px;
 }
-.poll-wrapper > .poll-content[data-v-53586a2a] {
+.poll-wrapper > .poll-content[data-v-cf668d4d] {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 10px;
 }
-.poll-wrapper > .poll-content > span[data-v-53586a2a] {
+.poll-wrapper > .poll-content > span[data-v-cf668d4d] {
   display: flex;
   align-items: center;
 }
-.poll-wrapper > .poll-content > .title[data-v-53586a2a] {
+.poll-wrapper > .poll-content > .title[data-v-cf668d4d] {
   font-weight: bold;
   align-self: center;
 }
-.poll-wrapper > div[data-v-53586a2a], .poll-wrapper > span[data-v-53586a2a] {
+.poll-wrapper > div[data-v-cf668d4d], .poll-wrapper > span[data-v-cf668d4d] {
   border: 1px solid black;
   padding: 15px;
 }
