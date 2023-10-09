@@ -26,7 +26,7 @@ export default {
     }
   },
   beforeMount() {
-    // Reprise d'une partie après un refresh
+    // Necessary storage to allow recover the game after a page refresh.
     window.addEventListener("beforeunload", event => {
       if (this.store.connection !== null) {
         localStorage.setItem('temp_peer', true);
@@ -51,17 +51,22 @@ export default {
     }
   },
   mounted() {
+    this.store.stopReconnect();
     this.freeze = true;
     this.store._leaving = false;
     this.store.setTempPeer( localStorage.getItem('temp_peer'));
     let gm_id = localStorage.getItem('gm_id');
+
+    // A refresh has happened, recover the game.
     if (this.store.peer == null || this.store.temp_peer !== null) {
       this.store.join(gm_id, true);
     }
+    // It's a first connection, start the handshake with the host.
     else {
       this.handshake();
     }
 
+    // Special handshake for page refresh.
     this.store.$subscribe((mutation, state) => {
       if (this.store.connection !== null && this.store.temp_peer !== null) {
         this.store.setTempPeer(null);
@@ -74,64 +79,78 @@ export default {
       let vm = this;
       this.store._leaving = false;
 
-      // 1. Début de la poignée de main.
+      // 1. Start of the handshake between host and player.
       console.log('Minotaure : handshake received')
       console.log(this.store.peer.id);
+
       this.store.connection.send({
         handshake: 'readyForCall'
       });
 
       console.log('Minotaure : ready for transaction');
 
-      this.store.connection.on('close', function() {
+      this.store.connection.once('close', function() {
+        console.log('Minotaure - connection closed');
         vm.freeze = true;
         if (!vm.store.leaving) {
           vm.store._leaving = false;
-          const myTimeout = setTimeout(function() {
-            console.log('Minotaure : reconnection attempted');
-            vm.store.join(vm.store.connection.peer, true);
-          }, 500);
+          if (vm.store.should_reconnect === -1) {
+            router.push('/join');
+            vm.store.setMessage('Partie terminée');
+          }
+          else if (vm.store.should_reconnect === 0) {
+            vm.store.startReconnect();
+          }
         }
       });
 
+      // 2. Receiving data from the host.
       this.store.connection.on('data', function (data) {
+        console.log('data received');
+
         if (data.handshake !== undefined) {
+          console.log(data.handshake);
+
+          // The host disconnected manually and tells the player what a disconnect will soon arrive.
           if (data.handshake === 'disconnectGracefully') {
-            vm.store.setShouldReconnect(false);
+            vm.store.setShouldReconnect(-1);
           }
-          // 2. Réception des données de la partie.
-          if (data.handshake === 'gameWait') {
+          // 3a. Game is online but not started.
+          else if (data.handshake === 'gameWait') {
             vm.gameStart = false;
           }
-
-          if (data.handshake === 'gameStart' || data.handshake === 'refresh') {
+          // 3b. Game is online and started.
+          else if (data.handshake === 'gameStart') {
             vm.gameStart = true;
 
             let found = vm.findGame(data.game_token);
 
-            // 3. Partie trouvée, envoi du token du joueur.
+            // 4a. Game found, sending back the player token to the host.
             if (found !== undefined) {
               vm.store.connection.send({handshake: 'readyForCharacter', token: found.character_token});
             }
-            // 3bis. Partie introuvable, envoi du signal seulement.
+            // 4b. Game not found, sending back the signal that we want a new character.
             else {
               vm.store.connection.send({handshake: 'readyForCharacter'});
             }
           }
 
-          // 4. Nouveau personnage, affichage du formulaire de création.
+          // 5. New character received, display the creation form.
           else if (data.handshake === 'initCharacter') {
+
+            vm.gameStart = true;
             vm.freeze = false;
             vm.creation_form = data.creation_form;
           }
 
-          // 5. Personnage créé, récupération des infos.
+          // 6. Character created, display the character sheet.
           else if (data.handshake === 'displayCharacter') {
+            vm.gameStart = true;
             vm.freeze = false;
 
             let found = vm.findGame(data.game_token)
 
-            // 5bis. La partie n'existe pas, il faut la créer et stocker le personnage.
+            // 7. The game doesn't exist, create it and link the character to it.
             if (found === undefined) {
               let games = vm.getLocalGames();
               games.push({
@@ -141,24 +160,12 @@ export default {
               localStorage.setItem('games_player', JSON.stringify(games));
             }
 
+            // 7b. Hide the creation from if needed and display the character.
             vm.creation_form = false;
             vm.character = data.character;
           }
         }
       });
-
-      // Réception d'un appel vidéo du MJ.
-      // this.store.peer.on('call', function(call) {
-      //   call.answer();
-      //
-      //   call.on('stream', function(stream) {
-      //     const video = document.querySelector("video");
-      //     video.srcObject = stream;
-      //     video.onloadedmetadata = () => {
-      //       video.play();
-      //     };
-      //   });
-      // });
     },
     getLocalGames() {
       let games_str = localStorage.getItem('games_player');
@@ -292,7 +299,6 @@ export default {
       <span class="character-name">{{ t('is_dead', {charname: character.name}) }}</span>
       <button @keyup.enter="newCharacter" @click="newCharacter">{{ t('Créer un nouveau personnage') }}</button>
     </div>
-<!--    <video v-if="!creation_form"></video>-->
   </div>
 </template>
 

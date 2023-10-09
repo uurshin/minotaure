@@ -51,7 +51,9 @@ export const usePlayerStore = defineStore('playerStore', {
         _leaving: false,
         _temp_peer: null,
         _connections: {},
-        _should_reconnect: false,
+        _should_reconnect: -1,
+        _reconnect_interval: null,
+        _reconnect_timeout: null,
         _message: '',
         _temp_connections: [],
         _last_challenge: {
@@ -144,14 +146,19 @@ export const usePlayerStore = defineStore('playerStore', {
                 this.current_game.current_basic_color = this.current_game.basic_color;
             }
 
+            let code;
+            do {
+                code = tag_label.substring(0, 2) + Math.floor((Math.random() * 10000000));
+            } while (this.tags.findIndex((tag) => tag.code === code) !== -1);
+
             const tag = {
                 label: tag_label,
-                code: tag_label.substring(0, 2) + Math.floor((Math.random() * 10000000)),
+                code: code,
                 color: [this.current_game.current_basic_color, 100, 40 + Math.floor(Math.random() * 40)],
                 group: group.code
             }
-            // Todo recherche si code déjà existant.
             group.tags.push(tag);
+            // Refresh the css rules to display the color fo the new tag.
             this.generateCss();
             return tag;
         },
@@ -161,10 +168,10 @@ export const usePlayerStore = defineStore('playerStore', {
             this.tags.forEach((tag) => css_str += '.tag-' + tag.code + ' .label-name:before { background-color:hsl(' + tag.color[0] + ',' + tag.color[1] + '%' + ',' + tag.color[2] + '%)' + ' !important} ');
             game_css.innerHTML = css_str;
         },
-        getStartTags() {
+        getStartGroupTags() {
             return this.tag_groups.filter((group) => group.start === 'start' && group.tags.length > 0);
         },
-        getRandomTags() {
+        getRandomGroupTags() {
             return this.tag_groups.filter((group) => group.start === 'random' && group.tags.length > 0);
         },
         getTagFromCode(code) {
@@ -231,6 +238,7 @@ export const usePlayerStore = defineStore('playerStore', {
             let tags = [];
             let ranking_stat = [];
 
+            // Gather the tags selected by the player.
             if (data != null) {
                 data.choices.forEach(function(code) {
                     let found_tag = vm.getTagFromCode(code);
@@ -240,7 +248,6 @@ export const usePlayerStore = defineStore('playerStore', {
                 });
             }
 
-            // Todo creation tag for NPCs.
             this.getRandomTags().forEach(function(group_tags) {
                 let choice = group_tags.tags[Math.floor(Math.random() * group_tags.tags.length)];
                 tags.push(choice);
@@ -249,9 +256,9 @@ export const usePlayerStore = defineStore('playerStore', {
             let character = {
                 game_name: this.current_game.name,
                 token: token,
-                stats: {},
                 name: data != null ? data.name : 'Perso ' + Math.floor(Math.random() * Math.random() * 100000),
                 pseudo: data != null ? data.pseudo : null,
+                stats: {},
                 gauges: {},
                 alive: true,
                 challenge: {},
@@ -261,22 +268,27 @@ export const usePlayerStore = defineStore('playerStore', {
                 watched: false,
             }
 
-            // The sum of all dice throws should be 10 * number of stats.
-            let dice_throws = [];
-            let pool_max = 9;
+            // Roll the dices to determine the character's stats.
+            // The sum of all dice rolls should be (10 * number of stats).
+            let dice_rolls = [];
+            let pool_max = 9; // Stores the distance between the last roll and 10.
             for(let i = 0; i < Object.keys(this.stats).length; ++i) {
+                // The first roll is not corrected and serve has to base for the next roll corrections.
                 if (i === 0) {
-                    let pool_throw = Math.floor(Math.random() * pool_max);
-                    pool_max = - pool_throw;
-                    dice_throws.push(10 + pool_throw);
+                    let roll = Math.floor(Math.random() * pool_max);
+                    pool_max = - roll;
+                    dice_rolls.push(10 + roll);
                 }
-                else if (i === Object.keys(this.stats).length - 1) {
-                    dice_throws.push(10 + pool_max);
+                // Each roll between the first and the last rolls are corrected.
+                // That prevents producing often a single extreme last roll (closer to 1 or 20).
+                else if (i < Object.keys(this.stats).length - 1) {
+                    let roll = Math.floor(Math.random() * pool_max);
+                    pool_max = pool_max - roll;
+                    dice_rolls.push(10 + roll);
                 }
+                // The last roll is corrected to make the sum of all rolls equal to (10 * number of stats).
                 else {
-                    let pool_throw = Math.floor(Math.random() * pool_max);
-                    pool_max = pool_max - pool_throw;
-                    dice_throws.push(10 + pool_throw);
+                    dice_rolls.push(10 + pool_max);
                 }
             }
 
@@ -290,28 +302,28 @@ export const usePlayerStore = defineStore('playerStore', {
                 }
             });
 
-            // Store the two best dice throws for tags that prioritize these stats.
-            dice_throws.sort(function(a, b){return a - b})
-            let max_throws = [];
+            // Store the two best dice rolls so they can be assigned to tags that prioritize these stats.
+            dice_rolls.sort(function(a, b){return a - b})
+            let max_rolls = [];
             if (ranking_stat[0] !== undefined) {
-                max_throws.push(dice_throws.pop());
+                max_rolls.push(dice_rolls.pop());
             }
             if (ranking_stat[1] !== undefined) {
-                max_throws.push(dice_throws.pop());
+                max_rolls.push(dice_rolls.pop());
             }
 
-            // Distribution of the throws for each stat.
+            // Distribution of the rolls for each stat.
             for (const [key, stat] of Object.entries(this.stats)) {
                 let die_choice;
-                if (max_throws[0] !== undefined && ranking_stat[0] === key) {
-                    die_choice = max_throws[0];
+                if (max_rolls[0] !== undefined && ranking_stat[0] === key) {
+                    die_choice = max_rolls[0];
                 }
-                else if (max_throws[1] !== undefined && ranking_stat[1] === key) {
-                    die_choice = max_throws[1];
+                else if (max_rolls[1] !== undefined && ranking_stat[1] === key) {
+                    die_choice = max_rolls[1];
                 }
                 else {
-                    let choice = Math.floor(dice_throws.length * Math.random());
-                    die_choice = dice_throws.splice(choice, 1)[0]
+                    let choice = Math.floor(dice_rolls.length * Math.random());
+                    die_choice = dice_rolls.splice(choice, 1)[0]
                 }
                 character.stats[key] = {label: stat.name, value: die_choice}
             }
@@ -416,7 +428,7 @@ export const usePlayerStore = defineStore('playerStore', {
             localStorage.setItem('games', JSON.stringify(games));
         },
         join(id, set_temp_peer = false) {
-            this.setShouldReconnect(true);
+            this.setShouldReconnect(0);
             let vm = this;
             let peer_client;
             let attempting_reconnect = false;
@@ -426,10 +438,11 @@ export const usePlayerStore = defineStore('playerStore', {
 
             peer_client.on('open', function () {
                 let conn = peer_client.connect(id);
+                vm.stopReconnect();
 
                 conn.on('open', function() {
                     console.log('Minotaure : connection opened');
-                    vm.setShouldReconnect(true);
+                    vm.setShouldReconnect(0);
                     vm.setPeer(peer_client);
                     vm.setConnection(conn);
 
@@ -444,47 +457,66 @@ export const usePlayerStore = defineStore('playerStore', {
                 });
             })
 
-            peer_client.on("disconnected", function(){
-                let count = 0;
+            peer_client.once("disconnected", function(){
+                vm.stopReconnect();
                 console.log('Minotaure : peer client disconnected');
-                if (!vm.should_reconnect) {
+                if (vm.should_reconnect === -1) {
                     console.log('Minotaure : Disconnected but should not reconnect');
                     peer_client.destroy();
                 }
-                else if (!attempting_reconnect) {
-                    vm.setMessage('Minotaure - reconnection attempt');
+                else if (vm.should_reconnect === 0) {
+                    vm.setMessage('Minotaure - starting attempts to reconnect after disconnect');
                     attempting_reconnect = true;
                     let interval = setInterval(function() {
-                        if (peer_client.open === true || peer_client.destroyed === true) {
-                            console.log('Minotaure : reconnection attempt successful !');
+                        if (vm.should_reconnect === -1) {
+                            console.log('Minotaure : Disconnected but should not reconnect');
+                            peer_client.destroy();
                             attempting_reconnect = false;
-                            clearInterval(interval);
                         }
-                        else if (count < 10) {
-                            count += 1;
-                            console.log('Minotaure : reconnection attempt number ' + count);
-                            peer_client.reconnect();
+                        else {
+                            if (peer_client.open === true) {
+                                console.log('Minotaure : reconnection attempt successful :) !');
+                                router.push('/player');
+                                attempting_reconnect = false;
+                            }
+                            else if (peer_client.destroyed === true) {
+                                console.log('Minotaure : reconnection attempt unsuccessful :( !');
+                                attempting_reconnect = false;
+                            }
+                            else if (vm.should_reconnect < 10) {
+                                vm.setShouldReconnect(vm.should_reconnect + 1);
+                                console.log('Minotaure : reconnection attempt number ' + vm.should_reconnect);
+                                peer_client.reconnect();
+                            }
+                            else if (router.currentRoute.value.path === '/player') {
+                                router.push('/join');
+                                vm.setMessage('Déconnexion imprévue');
+                                attempting_reconnect = false;
+                            }
+
+                            if (!attempting_reconnect) {
+                                clearInterval(interval);
+                                vm.setShouldReconnect(0);
+                            }
                         }
-                        else if (router.currentRoute.value.path === '/player') {
-                            router.push('/join');
-                            attempting_reconnect = false;
-                            vm.setMessage('Déconnexion imprévue');
-                        }
-                        }, 3000
+                        },
+                        3000
                     )
                 }
             });
 
             peer_client.on('error', function(err) {
                 console.log('Minotaure : peer received error - ' + err.type);
-                if (err.type === 'unavailable-id') {
-                    vm.setMessage('Identifiant déjà pris');
-                }
-                else if (err.type === 'peer-unavailable') {
-                    peer_client.disconnect();
-                    if (router.currentRoute.value.path === '/player') {
-                        router.push('/join');
-                        vm.setMessage('MJ déconnecté');
+
+                if (err.type === 'peer-unavailable') {
+                    if (this.should_reconnect > 0) {
+                        if (router.currentRoute.value.path === '/player') {
+                            router.push('/join');
+                            vm.setMessage('MJ déconnecté');
+                        }
+                        else {
+                            vm.setMessage('MJ indisponible');
+                        }
                     }
                     else {
                         vm.setMessage('MJ indisponible');
@@ -516,6 +548,24 @@ export const usePlayerStore = defineStore('playerStore', {
                 taken[x] = --len in taken ? taken[len] : len;
             }
             return result;
+        },
+        // Reconnects the player after the connection closed, in 1s if possible, or repeat until 10s.
+        startReconnect() {
+            const vm = this;
+            vm.setMessage('Minotaure - starting attempts to reconnect after connection closed.');
+            this._reconnect_timeout = setTimeout(function() {
+                console.log('Minotaure : reconnection attempts unsuccessful');
+                vm.stopReconnect();
+            }, 10000);
+            this._reconnect_interval = setInterval(function() {
+                console.log('Minotaure : trying to reconnect after connection closed');
+                vm.join(vm.connection.peer, true);
+            }, 2000);
+        },
+        // Interrupts reconnection attempts after connection closed (it's not related to peer disconnection).
+        stopReconnect() {
+            clearInterval(this._reconnect_interval);
+            clearInterval(this._reconnect_timeout);
         }
     },
 })
@@ -526,17 +576,16 @@ router.beforeEach((to, from, next) => {
     if (to.path === '/admin') {
         document.getElementsByClassName('main-wrapper')[0].classList.add('wide');
     }
-    else {
-        document.getElementsByClassName('main-wrapper')[0].classList.remove('wide');
-    }
 
     if (from.path === '/player' && to !== from && to.path !== '/join') {
         if (window.confirm("Si vous quittez cet onglet, votre connexion au MJ sera interrompue mais vous pourrez revenir dans la partie.")) {
             store._leaving = true;
-            store.connection.close();
+            if (store.connection !== null) {
+                store.connection.close();
+            }
             next();
         }
-        next(false)
+        next(false);
         return ''
     }
 
@@ -547,6 +596,7 @@ router.beforeEach((to, from, next) => {
                 localStorage.removeItem('temp_game');
                 store.disconnectAll();
                 store.saveQuit();
+                document.getElementsByClassName('main-wrapper')[0].classList.remove('wide');
                 next();
             }
         }

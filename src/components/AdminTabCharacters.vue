@@ -157,7 +157,7 @@ export default {
             // Todo edit.
             break;
           case 'add':
-            // Todo edit.
+            // Todo add.
             break;
         }
       }
@@ -334,13 +334,6 @@ export default {
           transition: all 0.2s ease-in-out;
         }
       }
-
-      //> .gauges, > .stats {
-      //  margin-top: auto;
-      //}
-      //> .gauges + .stats {
-      //  margin-top: 0;
-      //}
 
       > .stats, .gauges {
         display: flex;
