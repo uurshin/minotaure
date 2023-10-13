@@ -1,20 +1,14 @@
 <script>
 import router from '../main.js'
 import { usePlayerStore } from '../main';
-import {useI18n} from "vue-i18n";
+
 import { Peer } from "peerjs";
 
 export default {
-  setup() {
-    const { t } = useI18n()
-    return { t };
-  },
   data() {
     const store = usePlayerStore();
-    const { t } = useI18n();
     return {
       store,
-      t,
       peer: '',
       connections: [],
       id_admin: '',
@@ -102,11 +96,11 @@ export default {
 </script>
 
 <template>
-  <h1>{{ t("Créer une partie") }}</h1>
+  <h1>{{ $t("game_create") }}</h1>
   <div class="small-wrapper menu-wrapper">
-    <label v-if="step === 0" for="name">{{ t("Nom de votre partie. Vous pourrez le changer plus tard.") }}</label>
+    <label v-if="step === 0" for="name">{{ $t("Nom de votre partie. Vous pourrez le changer plus tard.") }}</label>
     <input v-if="step === 0" @keyup.enter="ask_id" autocomplete="off" v-model="name" type="text" id="name" value="Ma partie" :placeholder="$t('Ma partie')" maxlength="25">
-    <label v-if="step === 1" for="id_admin">{{ t("Cet identifiant sera inclus dans votre lien d'invitation. Vous pouvez choisir le vôtre.") }}</label>
+    <label v-if="step === 1" for="id_admin">{{ $t("Cet identifiant sera inclus dans votre lien d'invitation. Vous pouvez choisir le vôtre.") }}</label>
     <input v-if="step === 1" type="text" ref="id_admin" v-model="id_admin" id="id_admin" @keyup.enter="launch">
     <button class="btn-valid" :disabled="isBtnDisabled" @click="ask_id" @keyup.enter="ask_id">{{ btn_text }}</button>
   </div>

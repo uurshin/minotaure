@@ -1,18 +1,18 @@
-Créer une partie: 'Create game'
-Gérer vos parties: 'Manage your games'
-Rejoindre une partie: 'Join game'
-Gérer vos personnages: 'Manage your characters'
-En savoir plus: "More about Minotaure"
-Characters help: 'Your characters are stored in your browser, so you can find them again when you connect to a previously joined game. You can play on another browser by exporting your characters.'
-Characters nb: 'You have no character to export | You have one character to export | You have { count } characters to export'
+game_create: 'Create game'
+game_manage: 'Manage your games'
+game_join: 'Join game'
+character_manage: 'Manage your characters'
+read_more: "More about Minotaure"
+character_help: 'Your characters are stored in your browser, so you can find them again when you connect to a previously joined game. You can play on another browser by exporting your characters.'
+character_nb: 'You have no character to export | You have one character to export | You have { count } characters to export'
 challenge_success: "You've passed a {stat} challenge."
 challenge_failure: "You've failed a {stat} challenge."
 result_bonus: "You gain {points} points of {name}."
 result_malus: "You lose {points} points of {name}."
 
 #Admin
-Personnages: "Characters"
-Jauges: "Bars"
+character: "Characters"
+bar: "Bars"
 Sondages: "Polls"
 Épreuve: "Challenge"
 Caractéristiques: "Stats"

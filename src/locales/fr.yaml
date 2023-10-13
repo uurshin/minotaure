@@ -1,18 +1,18 @@
-Créer une partie: 'Créer une partie'
-Gérer vos parties: 'Gérer vos parties'
-Rejoindre une partie: 'Rejoindre une partie'
-Gérer vos personnages: 'Gérer vos personnages'
-En savoir plus: "En savoir plus"
-Characters help: "Vos personnages sont conservés dans votre navigateur, ce qui permet de les retrouver lors d'une connexion à une partie rejointe auparavant. Vous pouvez jouer sur un autre navigateur en exportant vos personnages."
-Characters nb: "Vous n'avez aucun personnage à exporter | Vous avez un personnage à exporter | Vous avez { count } personnages à exporter"
+game_create: 'Créer une partie'
+game_manage: 'Gérer vos parties'
+game_join: 'Rejoindre une partie'
+character_manage: 'Gérer vos personnages'
+read_more: "En savoir plus"
+character_help: "Vos personnages sont conservés dans votre navigateur, ce qui permet de les retrouver lors d'une connexion à une partie rejointe auparavant. Vous pouvez jouer sur un autre navigateur en exportant vos personnages."
+character_nb: "Vous n'avez aucun personnage à exporter | Vous avez un personnage à exporter | Vous avez { count } personnages à exporter"
 challenge_success: "Vous avez réussi une épreuve de {stat}."
 challenge_failure: "Vous avez raté une épreuve de {stat}."
 result_bonus: "Vous gagnez {points} points de {name}."
 result_malus: "Vous perdez {points} points de {name}."
 
 #Admin
-Personnages: "Personnages"
-Jauges: "Jauges"
+character: "Personnages"
+bar: "Jauges"
 Sondages: "Sondages"
 Épreuve: "Épreuve"
 Caractéristiques: "Caractéristiques"
