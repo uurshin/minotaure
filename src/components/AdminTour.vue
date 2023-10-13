@@ -1,12 +1,7 @@
 <script>
-import {useI18n} from "vue-i18n";
 import {useShepherd} from "vue-shepherd";
 
 export default {
-  setup() {
-    const { t } = useI18n()
-    return { t };
-  },
   data() {
     const tour = useShepherd({
       useModalOverlay: true,

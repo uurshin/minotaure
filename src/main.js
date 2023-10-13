@@ -33,7 +33,10 @@ const i18n = createI18n({
     legacy: false,
     locale: (Intl.DateTimeFormat().resolvedOptions().locale !== undefined ? Intl.DateTimeFormat().resolvedOptions().locale.slice(0, 2) : 'fr'),
     fallbackLocale: 'en', // fallback locale
-    messages
+    messages,
+    warnHtmlMessage: false,
+    warnHtmlInMessage: 'off',
+    globalInjection: true
 })
 
 const app = createApp(Main)

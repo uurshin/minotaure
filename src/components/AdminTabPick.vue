@@ -1,14 +1,10 @@
 <script>
 import { usePlayerStore } from '../main';
 import VueMultiselect from "vue-multiselect";
-import {useI18n} from "vue-i18n";
+
 export default {
   components: {
     VueMultiselect
-  },
-  setup() {
-    const { t } = useI18n()
-    return { t }
   },
   data() {
     const store = usePlayerStore();
@@ -161,9 +157,9 @@ export default {
       <div class="vertical-wrapper">
         <input type="number" v-model="nb_targets" min="1">
         <select v-model="type_pick">
-          <option value="one">{{ t('parmi les personnages ayant un de ces tags') }}</option>
-          <option value="all">{{ t('parmi les personnages ayant tous ces tags') }}</option>
-          <option disabled value="each">{{ t('personnages par tags') }} - en chantier</option>
+          <option value="one">{{ $t('parmi les personnages ayant un de ces tags') }}</option>
+          <option value="all">{{ $t('parmi les personnages ayant tous ces tags') }}</option>
+          <option disabled value="each">{{ $t('personnages par tags') }} - en chantier</option>
         </select>
         <vue-multiselect
             ref="pick_multiselect"
@@ -185,7 +181,7 @@ export default {
       </div>
 
       <div id="consequences" class="vertical-wrapper">
-        <span class="label-wrapper">{{ t('Conséquences supplémentaires du tirage') }}</span>
+        <span class="label-wrapper">{{ $t('Conséquences supplémentaires du tirage') }}</span>
         <div>
           <div class="modifiers-buttons" v-for="(gauge, key) in store.current_game.gauges">
             <span class="modifier-label">{{ gauge.name }}</span>
@@ -205,7 +201,7 @@ export default {
           </div>
         </div>
         <div class="full">
-          <label for='chosen_modifier_pick_add'>{{ t('Ajouter les tags') }}</label>
+          <label for='chosen_modifier_pick_add'>{{ $t('Ajouter les tags') }}</label>
           <vue-multiselect
               id='chosen_modifier_pick_add'
               v-model="chosen_modifier_pick_add"
@@ -225,7 +221,7 @@ export default {
           ></vue-multiselect>
         </div>
         <div class="full">
-          <label for='chosen_modifier_pick_remove'>{{ t('Retirer les tags') }}</label>
+          <label for='chosen_modifier_pick_remove'>{{ $t('Retirer les tags') }}</label>
           <vue-multiselect
               id='chosen_modifier_pick_remove'
               v-model="chosen_modifier_pick_remove"
@@ -244,7 +240,7 @@ export default {
         </div>
       </div>
 
-      <button id="admin_pick_button" class="btn-valid" @click="launchPick">{{ t('Lancer le tirage') }}</button>
+      <button id="admin_pick_button" class="btn-valid" @click="launchPick">{{ $t('Lancer le tirage') }}</button>
     </div>
   </div>
 </template>

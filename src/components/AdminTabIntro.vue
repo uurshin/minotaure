@@ -1,6 +1,6 @@
 <script>
 import router, { usePlayerStore } from '../main';
-import {useI18n} from "vue-i18n";
+
 
 export default {
   components: {
@@ -8,10 +8,9 @@ export default {
   },
   data() {
     const store = usePlayerStore();
-    const { t } = useI18n();
 
     return {
-      store, t
+      store
     }
   },
   mounted() {
@@ -26,8 +25,8 @@ export default {
 <template>
   <div class="tab" ref="tab">
     <div id='tab-intro-content'>
-      {{ t('Bienvenue dans Minotaure')}}
-      {{ t("Vous pouvez démarrer le didacticiel à tout moment en cliquant sur le bouton d'aide")}}
+      {{ $t('Bienvenue dans Minotaure')}}
+      {{ $t("Vous pouvez démarrer le didacticiel à tout moment en cliquant sur le bouton d'aide")}}
     </div>
   </div>
 </template>

@@ -6,17 +6,12 @@ import VueSimpleContextMenu from 'vue-simple-context-menu';
 import 'vue-simple-context-menu/dist/vue-simple-context-menu.css';
 import '@radial-color-picker/vue-color-picker/dist/vue-color-picker.min.css';
 import ColorPicker from '@radial-color-picker/vue-color-picker';
-import {useI18n} from "vue-i18n";
+
 
 export default {
   components: { VueMultiselect, VueSimpleContextMenu, ColorPicker },
-  setup() {
-    const { t } = useI18n()
-    return { t }
-  },
   data() {
     const store = usePlayerStore();
-    const { t } = useI18n();
     const options_contextual = [{}];
     const color = reactive({
       hue: 50,
@@ -29,7 +24,6 @@ export default {
 
     return {
       store,
-      t,
       options_contextual,
       color,
       color_picked,
@@ -231,24 +225,24 @@ export default {
           >
           </color-picker>
         </div>
-        <button class="icon-add" @click="addGroupTag()">{{ t("Ajouter un groupe de tags") }}</button>
+        <button class="icon-add" @click="addGroupTag()">{{ $t("Ajouter un groupe de tags") }}</button>
       </div>
       <template v-for="(group, key) in store.current_game.tag_groups">
         <div class="group-tag">
           <span class="group-label">
             <input :ref="'group_name_input_'+ key" @keydown.enter="group_selected = null;" v-if="group_selected === key" type="text" v-model="store.current_game.tag_groups[key].label" />
             <button v-show="group_selected !== key" @keyup.enter="focusLabelGroup($event, key)" @click="focusLabelGroup($event, key)" class="icon-edit">{{ store.current_game.tag_groups[key].label }}</button>
-            <button v-show="group_selected === key" @click="group_selected = null">{{ t("Terminer") }}</button>
+            <button v-show="group_selected === key" @click="group_selected = null">{{ $t("Terminer") }}</button>
           </span>
           <div class="actions secondary">
-            <label for="creation_rule">{{ t("Règle d'attribution") }}</label>
+            <label for="creation_rule">{{ $t("Règle d'attribution") }}</label>
             <select id="creation_rule" v-model="store.current_game.tag_groups[key].start">
-              <option value="random">{{ t("Répartis aléatoirement à la création") }}</option>
-              <option value="start">{{ t("A choisir à la création du personnage") }}</option>
-              <option value="none">{{ t("Pas de règle") }}</option>
+              <option value="random">{{ $t("Répartis aléatoirement à la création") }}</option>
+              <option value="start">{{ $t("A choisir à la création du personnage") }}</option>
+              <option value="none">{{ $t("Pas de règle") }}</option>
             </select>
-            <button @click="allocateGroupTag(group)" :title="$t('Pour chaque personnage n\'ayant pas encore de tag de ce groupe, un tag lui sera attribué au hasard')">{{ t("Redistribuer") }}</button>
-            <button class="btn-danger" @click="removeGroupTag(key)" :title="$t('Tous les tags de ce groupe seront supprimés, et retirés des personnages')">{{ t("Supprimer") }}</button>
+            <button @click="allocateGroupTag(group)" :title="$t('Pour chaque personnage n\'ayant pas encore de tag de ce groupe, un tag lui sera attribué au hasard')">{{ $t("Redistribuer") }}</button>
+            <button class="btn-danger" @click="removeGroupTag(key)" :title="$t('Tous les tags de ce groupe seront supprimés, et retirés des personnages')">{{ $t("Supprimer") }}</button>
           </div>
           <vue-multiselect
               :ref="'group_tag_select_' + group.code"
@@ -277,8 +271,8 @@ export default {
                   <div>
                     <span class="icon-settings hover-only"></span>
                     <span class="label-name">{{ tag.option.label }}</span>
-                    <span v-if="tag.option.stat1">{{ tag.option.stat1 !== undefined ? t('Carac principale') + store.stats[tag.option.stat1].name : '' }}</span>
-                    <span v-if="tag.option.stat2">{{ tag.option.stat2 !== undefined ? t('Carac secondaire') + store.stats[tag.option.stat2].name : '' }}</span>
+                    <span v-if="tag.option.stat1">{{ tag.option.stat1 !== undefined ? $t('Carac principale') + store.stats[tag.option.stat1].name : '' }}</span>
+                    <span v-if="tag.option.stat2">{{ tag.option.stat2 !== undefined ? $t('Carac secondaire') + store.stats[tag.option.stat2].name : '' }}</span>
                     <span v-if="tag.option.gauge_modifiers !== undefined" v-for="(modifier, key) in tag.option.gauge_modifiers">
                       {{ store.gauges[key].name }} {{ modifier.value > 0 ? '+' + modifier.value : modifier.value }}
                     </span>

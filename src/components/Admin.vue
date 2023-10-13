@@ -11,7 +11,6 @@ import AdminTabPoll from '../components/AdminTabPoll.vue'
 import AdminTabChallenge from '../components/AdminTabChallenge.vue'
 import AdminTabPick from '../components/AdminTabPick.vue'
 import AdminTour from '../components/AdminTour.vue'
-import { useI18n } from "vue-i18n";
 import { Peer } from "peerjs";
 
 export default {
@@ -46,12 +45,11 @@ export default {
   },
   setup() {
     const store = usePlayerStore();
-    const { t } = useI18n();
     const is_live = ref[false];
     const btn_live = ref('Démarrer la vidéo');
     const current_tab = ref('');
     return {
-      store, t, is_live, btn_live, current_tab
+      store, is_live, btn_live, current_tab
     }
   },
   data() {
@@ -366,15 +364,15 @@ export default {
           class="tab-label"
           :class="{open: current_tab === tab.id, attention: tab.tutorial === 'blink' && this.store.current_game.tuto_on}"
       >
-        {{ t(tab.label) }}
+        {{ $t(tab.label) }}
       </div>
       <div class="tab-details">
-        <button @click="startTour">{{ t('Aide')}}</button>
+        <button @click="startTour">{{ $t('Aide')}}</button>
         <button class="icon-email" v-if="peer !== undefined" @click="shareLink">
-          {{ t("Inviter à jouer") }}
+          {{ $t("Inviter à jouer") }}
         </button>
         <button ref="start" class="icon-play" :class="{'btn-important': !store.current_game.tuto_on, attention: !this.store.current_game.tuto_on}" v-if="!store.current_game.game_started" @click="startGame">
-          {{ t("Démarrer") }}
+          {{ $t("Démarrer") }}
         </button>
       </div>
     </div>
