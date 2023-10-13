@@ -20,8 +20,8 @@ export default {
   <div id="home">
     <div class="menu">
       <div>
-        <router-link to="/create">{{ t('Créer une partie') }}</router-link>
-        <router-link to="/continue">{{ t('Gérer vos parties') }}</router-link>
+        <router-link to="/create">{{ t('game_create') }}</router-link>
+        <router-link to="/continue">{{ t('game_manage') }}</router-link>
       </div>
       <div class="logo-wrapper">
         <span>minotaure</span>
@@ -35,13 +35,13 @@ export default {
         </svg>
       </div>
       <div>
-        <router-link to="/join">{{ t('Rejoindre une partie') }}</router-link>
-        <router-link to="/characters">{{ t('Gérer vos personnages') }}</router-link>
+        <router-link to="/join">{{ t('character_manage') }}</router-link>
+        <router-link to="/characters">{{ t('character_manage') }}</router-link>
       </div>
     </div>
     <div class="small-wrapper infos">
       <span>Version : {{ version }}</span>
-      <a href="https://github.com/fibreville/minotaure">{{ t('En savoir plus') }}</a>
+      <a href="https://github.com/fibreville/minotaure">{{ t('read_more') }}</a>
     </div>
   </div>
   <router-view></router-view>

@@ -97,7 +97,7 @@ export default {
     <div id='tab-settings-content'>
       <div class="wrapper-settings">
         <div class="wrapper-title">
-          <h2>{{ t('Jauges') }}</h2>
+          <h2>{{ t('bar') }}</h2>
           <button ref="step3" class="icon-add btn-valid" v-if="!add_gauge_enabled" @click="add_gauge_enabled = true">{{ t('Ajouter') }}</button>
         </div>
         <div class="wrapper-list">

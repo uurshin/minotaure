@@ -46,7 +46,7 @@ export default {
           return this.$t('continue_game', {name: found.name});
         }
       }
-      return this.$t('Gérer vos parties');
+      return this.$t('game_manage');
     },
   },
   methods: {
@@ -148,7 +148,7 @@ export default {
     </div>
     <div class="vertical-wrapper" v-if="!games.length">
       <span>{{ t("Vous n'avez créé aucune partie.") }}</span>
-      <router-link to="/create">{{ t("Créer une partie") }}</router-link>
+      <router-link to="/create">{{ t("game_create") }}</router-link>
     </div>
     <button v-if="games.length > 1 && !ask_id" class="btn-danger delete-all" @click="deleteAllGames($event)">{{ t('Supprimer toutes les parties') }}</button>
     <div class="continue-game" v-if="ask_id">

@@ -65,7 +65,7 @@ export default {
       temp_game_name: '',
       tabs: [
         {id: 'intro', label: 'Introduction'},
-        {id: 'characters', label: 'Personnages', tutorial: 'off' },
+        {id: 'characters', label: 'character', tutorial: 'off' },
         {id: 'poll', label: 'Sondages', tutorial: 'off' },
         {id: 'challenge', label: 'Épreuve', tutorial: 'off' },
         {id: 'pick', label: 'Tirage', tutorial: 'off' },

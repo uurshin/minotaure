@@ -102,7 +102,7 @@ export default {
 </script>
 
 <template>
-  <h1>{{ t("Créer une partie") }}</h1>
+  <h1>{{ t("game_create") }}</h1>
   <div class="small-wrapper menu-wrapper">
     <label v-if="step === 0" for="name">{{ t("Nom de votre partie. Vous pourrez le changer plus tard.") }}</label>
     <input v-if="step === 0" @keyup.enter="ask_id" autocomplete="off" v-model="name" type="text" id="name" value="Ma partie" :placeholder="$t('Ma partie')" maxlength="25">
