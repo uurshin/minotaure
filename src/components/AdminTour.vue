@@ -14,8 +14,8 @@ export default {
     });
     const steps = [
       {text: 'Ce didacticiel est en cours de conception.', parent: 'characters', id: 'step1'},
-      {text: 'character', parent: 'characters', id: 'step2'},
-      {text: 'bar', parent: 'settings', id: 'step3', finish:true},
+      {text: 'characters', parent: 'characters', id: 'step2'},
+      {text: 'bars', parent: 'settings', id: 'step3', finish:true},
     ];
 
     return {

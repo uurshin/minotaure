@@ -32,7 +32,7 @@ export default {
         </svg>
       </div>
       <div>
-        <router-link to="/join">{{ $t('character_manage') }}</router-link>
+        <router-link to="/join">{{ $t('game_join') }}</router-link>
         <router-link to="/characters">{{ $t('character_manage') }}</router-link>
       </div>
     </div>

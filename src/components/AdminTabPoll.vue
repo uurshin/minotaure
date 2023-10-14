@@ -227,7 +227,7 @@ export default {
         <div :ref="'past_poll_'+ key" class="list-polls poll-past" v-for="(poll, key) in store.past_polls">
           <div class="wrapper-title">
             <span class="title">{{ poll.label}}</span>
-            <button class='see-more' @click="toggle_poll(key)">{{ $t('Voir plus') }}</button>
+            <button class='see-more' @click="toggle_poll(key)">{{ $t('see_more') }}</button>
             <button class="btn-danger" @click="delete_poll(key)">{{ $t('Supprimer') }}</button>
           </div>
           <div v-for="option in Object.entries(poll.options).sort(function(a, b) { return a.count - b.count} )">
