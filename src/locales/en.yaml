@@ -168,10 +168,12 @@ Importer vos personnages: "Import characters"
 Supprimer tous vos personnages: "Delete all your characters"
 
 #AdminTabPick
-parmi les personnages ayant un de ces tags: "out of characters with any following tag:"
-parmi les personnages ayant tous ces tags: "out of characters with all following tag:"
-personnages par tag: "characters by tag:"
-Lancer le tirage: "Draw"
+admin_pick_one: "out of characters with any following tags:"
+admin_pick_all: "out of characters with all following tags:"
+admin_pick_none: "out of characters with none of the following tags:"
+admin_pick_each: "characters by tag:"
+admin_pick_launch: "Draw"
+future_feature: "Future feature"
 
 #Join
 ID de la partie: "Game ID"

@@ -58,6 +58,18 @@ export default {
               }
           );
         }
+        else if (this.type_pick === 'none') {
+          relevant_characters = relevant_characters.filter(
+              function (character) {
+                let found = -1;
+                vm.pick_multiselect.every(function(tag) {
+                  found = character.tags.findIndex((character_tag) => character_tag.code === tag.code);
+                  return (found === -1);
+                })
+                return (found === -1);
+              }
+          );
+        }
         else if (this.type_pick === 'each') {
           // TODO : each
           // vm.pick_multiselect.forEach(function(picked_tag) {
@@ -157,9 +169,10 @@ export default {
       <div class="vertical-wrapper">
         <input type="number" v-model="nb_targets" min="1">
         <select v-model="type_pick">
-          <option value="one">{{ $t('parmi les personnages ayant un de ces tags') }}</option>
-          <option value="all">{{ $t('parmi les personnages ayant tous ces tags') }}</option>
-          <option disabled value="each">{{ $t('personnages par tags') }} - en chantier</option>
+          <option value="one">{{ $t('admin_pick_one') }}</option>
+          <option value="all">{{ $t('admin_pick_all') }}</option>
+          <option value="none">{{ $t('admin_pick_none') }}</option>
+          <option disabled value="each">{{ $t('admin_pick_each') }} - {{ $t('future_feature') }}</option>
         </select>
         <vue-multiselect
             ref="pick_multiselect"
