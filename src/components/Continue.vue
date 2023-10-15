@@ -136,13 +136,13 @@ export default {
       </div>
       <span v-if="activated !== key">{{ $t('count_personnage', {count: game.characters.length}) }}</span>
       <div class="hidden-mobile" :class="{active: activated === key}">
-        <button class="btn-valid" @click="askPublicId(game.id)">{{ $t('Continuer') }}</button>
+        <button class="btn-valid" @click="askPublicId(game.id)">{{ $t('continue') }}</button>
         <button class="btn-danger" @click="deleteGame(game.id, $event)">{{ $t('Supprimer') }}</button>
       </div>
-      <button class="visible-mobile" @click="activated = key;" v-if="activated !== key">{{ $t('Voir plus') }}</button>
+      <button class="visible-mobile" @click="activated = key;" v-if="activated !== key">{{ $t('see_more') }}</button>
     </div>
     <div class="vertical-wrapper" v-if="!games.length">
-      <span>{{ $t("Vous n'avez créé aucune partie.") }}</span>
+      <span>{{ $t("any_game") }}</span>
       <router-link to="/create">{{ $t("game_create") }}</router-link>
     </div>
     <button v-if="games.length > 1 && !ask_id" class="btn-danger delete-all" @click="deleteAllGames($event)">{{ $t('Supprimer toutes les parties') }}</button>

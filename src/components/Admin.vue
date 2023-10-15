@@ -63,12 +63,12 @@ export default {
       temp_game_name: '',
       tabs: [
         {id: 'intro', label: 'Introduction'},
-        {id: 'characters', label: 'character', tutorial: 'off' },
-        {id: 'poll', label: 'Sondages', tutorial: 'off' },
-        {id: 'challenge', label: 'Épreuve', tutorial: 'off' },
-        {id: 'pick', label: 'Tirage', tutorial: 'off' },
-        {id: 'tags', label: 'Tags', tutorial: 'blink' },
-        {id: 'settings', label: 'Paramètres', tutorial: 'blink' }
+        {id: 'characters', label: 'characters', tutorial: 'off' },
+        {id: 'poll', label: 'polls', tutorial: 'off' },
+        {id: 'challenge', label: 'challenge', tutorial: 'off' },
+        {id: 'pick', label: 'draw', tutorial: 'off' },
+        {id: 'tags', label: 'tags', tutorial: 'blink' },
+        {id: 'settings', label: 'settings', tutorial: 'blink' }
       ]
     }
   },
@@ -84,7 +84,7 @@ export default {
       }
     },
     gameLabel: function() {
-      return (this.game_name_focused === 0 ? this.$t('Renommer la partie') : this.store.current_game.name);
+      return (this.game_name_focused === 0 ? this.$t('game_rename ') : this.store.current_game.name);
     }
   },
   created() {
@@ -125,12 +125,12 @@ export default {
     // It's the first time the game is loaded, so initialize some data.
     if (vm.store.current_game.initialized === false) {
       vm.store.current_game.stats = {
-        fo1: {name: vm.$t('Physique')},
-        me1: {name: vm.$t('Mental')}
+        fo1: {name: vm.$t('strength')},
+        me1: {name: vm.$t('mind')}
       }
       vm.store.current_game.gauges = {
-        li1: {name: vm.$t('Vie'), value: 10, deadly: true},
-        wi1: {name: vm.$t('Volonté'), value: 10, deadly: false}
+        li1: {name: vm.$t('health'), value: 10, deadly: true},
+        wi1: {name: vm.$t('will'), value: 10, deadly: false}
       }
       vm.store.current_game.tag_groups = [];
       vm.store.current_game.polls = {};
@@ -288,15 +288,15 @@ export default {
       const vm = this;
       if (window.location.origin === 'null') {
         navigator.clipboard.writeText(this.store.peer.id);
-        event.target.innerText = this.$t("Identifiant de partie copié !");
+        event.target.innerText = this.$t("game_id_copied");
       }
       else {
         navigator.clipboard.writeText(window.location.href.slice(0, location.href.lastIndexOf("/")) + 'join?id=' + this.store.peer.id);
-        event.target.innerText = this.$t("Lien d'invitation copié !");
+        event.target.innerText = this.$t("invite_link_copied");
       }
 
       setTimeout(function() {
-        event.target.innerText = vm.$t('Inviter à jouer');
+        event.target.innerText = vm.$t('invite_to_play');
       }, 2000)
     },
     startTour() {
@@ -367,12 +367,12 @@ export default {
         {{ $t(tab.label) }}
       </div>
       <div class="tab-details">
-        <button @click="startTour">{{ $t('Aide')}}</button>
+        <button @click="startTour">{{ $t('help')}}</button>
         <button class="icon-email" v-if="peer !== undefined" @click="shareLink">
-          {{ $t("Inviter à jouer") }}
+          {{ $t("invite_to_play") }}
         </button>
         <button ref="start" class="icon-play" :class="{'btn-important': !store.current_game.tuto_on, attention: !this.store.current_game.tuto_on}" v-if="!store.current_game.game_started" @click="startGame">
-          {{ $t("Démarrer") }}
+          {{ $t("start") }}
         </button>
       </div>
     </div>
