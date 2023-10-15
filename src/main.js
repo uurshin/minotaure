@@ -251,7 +251,7 @@ export const usePlayerStore = defineStore('playerStore', {
                 });
             }
 
-            this.getRandomTags().forEach(function(group_tags) {
+            this.getRandomGroupTags().forEach(function(group_tags) {
                 let choice = group_tags.tags[Math.floor(Math.random() * group_tags.tags.length)];
                 tags.push(choice);
             })
