@@ -38,7 +38,7 @@ export default {
     </div>
     <div class="small-wrapper infos">
       <span>Version : {{ version }}</span>
-      <a href="https://github.com/fibreville/minotaure">{{ $t('read_more') }}</a>
+      <a href="https://github.com/uurshin/minotaure">{{ $t('read_more') }}</a>
     </div>
   </div>
   <router-view></router-view>
