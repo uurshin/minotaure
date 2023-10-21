@@ -213,7 +213,7 @@ export default {
             <span  :class="{full_attendance: attendance(poll) === '100.00'}">{{ attendance(poll) }}%</span>
           </span>
           <div class="results">
-            <div v-for="option in Object.entries(poll.options).sort(function(a, b) { return b.count - a.count} )">
+            <div v-for="option in Object.entries(poll.options).sort(function(a, b) { return b[1].count - a[1].count} )">
               {{ option[1].label }} : {{ option[1].count > 0 ? (100 / poll.nb_targets * option[1].count).toFixed(2) : 0 }}%
             </div>
           </div>
@@ -230,8 +230,8 @@ export default {
             <button class='see-more' @click="toggle_poll(key)">{{ $t('see_more') }}</button>
             <button class="btn-danger" @click="delete_poll(key)">{{ $t('Supprimer') }}</button>
           </div>
-          <div v-for="option in Object.entries(poll.options).sort(function(a, b) { return a.count - b.count} )">
-            {{ option.label }} : {{ option.count > 0 ? (100 / poll.nb_targets * option.count).toFixed(2) : 0 }}%
+          <div v-for="option in Object.entries(poll.options).sort(function(a, b) { return b[1].count - a[1].count} )">
+            {{ option[1].label }} : {{ option[1].count > 0 ? (100 / poll.nb_targets * option[1].count).toFixed(2) : 0 }}%
           </div>
         </div>
       </div>
