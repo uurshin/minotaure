@@ -119,7 +119,7 @@ export default {
       let group = this.store.tag_groups.find((element) => (element.code === 'freetag'));
       if (group === undefined) {
         group = {
-          label: this.$t('Tags des épreuves'),
+          label: this.$t('challenge_tags'),
           code: 'freetag',
           tags: [],
           start: 'none',
@@ -140,14 +140,14 @@ export default {
   <div class="tab" ref="tab">
     <div id='tab-poll-content'>
       <div class="actions">
-        <button @click="poll_tab = 'add'" class="icon-add" :class="{ active:poll_tab === 'add' }" >{{ $t("Ajouter un sondage") }}</button>
-        <button @click="poll_tab = 'active'" :class="{ active:poll_tab === 'active' }" >{{ $t("Voir les sondages actifs") }}</button>
-        <button @click="poll_tab = 'past'" :class="{ active:poll_tab === 'past' }" >{{ $t("Voir les sondages passés") }}</button>
+        <button @click="poll_tab = 'add'" class="icon-add" :class="{ active:poll_tab === 'add' }" >{{ $t("add_poll") }}</button>
+        <button @click="poll_tab = 'active'" :class="{ active:poll_tab === 'active' }" >{{ $t("active_polls") }}</button>
+        <button @click="poll_tab = 'past'" :class="{ active:poll_tab === 'past' }" >{{ $t("past_polls") }}</button>
       </div>
 
       <div class="vertical-wrapper add-poll" v-if="poll_tab === 'add'">
         <div>
-          <label for="poll_targets">{{ $t('Cibles') }}</label>
+          <label for="poll_targets">{{ $t('targets') }}</label>
           <vue-multiselect
               ref="poll_targets"
               id="poll_targets"
@@ -158,9 +158,9 @@ export default {
               group-values="tags"
               group-label="label"
               :group-select="true"
-              :placeholder="$t('Choisir un tag')"
-              :tagPlaceholder="$t('Choisir un tag')"
-              noOptions="Tout le monde"
+              :placeholder="$t('select_tag')"
+              :tagPlaceholder="$t('select_tag')"
+              :noOptions="$t('everyone')"
               :options=store.tag_groups
               :multiple="true"
               :taggable="false"
@@ -168,27 +168,27 @@ export default {
           ></vue-multiselect>
         </div>
         <div>
-          <label for="question">{{ $t('Question') }}</label>
+          <label for="question">{{ $t('question') }}</label>
           <input @keyup.enter="focus(0)" id="question" v-model=label type='text'>
         </div>
         <div>
-          <span>{{ $t('Choix possibles') }}</span>
+          <span>{{ $t('possible_choices') }}</span>
           <div v-for="n in nb_options" class="poll-choice">
             <div>
               <label :for="'choice_' + n">{{ $t('nb_choice', {'nb':n}) }}</label>
               <input :id="'choice_' + n" :ref="'choice_' + n" @keyup.enter="focus(n)" v-model=answers[n] type='text'>
             </div>
             <div>
-              <label :for="'chosen_tags_' + n">{{ $t('Ce choix donnera le tag suivant') }}</label>
+              <label :for="'chosen_tags_' + n">{{ $t('choice_gives_tag') }}</label>
               <vue-multiselect
                   :id="'chosen_tags_' + n"
                   v-model="chosen_tags[n]"
                   class="left-multiselect"
                   label="label"
                   track-by="code"
-                  :tag-placeholder="$t('Ajouter un tag')"
-                  :placeholder="$t('Tapez un mot')"
-                  :noOptions="$t('Aucun autre tag, inventez-en un !')"
+                  :tag-placeholder="$t('add_tag')"
+                  :placeholder="$t('input_word')"
+                  :noOptions="$t('no_tag_create')"
                   group-values="tags"
                   group-label="label"
                   :group-select="false"
@@ -200,16 +200,16 @@ export default {
               ></vue-multiselect>
             </div>
           </div>
-          <button @click="nb_options += 1">{{ $t('Ajouter un choix') }}</button>
+          <button @click="nb_options += 1">{{ $t('add_poll_choice') }}</button>
         </div>
-        <button class="btn-valid" :disabled="nb_options < 2 || label === ''" @click="startPoll">{{ $t('Lancer le sondage') }}</button>
+        <button class="btn-valid" :disabled="nb_options < 2 || label === ''" @click="startPoll">{{ $t('start_poll') }}</button>
       </div>
 
       <div class="vertical-wrapper" v-if="poll_tab === 'active'">
         <div class="list-polls poll-active" :class="{show: poll_show[key]}" v-for="(poll, key) in store.active_polls">
           <span class="title">{{ poll.label}}</span>
           <span>
-            <span>{{ $t('Participation : ') }}</span>
+            <span>{{ $t('turnout') }}</span>
             <span  :class="{full_attendance: attendance(poll) === '100.00'}">{{ attendance(poll) }}%</span>
           </span>
           <div class="results">
@@ -218,8 +218,8 @@ export default {
             </div>
           </div>
           <div class="actions">
-            <button @click="poll_show[key] = poll_show[key] !== undefined ? !poll_show[key] : true">{{ $t('Montrer les résultats')}}</button>
-            <button class='btn-danger' @click="finishPoll(key)">{{ $t('Terminer le sondage') }}</button>
+            <button @click="poll_show[key] = poll_show[key] !== undefined ? !poll_show[key] : true">{{ $t('show_poll_results')}}</button>
+            <button class='btn-danger' @click="finishPoll(key)">{{ $t('close_poll') }}</button>
           </div>
         </div>
       </div>
@@ -228,7 +228,7 @@ export default {
           <div class="wrapper-title">
             <span class="title">{{ poll.label}}</span>
             <button class='see-more' @click="toggle_poll(key)">{{ $t('see_more') }}</button>
-            <button class="btn-danger" @click="delete_poll(key)">{{ $t('Supprimer') }}</button>
+            <button class="btn-danger" @click="delete_poll(key)">{{ $t('delete') }}</button>
           </div>
           <div v-for="option in Object.entries(poll.options).sort(function(a, b) { return b[1].count - a[1].count} )">
             {{ option[1].label }} : {{ option[1].count > 0 ? (100 / poll.nb_targets * option[1].count).toFixed(2) : 0 }}%

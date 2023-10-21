@@ -37,7 +37,7 @@ export default {
         buttons: [
           {
             text: function() {
-              return (step.finish ? vm.$t('Terminer la visite') : vm.$t('Suivant'));
+              return (step.finish ? vm.$t('end_tour') : vm.$t('next'));
             },
             action: vm.tour.next
           }

@@ -84,7 +84,7 @@ export default {
       }
     },
     gameLabel: function() {
-      return (this.game_name_focused === 0 ? this.$t('game_rename ') : this.store.current_game.name);
+      return (this.game_name_focused === 0 ? this.$t('game_rename') : this.store.current_game.name);
     }
   },
   created() {

@@ -107,7 +107,7 @@ export default {
               let found = character.tags.findIndex((character_tag) => character_tag.code === tag.code);
               if (found === -1) {
                 character.tags.push(tag);
-                // messages.push(vm.$t('tag ajouté', {tag_label: tag.label}) );
+                // messages.push(vm.$t('added_tag', {tag_label: tag.label}) );
               }
             });
           }
@@ -116,7 +116,7 @@ export default {
               let found = character.tags.findIndex((character_tag) => character_tag.code === tag.code);
               if (found !== -1) {
                 character.tags.splice(found, 1);
-                // messages.push(vm.$t('tag enlevé', {tag_label: tag.label}) );
+                // messages.push(vm.$t('removed_tag', {tag_label: tag.label}) );
               }
             });
           }
@@ -149,7 +149,7 @@ export default {
       let group = this.store.tag_groups.find((element) => (element.code === 'freetag'));
       if (group === undefined) {
         group = {
-          label: this.$t('Tags des épreuves'),
+          label: this.$t('challenge_tags'),
           code: 'freetag',
           tags: [],
           start: 'none',
@@ -183,9 +183,9 @@ export default {
             group-values="tags"
             group-label="label"
             :group-select="true"
-            :placeholder="$t('Choisir un tag')"
-            :tagPlaceholder="$t('Choisir un tag')"
-            noOptions="Tout le monde"
+            :placeholder="$t('select_tag')"
+            :tagPlaceholder="$t('select_tag')"
+            :noOptions="$t('everyone')"
             :options=store.tag_groups
             :multiple="true"
             :taggable="false"
@@ -194,7 +194,7 @@ export default {
       </div>
 
       <div id="consequences" class="vertical-wrapper">
-        <span class="label-wrapper">{{ $t('Conséquences supplémentaires du tirage') }}</span>
+        <span class="label-wrapper">{{ $t('admin_pick_add_csq') }}</span>
         <div>
           <div class="modifiers-buttons" v-for="(gauge, key) in store.current_game.gauges">
             <span class="modifier-label">{{ gauge.name }}</span>
@@ -214,15 +214,15 @@ export default {
           </div>
         </div>
         <div class="full">
-          <label for='chosen_modifier_pick_add'>{{ $t('Ajouter les tags') }}</label>
+          <label for='chosen_modifier_pick_add'>{{ $t('add_tags') }}</label>
           <vue-multiselect
               id='chosen_modifier_pick_add'
               v-model="chosen_modifier_pick_add"
               label="label"
               track-by="code"
-              :tag-placeholder="$t('Ajouter un tag')"
-              :placeholder="$t('Tapez un mot')"
-              :noOptions="$t('Aucun autre tag, inventez-en un !')"
+              :tag-placeholder="$t('add_tag')"
+              :placeholder="$t('input_word')"
+              :noOptions="$t('no_tag_create')"
               group-values="tags"
               group-label="label"
               :group-select="false"
@@ -234,13 +234,13 @@ export default {
           ></vue-multiselect>
         </div>
         <div class="full">
-          <label for='chosen_modifier_pick_remove'>{{ $t('Retirer les tags') }}</label>
+          <label for='chosen_modifier_pick_remove'>{{ $t('remove_tag') }}</label>
           <vue-multiselect
               id='chosen_modifier_pick_remove'
               v-model="chosen_modifier_pick_remove"
               label="label"
               track-by="code"
-              :placeholder="$t('Tapez un mot')"
+              :placeholder="$t('input_word')"
               :showNoOptions="false"
               group-values="tags"
               group-label="label"
@@ -253,7 +253,7 @@ export default {
         </div>
       </div>
 
-      <button id="admin_pick_button" class="btn-valid" @click="launchPick">{{ $t('Lancer le tirage') }}</button>
+      <button id="admin_pick_button" class="btn-valid" @click="launchPick">{{ $t('admin_pick_launch') }}</button>
     </div>
   </div>
 </template>

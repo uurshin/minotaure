@@ -34,15 +34,15 @@ export default {
   computed: {
     labelDifficulty: function() {
       let levels = [
-        {value:-8, label:this.$t('Trivial')},
-        {value:-6, label:this.$t('Aisé')},
-        {value:-4, label:this.$t('Facile')},
-        {value:-2, label:this.$t('Assez facile')},
-        {value:0, label:this.$t('Modéré')},
-        {value:2, label:this.$t('Assez difficile')},
-        {value:4, label:this.$t('Difficile')},
-        {value:6, label:this.$t('Ardu')},
-        {value:8, label:this.$t('Cauchemardesque')},
+        {value:-8, label:this.$t('dif_cake')},
+        {value:-6, label:this.$t('dif_ext_easy')},
+        {value:-4, label:this.$t('dif_very_easy')},
+        {value:-2, label:this.$t('dif_easy')},
+        {value:0, label:this.$t('dif_moderate')},
+        {value:2, label:this.$t('dif_hard')},
+        {value:4, label:this.$t('dif_very_hard')},
+        {value:6, label:this.$t('dif_extreme')},
+        {value:8, label:this.$t('dif_impossible')},
       ]
       for (let level of levels) {
         if (this.challenge_difficulty <= level.value) {
@@ -87,7 +87,7 @@ export default {
       let group = this.store.tag_groups.find((element) => (element.code === 'freetag'));
       if (group === undefined) {
         group = {
-          label: this.$t('Tags des épreuves'),
+          label: this.$t('challenge_tags'),
           code: 'freetag',
           tags: [],
           start: 'none',
@@ -142,7 +142,7 @@ export default {
             let found = character.tags.findIndex((character_tag) => character_tag.code === tag.code);
             if (found === -1) {
               character.tags.push(tag);
-              messages.push(vm.$t('tag ajouté', {tag_label: tag.label}) );
+              messages.push(vm.$t('added_tag', {tag_label: tag.label}) );
             }
           });
         }
@@ -151,7 +151,7 @@ export default {
             let found = character.tags.findIndex((character_tag) => character_tag.code === tag.code);
             if (found !== -1) {
               character.tags.splice(found, 1);
-              messages.push(vm.$t('tag enlevé', {tag_label: tag.label}) );
+              messages.push(vm.$t('removed_tag', {tag_label: tag.label}) );
             }
           });
         }
@@ -187,18 +187,18 @@ export default {
 
 <template>
   <div class="tab" ref="tab">
-    <span v-if="store.stats !== undefined && Object.keys(store.stats).length === 0">{{ $t("Vous devez d'abord") }}<button @click="$parent.changeTab('settings')">{{ $t('créer une caractéristique') }}</button></span>
+    <span v-if="store.stats !== undefined && Object.keys(store.stats).length === 0">{{ $t("must_first") }}<button @click="$parent.changeTab('settings')">{{ $t('add_stat') }}</button></span>
     <div id='tab-challenge-content' v-if="store.stats !== undefined && Object.keys(store.stats).length > 0">
       <div id="chosen-targets">
         <div>
-          <label for="chosen_stat">{{ $t('Caractéristique à tester') }}</label>
+          <label for="chosen_stat">{{ $t('tested_stat') }}</label>
           <select id="chosen_stat" v-model="chosen_stat">
-            <option value="" >{{ $t('Choisissez une caractéristique') }}</option>
+            <option value="" >{{ $t('choose_stat') }}</option>
             <option :value="key" v-for="(stat, key) in store.current_game.stats">{{ stat.name }}</option>
           </select>
         </div>
         <div>
-          <label for="difficulty">{{ $t('Difficulté') }}<span class="label-difficulty">{{ labelDifficulty }}</span></label>
+          <label for="difficulty">{{ $t('difficulty') }}<span class="label-difficulty">{{ labelDifficulty }}</span></label>
           <Slider
               v-model="challenge_difficulty"
               :min="-8"
@@ -209,7 +209,7 @@ export default {
           />
         </div>
         <div>
-          <label for="chosen_tags">{{ $t('Cibles') }}</label>
+          <label for="chosen_tags">{{ $t('targets') }}</label>
           <vue-multiselect
               ref="chosen_tags"
               id="chosen_tags"
@@ -219,9 +219,9 @@ export default {
               group-values="tags"
               group-label="label"
               :group-select="true"
-              :placeholder="$t('Ajouter une cible')"
-              :tagPlaceholder="$t('Ajouter une cible')"
-              :noOptions="$t('Tout le monde')"
+              :placeholder="$t('add_target')"
+              :tagPlaceholder="$t('add_target')"
+              :noOptions="$t('everyone')"
               :options=store.tag_groups_plus_targets
               :multiple="true"
               :taggable="false"
@@ -233,7 +233,7 @@ export default {
 
       <template v-for="type in types">
         <div :id="'chosen-'+type"  v-if="chosen_stat !== ''" :class="'type-'+type" >
-          <span class="label-wrapper">{{ type === 'success' ?  $t('Conséquences positives')  :  $t('Conséquences négatives') }}</span>
+          <span class="label-wrapper">{{ type === 'success' ?  $t('positive_csq')  :  $t('negative_csq') }}</span>
           <div>
             <div class="modifiers-buttons" v-for="(gauge, key) in store.current_game.gauges">
               <span class="modifier-label">{{ gauge.name }}</span>
@@ -253,15 +253,15 @@ export default {
             </div>
           </div>
           <div>
-            <label :for="'chosen_modifier_tags_add_'+type">{{ $t('Ajouter les tags') }}</label>
+            <label :for="'chosen_modifier_tags_add_'+type">{{ $t('add_tags') }}</label>
             <vue-multiselect
                 :id="'chosen_modifier_tags_add_'+type"
                 v-model="chosen_modifier_tags_add[type]"
                 label="label"
                 track-by="code"
-                :tag-placeholder="$t('Ajouter un tag')"
-                :placeholder="$t('Tapez un mot')"
-                :noOptions="$t('Aucun autre tag, inventez-en un !')"
+                :tag-placeholder="$t('add_tag')"
+                :placeholder="$t('input_word')"
+                :noOptions="$t('no_tag_create')"
                 group-values="tags"
                 group-label="label"
                 :group-select="false"
@@ -273,13 +273,13 @@ export default {
             ></vue-multiselect>
           </div>
           <div class="full">
-            <label :for="'chosen_modifier_tags_remove_'+type">{{ $t('Retirer les tags') }}</label>
+            <label :for="'chosen_modifier_tags_remove_'+type">{{ $t('remove_tag') }}</label>
             <vue-multiselect
                 :id="'chosen_modifier_tags_remove_'+type"
                 v-model="chosen_modifier_tags_remove[type]"
                 label="label"
                 track-by="code"
-                :placeholder="$t('Tapez un mot')"
+                :placeholder="$t('input_word')"
                 :showNoOptions="false"
                 group-values="tags"
                 group-label="label"
@@ -295,10 +295,10 @@ export default {
 
       <div id="summary-target" v-if="chosen_stat !== ''">
         <div>
-          <span>{{ $t('Vous allez déclencher une épreuve de') }}{{ store.stats[chosen_stat].name.toLowerCase() }}</span>
-          <span v-if="chosen_tags.length === 0">{{ $t('Pour tout le monde') }}</span>
+          <span>{{ $t('this_will_test') }}{{ store.stats[chosen_stat].name.toLowerCase() }}</span>
+          <span v-if="chosen_tags.length === 0">{{ $t('for_everyone') }}</span>
           <div v-if="chosen_tags.length > 0">
-            <span>{{ $t('Pour chaque') }}</span>
+            <span>{{ $t('for_every') }}</span>
             <span v-for="(tag, key) in chosen_tags">
             {{ (key > 0) ? ',' : '' }}
             {{ tag.label }}
@@ -308,7 +308,7 @@ export default {
 
         <template v-for="type in types">
           <div>
-            <span v-if="Object.keys(gauge_modifier[type]).length || Object.keys(stat_modifier[type]).length || chosen_modifier_tags_add[type].length || chosen_modifier_tags_remove[type].length">{{ $t('Les personnages') }}{{ type === 'success' ? $t('réussissant') : $t('échouant') }}{{ $t('obtiendront') }}</span>
+            <span v-if="Object.keys(gauge_modifier[type]).length || Object.keys(stat_modifier[type]).length || chosen_modifier_tags_add[type].length || chosen_modifier_tags_remove[type].length">{{ $t('challenge_characters') }}{{ type === 'success' ? $t('that_pass') : $t('that_fail') }}{{ $t('will_have') }}</span>
             <div class="inline">
               <span v-for="(modifier, key) in gauge_modifier[type]">
                 {{ store.gauges[key].name }} {{ modifier > 0 ? '+' + modifier : modifier }}
@@ -318,20 +318,20 @@ export default {
               </span>
             </div>
             <div class="full" v-if="chosen_modifier_tags_add[type].length > 0">
-              <span>{{ $t('Ces tags en plus') }}</span>
+              <span>{{ $t('get_following_tags') }}</span>
               <span v-for="tag in chosen_modifier_tags_add[type]">
                 {{ tag.label }}
               </span>
             </div>
             <div class="full" v-if="chosen_modifier_tags_remove[type].length > 0">
-              <span>{{ $t("Ces tags en moins (s'ils les ont)") }}</span>
+              <span>{{ $t("lose_following_tags") }}</span>
               <span v-for="tag in chosen_modifier_tags_remove[type]">
                 {{ tag.label }}
               </span>
             </div>
           </div>
         </template>
-        <button @click="startChallenge()">{{ $t("Lancer l'épreuve !") }}</button>
+        <button @click="startChallenge()">{{ $t("start_challenge") }}</button>
       </div>
     </div>
 

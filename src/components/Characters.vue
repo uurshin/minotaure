@@ -36,7 +36,7 @@
                 result.push({'game_token': character.game_token, 'character_token': character.character_token });
               }
             });
-            alert(this.$t('count_personnage_import', {count_import: result.length}));
+            alert(this.$t('count_char_import', {count_import: result.length}));
             localStorage.setItem('games_player', JSON.stringify(result));
 
             this.characters = JSON.parse(localStorage.getItem('games_player'));
@@ -45,7 +45,7 @@
           }
         }
 
-        alert(this.$t('QR code invalide'));
+        alert(this.$t('invalid_qr_code'));
         this.paused = true
         await this.timeout(500)
         this.paused = false
@@ -68,9 +68,9 @@
   <div class="small-wrapper">
     <div>{{ $t('character_help') }}</div>
     <div>{{ $t('character_nb', characters !== null ? characters.length : 0)}}</div>
-    <button v-if="characters !== null" @click="type_action = 'export'">{{ $t("Exporter vos personnages") }}</button>
-    <button @click="type_action = 'import'">{{ $t("Importer vos personnages") }}</button>
-    <button v-if="characters !== null" class='btn-danger' @click="deleteAllCharacters">{{ $t("Supprimer tous vos personnages") }}</button>
+    <button v-if="characters !== null" @click="type_action = 'export'">{{ $t("export_char") }}</button>
+    <button @click="type_action = 'import'">{{ $t("import_char") }}</button>
+    <button v-if="characters !== null" class='btn-danger' @click="deleteAllCharacters">{{ $t("delete_all_chars") }}</button>
 
     <div id="export" v-if="type_action === 'export'">
       <div class="qr-code">
