@@ -60,7 +60,7 @@ export default {
         tags: [],
         start: 'random',
         code: Math.floor((Math.random() * 10000000)),
-        label: this.$t('Groupe nb', {nb: this.store.tag_groups.length + 1})
+        label: this.$t('group_nb', {nb: this.store.tag_groups.length + 1})
       }
       this.store.tag_groups.push(group);
       this.$nextTick(() => {
@@ -95,7 +95,7 @@ export default {
     generateOptions (item) {
       let options = [];
 
-      options.push({name: this.$t('Supprimer'), effect:'remove'});
+      options.push({name: this.$t('delete'), effect:'remove'});
       options.push({ type:'divider'})
 
       if (item.stat1 === undefined) {
@@ -134,7 +134,7 @@ export default {
       }
       options.push({ type:'divider'})
 
-      options.push({name: this.$t('Changer la couleur'), effect:'color'});
+      options.push({name: this.$t('change_tag_color'), effect:'color'});
 
       return options;
     },
@@ -225,24 +225,24 @@ export default {
           >
           </color-picker>
         </div>
-        <button class="icon-add" @click="addGroupTag()">{{ $t("Ajouter un groupe de tags") }}</button>
+        <button class="icon-add" @click="addGroupTag()">{{ $t("add_groug_of_tag") }}</button>
       </div>
       <template v-for="(group, key) in store.current_game.tag_groups">
         <div class="group-tag">
           <span class="group-label">
             <input :ref="'group_name_input_'+ key" @keydown.enter="group_selected = null;" v-if="group_selected === key" type="text" v-model="store.current_game.tag_groups[key].label" />
             <button v-show="group_selected !== key" @keyup.enter="focusLabelGroup($event, key)" @click="focusLabelGroup($event, key)" class="icon-edit">{{ store.current_game.tag_groups[key].label }}</button>
-            <button v-show="group_selected === key" @click="group_selected = null">{{ $t("Terminer") }}</button>
+            <button v-show="group_selected === key" @click="group_selected = null">{{ $t("tags_submit") }}</button>
           </span>
           <div class="actions secondary">
-            <label for="creation_rule">{{ $t("Règle d'attribution") }}</label>
+            <label for="creation_rule">{{ $t("distribution_mode") }}</label>
             <select id="creation_rule" v-model="store.current_game.tag_groups[key].start">
-              <option value="random">{{ $t("Répartis aléatoirement à la création") }}</option>
-              <option value="start">{{ $t("A choisir à la création du personnage") }}</option>
-              <option value="none">{{ $t("Pas de règle") }}</option>
+              <option value="random">{{ $t("randomly_distributed_at_creation") }}</option>
+              <option value="start">{{ $t("chosen_at_char_creation") }}</option>
+              <option value="none">{{ $t("not_autodistributed") }}</option>
             </select>
-            <button @click="allocateGroupTag(group)" :title="$t('Pour chaque personnage n\'ayant pas encore de tag de ce groupe, un tag lui sera attribué au hasard')">{{ $t("Redistribuer") }}</button>
-            <button class="btn-danger" @click="removeGroupTag(key)" :title="$t('Tous les tags de ce groupe seront supprimés, et retirés des personnages')">{{ $t("Supprimer") }}</button>
+            <button @click="allocateGroupTag(group)" :title="$t('a_tag_will_be_assigned_to_char')">{{ $t("reallocate") }}</button>
+            <button class="btn-danger" @click="removeGroupTag(key)" :title="$t('delete_groupe_tags_and_remove_from_chars')">{{ $t("delete") }}</button>
           </div>
           <vue-multiselect
               :ref="'group_tag_select_' + group.code"
@@ -250,8 +250,8 @@ export default {
               v-model="store.current_game.tag_groups[key].tags"
               label="label"
               track-by="code"
-              :tag-placeholder="$t('Ajouter un tag')"
-              :placeholder="$t('Tapez un mot')"
+              :tag-placeholder="$t('add_tag')"
+              :placeholder="$t('input_word')"
               :closeOnSelect="false"
               :showNoOptions="false"
               :options="store.current_game.tag_groups[key].tags"
@@ -271,8 +271,8 @@ export default {
                   <div>
                     <span class="icon-settings hover-only"></span>
                     <span class="label-name">{{ tag.option.label }}</span>
-                    <span v-if="tag.option.stat1">{{ tag.option.stat1 !== undefined ? $t('Carac principale') + store.stats[tag.option.stat1].name : '' }}</span>
-                    <span v-if="tag.option.stat2">{{ tag.option.stat2 !== undefined ? $t('Carac secondaire') + store.stats[tag.option.stat2].name : '' }}</span>
+                    <span v-if="tag.option.stat1">{{ tag.option.stat1 !== undefined ? $t('main_stat') + store.stats[tag.option.stat1].name : '' }}</span>
+                    <span v-if="tag.option.stat2">{{ tag.option.stat2 !== undefined ? $t('secondary_stat') + store.stats[tag.option.stat2].name : '' }}</span>
                     <span v-if="tag.option.gauge_modifiers !== undefined" v-for="(modifier, key) in tag.option.gauge_modifiers">
                       {{ store.gauges[key].name }} {{ modifier.value > 0 ? '+' + modifier.value : modifier.value }}
                     </span>
