@@ -96,7 +96,7 @@ export default {
 
       let selectedCharacters
       if (this.tags_poll.length) {
-        selectedCharacters = this.store.connected_characters(true).filter((character) => vm.store.filterCharacterByTags(character, vm.tags_poll));
+        selectedCharacters = this.store.connected_characters(true).filter((character) => vm.store.filterCharacterByTagsAndPicked(character, vm.tags_poll));
       }
       else {
         selectedCharacters = this.store.connected_characters(true);
@@ -161,7 +161,7 @@ export default {
               :placeholder="$t('Choisir un tag')"
               :tagPlaceholder="$t('Choisir un tag')"
               noOptions="Tout le monde"
-              :options=store.tag_groups
+              :options=store.tag_groups_plus_targets
               :multiple="true"
               :taggable="false"
               :hideSelected="true"

@@ -129,36 +129,44 @@ export default {
           this.store.connections[connection].open === true
       )
     },
-    handleClick (event, item) {
+    handleClick(event, item) {
       this.options_contextual = this.generateOptions(item)
       this.$refs.context_character.showMenu(event, item)
     },
-    generateOptions (item) {
+    generateOptions(item) {
       let options = [];
-      options.push({ name: 'Renommer (à venir)', effect:'rename'});
-      options.push({ name: 'Supprimer (à venir)', effect:'delete'});
-      options.push({ name: 'Modifier (à venir)', effect:'edit'});
-      options.push({ name: 'Ajouter au tirage (à venir)', effect:'add'});
+      if (item.picked === undefined || !item.picked) {
+        options.push({name: this.$t('context_add_selection_character'), effect: 'toggle'});
+      } else {
+        options.push({name: this.$t('context_remove_selection_character'), effect: 'toggle'});
+      }
+      options.push({name: this.$t('context_edit_character'), effect: 'edit'});
+      options.push({name: this.$t('context_delete_character'), effect: 'delete'});
       return options;
     },
-    optionClicked (event) {
+    optionClicked(event) {
       if (event.option.effect !== undefined) {
         let character = event.item;
         switch (event.option.effect) {
           case 'rename':
             // Todo rename.
-             break;
+            break;
           case 'delete':
-            // Todo delete.
+            let foundIndex = this.store.characters.findIndex((found_character) => found_character.token === character.token);
+            this.store.characters.splice(foundIndex, 1);
             break;
           case 'edit':
             // Todo edit.
             break;
-          case 'add':
-            // Todo add.
+          case 'toggle':
+            this.toggleCharacter(character);
             break;
         }
       }
+    },
+    toggleCharacter(character) {
+      let found = this.store.characters.find((found_character) => found_character.token === character.token);
+      found.picked = !found.picked;
     }
   }
 }
@@ -201,7 +209,7 @@ export default {
         <button @click="switchFilter('dead')" :class="{active : filters.dead !== undefined}">{{ $t('Vivants') }}</button>
         <button @click="switchFilter('connected')" :class="{active : filters.connected !== undefined}">{{ $t('Connectés') }}</button>
         <button v-if="store.current_game.has_picked" @click="switchFilter('picked')" :class="{active : filters.picked !== undefined}">{{ $t('Tirés au sort') }}</button>
-        <button class='btn-valid' v-if="store.current_game.has_picked" @click="this.store.resetPickedCharacters()">{{ $t('Effacer le tirage') }}</button>
+        <button class='btn-valid' v-if="store.picked_characters !== undefined && store.picked_characters.length" @click="this.store.resetPickedCharacters()">{{ $t('reset_selection') }}</button>
         <div class="dual-button" v-if="store.last_challenge.date !== 0">
           <button @click="switchFilterChallenge('success')" class="success-button badge" :class="{active : filters.challenge !== undefined && filters.challenge === 'success'}">
             {{ $t('Réussites') }}<span>{{ store.last_challenge.nb_success }}</span>
@@ -227,8 +235,8 @@ export default {
         </div>
         <div class="summary full">{{ $t('count_personnage', {count: ds.dsResultsNumber}) }}{{ $t('sur') }}{{ store.characters.length }}</div>
         <dataset-item class="full" id="character-list">
-          <template #default="{ row, rowIndex }" >
-            <div @contextmenu.prevent.stop="handleClick($event, row)" class="character" :class="[getClasses(row), !row.alive ? 'dead' : '']">
+          <template #default="{ row, rowIndex }">
+            <div :key="row.token" @click.shift="toggleCharacter(row)" @contextmenu.prevent.stop="handleClick($event, row)" class="character" :class="[getClasses(row), !row.alive ? 'dead' : '']">
               <div class="character-names">
                 <span class="character-name">{{ row.name }}</span>
                 <span class="pseudo">{{ row.pseudo }}</span>
@@ -303,6 +311,7 @@ export default {
       background: var(--background-card-color);
       border-radius: 8px;
       color: var(--font-color);
+      user-select: none;
 
       &:not(.connected) {
         opacity: 0.6;

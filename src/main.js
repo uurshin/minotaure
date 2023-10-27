@@ -74,10 +74,10 @@ export const usePlayerStore = defineStore('playerStore', {
         current_game: (state) => state._current_game,
         characters: (state) => state._current_game.characters,
         alive_characters: (state) => state._current_game.characters.filter((character) => character.alive),
-        picked_characters: (state) => state._current_game.picked_characters.filter((character) => character.picked),
+        picked_characters: (state) => state._current_game.characters.filter((character) => character.picked),
         tag_groups: (state) => state._current_game.tag_groups,
         tag_groups_plus_targets: function(state) {
-            if (state._current_game.has_picked) {
+            if (this.picked_characters.length) {
                 let altered_group = [...state._current_game.tag_groups];
                 altered_group.unshift({code: 'targets', label: 'Tirés au sort', tags: [{code: 'targets', label: 'Tirés au sort'}]});
                 return altered_group;
@@ -385,16 +385,19 @@ export const usePlayerStore = defineStore('playerStore', {
             )
         },
         filterCharacterByTagsAndPicked(character, chosen_tags) {
-            // Todo separate UX
+            let is_picked = false;
             if (chosen_tags.findIndex((tag) => tag.code === 'targets') > -1) {
-                return (character.picked !== undefined && character.picked);
+                is_picked = (character.picked !== undefined && character.picked);
             }
-            else {
+            if (!is_picked) {
                 return(
                     character.tags.find(
                         (tag) => chosen_tags.find((chosen_tag) => chosen_tag.code === tag.code)
                     )
                 )
+            }
+            else {
+                return true;
             }
         },
         removeTagFromAll(deleted_tag) {
@@ -531,7 +534,6 @@ export const usePlayerStore = defineStore('playerStore', {
             picked_characters.forEach((character) => character.picked = true);
         },
         resetPickedCharacters() {
-            this.current_game.has_picked = false;
             this.characters.map(function (character) {
                 if (character.picked) {
                     character.picked = false;

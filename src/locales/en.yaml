@@ -122,6 +122,11 @@ Ces tags en moins (s'ils les ont): "And lose following tags (if possessed!): "
 Lancer l'épreuve !: "Start Challenge!"
 
 #AdminTabCharacters
+context_add_selection_character: "Add character to selection"
+context_remove_selection_character: "Remove character from selection"
+context_delete_character: "Delete character"
+context_edit_character: "Edit character (future feature)"
+reset_selection: "Clear selection"
 La dernière épreuve a connu un pourcentage de réussite de: "Success rate of last challenge: "
 Choisir un tag: "Select tag"
 Filtrer sur un tag: "Filter by tag"

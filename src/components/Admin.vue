@@ -207,7 +207,7 @@ export default {
           let new_character;
 
           // The player submitted a character token to retrieve a (possibly) existing character.
-          if (data.token !== undefined) {
+          if (data.token !== undefined && data.token !== null) {
             new_character = vm.store.retrieveCharacter(data.token);
             // The character exists and should be sent to the player.
             if (new_character !== undefined) {
@@ -229,6 +229,7 @@ export default {
           // New character should be created (it could be after death), send a creation form.
           if (new_character === undefined || data.reset !== undefined) {
             message.handshake = 'initCharacter';
+            message.game_token = vm.store.current_game.id;
             message.creation_form = {
               options: vm.store.getStartGroupTags()
             };

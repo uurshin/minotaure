@@ -134,6 +134,12 @@ export default {
 
           // 5. New character received, display the creation form.
           else if (data.handshake === 'initCharacter') {
+            let games = vm.getLocalGames();
+            let foundIndex = games.findIndex((element) => element.game_token === data.game_token);
+            if (foundIndex > -1) {
+              games.splice(foundIndex, 1);
+              localStorage.setItem('games_player', JSON.stringify(games));
+            }
 
             vm.gameStart = true;
             vm.freeze = false;
