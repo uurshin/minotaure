@@ -102,7 +102,6 @@ export default {
         for (const [key, stat] of Object.entries(this.store.stats)) {
           options.push({name: this.$t('linkStatToTag', {statname: stat.name}), effect:'stat1', target: key });
         }
-        options.push({ type:'divider'})
       }
       else {
         options.push({name: this.$t('unlinkStatToTag', {statname: this.store.stats[item.stat1].name}), effect:'stat1_unset', target: item.stat1 });
@@ -130,7 +129,7 @@ export default {
 
       for (const [key, stat] of Object.entries(this.store.stats)) {
         options.push({name: this.$t('bonus_stat', {name : stat.name}), effect:'bonus_stat', target: key, value: 1 });
-        options.push({name: this.$t('bonus_stat', {name : stat.name}), effect:'bonus_stat', target: key, value: -1 });
+        options.push({name: this.$t('malus_stat', {name : stat.name}), effect:'bonus_stat', target: key, value: -1 });
       }
       options.push({ type:'divider'})
 
