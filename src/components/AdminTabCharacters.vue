@@ -182,7 +182,7 @@ export default {
   <div class="tab" ref="tab">
     <div id='tab-characters-content'>
       <div class="full" v-if="this.store.last_challenge.date !== 0">
-        <span>{{ $t('La dernière épreuve a connu un pourcentage de réussite de') }}
+        <span>{{ $t('last_challenge_success_rate') }}
           <span class="result-challenge" :class="store.last_challenge.rate <= 50 ? (store.last_challenge.rate < 50 ? 'failure' : '') : 'success'">{{ store.last_challenge.rate}}%</span>
         </span>
       </div>
@@ -197,28 +197,28 @@ export default {
               group-values="tags"
               group-label="label"
               :group-select="true"
-              :placeholder="$t('Choisir un tag')"
-              :tagPlaceholder="$t('Choisir un tag')"
-              noOptions="Tout le monde"
+              :placeholder="$t('select_tag')"
+              :tagPlaceholder="$t('select_tag')"
+              :noOptions="$t('everyone')"
               :options=store.tag_groups
               :multiple="true"
               :taggable="false"
               :hideSelected="true"
           ></vue-multiselect>
         </div>
-        <button @click="switchFilter('dead')" :class="{active : filters.dead !== undefined}">{{ $t('Vivants') }}</button>
-        <button @click="switchFilter('connected')" :class="{active : filters.connected !== undefined}">{{ $t('Connectés') }}</button>
-        <button v-if="store.current_game.has_picked" @click="switchFilter('picked')" :class="{active : filters.picked !== undefined}">{{ $t('Tirés au sort') }}</button>
-        <button class='btn-valid' v-if="store.picked_characters !== undefined && store.picked_characters.length" @click="this.store.resetPickedCharacters()">{{ $t('reset_selection') }}</button>
+        <button @click="switchFilter('dead')" :class="{active : filters.dead !== undefined}">{{ $t('alive') }}</button>
+        <button @click="switchFilter('connected')" :class="{active : filters.connected !== undefined}">{{ $t('connected') }}</button>
+        <button v-if="store.current_game.has_picked" @click="switchFilter('picked')" :class="{active : filters.picked !== undefined}">{{ $t('char_picked') }}</button>
+        <button class='btn-valid' v-if="store.picked_characters !== undefined && store.picked_characters.length" @click="this.store.resetPickedCharacters()">{{ $t('clear_selection') }}</button>
         <div class="dual-button" v-if="store.last_challenge.date !== 0">
           <button @click="switchFilterChallenge('success')" class="success-button badge" :class="{active : filters.challenge !== undefined && filters.challenge === 'success'}">
-            {{ $t('Réussites') }}<span>{{ store.last_challenge.nb_success }}</span>
+            {{ $t('passed') }}<span>{{ store.last_challenge.nb_success }}</span>
           </button>
           <button @click="switchFilterChallenge('failure')" class="failure-button badge" :class="{active : filters.challenge !== undefined && filters.challenge === 'failure'}">
-            {{ $t('Échecs') }}<span>{{ store.last_challenge.nb_failure }}</span>
+            {{ $t('failed') }}<span>{{ store.last_challenge.nb_failure }}</span>
           </button>
         </div>
-        <button v-if="Object.keys(filters).length || tag_filter.length" class="reset-filters" @click="resetFilters">{{ $t('Montrer tous les personnages') }}</button>
+        <button v-if="Object.keys(filters).length || tag_filter.length" class="reset-filters" @click="resetFilters">{{ $t('show_all_characters') }}</button>
       </div>
       <dataset
           v-slot="{ ds }"
@@ -229,11 +229,11 @@ export default {
           :ds-sort-as="{ challenge: sortAsChallenge, connection: sortAsConnected }"
           ref="dataset"
       >
-        <button ref="step2" @click="store.generateCharacters(1)">{{ $t('Générer un PNJ') }}</button>
+        <button ref="step2" @click="store.generateCharacters(1)">{{ $t('spawn_npc') }}</button>
         <div class="wrapper-label">
-          <dataset-search :placeholder="$t('Rechercher un personnage')" v-model="search_character" id="search-character" :ds-search-placeholder="$t('Commencez à taper')" />
+          <dataset-search :placeholder="$t('search_character')" v-model="search_character" id="search-character" :ds-search-placeholder="$t('start_typing')" />
         </div>
-        <div class="summary full">{{ $t('count_personnage', {count: ds.dsResultsNumber}) }}{{ $t('sur') }}{{ store.characters.length }}</div>
+        <div class="summary full">{{ $t('count_personnage', {count: ds.dsResultsNumber}) }}{{ $t('characters_on') }}{{ store.characters.length }}</div>
         <dataset-item class="full" id="character-list">
           <template #default="{ row, rowIndex }">
             <div :key="row.token" @click.shift="toggleCharacter(row)" @contextmenu.prevent.stop="handleClick($event, row)" class="character" :class="[getClasses(row), !row.alive ? 'dead' : '']">
@@ -257,7 +257,7 @@ export default {
             </div>
           </template>
           <template v-slot:noDataFound>
-            <div v-if="store.characters.length > 0" class="no-found">{{ $t('Aucun personnage ne correspond à ces filtres') }}</div>
+            <div v-if="store.characters.length > 0" class="no-found">{{ $t('no_characters_to_show_try_different_filter') }}</div>
           </template>
         </dataset-item>
       </dataset>

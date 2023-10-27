@@ -243,18 +243,18 @@ export default {
   <span class="game-name" v-if="character.game_name !== undefined">{{ character.game_name }}</span>
   <div id="player-sheet" class="small-wrapper" :class="{ disabled: freeze }">
     <div class="lds-ripple"><div></div><div></div></div>
-    <div class="game-wait" v-if="!gameStart">{{ $t("En attente du démarrage de la partie") }}</div>
+    <div class="game-wait" v-if="!gameStart">{{ $t("waiting_for_game_start") }}</div>
 
     <div id="creation" class="vertical-wrapper" v-if="creation_form">
-      <label for="name">{{ $t("Nom de votre personnage") }}</label>
+      <label for="name">{{ $t("char_name") }}</label>
       <input maxlength="12" type="text" id="name" v-model="name_picked" @keyup.enter="this.$refs['pseudo'].focus()" />
-      <label for="pseudo">{{ $t("Votre pseudo (optionnel)") }}</label>
+      <label for="pseudo">{{ $t("user_name") }}</label>
       <input ref="pseudo" maxlength="12" type="text" id="pseudo" v-model="pseudo_picked" @keyup.enter="sendCharacter()" />
 
 
       <template v-for="(option, group_key) in creation_form.options">
         <div class="group-choice">
-          <label :for="'tag-group-' + group_key">{{ $t("Votre personnage est") }}</label>
+          <label :for="'tag-group-' + group_key">{{ $t("your_char") }}</label>
           <select :id="'tag-group-' + group_key" v-model="option_picked[group_key]">
             <option v-for="(value, key, index) in option.tags" :value="value.code">
               {{ value.label }}
@@ -262,7 +262,7 @@ export default {
           </select>
         </div>
       </template>
-      <button :disabled="characterIsInvalid" @click="sendCharacter()">{{ $t("Valider votre personnage") }}</button>
+      <button :disabled="characterIsInvalid" @click="sendCharacter()">{{ $t("submit_your_char") }}</button>
     </div>
 
     <div class="vertical-wrapper polls" v-else-if="activePolls">
@@ -273,7 +273,7 @@ export default {
               <input type="radio" :value="poll_key" :name="'poll_' + key" :id="'poll_' + key + '_' + poll_key" v-model="answers[key]">
               <label :for="'poll_' + key + '_' + poll_key">{{ option }}</label>
             </span>
-          <button @click="sendAnswer(key)">{{ $t("Envoyer mon choix") }}</button>
+          <button @click="sendAnswer(key)">{{ $t("send_answer") }}</button>
         </div>
       </div>
     </div>
@@ -300,7 +300,7 @@ export default {
     </div>
     <div class="vertical-wrapper" v-else>
       <span class="character-name">{{ $t('is_dead', {charname: character.name}) }}</span>
-      <button @keyup.enter="newCharacter" @click="newCharacter">{{ $t('Créer un nouveau personnage') }}</button>
+      <button @keyup.enter="newCharacter" @click="newCharacter">{{ $t('create_new_char') }}</button>
     </div>
   </div>
 </template>
