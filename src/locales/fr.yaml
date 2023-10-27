@@ -143,8 +143,8 @@ characters_on: " sur "
 no_characters_to_show_try_different_filter: "Aucun personnage ne correspond à ces filtres"
 search_character: "Rechercher un personnage"
 start_typing: "Commencez à taper"
-clear_selection: "Effacer le tirage"
-char_picked: "Tirés au sort"
+clear_selection: "Effacer la sélection"
+char_picked: "Sélectionnés"
 
 #AdminTabTags
 group_nb: "Groupe {nb}"
