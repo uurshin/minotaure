@@ -648,6 +648,14 @@ export default {
     }
   }
 
+  .vue-simple-context-menu {
+    font-size: 14px;
+
+    li {
+      padding-top: 0;
+    }
+  }
+
   @keyframes color {
     0% {
       background-color: var(--success-background);

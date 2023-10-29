@@ -138,6 +138,11 @@ export default {
 
       options.push({name: this.$t('change_tag_color'), effect:'color'});
 
+      if (item.probability !== undefined && item.probability > 1) {
+        options.push({name: this.$t('substract_probability'), effect:'substract_probability'});
+      }
+      options.push({name: this.$t('add_probability'), effect:'add_probability'});
+
       return options;
     },
     optionClicked (event) {
@@ -200,21 +205,16 @@ export default {
               this.$refs.color_picker.$el.focus()
             });
             break;
-          case 'factor_probability':
+          case 'add_probability':
             if (tag.probability === undefined) {
               tag.probability = 2;
             }
             else {
-              tag.probability *= 2;
+              tag.probability += 1;
             }
             break;
-          case 'divide_probability':
-            if (tag.probability === undefined || tag.probability / 2 < 1) {
-              tag.probability = 1;
-            }
-            else {
-              tag.probability /= 2;
-            }
+          case 'substract_probability':
+            tag.probability -= 1;
             break;
         }
       }
@@ -256,6 +256,7 @@ export default {
             <label for="creation_rule">{{ $t("distribution_mode") }}</label>
             <select id="creation_rule" v-model="store.current_game.tag_groups[key].start">
               <option value="random">{{ $t("randomly_distributed_at_creation") }}</option>
+              <option value="balanced">{{ $t("equaly_distributed_at_creation") }}</option>
               <option value="start">{{ $t("chosen_at_char_creation") }}</option>
               <option value="none">{{ $t("not_autodistributed") }}</option>
             </select>
@@ -298,6 +299,7 @@ export default {
                     <span v-if="tag.option.stat_modifiers !== undefined" v-for="(modifier, key) in tag.option.stat_modifiers">
                       {{ store.stats[key].name }} {{ modifier.value > 0 ? '+' + modifier.value : modifier.value }}
                     </span>
+                    <span>{{ tag.option.probability ?? 1 }} chance sur {{ store.current_game.tag_groups[key].picking_array.length }}</span>
                   </div>
                 </div>
             </template>
@@ -430,7 +432,6 @@ export default {
     left: 0;
     right: 0;
     width: 100vw;
-    height: 100vh;
     height: 100vh;
     display: none;
     opacity: 0;
