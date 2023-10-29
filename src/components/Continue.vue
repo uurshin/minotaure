@@ -194,7 +194,7 @@ export default {
     display: grid;
     grid-template-columns: 1fr 1fr 2fr;
     align-items: center;
-    gap: 60px;
+    gap: 20px 60px;
     text-align: left;
     background: var(--background-card-color);
     border-radius: 10px;

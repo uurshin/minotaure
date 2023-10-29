@@ -160,7 +160,18 @@ export const usePlayerStore = defineStore('playerStore', {
                 color: [this.current_game.current_basic_color, 100, 40 + Math.floor(Math.random() * 40)],
                 group: group.code
             }
+
+            // Now we fill the array used for picking the next new character tags.
+            // These two steps make the new tag being picked as probable as for any tag never picked yet.
+            // 1. For each tag already in the group, add an instance of the matching tag code.
+            group.tags.forEach((tag_from_group) => group.picking_array.push(tag_from_group.code));
+
+            // 2. For each tag already in the group, add one instance of the new tag code.
             group.tags.push(tag);
+            for(let i = 0; i < group.tags.length; i++) {
+                group.picking_array.push(tag.code);
+            }
+
             // Refresh the css rules to display the color fo the new tag.
             this.generateCss();
             return tag;
@@ -250,10 +261,13 @@ export const usePlayerStore = defineStore('playerStore', {
                     }
                 });
             }
-
+            
+            // Choose one tag for each random tag group.
             this.getRandomGroupTags().forEach(function(group_tags) {
-                let choice = group_tags.tags[Math.floor(Math.random() * group_tags.tags.length)];
-                tags.push(choice);
+                // Choose a tag at random in the pool of tag codes.
+                if (group_tags.picking_array.length > 0) {
+                    tags.push(vm.getRandomTagFromGroup(group_tags));
+                }
             })
 
             let character = {
@@ -399,6 +413,27 @@ export const usePlayerStore = defineStore('playerStore', {
             else {
                 return true;
             }
+        },
+        getRandomTagFromGroup(group) {
+            // Remove an instance of this tag code from the pool so that it's now less probable to pick.
+            let choice_index = group.picking_array.splice(Math.floor(Math.random() * group.picking_array.length), 1);
+            // Add the tag to the selected array of tags selected for the new characters.
+            let chosen_tag = group.tags.find((tag) => tag.code === choice_index[0]);
+            // Refill the pool with one instance of the selected tag code if there's no more instance of it.
+            let remaining = group.picking_array.filter((code) => code === chosen_tag.code);
+            if (remaining.length < (chosen_tag.probability ?? 1)) {
+                group.picking_array.push(choice_index[0]);
+                console.log('filling remaining');
+            }
+            if (group.picking_array.length === group.tags.length) {
+                group.tags.forEach(function(tag) {
+                    for (let i = 0; i < tag.probability ?? 1; i++) {
+                        group.picking_array.push(tag.code);
+                    }
+                })
+            }
+
+            return chosen_tag;
         },
         removeTagFromAll(deleted_tag) {
             this.characters.forEach(function(character) {

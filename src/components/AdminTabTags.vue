@@ -52,12 +52,14 @@ export default {
       let tagIndex = this.store.tag_groups[groupIndex].tags.findIndex((search_tag) => search_tag.code === tag.code);
       if (tagIndex > -1) {
         this.store.tag_groups[groupIndex].tags.splice(tagIndex, 1);
+        this.store.tag_groups[groupIndex].picking_array = this.store.tag_groups[groupIndex].picking_array.filter((code) => code !== tag.code);
       }
       this.store.generateCss();
     },
     addGroupTag: function() {
       let group = {
         tags: [],
+        picking_array: [],
         start: 'random',
         code: Math.floor((Math.random() * 10000000)),
         label: this.$t('group_nb', {nb: this.store.tag_groups.length + 1})
@@ -73,11 +75,12 @@ export default {
       this.store.generateCss();
     },
     allocateGroupTag: function(group) {
-      let store = this.store;
+      const vm = this;
       this.store.characters.forEach(function(character) {
+        // Check if the character already has a tag from this group.
         let found = character.tags.findIndex((tag) => tag.group === group.code);
         if (found === -1) {
-          character.tags.push(group.tags[Math.floor(Math.random() * group.tags.length)]);
+          character.tags.push(vm.store.getRandomTagFromGroup(group));
         }
       })
     },
@@ -197,6 +200,22 @@ export default {
               this.$refs.color_picker.$el.focus()
             });
             break;
+          case 'factor_probability':
+            if (tag.probability === undefined) {
+              tag.probability = 2;
+            }
+            else {
+              tag.probability *= 2;
+            }
+            break;
+          case 'divide_probability':
+            if (tag.probability === undefined || tag.probability / 2 < 1) {
+              tag.probability = 1;
+            }
+            else {
+              tag.probability /= 2;
+            }
+            break;
         }
       }
     }
@@ -243,6 +262,7 @@ export default {
             <button @click="allocateGroupTag(group)" :title="$t('a_tag_will_be_assigned_to_char')">{{ $t("reallocate") }}</button>
             <button class="btn-danger" @click="removeGroupTag(key)" :title="$t('delete_groupe_tags_and_remove_from_chars')">{{ $t("delete") }}</button>
           </div>
+          <span v-for="code in group.picking_array">{{ code }},</span>
           <vue-multiselect
               :ref="'group_tag_select_' + group.code"
               :id="'tag_'+key"
