@@ -90,12 +90,12 @@ export default {
         this.$refs['group_name_input_' + key][0].focus();
       });
     },
-    handleClick (event, item) {
-      this.options_contextual = this.generateOptions(item)
+    handleClick (event, item, group) {
+      this.options_contextual = this.generateOptions(item, group)
       this.$refs.context_menu_tags.showMenu(event, item)
       this.$refs.context_menu_tags.$el.focus();
     },
-    generateOptions (item) {
+    generateOptions (item, group) {
       let options = [];
 
       options.push({name: this.$t('delete'), effect:'remove'});
@@ -139,10 +139,9 @@ export default {
       options.push({name: this.$t('change_tag_color'), effect:'color'});
 
       if (item.probability !== undefined && item.probability > 1) {
-        options.push({name: this.$t('substract_probability'), effect:'substract_probability'});
+        options.push({name: this.$t('decrease_probability'), effect:'decrease_probability', group: group});
       }
-      options.push({name: this.$t('add_probability'), effect:'add_probability'});
-
+      options.push({name: this.$t('increase_probability'), effect:'increase_probability', group: group});
       return options;
     },
     optionClicked (event) {
@@ -205,16 +204,21 @@ export default {
               this.$refs.color_picker.$el.focus()
             });
             break;
-          case 'add_probability':
+          case 'increase_probability':
             if (tag.probability === undefined) {
               tag.probability = 2;
             }
             else {
               tag.probability += 1;
             }
+            event.option.group.picking_array.push(tag.code);
             break;
-          case 'substract_probability':
+          case 'decrease_probability':
             tag.probability -= 1;
+            let index = event.option.group.picking_array.findIndex((code) => code === tag.code);
+            if (index > -1) {
+              event.option.group.picking_array.splice(index, 1);
+            }
             break;
         }
       }
@@ -256,7 +260,7 @@ export default {
             <label for="creation_rule">{{ $t("distribution_mode") }}</label>
             <select id="creation_rule" v-model="store.current_game.tag_groups[key].start">
               <option value="random">{{ $t("randomly_distributed_at_creation") }}</option>
-              <option value="balanced">{{ $t("equaly_distributed_at_creation") }}</option>
+              <option value="equitable">{{ $t("equitably_distributed_at_creation") }}</option>
               <option value="start">{{ $t("chosen_at_char_creation") }}</option>
               <option value="none">{{ $t("not_autodistributed") }}</option>
             </select>
@@ -286,7 +290,7 @@ export default {
                 <div
                     class="multiselect__tag"
                     :class="'tag tag-' + tag.option.code"
-                    tabindex="0" @keyup.enter="handleClick($event, tag.option)" @click.prevent.stop="handleClick($event, tag.option)" title="Paramétrer ce tag"
+                    tabindex="0" @keyup.enter="handleClick($event, tag.option, group)" @click.prevent.stop="handleClick($event, tag.option, group)" title="Paramétrer ce tag"
                     >
                   <div>
                     <span class="icon-settings hover-only"></span>
@@ -299,7 +303,8 @@ export default {
                     <span v-if="tag.option.stat_modifiers !== undefined" v-for="(modifier, key) in tag.option.stat_modifiers">
                       {{ store.stats[key].name }} {{ modifier.value > 0 ? '+' + modifier.value : modifier.value }}
                     </span>
-                    <span>{{ tag.option.probability ?? 1 }} chance sur {{ store.current_game.tag_groups[key].picking_array.length }}</span>
+                    <span v-if="group.start === 'random'">{{ $t('tag_probability', {nb: tag.option.probability ?? 1, total: store.current_game.tag_groups[key].picking_array.length }) }}</span>
+                    <span v-if="group.start === 'equitable'">{{ $t('tag_nb_copies', {nb: tag.option.probability ?? 1}) }}</span>
                   </div>
                 </div>
             </template>
