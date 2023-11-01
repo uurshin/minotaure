@@ -91,6 +91,7 @@ export default {
           code: 'freetag',
           tags: [],
           start: 'none',
+          picking_array: []
         };
         this.store.tag_groups.push(group);
       }
