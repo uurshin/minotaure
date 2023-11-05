@@ -18,7 +18,6 @@ export default {
      * - group_finish (this step ends the tour if a single tab visit was triggered). Optional.
      * - finish (this step ends the whole tour). Optional.
      */
-
     const steps = [
       {id: 'step_help'},
       {id: 'step_invite'},
@@ -35,39 +34,38 @@ export default {
       {parent: 'settings', id: 'step_settings_stat_delete', group_finish: true},
       {id: 'tab_label_tags', goto: 'tags'},
       {parent: 'tags', id: 'step_tags'},
-      {parent: 'tags', id: 'step_tags_group_add',
+      {
+        parent: 'tags', id: 'step_tags_group_add',
         beforeShow: function () {
-          return new Promise(function (resolve) {
-            let groups = vm.store.getGroupTags();
-            if (groups.length === 0) {
-              vm.store.addGroupTag();
-            }
-            resolve();
-          });
-        }},
-      {parent: 'tags', id: 'step_tags_group_rename'},
-      {parent: 'tags', id: 'step_tags_group',
+            return new Promise(function (resolve) {
+              let groups = vm.store.getGroupTags();
+              if (groups.length === 0) {
+                vm.store.addGroupTag();
+              }
+              resolve();
+            });
+        }
+      },
+      {
+        parent: 'tags', id: 'step_tags_group',
         beforeShow: function () {
           return new Promise(function (resolve) {
             let groups = vm.store.getGroupTags();
             let group;
             if (groups.length === 0) {
               group = vm.store.addGroupTag();
-            }
-            else {
+            } else {
               group = groups[0];
             }
             if (groups[0].tags.length === 0) {
               vm.store.addTag('Exemple de tag', group);
             }
-            let already_added = vm.added_steps.findIndex((added_step) => added_step === 'step_tags_tag');
-            if (already_added === -1) {
-              vm.addStep({parent: 'tags', id: 'step_tags_tag'}, steps.findIndex((step) => step.id === 'step_tags_group') + 1);
-              vm.added_steps.push('step_tags_tag');
-            }
             resolve();
           });
-        }},
+        }
+      },
+      {parent: 'tags', id: 'step_tags_tag'},
+      {parent: 'tags', id: 'step_tags_group_rename'},
       {parent: 'tags', id: 'step_tags_group_distribution'},
       {parent: 'tags', id: 'step_tags_group_distribute'},
       {parent: 'tags', id: 'step_tags_group_shuffle'},
@@ -124,7 +122,7 @@ export default {
                 return vm.$t('see_page_tutorial');
               },
               action: function() {
-                let step = vm.steps.findIndex((step) => step.parent === vm.$parent.current_tab);
+                let step = vm.steps.findIndex((step) => step.id === 'tab_label_' + vm.$parent.current_tab);
                 vm.tab_tuto_enabled = true;
                 return vm.tour.show(step);
               },
@@ -156,13 +154,6 @@ export default {
     },
     addStep(step, index = undefined) {
       const vm = this;
-      let element;
-      if (step.parent !== undefined) {
-        element = vm.$parent.$refs['admin_tab_' + step.parent].$refs[step.id];
-      }
-      else {
-        element = vm.$parent.$refs[step.id];
-      }
 
       let new_step = {
         arrow: step.arrow ?? true,
@@ -174,25 +165,31 @@ export default {
         new_step.beforeShowPromise = step.beforeShow;
       }
 
-      if (element !== undefined) {
-        new_step.attachTo = {
-          element: function () {
-            if (step.parent !== undefined) {
-              vm.$parent.changeTab(step.parent);
-            }
-            else if (step.goto !== undefined) {
-              vm.$parent.changeTab(step.goto);
-            }
-            return element.classList ? element : element[0];
-          },
-          on: step.placement ?? 'top',
-          showOn: function() {
-            return element === null;
-          },
-        }
+      new_step.attachTo = {
+        element: function () {
+          if (step.parent !== undefined) {
+            vm.$parent.changeTab(step.parent);
+          }
+          else if (step.goto !== undefined) {
+            vm.$parent.changeTab(step.goto);
+          }
+          let element;
+          if (step.parent !== undefined) {
+            element = vm.$parent.$refs['admin_tab_' + step.parent].$refs[step.id];
+          }
+          else {
+            element = vm.$parent.$refs[step.id];
+          }
 
-        vm.tour.addStep(new_step, index);
+          return element.classList ? element : element[0];
+        },
+        on: step.placement ?? 'top',
+        showOn: function() {
+          return element !== null;
+        },
       }
+
+      vm.tour.addStep(new_step, index);
     }
   }
 }

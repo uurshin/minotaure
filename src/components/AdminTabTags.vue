@@ -261,7 +261,7 @@ export default {
         </div>
         <button ref="step_tags_group_add" class="icon-add" @click="addGroupTag()">{{ $t("add_groug_of_tag") }}</button>
       </div>
-      <template v-for="(group, key) in store.current_game.tag_groups">
+      <template v-for="(group, key) in store.getGroupTags()">
         <div class="group-tag" :ref="key === 0 ? 'step_tags_group' : null">
           <span class="group-label">
             <input :ref="'group_name_input_'+ key" @keydown.enter="group_selected = null;" v-if="group_selected === key" type="text" v-model="store.current_game.tag_groups[key].label"/>

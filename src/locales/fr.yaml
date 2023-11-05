@@ -67,8 +67,11 @@ turnout: "Participation : "
 other_tags: "Divers"
 
 #AdminTabIntro
-minotaure_welcome: "Bienvenue dans Minotaure."
-tutorial_help: "Vous pouvez démarrer le didacticiel à tout moment en cliquant sur le bouton d'aide."
+minotaure_welcome: "Bienvenue dans Minotaure"
+tutorial_help_1: "Vous pouvez démarrer le didacticiel à tout moment en cliquant sur le bouton <strong class='icon-question'>Aide</strong> (le didacticiel complet sera disponible dans une version future)."
+tutorial_help_2: "Avant de démarrer votre partie, vous pouvez modifier les <strong>paramètres</strong> et les <strong>tags</strong> dans les onglets correspondants."
+tutorial_help_3: "Vous pouvez dès maintenant inviter vos joueurs dans la partie en cliquant sur le bouton <strong class='icon-email'>Invitation à jouer</strong>."
+tutorial_help_4: "Tant que vous n'aurez pas cliqué sur <strong class='icon-play'>Démarrer</strong>, ils seront en salle d'attente."
 
 #AdminTour
 next: "Suivant"
@@ -104,7 +107,7 @@ tab_label_tags:
   "Les tags sont des étiquettes attribuées aux personnages et font la grande force de Minotaure.<br>"
 step_tags:
   "Chaque tag fait partie d'un groupe de tag, qui peut être nommé (exemple: métiers, genre, peuple, avantages, défauts, etc.).
-  Un tag peut facilement être considéré comme une classe de personnage, mais est suffisamment polyvalent pour permettre d'autres utilisations."
+  Un tag peut servir comme une classe de personnage, mais est suffisamment polyvalent pour permettre d'autres utilisations."
 step_tags_group_add:
   "Vous pouvez ajouter autant de groupes de tags que vous le souhaitez"
 step_tags_group:
@@ -127,10 +130,10 @@ step_tags_tag:
   "Chaque tag peut influer sur les jauges et les caractéristiques d'un personnage à sa création. En cliquant sur un tag, vous pouvez:
     <ul>
     <li>- lui associer une <strong>caractéristique principale</strong>. Si un personnage obtient ce tag à la création, ce sera automatiquement sa plus forte caractéristique. Exemple: un tag \"magicien\" pourrait avoir la caractéristique principale \"Magie\".</li>
-    <li>- lui associer une strong>caractéristique secondaire</strong>. Si un personnage obtient ce tag à la création, ce sera automatiquement sa deuxième plus forte caractéristique.</li>
+    <li>- lui associer une <strong>caractéristique secondaire</strong>. Si un personnage obtient ce tag à la création, ce sera automatiquement sa deuxième plus forte caractéristique.</li>
     <li>- lui associer des <strong>bonus</strong> et des <strong>malus</strong> qui viennent modifier le tirage des caractéristiques de départ, ou la valeur de départ de certaines jauges.</li>
-    <li>- augmenter ou diminuer sa probabilité d'attribution aléatoire.</li>
-    <li>- changer sa couleur</li>
+    <li>- augmenter ou diminuer sa <strong>probabilité</strong> d'attribution aléatoire.</li>
+    <li>- changer sa <strong>couleur</strong></li>
     </ul>"
 step_tags_group_delete:
   "Vous pouvez supprimer un groupe de tags à tout moment. Cela supprimera les tags correspondants pour les personnages."

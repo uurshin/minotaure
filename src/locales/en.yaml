@@ -67,8 +67,11 @@ turnout: "Turnout: "
 other_tags: "Miscellaneous"
 
 #AdminTabIntro
-minotaure_welcome: "Welcome to Minotaure."
-tutorial_help: "You may begin the tutorial by clicking on the help button."
+minotaure_welcome: "Welcome to Minotaure"
+tutorial_help_1: "You may begin the tutorial by clicking on the <strong class='icon-question'>Help</strong> button (a full tutorial will be available in a future version)"
+tutorial_help_2: "Before starting your game, you can modify the <strong>settings</strong> and <strong>tags</strong> in their respective tabs."
+tutorial_help_3: "You can invite your players to the game right away by clicking on <strong class='icon-email'>Invite to play</strong> button."
+tutorial_help_4: "Until you click on <strong class='icon-play'>Start</strong>, they will be in the waiting room."
 
 #AdminTour
 next: "Next"
@@ -101,7 +104,7 @@ step_settings_stat_delete: "You can delete a stat at any time."
 tab_label_tags:
   "Tags are labels assigned to characters and are a great strength of Minotaure.<br>"
 step_tags:
-  "Each tag belongs to a tag group, which can be named (e.g., professions, gender, race, advantages, flaws, etc.). A tag can easily be considered as a character class, but it's versatile enough for other uses."
+  "Each tag belongs to a tag group, which can be named (e.g., professions, gender, race, advantages, flaws, etc.). A tag can be used for a character class, but it's versatile enough for other uses."
 step_tags_group_add: "You can add as many tag groups as you want."
 step_tags_group:
   "Start typing text and confirm to create a tag. A color will be associated with it."
@@ -122,8 +125,8 @@ step_tags_tag:
   <li>- associate it with a <strong>main stat</strong>. If a character gets this tag at creation, it will automatically be their strongest stat. For example, a \"wizard\" tag could have the main stat \"Magic.\"</li>
   <li>- associate it with a <strong>secondary stat</strong>. If a character gets this tag at creation, it will automatically be their second-strongest stat.</li>
   <li>- associate it with <strong>bonuses</strong> and <strong>penalties</strong> that modify the initial stats roll or the starting value of certain bars.</li>
-  <li>- increase or decrease its random attribution probability.</li>
-  <li>- change its color.</li>
+  <li>- increase or decrease its random attribution <strong>probability</strong>.</li>
+  <li>- change its <strong>color</strong>.</li>
   </ul>"
 step_tags_group_delete: "You can delete a tag group at any time. This will remove the corresponding tags for the characters."
 tab_label_characters: "This is the tab you will use most during the game: it presents all created characters and summarizes their properties (character name, player's pseudonym, bats, stats, tags, etc.). You can search for characters based on various criteria."
