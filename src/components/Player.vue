@@ -81,7 +81,8 @@ export default {
       console.log(this.store.peer.id);
 
       this.store.connection.send({
-        handshake: 'readyForCall'
+        handshake: 'readyForCall',
+        version: APP_VERSION
       });
 
       console.log('Minotaure : ready for transaction');
@@ -107,6 +108,13 @@ export default {
 
         if (data.handshake !== undefined) {
           console.log(data.handshake);
+
+          // Host and player versions are not compatible.
+          if (data.handshake === 'versionError') {
+            vm.store.setShouldReconnect(-1);
+            vm.store.connection.close();
+            vm.store.setMessage('Version incompatible');
+          }
 
           // The host disconnected manually and tells the player what a disconnect will soon arrive.
           if (data.handshake === 'disconnectGracefully') {

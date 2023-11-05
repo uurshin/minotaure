@@ -3,7 +3,7 @@ import { usePlayerStore } from '../main';
 import VueMultiselect from 'vue-multiselect'
 import {Dataset, DatasetItem, DatasetSearch, DatasetInfo, DatasetShow} from "vue-dataset";
 import VueSimpleContextMenu from 'vue-simple-context-menu';
-
+import { ref } from 'vue';
 
 export default {
   components: {
@@ -15,6 +15,12 @@ export default {
     DatasetShow,
     VueSimpleContextMenu
   },
+  setup() {
+    const card_centered = ref(null)
+    return {
+      card_centered
+    };
+  },
   data() {
     const store = usePlayerStore();
 
@@ -23,7 +29,8 @@ export default {
       tag_filter: [],
       search_character: '',
       filters: {},
-      options_contextual: [{}]
+      options_contextual: [{}],
+
     }
   },
   mounted() {
@@ -167,6 +174,33 @@ export default {
     toggleCharacter(character) {
       let found = this.store.characters.find((found_character) => found_character.token === character.token);
       found.picked = !found.picked;
+    },
+    selectVisible(ds) {
+      ds.dsRows.forEach((row) => ds.dsData[row].picked = true);
+    },
+    animateToCenter(id) {
+      let expand = false;
+      if (this.card_centered !== this.$refs[id]) {
+        expand = true;
+      }
+      if (this.card_centered !== null) {
+        this.card_centered.style.transform = null;
+        this.card_centered.classList.remove('centered');
+        this.card_centered = null;
+      }
+      if (expand) {
+        this.card_centered = this.$refs[id];
+        var rect = this.$refs[id].getBoundingClientRect();
+        let scale = 3;
+        // For bigger screens, the expanded card can take more space.
+        if (window.screen.availHeight > 1000) {
+          scale = 4;
+        }
+        let diffX = (window.innerWidth / 2) - rect.left - this.$refs[id].offsetWidth * scale / 2;
+        let diffY = (window.innerHeight / 2) - rect.top - this.$refs[id].offsetHeight * scale / 2;
+        this.$refs[id].style.transform = 'translate(' + diffX + 'px ,' + diffY + 'px) scale3D(' + scale + ',' + scale + ',' + scale + ')';
+        this.$refs[id].classList.add('centered');
+      }
     }
   }
 }
@@ -179,7 +213,7 @@ export default {
       ref="context_character"
       @option-clicked="optionClicked"
   />
-  <div class="tab" ref="tab">
+  <div :style="cssVars" class="tab" ref="tab">
     <div id='tab-characters-content'>
       <div class="full" v-if="this.store.last_challenge.date !== 0">
         <span>{{ $t('last_challenge_success_rate') }}
@@ -209,7 +243,6 @@ export default {
         <button @click="switchFilter('dead')" :class="{active : filters.dead !== undefined}">{{ $t('alive') }}</button>
         <button @click="switchFilter('connected')" :class="{active : filters.connected !== undefined}">{{ $t('connected') }}</button>
         <button v-if="store.current_game.has_picked" @click="switchFilter('picked')" :class="{active : filters.picked !== undefined}">{{ $t('char_picked') }}</button>
-        <button class='btn-valid' v-if="store.picked_characters !== undefined && store.picked_characters.length" @click="this.store.resetPickedCharacters()">{{ $t('clear_selection') }}</button>
         <div class="dual-button" v-if="store.last_challenge.date !== 0">
           <button @click="switchFilterChallenge('success')" class="success-button badge" :class="{active : filters.challenge !== undefined && filters.challenge === 'success'}">
             {{ $t('passed') }}<span>{{ store.last_challenge.nb_success }}</span>
@@ -219,6 +252,7 @@ export default {
           </button>
         </div>
         <button v-if="Object.keys(filters).length || tag_filter.length" class="reset-filters" @click="resetFilters">{{ $t('show_all_characters') }}</button>
+        <button class='btn-valid clear-selection' v-if="store.picked_characters !== undefined && store.picked_characters.length" @click="this.store.resetPickedCharacters()">{{ $t('clear_selection') }}</button>
       </div>
       <dataset
           v-slot="{ ds }"
@@ -229,14 +263,15 @@ export default {
           :ds-sort-as="{ challenge: sortAsChallenge, connection: sortAsConnected }"
           ref="dataset"
       >
-        <button ref="step2" @click="store.generateCharacters(1)">{{ $t('spawn_npc') }}</button>
+        <button @click="this.selectVisible(ds)">{{ $t('add_all_to_selection') }}</button>
+        <button ref="step_characters_1" @click="store.generateCharacters(1)">{{ $t('spawn_npc') }}</button>
         <div class="wrapper-label">
           <dataset-search :placeholder="$t('search_character')" v-model="search_character" id="search-character" :ds-search-placeholder="$t('start_typing')" />
         </div>
         <div class="summary full">{{ $t('count_personnage', {count: ds.dsResultsNumber}) }}{{ $t('characters_on') }}{{ store.characters.length }}</div>
         <dataset-item class="full" id="character-list">
           <template #default="{ row, rowIndex }">
-            <div :key="row.token" @click.shift="toggleCharacter(row)" @contextmenu.prevent.stop="handleClick($event, row)" class="character" :class="[getClasses(row), !row.alive ? 'dead' : '']">
+            <div @click="animateToCenter(row.token)" :ref="row.token" :key="row.token" @click.shift="toggleCharacter(row)" @contextmenu.prevent.stop="handleClick($event, row)" class="character" :class="[getClasses(row), !row.alive ? 'dead' : '']">
               <div class="character-names">
                 <span class="character-name">{{ row.name }}</span>
                 <span class="pseudo">{{ row.pseudo }}</span>
@@ -312,7 +347,13 @@ export default {
       border-radius: 8px;
       color: var(--font-color);
       user-select: none;
+      transition: scale 1s ease, transform 1s ease, opacity 1s ease-in-out;
+      transform-origin: top left;
 
+      &.centered {
+        opacity: 1 !important;
+        z-index: 100;
+      }
       &:not(.connected) {
         opacity: 0.6;
       }
@@ -365,20 +406,20 @@ export default {
     }
   }
 
+  .clear-selection {
+    margin-left: auto;
+  }
+
   .filter-data {
     display: flex;
+    flex: 1;
     gap: 15px;
     flex-direction: row;
     align-items: flex-end;
-    margin-right: auto;
 
     > div {
       display: flex;
       flex-direction: column;
-    }
-
-    .reset-filters {
-      margin-left: auto;
     }
   }
 

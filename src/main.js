@@ -44,7 +44,7 @@ app.use(i18n)
 app.use(createPinia())
 app.use(router)
 
-window.vm = app.mount('#app')
+window.vm = app.mount('#app');
 
 export const usePlayerStore = defineStore('playerStore', {
     state: () => ({
@@ -79,7 +79,7 @@ export const usePlayerStore = defineStore('playerStore', {
         tag_groups_plus_targets: function(state) {
             if (this.picked_characters.length) {
                 let altered_group = [...state._current_game.tag_groups];
-                altered_group.unshift({code: 'targets', label: 'Tirés au sort', tags: [{code: 'targets', label: 'Tirés au sort'}]});
+                altered_group.unshift({code: 'targets', label: i18n.global.t('selected'), tags: [{code: 'targets', label: i18n.global.t('selected')}]});
                 return altered_group;
             }
             else {
@@ -168,11 +168,25 @@ export const usePlayerStore = defineStore('playerStore', {
             this.generateCss();
             return tag;
         },
+        addGroupTag(freetag = false) {
+            let group = {
+                tags: [],
+                picking_array: [],
+                label: freetag ? i18n.global.t('other_tags') : i18n.global.t('group_nb', {nb: this.tag_groups.length + 1})
+            }
+            group.code = freetag ? 'freetag' : Math.floor(Math.random() * 10000000);
+            group.start =  freetag ? 'none' : 'random';
+            this.tag_groups.push(group);
+            return group;
+        },
         generateCss() {
             let game_css = document.getElementById('game_css');
             let css_str = '';
             this.tags.forEach((tag) => css_str += '.tag-' + tag.code + ' .label-name:before { background-color:hsl(' + tag.color[0] + ',' + tag.color[1] + '%' + ',' + tag.color[2] + '%)' + ' !important} ');
             game_css.innerHTML = css_str;
+        },
+        getGroupTags() {
+            return this.tag_groups;
         },
         getStartGroupTags() {
             return this.tag_groups.filter((group) => group.start === 'start' && group.tags.length > 0);
@@ -253,7 +267,13 @@ export const usePlayerStore = defineStore('playerStore', {
                     }
                 });
             }
-            
+
+            if (data === null) {
+                this.getStartGroupTags().forEach(function(group) {
+                    tags.push(vm.getRandomTagFromGroup(group));
+                })
+            }
+
             // Choose one tag for each random tag group.
             this.getRandomGroupTags().forEach(function(group) {
                 tags.push(vm.getRandomTagFromGroup(group));

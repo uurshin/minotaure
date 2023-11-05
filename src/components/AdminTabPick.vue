@@ -148,15 +148,10 @@ export default {
     addTag(tag_label, type) {
       let group = this.store.tag_groups.find((element) => (element.code === 'freetag'));
       if (group === undefined) {
-        group = {
-          label: this.$t('challenge_tags'),
-          code: 'freetag',
-          tags: [],
-          start: 'none',
-        };
-        this.store.tag_groups.push(group);
+        group = this.store.addGroupTag(true);
       }
       let tag = this.store.addTag(tag_label, group);
+      group.picking_array.push(tag.code);
       this.chosen_modifier_pick_add.push(tag);
     },
   }
@@ -167,7 +162,7 @@ export default {
   <div class="tab" ref="tab">
     <div id='tab-pick-content'>
       <div class="vertical-wrapper">
-        <input type="number" v-model="nb_targets" min="1">
+        <input ref="step_pick_1" type="number" v-model="nb_targets" min="1">
         <select v-model="type_pick">
           <option value="one">{{ $t('admin_pick_one') }}</option>
           <option value="all">{{ $t('admin_pick_all') }}</option>

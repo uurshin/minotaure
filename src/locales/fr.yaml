@@ -29,6 +29,7 @@ mind: "Mental"
 health: "Vie"
 will: "Volonté"
 game_rename: "Renommer la partie"
+selected: "Sélectionnés"
 
 #Continue
 continue_game: "Continuer - {name}"
@@ -63,7 +64,7 @@ close_poll: "Terminer le sondage"
 nb_choice: "Choix {choice}"
 choice_gives_tag: "Ce choix donnera le tag suivant"
 turnout: "Participation : "
-challenge_tags: "Tags des épreuves"
+other_tags: "Divers"
 
 #AdminTabIntro
 minotaure_welcome: "Bienvenue dans Minotaure."
@@ -72,6 +73,75 @@ tutorial_help: "Vous pouvez démarrer le didacticiel à tout moment en cliquant 
 #AdminTour
 next: "Suivant"
 end_tour: "Terminer la visite"
+end_tab_tour: "Terminer la visite de cet onglet"
+step_help: "Souhaitez-vous suivre la visite complète ou obtenir uniquement l'aide pour cet onglet ?"
+see_all_tutorial: "Visite complète"
+see_page_tutorial: "Visite de cet onglet"
+step_invite: "En cliquant sur ce bouton un lien d'invitation sera copié et vous permettra d'inviter à rejoindre à votre partie."
+step_start: "Tant que vous ne cliquez pas sur ce bouton, vos invités patienteront sur un écran d'attente."
+tab_label_settings: "Les paramètres sont les réglages de la partie que nous vous conseillons de modifier avant son démarrage, mais que vous pourrez toujours changer en cours de partie."
+step_settings_gauges:
+  "Les jauges sont des réserves de points pour chaque personnage. Quand vous créez une partie, deux jauges sont créées par défaut : vie et volonté."
+step_settings_add_gauge: "Vous pouvez ajouter autant de jauge que vous le souhaitez."
+step_settings_gauge:
+  "Tous les personnages possèdent ces jauges à leur création, avec un nombre de points de départ que 
+  vous pouvez modifier."
+step_settings_gauge_delete:
+  "Vous pouvez supprimer une jauge à tout moment."
+step_settings_gauge_make_deadly:
+  "Vous pouvez faire en sorte que le passage d'une jauge à un score de 0 entraine la mort d'un personnage en cliquant 
+  sur ce bouton (cette action est réversible mais les personnages déjà morts ne seront pas ressuscités pour autant !)."
+step_settings_stats:
+  "Les caractéristiques fonctionnent de la même façon que dans la plupart des jeux de rôle. 
+  Quand vous créez une partie, deux caractéristiques sont créées : physique et mental."
+step_settings_add_stat: "Vous pouvez ajouter autant de caractéristiques que vous le souhaitez."
+step_settings_stat:
+  "Tous les personnages possèdent ces caractéristiques à leur création, avec un nombre de points de départ de 10 + un nombre aléatoire entre -9 et +9. <br>
+  Le total des caractéristiques d'un personnage à sa création est toujours de 10 x le nombre de caractéristiques, pour garantir le même total de points à tous les participants."
+step_settings_stat_delete:
+  "Vous pouvez supprimer une caractéristique à tout moment."
+tab_label_tags:
+  "Les tags sont des étiquettes attribuées aux personnages et font la grande force de Minotaure.<br>"
+step_tags:
+  "Chaque tag fait partie d'un groupe de tag, qui peut être nommé (exemple: métiers, genre, peuple, avantages, défauts, etc.).
+  Un tag peut facilement être considéré comme une classe de personnage, mais est suffisamment polyvalent pour permettre d'autres utilisations."
+step_tags_group_add:
+  "Vous pouvez ajouter autant de groupes de tags que vous le souhaitez"
+step_tags_group:
+  "Commencez à taper du texte et validez pour créer un tag. Une couleur lui sera associée."
+step_tags_group_distribution:
+  "Pour chaque groupe de tags, vous pouvez choisir un mode de répartition des tags :
+  <ul>
+  <li>- choisis par le joueur à la création du personnage</li>
+  <li>- attribués aléatoirement</li>
+  <li>- attribués équitablement (le système choisira parmi les tags les moins attribués pour équilibrer les tags distribués)</li>
+  <li>- non attribués à la création (vous vous en servirez autrement qu'à la création)</li>
+  </ul>"
+step_tags_group_distribute:
+  "Cliquez ici pour distribuer un tag de ce groupe à tous les personnages qui n'en ont pas déjà un. Utile si vous avez créé le groupe en cours de partie."
+step_tags_group_shuffle:
+  "Cliquez ici pour distribuer un tag de ce groupe à tous les personnages qui en ont déjà un. Le nouveau tag remplacera l'ancien. Utile si vous n'êtes pas satisfait de la répartition actuelle."
+step_tags_group_rename:
+  "Vous pouvez renommer à tout moment un groupe de tag."
+step_tags_tag:
+  "Chaque tag peut influer sur les jauges et les caractéristiques d'un personnage à sa création. En cliquant sur un tag, vous pouvez:
+    <ul>
+    <li>- lui associer une <strong>caractéristique principale</strong>. Si un personnage obtient ce tag à la création, ce sera automatiquement sa plus forte caractéristique. Exemple: un tag \"magicien\" pourrait avoir la caractéristique principale \"Magie\".</li>
+    <li>- lui associer une strong>caractéristique secondaire</strong>. Si un personnage obtient ce tag à la création, ce sera automatiquement sa deuxième plus forte caractéristique.</li>
+    <li>- lui associer des <strong>bonus</strong> et des <strong>malus</strong> qui viennent modifier le tirage des caractéristiques de départ, ou la valeur de départ de certaines jauges.</li>
+    <li>- augmenter ou diminuer sa probabilité d'attribution aléatoire.</li>
+    <li>- changer sa couleur</li>
+    </ul>"
+step_tags_group_delete:
+  "Vous pouvez supprimer un groupe de tags à tout moment. Cela supprimera les tags correspondants pour les personnages."
+tab_label_characters:
+  "C'est l'onglet que vous montrerez le plus pendant la partie : il présente l'ensemble des personnages créés et résume ses propriétés (nom du personnage, pseudo du joueur, jauges, caractéristiques, tags, etc.). Vous pouvez y rechercher les personnages selon de nombreux critères."
+tab_label_poll:
+  "Vous pouvez déclencher un sondage qui vous permettra de savoir dans quel sens faire évoluer la partie. Vous pouvez également ajouter des tags aux personnages en fonction des choix de chaque joueur au sondage."
+tab_label_challenge:
+  "Vous pouvez déclencher l'équivalent de jets de dés qui entraîneront pour chaque personnage concerné des conséquences selon sa réussite ou son échec."
+tab_label_pick:
+  "Les tirages au sort vous permettent de sélectionner un nombre de personnages de votre choix au hasard parmi tout ou partie de la population. Vous pouvez également appliquer des conséquences aux personnages tirés au sort."
 
 #AdminTabSettings
 add: "Ajouter"
@@ -137,7 +207,7 @@ alive: "Vivants"
 connected: "Connectés"
 passed: "Réussites"
 failed: "Échecs"
-show_all_characters: "Montrer tous les personnages"
+show_all_characters: "Montrer tout"
 spawn_npc: "Générer un PNJ"
 characters_on: " sur "
 no_characters_to_show_try_different_filter: "Aucun personnage ne correspond à ces filtres"
@@ -145,6 +215,7 @@ search_character: "Rechercher un personnage"
 start_typing: "Commencez à taper"
 clear_selection: "Effacer la sélection"
 char_picked: "Sélectionnés"
+add_all_to_selection: "Tout ajouter à la sélection"
 
 #AdminTabTags
 group_nb: "Groupe {nb}"
@@ -164,7 +235,9 @@ randomly_distributed_at_creation: "Répartis aléatoirement à la création"
 equitably_distributed_at_creation: "Répartis équitablement à la création"
 chosen_at_char_creation: "A choisir à la création du personnage"
 not_autodistributed: "Pas de règle"
-reallocate: "Redistribuer"
+distribute: "Distribuer"
+shuffle: "Mélanger"
+shuffle_help: "Pour chaque personnage ayant déjà un tag de ce groupe, un tag du groupe lui sera attribué au hasard à la place"
 main_stat: " Carac principale : "
 secondary_stat: " Carac secondaire : "
 tags_submit: "Terminer"
@@ -172,11 +245,10 @@ a_tag_will_be_assigned_to_char: "Pour chaque personnage n'ayant pas encore de ta
 delete_groupe_tags_and_remove_from_chars: "Tous les tags de ce groupe seront supprimés, et retirés des personnages"
 increase_probability: "Augmenter la probabilité"
 decrease_probability: "Diminuer la probabilité"
-tag_probability: "{nb} chances sur {total}"
-tag_nb_copies: "{nb} fois plus"
+tag_probability: "1 chance sur {total} | {count} chances sur {total}"
 
 #Characters
-count_char_import: "1 personnage importé | {count_import} personnages importés"
+count_char_import: "1 personnage importé | {count} personnages importés"
 invalid_qr_code: "QR code invalide"
 export_char: "Exporter vos personnages"
 import_char: "Importer vos personnages"

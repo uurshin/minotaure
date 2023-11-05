@@ -29,6 +29,7 @@ mind: "Mind"
 health: "Health"
 will: "Will"
 game_rename : "Rename game"
+selected: "Selected"
 
 #Continue
 continue_game: "Continue - {name}"
@@ -63,7 +64,7 @@ close_poll: "Close poll"
 nb_choice: "Choix {nb}"
 choice_gives_tag: "Add following tag for this choice"
 turnout: "Turnout: "
-challenge_tags: "Challenge tags"
+other_tags: "Miscellaneous"
 
 #AdminTabIntro
 minotaure_welcome: "Welcome to Minotaure."
@@ -71,7 +72,67 @@ tutorial_help: "You may begin the tutorial by clicking on the help button."
 
 #AdminTour
 next: "Next"
-end_tour: "Finish tour"
+end_tour: "End this tour"
+end_tab_tour: "End the tour for this tab"
+step_help: "Would you like to take the full tour or just get help for this tab?"
+see_all_tutorial: "Complete tour"
+see_page_tutorial: "Visit this tab"
+step_invite: "By clicking on this button an invitation link will be copied and will allow you to invite people to join your game."
+step_start: "Until you click this button, your guests will wait on a waiting screen."
+tab_label_settings: "The settings are the game settings that we recommend you change before the game starts, but that you can always change during the game."
+step_settings_gauges:
+  "Bars are point reserves for each character. When you create a game, two bars are created by default: life and will."
+step_settings_add_gauge: "You can add as many bars as you like."
+step_settings_gauge:
+  "All characters have these bars when they are created, with a number of starting points that 
+  you can change."
+step_settings_gauge_delete:
+  "You can delete a bar at any time."
+step_settings_gauge_make_deadly:
+  "You can make it so that a bar's passage to a score of 0 results in a character's death by clicking 
+  on this button (this action is reversible, but characters already dead will not be resurrected!)."
+step_settings_stats:
+  "The stats work in the same way as in most role-playing games. When you create a game, two stats are created: physical and mental."
+step_settings_add_stat: "You can add as many stats as you want."
+step_settings_stat:
+  "All characters have these stats at their creation, with a starting number of points of 10 + a random number between -9 and +9. <br>
+  The point total of all stats of a the creation of a character is always 10 times the number of stats, to ensure the same total points for all participants."
+step_settings_stat_delete: "You can delete a stat at any time."
+tab_label_tags:
+  "Tags are labels assigned to characters and are a great strength of Minotaure.<br>"
+step_tags:
+  "Each tag belongs to a tag group, which can be named (e.g., professions, gender, race, advantages, flaws, etc.). A tag can easily be considered as a character class, but it's versatile enough for other uses."
+step_tags_group_add: "You can add as many tag groups as you want."
+step_tags_group:
+  "Start typing text and confirm to create a tag. A color will be associated with it."
+step_tags_group_distribution:
+  "For each tag group, you can choose a tag distribution mode:
+  <ul>
+  <li>- chosen by the player at character creation</li>
+  <li>- assigned randomly</li>
+  <li>- distributed evenly (the system will choose from the least assigned tags to balance the distributed tags)</li>
+  <li>- not assigned at creation (you will use them differently than at character creation)</li>
+  </ul>"
+step_tags_group_distribute: "Click here to distribute a tag from this group to all characters that do not already have one. Useful if you created the group during the game."
+step_tags_group_shuffle: "Click here to distribute a tag from this group to all characters that already have one. The new tag will replace the old one. Useful if you are not satisfied with the current distribution."
+step_tags_group_rename: "You can rename a tag group at any time."
+step_tags_tag:
+  "Each tag can influence a character's bars and stats at their creation. By clicking on a tag, you can:
+  <ul>
+  <li>- associate it with a <strong>main stat</strong>. If a character gets this tag at creation, it will automatically be their strongest stat. For example, a \"wizard\" tag could have the main stat \"Magic.\"</li>
+  <li>- associate it with a <strong>secondary stat</strong>. If a character gets this tag at creation, it will automatically be their second-strongest stat.</li>
+  <li>- associate it with <strong>bonuses</strong> and <strong>penalties</strong> that modify the initial stats roll or the starting value of certain bars.</li>
+  <li>- increase or decrease its random attribution probability.</li>
+  <li>- change its color.</li>
+  </ul>"
+step_tags_group_delete: "You can delete a tag group at any time. This will remove the corresponding tags for the characters."
+tab_label_characters: "This is the tab you will use most during the game: it presents all created characters and summarizes their properties (character name, player's pseudonym, bats, stats, tags, etc.). You can search for characters based on various criteria."
+tab_label_poll:
+  "You can trigger a poll that will help you determine the direction in which the game should evolve. You can also add tags to characters based on the choices of each player in the poll."
+tab_label_challenge:
+  "You can trigger the equivalent of dice rolls that will result in consequences for each character involved, depending on their success or failure."
+tab_label_pick:
+  "Random draws allow you to select a number of characters of your choice at random from the entire or a portion of the population. You can also apply consequences to the characters drawn."
 
 #AdminTabSettings
 add: "Add"
@@ -137,7 +198,7 @@ alive: "Alive"
 connected: "Connected"
 passed: "Passed"
 failed: "Failed"
-show_all_characters: "Show all characters"
+show_all_characters: "Show all"
 spawn_npc: "Spawn NPC"
 characters_on: " on "
 no_characters_to_show_try_different_filter: "No characters to show here. Try a different filter."
@@ -145,6 +206,7 @@ search_character: "Search for a character"
 start_typing: "Start typing"
 clear_selection: "Clear selection"
 char_picked: "Selected characters"
+add_all_to_selection: "Add all to selection"
 
 #AdminTabTags
 group_nb: "Group {nb}"
@@ -164,19 +226,20 @@ randomly_distributed_at_creation: "Randomly distributed at creation"
 equitably_distributed_at_creation: "Equitably distributed at creation"
 chosen_at_char_creation: "Chosen at character creation"
 not_autodistributed: "Not autodistributed"
-reallocate: "Reallocate"
+distribute: "Distribute"
+shuffle: "Shuffle"
+shuffle_help: "For each character already having a tag from this group, a new tag from this group will be assigned to it instead."
 main_stat: " Main stat: "
 secondary_stat: " Secondary stat: "
 tags_submit: "Submit"
-a_tag_will_be_assigned_to_char: "A tag will be assigned to all characters missing one"
+a_tag_will_be_assigned_to_char: "A tag will be assigned to all characters missing a tag from this group"
 delete_groupe_tags_and_remove_from_chars: "This group's tags will be deleted and removed from characters"
 increase_probability: "Increase probability"
 decrease_probability: "Decrease probability"
-tag_probability: "{nb} out of {total} chances"
-tag_nb_copies: "{nb} times more"
+tag_probability: "1 chance out of {total} | {count} chances out of {total}"
 
 #Characters
-count_char_import: "1 imported character | {count_import} imported characters"
+count_char_import: "1 imported character | {count} imported characters"
 invalid_qr_code: "Invalid QR code"
 export_char: "Export characters"
 import_char: "Import characters"

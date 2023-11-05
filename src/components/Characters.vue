@@ -36,7 +36,7 @@
                 result.push({'game_token': character.game_token, 'character_token': character.character_token });
               }
             });
-            alert(this.$t('count_char_import', {count_import: result.length}));
+            alert(this.$t('count_char_import', {count: result.length}));
             localStorage.setItem('games_player', JSON.stringify(result));
 
             this.characters = JSON.parse(localStorage.getItem('games_player'));

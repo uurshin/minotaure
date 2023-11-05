@@ -118,13 +118,7 @@ export default {
     addTag(tag_label, key) {
       let group = this.store.tag_groups.find((element) => (element.code === 'freetag'));
       if (group === undefined) {
-        group = {
-          label: this.$t('challenge_tags'),
-          code: 'freetag',
-          tags: [],
-          start: 'none',
-        };
-        this.store.tag_groups.push(group);
+        group = this.store.addGroupTag(true);
       }
       let tag = this.store.addTag(tag_label, group);
       if (this.chosen_tags[key] === undefined) {

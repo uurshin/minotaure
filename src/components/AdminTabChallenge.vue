@@ -86,14 +86,7 @@ export default {
     addTag(tag_label, type) {
       let group = this.store.tag_groups.find((element) => (element.code === 'freetag'));
       if (group === undefined) {
-        group = {
-          label: this.$t('challenge_tags'),
-          code: 'freetag',
-          tags: [],
-          start: 'none',
-          picking_array: []
-        };
-        this.store.tag_groups.push(group);
+        group = this.store.addGroupTag(true);
       }
       let tag = this.store.addTag(tag_label, group);
       this.chosen_modifier_tags_add[type].push(tag);
@@ -189,7 +182,7 @@ export default {
 <template>
   <div class="tab" ref="tab">
     <span v-if="store.stats !== undefined && Object.keys(store.stats).length === 0">{{ $t("must_first") }}<button @click="$parent.changeTab('settings')">{{ $t('add_stat') }}</button></span>
-    <div id='tab-challenge-content' v-if="store.stats !== undefined && Object.keys(store.stats).length > 0">
+    <div ref="step_challenge_1" id='tab-challenge-content' v-if="store.stats !== undefined && Object.keys(store.stats).length > 0">
       <div id="chosen-targets">
         <div>
           <label for="chosen_stat">{{ $t('tested_stat') }}</label>

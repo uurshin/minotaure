@@ -182,20 +182,28 @@ export default {
       conn.on('data', function (data) {
         // Player connected and waiting for the game ID.
         if (data.handshake === 'readyForCall') {
-          // The game has already started, send the corresponding signal.
-          if (vm.store.current_game.game_started) {
+          // Host and player versions are not compatible.
+          if (data.version === undefined || data.version !== APP_VERSION) {
             conn.send({
-              handshake:'gameStart',
-              game_token: vm.store.current_game.id
+              handshake:'versionError'
             });
           }
           else {
-            // The game has not started, send the corresponding signal.
-            vm.store.temp_connections.push(conn);
-            conn.send({
-              handshake:'gameWait',
-              game_token: vm.store.current_game.id
-            });
+            // The game has already started, send the corresponding signal.
+            if (vm.store.current_game.game_started) {
+              conn.send({
+                handshake:'gameStart',
+                game_token: vm.store.current_game.id
+              });
+            }
+            else {
+              // The game has not started, send the corresponding signal.
+              vm.store.temp_connections.push(conn);
+              conn.send({
+                handshake:'gameWait',
+                game_token: vm.store.current_game.id
+              });
+            }
           }
         }
         // The player is connected and waiting for a character.
@@ -276,7 +284,7 @@ export default {
         }
         tab_found = this.tabs.find((tab) => tab.tutorial === 'blink');
         if (tab_found === undefined) {
-          this.$refs['start'].classList.add('attention');
+          this.$refs['step_start'].classList.add('attention');
         }
       }
       if (this.current_tab != null) {
@@ -368,11 +376,11 @@ export default {
         {{ $t(tab.label) }}
       </div>
       <div class="tab-details">
-        <button @click="startTour">{{ $t('help')}}</button>
-        <button class="icon-email" v-if="peer !== undefined" @click="shareLink">
+        <button ref="step_help" @click="startTour" class="icon-question">{{ $t('help')}}</button>
+        <button ref="step_invite" class="icon-email" v-if="peer !== undefined" @click="shareLink">
           {{ $t("invite_to_play") }}
         </button>
-        <button ref="start" class="icon-play" :class="{'btn-important': !store.current_game.tuto_on, attention: !this.store.current_game.tuto_on}" v-if="!store.current_game.game_started" @click="startGame">
+        <button ref="step_start" class="icon-play" :class="{'btn-important': !store.current_game.tuto_on, attention: !this.store.current_game.tuto_on}" v-if="!store.current_game.game_started" @click="startGame">
           {{ $t("start") }}
         </button>
       </div>

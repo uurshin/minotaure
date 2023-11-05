@@ -7,7 +7,6 @@ import 'vue-simple-context-menu/dist/vue-simple-context-menu.css';
 import '@radial-color-picker/vue-color-picker/dist/vue-color-picker.min.css';
 import ColorPicker from '@radial-color-picker/vue-color-picker';
 
-
 export default {
   components: { VueMultiselect, VueSimpleContextMenu, ColorPicker },
   data() {
@@ -50,21 +49,14 @@ export default {
       this.store.removeTagFromAll(tag);
       let groupIndex = this.store.tag_groups.findIndex((group) => group.code === tag.group);
       let tagIndex = this.store.tag_groups[groupIndex].tags.findIndex((search_tag) => search_tag.code === tag.code);
+      this.store.tag_groups[groupIndex].picking_array = this.store.tag_groups[groupIndex].picking_array.filter((code) => code !== tag.code);
       if (tagIndex > -1) {
         this.store.tag_groups[groupIndex].tags.splice(tagIndex, 1);
-        this.store.tag_groups[groupIndex].picking_array = this.store.tag_groups[groupIndex].picking_array.filter((code) => code !== tag.code);
       }
       this.store.generateCss();
     },
     addGroupTag: function() {
-      let group = {
-        tags: [],
-        picking_array: [],
-        start: 'random',
-        code: Math.floor((Math.random() * 10000000)),
-        label: this.$t('group_nb', {nb: this.store.tag_groups.length + 1})
-      }
-      this.store.tag_groups.push(group);
+      let group = this.store.addGroupTag();
       this.$nextTick(() => {
         this.$refs['group_tag_select_' + group.code][0].$el.focus()
       });
@@ -74,12 +66,23 @@ export default {
       this.store.tag_groups.splice(key, 1);
       this.store.generateCss();
     },
-    allocateGroupTag: function(group) {
+    distributeGroupTag: function(group) {
       const vm = this;
       this.store.characters.forEach(function(character) {
         // Check if the character already has a tag from this group.
         let found = character.tags.findIndex((tag) => tag.group === group.code);
         if (found === -1) {
+          character.tags.push(vm.store.getRandomTagFromGroup(group));
+        }
+      })
+    },
+    shuffleGroupTag: function(group) {
+      const vm = this;
+      this.store.characters.forEach(function(character) {
+        // Check if the character already has a tag from this group.
+        let found = character.tags.findIndex((tag) => tag.group === group.code);
+        if (found > -1) {
+          character.tags.splice(found, 1);
           character.tags.push(vm.store.getRandomTagFromGroup(group));
         }
       })
@@ -138,10 +141,13 @@ export default {
 
       options.push({name: this.$t('change_tag_color'), effect:'color'});
 
-      if (item.probability !== undefined && item.probability > 1) {
-        options.push({name: this.$t('decrease_probability'), effect:'decrease_probability', group: group});
+      if (group.start === 'random') {
+        if (item.probability !== undefined && item.probability > 1) {
+          options.push({name: this.$t('decrease_probability'), effect:'decrease_probability', group: group});
+        }
+        options.push({name: this.$t('increase_probability'), effect:'increase_probability', group: group});
       }
-      options.push({name: this.$t('increase_probability'), effect:'increase_probability', group: group});
+
       return options;
     },
     optionClicked (event) {
@@ -222,6 +228,12 @@ export default {
             break;
         }
       }
+    },
+    changeGroupRule(group) {
+      if (group.start === 'equitable') {
+        group.picking_array = [];
+        group.tags.forEach((tag) => group.picking_array.push(tag.code));
+      }
     }
   }
 }
@@ -229,7 +241,7 @@ export default {
 
 <template>
   <div class="tab" ref="tab">
-    <div id="tab-tags-content">
+    <div id="tab-tags-content" ref="step_tags">
       <div class="actions">
         <VueSimpleContextMenu
             element-id="context_menu_tags"
@@ -247,27 +259,37 @@ export default {
           >
           </color-picker>
         </div>
-        <button class="icon-add" @click="addGroupTag()">{{ $t("add_groug_of_tag") }}</button>
+        <button ref="step_tags_group_add" class="icon-add" @click="addGroupTag()">{{ $t("add_groug_of_tag") }}</button>
       </div>
       <template v-for="(group, key) in store.current_game.tag_groups">
-        <div class="group-tag">
+        <div class="group-tag" :ref="key === 0 ? 'step_tags_group' : null">
           <span class="group-label">
-            <input :ref="'group_name_input_'+ key" @keydown.enter="group_selected = null;" v-if="group_selected === key" type="text" v-model="store.current_game.tag_groups[key].label" />
-            <button v-show="group_selected !== key" @keyup.enter="focusLabelGroup($event, key)" @click="focusLabelGroup($event, key)" class="icon-edit">{{ store.current_game.tag_groups[key].label }}</button>
+            <input :ref="'group_name_input_'+ key" @keydown.enter="group_selected = null;" v-if="group_selected === key" type="text" v-model="store.current_game.tag_groups[key].label"/>
+            <button
+                v-show="group_selected !== key"
+                @keyup.enter="focusLabelGroup($event, key)"
+                @click="focusLabelGroup($event, key)"
+                class="icon-edit"
+                :ref="key === 0 ? 'step_tags_group_rename' : null"
+            >
+              {{ store.current_game.tag_groups[key].label }}
+            </button>
             <button v-show="group_selected === key" @click="group_selected = null">{{ $t("tags_submit") }}</button>
           </span>
           <div class="actions secondary">
             <label for="creation_rule">{{ $t("distribution_mode") }}</label>
-            <select id="creation_rule" v-model="store.current_game.tag_groups[key].start">
+            <select @change="changeGroupRule(group)" id="creation_rule" v-model="store.current_game.tag_groups[key].start" :ref="key === 0 ? 'step_tags_group_distribution' : null">
               <option value="random">{{ $t("randomly_distributed_at_creation") }}</option>
               <option value="equitable">{{ $t("equitably_distributed_at_creation") }}</option>
               <option value="start">{{ $t("chosen_at_char_creation") }}</option>
               <option value="none">{{ $t("not_autodistributed") }}</option>
             </select>
-            <button @click="allocateGroupTag(group)" :title="$t('a_tag_will_be_assigned_to_char')">{{ $t("reallocate") }}</button>
-            <button class="btn-danger" @click="removeGroupTag(key)" :title="$t('delete_groupe_tags_and_remove_from_chars')">{{ $t("delete") }}</button>
+            <button @click="distributeGroupTag(group)" :title="$t('a_tag_will_be_assigned_to_char')" :ref="key === 0 ? 'step_tags_group_distribute' : null">{{ $t("distribute") }}</button>
+            <button @click="shuffleGroupTag(group)" :title="$t('shuffle_help')" :ref="key === 0 ? 'step_tags_group_shuffle' : null">{{ $t("shuffle") }}</button>
+
+            <button class="btn-danger" @click="removeGroupTag(key)" :title="$t('delete_groupe_tags_and_remove_from_chars')" :ref="key === 0 ? 'step_tags_group_delete' : null">{{ $t("delete") }}</button>
           </div>
-          <span v-for="code in group.picking_array">{{ code }},</span>
+
           <vue-multiselect
               :ref="'group_tag_select_' + group.code"
               :id="'tag_'+key"
@@ -291,6 +313,7 @@ export default {
                     class="multiselect__tag"
                     :class="'tag tag-' + tag.option.code"
                     tabindex="0" @keyup.enter="handleClick($event, tag.option, group)" @click.prevent.stop="handleClick($event, tag.option, group)" title="Paramétrer ce tag"
+                    :ref="key === 0 && Object.entries(group.tags)[0].code === tag.code ? 'step_tags_tag' : null"
                     >
                   <div>
                     <span class="icon-settings hover-only"></span>
@@ -303,8 +326,7 @@ export default {
                     <span v-if="tag.option.stat_modifiers !== undefined" v-for="(modifier, key) in tag.option.stat_modifiers">
                       {{ store.stats[key].name }} {{ modifier.value > 0 ? '+' + modifier.value : modifier.value }}
                     </span>
-                    <span v-if="group.start === 'random'">{{ $t('tag_probability', {nb: tag.option.probability ?? 1, total: store.current_game.tag_groups[key].picking_array.length }) }}</span>
-                    <span v-if="group.start === 'equitable'">{{ $t('tag_nb_copies', {nb: tag.option.probability ?? 1}) }}</span>
+                    <span v-if="group.start === 'random'">{{ $t('tag_probability', {count: (tag.option.probability ?? 1), total: store.current_game.tag_groups[key].picking_array.length }) }}</span>
                   </div>
                 </div>
             </template>

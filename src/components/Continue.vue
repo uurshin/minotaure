@@ -134,7 +134,7 @@ export default {
         <span>{{ game.name }}<span class="danger" v-if="game.version !== undefined && versionIsDeprecated(game.version)">*</span></span>
         <span class="date" v-if="activated !== key">{{ formatDate(game.date) }}</span>
       </div>
-      <span v-if="activated !== key">{{ $t('count_personnage', {count: game.characters.length}) }}</span>
+      <span v-if="activated !== key">{{ $t('count_personnage', game.characters.length, {count: game.characters.length}) }}</span>
       <div class="hidden-mobile" :class="{active: activated === key}">
         <button class="btn-valid" @click="askPublicId(game.id)">{{ $t('continue') }}</button>
         <button class="btn-danger" @click="deleteGame(game.id, $event)">{{ $t('delete') }}</button>
