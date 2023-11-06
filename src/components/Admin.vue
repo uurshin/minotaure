@@ -362,7 +362,7 @@ export default {
   <admin-tour ref="admin_tour"></admin-tour>
   <div id="admin-wrapper" v-if="store.current_game != null">
     <div class="tabs">
-      <button v-if="game_name_focused < 1" class="game-name" @keyup.enter="gameStartRename" @click="gameStartRename">{{ gameLabel }}</button>
+      <button ref='step_game_name' v-if="game_name_focused < 1" class="game-name" @keyup.enter="gameStartRename" @click="gameStartRename">{{ gameLabel }}</button>
       <input maxlength="25" ref="input_game_name" id="input-game-name" v-show="game_name_focused === 1" type="text" v-model="temp_game_name" @blur="gameConfirmRename" @keyup.enter="gameConfirmRename" />
       <div
           tabindex="0"
@@ -458,7 +458,7 @@ export default {
       top: -21px;
       right: 0;
       width: auto;
-      min-width: 120px;
+      min-width: 140px;
       margin: var(--margin-multiselect);
       text-align: center;
       color: black;
@@ -644,6 +644,7 @@ export default {
 
   .attention {
     background-color: black;
+    color: white;
     animation-name: color;
     animation-duration: 2s;
     animation-iteration-count: infinite;

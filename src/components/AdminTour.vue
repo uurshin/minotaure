@@ -20,6 +20,7 @@ export default {
      */
     const steps = [
       {id: 'step_help'},
+      {id: 'step_game_name', arrow: false},
       {id: 'step_invite'},
       {id: 'step_start'},
       {id: 'tab_label_settings', goto: 'settings'},
@@ -58,7 +59,7 @@ export default {
               group = groups[0];
             }
             if (groups[0].tags.length === 0) {
-              vm.store.addTag('Exemple de tag', group);
+              vm.store.addTag(vm.$t('example'), group);
             }
             resolve();
           });
@@ -70,9 +71,9 @@ export default {
       {parent: 'tags', id: 'step_tags_group_distribute'},
       {parent: 'tags', id: 'step_tags_group_shuffle'},
       {parent: 'tags', id: 'step_tags_group_delete', group_finish: true},
-      {id: 'tab_label_characters', goto: 'characters'},
-      {id: 'tab_label_poll', goto: 'poll'},
-      {id: 'tab_label_challenge', goto: 'challenge'},
+      {id: 'tab_label_characters', goto: 'characters', group_finish: true},
+      {id: 'tab_label_poll', goto: 'poll', group_finish: true},
+      {id: 'tab_label_challenge', goto: 'challenge', group_finish: true},
       {id: 'tab_label_pick', goto: 'pick', finish:true}
     ];
 

@@ -71,7 +71,7 @@ minotaure_welcome: "Bienvenue dans Minotaure"
 tutorial_help_1: "Vous pouvez démarrer le didacticiel à tout moment en cliquant sur le bouton <strong class='icon-question'>Aide</strong> (le didacticiel complet sera disponible dans une version future)."
 tutorial_help_2: "Avant de démarrer votre partie, vous pouvez modifier les <strong>paramètres</strong> et les <strong>tags</strong> dans les onglets correspondants."
 tutorial_help_3: "Vous pouvez dès maintenant inviter vos joueurs dans la partie en cliquant sur le bouton <strong class='icon-email'>Invitation à jouer</strong>."
-tutorial_help_4: "Tant que vous n'aurez pas cliqué sur <strong class='icon-play'>Démarrer</strong>, ils seront en salle d'attente."
+tutorial_help_4: "Tant que vous n'aurez pas cliqué sur <strong class='icon-play'>Démarrer</strong> ils seront en salle d'attente."
 
 #AdminTour
 next: "Suivant"
@@ -80,6 +80,7 @@ end_tab_tour: "Terminer la visite de cet onglet"
 step_help: "Souhaitez-vous suivre la visite complète ou obtenir uniquement l'aide pour cet onglet ?"
 see_all_tutorial: "Visite complète"
 see_page_tutorial: "Visite de cet onglet"
+step_game_name: "Vous pouvez changer le nom de la partie à tout moment."
 step_invite: "En cliquant sur ce bouton un lien d'invitation sera copié et vous permettra d'inviter à rejoindre à votre partie."
 step_start: "Tant que vous ne cliquez pas sur ce bouton, vos invités patienteront sur un écran d'attente."
 tab_label_settings: "Les paramètres sont les réglages de la partie que nous vous conseillons de modifier avant son démarrage, mais que vous pourrez toujours changer en cours de partie."
@@ -135,6 +136,7 @@ step_tags_tag:
     <li>- augmenter ou diminuer sa <strong>probabilité</strong> d'attribution aléatoire.</li>
     <li>- changer sa <strong>couleur</strong></li>
     </ul>"
+example: 'exemple'
 step_tags_group_delete:
   "Vous pouvez supprimer un groupe de tags à tout moment. Cela supprimera les tags correspondants pour les personnages."
 tab_label_characters:

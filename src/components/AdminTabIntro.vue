@@ -36,10 +36,13 @@ export default {
             </g>
           </svg>
         </div>
-        <div v-html="$t('tutorial_help_1')"></div>
-        <div v-html="$t('tutorial_help_2')"></div>
-        <div v-html="$t('tutorial_help_3')"></div>
-        <div v-html="$t('tutorial_help_4')"></div>
+        <div class="tuto-text">
+          <div v-html="$t('tutorial_help_1')"></div>
+          <div v-html="$t('tutorial_help_2')"></div>
+          <div v-html="$t('tutorial_help_3')"></div>
+          <div v-html="$t('tutorial_help_4')"></div>
+        </div>
+
       </div>
 
     </div>
@@ -50,8 +53,17 @@ export default {
   .tutorial-help {
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    margin-top: 15px;
+    gap: 30px;
+    margin: 30px auto;
+
+    .tuto-text {
+      background: var(--background-card-color);
+      padding: 15px;
+      border-radius: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
 
     .logo-wrapper {
       width: 100px;
