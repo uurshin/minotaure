@@ -191,8 +191,8 @@ lose_following_tags: "And lose following tags (if possessed!): "
 start_challenge: "Start Challenge!"
 
 #AdminTabCharacters
-context_add_selection_character: "Add character to selection"
-context_remove_selection_character: "Remove character from selection"
+context_add_selection_character: "Add character to selection (maj + left click)"
+context_remove_selection_character: "Remove character from selection (maj + left click)"
 context_delete_character: "Delete character"
 context_edit_character: "Edit character (future feature)"
 last_challenge_success_rate: "Success rate of last challenge: "

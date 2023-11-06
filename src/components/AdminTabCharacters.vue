@@ -191,10 +191,10 @@ export default {
       if (expand) {
         this.card_centered = this.$refs[id];
         var rect = this.$refs[id].getBoundingClientRect();
-        let scale = 3;
+        let scale = 2;
         // For bigger screens, the expanded card can take more space.
         if (window.screen.availHeight > 1000) {
-          scale = 4;
+          scale = 3;
         }
         let diffX = (window.innerWidth / 2) - rect.left - this.$refs[id].offsetWidth * scale / 2;
         let diffY = (window.innerHeight / 2) - rect.top - this.$refs[id].offsetHeight * scale / 2;
@@ -242,7 +242,7 @@ export default {
         </div>
         <button @click="switchFilter('dead')" :class="{active : filters.dead !== undefined}">{{ $t('alive') }}</button>
         <button @click="switchFilter('connected')" :class="{active : filters.connected !== undefined}">{{ $t('connected') }}</button>
-        <button v-if="store.current_game.has_picked" @click="switchFilter('picked')" :class="{active : filters.picked !== undefined}">{{ $t('char_picked') }}</button>
+        <button v-if="store.picked_characters !== undefined && store.picked_characters.length" @click="switchFilter('picked')" :class="{active : filters.picked !== undefined}">{{ $t('char_picked') }}</button>
         <div class="dual-button" v-if="store.last_challenge.date !== 0">
           <button @click="switchFilterChallenge('success')" class="success-button badge" :class="{active : filters.challenge !== undefined && filters.challenge === 'success'}">
             {{ $t('passed') }}<span>{{ store.last_challenge.nb_success }}</span>
@@ -257,7 +257,7 @@ export default {
       <dataset
           v-slot="{ ds }"
           :ds-data="store.characters"
-          :ds-sortby="['-alive', '-picked', '-challenge', '-connection', 'name']"
+          :ds-sortby="['-alive', '-challenge', '-connection', 'name']"
           :ds-search-in="['name']"
           :ds-filter-fields="{ tags: filterOnTag, connection: filterConnected, alive: filterDead, challenge: filterChallenge, picked: filterPicked }"
           :ds-sort-as="{ challenge: sortAsChallenge, connection: sortAsConnected }"
@@ -271,7 +271,7 @@ export default {
         <div class="summary full">{{ $t('count_personnage', {count: ds.dsResultsNumber}) }}{{ $t('characters_on') }}{{ store.characters.length }}</div>
         <dataset-item class="full" id="character-list">
           <template #default="{ row, rowIndex }">
-            <div @click="animateToCenter(row.token)" :ref="row.token" :key="row.token" @click.shift="toggleCharacter(row)" @contextmenu.prevent.stop="handleClick($event, row)" class="character" :class="[getClasses(row), !row.alive ? 'dead' : '']">
+            <div @click.exact="animateToCenter(row.token)" :ref="row.token" :key="row.token" @click.shift.exact="toggleCharacter(row)" @contextmenu.prevent.stop="handleClick($event, row)" class="character" :class="[getClasses(row), !row.alive ? 'dead' : '']">
               <div class="character-names">
                 <span class="character-name">{{ row.name }}</span>
                 <span class="pseudo">{{ row.pseudo }}</span>
@@ -321,6 +321,11 @@ export default {
 
     input:not(.multiselect__input) {
       padding: 0.6em 1.2em;
+      border: var(--select-border);
+    }
+
+    .multiselect__tags {
+      border: var(--select-border);
     }
   }
 
@@ -358,7 +363,7 @@ export default {
         opacity: 0.6;
       }
       &.picked {
-        border: 3px solid gold;
+        border: 3px solid var(--character-picked);
       }
       &.result-success {
         background: var(--success-background);

@@ -201,8 +201,8 @@ lose_following_tags: "Ces tags en moins (s'ils les ont) : "
 start_challenge: "Lancer l'épreuve !"
 
 #AdminTabCharacters
-context_add_selection_character: "Ajouter à la sélection"
-context_remove_selection_character: "Retirer de la sélection"
+context_add_selection_character: "Ajouter à la sélection (maj + clic gauche)"
+context_remove_selection_character: "Retirer de la sélection (maj + clic gauche)"
 context_delete_character: "Supprimer le personnage"
 context_edit_character: "Modifier le personnage (à venir)"
 last_challenge_success_rate: "La dernière épreuve a connu un pourcentage de réussite de "
