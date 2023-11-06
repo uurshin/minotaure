@@ -1,12 +1,9 @@
 <script>
-import router, { usePlayerStore } from '../main';
-import { ref } from 'vue'
-import {useI18n} from "vue-i18n";
+import { usePlayerStore } from '../main';
 
 export default {
   data() {
     const store = usePlayerStore();
-    const { t } = useI18n();
     const change_label_enabled = [];
     const add_gauge_enabled = false;
     const temp_gauge_name = '';
@@ -16,7 +13,7 @@ export default {
     const temp_stat_name = '';
 
     return {
-      store, t, change_label_enabled, add_gauge_enabled, temp_gauge_name, temp_gauge_value, add_stat_enabled, temp_stat_name
+      store, change_label_enabled, add_gauge_enabled, temp_gauge_name, temp_gauge_value, add_stat_enabled, temp_stat_name
     }
   },
   mounted() {
@@ -95,64 +92,71 @@ export default {
 <template>
   <div class="tab" ref="tab">
     <div id='tab-settings-content'>
-      <div class="wrapper-settings">
+      <div ref="step_settings_gauges" class="wrapper-settings">
         <div class="wrapper-title">
-          <h2>{{ t('Jauges') }}</h2>
-          <button ref="step3" class="icon-add btn-valid" v-if="!add_gauge_enabled" @click="add_gauge_enabled = true">{{ t('Ajouter') }}</button>
+          <h2>{{ $t('bars') }}</h2>
+          <button ref="step_settings_add_gauge" class="icon-add btn-valid" v-if="!add_gauge_enabled" @click="add_gauge_enabled = true">{{ $t('add') }}</button>
         </div>
         <div class="wrapper-list">
-          <template v-for="(gauge, key) in store.gauges">
-            <div class="gauge list-item">
+          <template v-for="(gauge, key, index) in store.gauges">
+            <div class="gauge list-item" :ref="index === 0 ? 'step_settings_gauge' : null">
               <div v-if="!change_label_enabled[key]" class="wrapper-gauge-title">
                 <span class="gauge-name">{{ gauge.name }}</span>
-                <span>{{ t('gauge_start', {gauge_value: gauge.value}) }}</span>
-                <span v-if="gauge.deadly">{{ t('Tue à 0') }}</span>
+                <span>{{ $t('gauge_start', {gauge_value: gauge.value}) }}</span>
+                <span v-if="gauge.deadly">{{ $t('kills_at_0') }}</span>
               </div>
               <input :ref="'gauge_' + key" :value="gauge.name" id="'gauge_'+key" type="text" v-if="change_label_enabled[key]">
               <input :ref="'gauge_value_' + key" :value="gauge.value" min="1" id="'gauge_value'+key" type="number" v-if="change_label_enabled[key]">
-              <button class="btn-valid" @click="changeGauge(key)" v-if="change_label_enabled[key]">{{ t('Valider') }}</button>
-              <button @click="change_label_enabled[key] = false" v-if="change_label_enabled[key]">{{ t('Annuler') }}</button>
+              <button class="btn-valid" @click="changeGauge(key)" v-if="change_label_enabled[key]">{{ $t('submit') }}</button>
+              <button @click="change_label_enabled[key] = false" v-if="change_label_enabled[key]">{{ $t('cancel') }}</button>
               <div class="action" v-if="!change_label_enabled[key]">
-                <button @click="makeDeadly(key)">{{ gauge.deadly ? t('Rendre normale') : t('Rendre fatale') }}</button>
-                <button @click="change_label_enabled[key] = true">{{ t('Modifier') }}</button>
-                <button class="btn-danger" @keyup.enter="remove(key, 'gauges')"  @click="remove(key, 'gauges')">{{ t('Supprimer') }}</button>
+                <button @click="makeDeadly(key)" :ref="index === 0 ? 'step_settings_gauge_make_deadly' : null">{{ gauge.deadly ? $t('make_normal') : $t('make_fatal') }}</button>
+                <button @click="change_label_enabled[key] = true">{{ $t('modify') }}</button>
+                <button class="btn-danger" @keyup.enter="remove(key, 'gauges')"  @click="remove(key, 'gauges')" :ref="index === 0 ? 'step_settings_gauge_delete' : null">{{ $t('delete') }}</button>
               </div>
             </div>
           </template>
           <div class="action-group" v-if="add_gauge_enabled">
-            <label for="temp_gauge">{{ t('Nom') }}</label>
+            <label for="temp_gauge">{{ $t('name') }}</label>
             <input id="temp_gauge" type="text" v-model="temp_gauge_name" @keyup.enter="addGauge()">
-            <label for="temp_gauge_value">{{ t('Démarre à') }}</label>
+            <label for="temp_gauge_value">{{ $t('starts_at') }}</label>
             <input id="temp_gauge_value" type="number" min="1" v-model="temp_gauge_value">
-            <button class="btn-valid" @click="addGauge()">{{ t('Valider') }}</button>
-            <button @click="add_gauge_enabled = false">{{ t('Annuler') }}</button>
+            <button class="btn-valid" @click="addGauge()">{{ $t('submit') }}</button>
+            <button @click="add_gauge_enabled = false">{{ $t('cancel') }}</button>
           </div>
         </div>
       </div>
 
-      <div class="wrapper-settings">
+      <div ref="step_settings_stats" class="wrapper-settings">
         <div class="wrapper-title">
-          <h2>{{ t('Caractéristiques') }}</h2>
-          <button class="icon-add btn-valid" v-if="!add_stat_enabled" @click="add_stat_enabled = true">{{ t('Ajouter') }}</button>
+          <h2>{{ $t('stats') }}</h2>
+          <button ref="step_settings_add_stat"  class="icon-add btn-valid" v-if="!add_stat_enabled" @click="add_stat_enabled = true">{{ $t('add') }}</button>
         </div>
         <div class="wrapper-list">
-          <template v-for="(stat, key) in store.stats">
-            <div class="stat list-item">
+          <template v-for="(stat, key, index) in store.stats">
+            <div class="stat list-item" :ref="index === 0 ? 'step_settings_stat' : null">
               <label :for="'stat_' + key" v-if="!change_label_enabled[key]">{{ stat.name }}</label>
               <input :ref="'stat_' + key" :value="stat.name" id="'stat_'+key" type="text" v-if="change_label_enabled[key]">
-              <button class="btn-valid" @click="changeStatLabel(key)" v-if="change_label_enabled[key]">{{ t('Valider') }}</button>
-              <button @click="change_label_enabled[key] = false" v-if="change_label_enabled[key]">{{ t('Annuler') }}</button>
+              <button class="btn-valid" @click="changeStatLabel(key)" v-if="change_label_enabled[key]">{{ $t('submit') }}</button>
+              <button @click="change_label_enabled[key] = false" v-if="change_label_enabled[key]">{{ $t('cancel') }}</button>
               <div class="action">
-                <button @click="change_label_enabled[key] = true" v-if="!change_label_enabled[key]">{{ t('Renommer') }}</button>
-                <button class="btn-danger" @keyup.enter="remove(key, 'stats')" @click="remove(key, 'stats')" v-if="!change_label_enabled[key]">{{ t('Supprimer') }}</button>
+                <button @click="change_label_enabled[key] = true" v-if="!change_label_enabled[key]">{{ $t('rename') }}</button>
+                <button
+                    class="btn-danger"
+                    @keyup.enter="remove(key, 'stats')"
+                    @click="remove(key, 'stats')"
+                    v-if="!change_label_enabled[key]"
+                    :ref="index === 0 ? 'step_settings_stat_delete' : null">
+                    {{ $t('delete') }}
+                </button>
               </div>
             </div>
           </template>
           <div class="action-group" v-if="add_stat_enabled">
-            <label for="temp_stat">{{ t('Nom') }}</label>
+            <label for="temp_stat">{{ $t('name') }}</label>
             <input @keyup.enter="addStat()" v-model="temp_stat_name" id="temp_stat" type="text">
-            <button class="btn-valid" @click="addStat()">{{ t('Valider') }}</button>
-            <button @click="add_stat_enabled = false">{{ t('Annuler') }}</button>
+            <button class="btn-valid" @click="addStat()">{{ $t('submit') }}</button>
+            <button @click="add_stat_enabled = false">{{ $t('cancel') }}</button>
           </div>
         </div>
       </div>

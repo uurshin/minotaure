@@ -1,14 +1,10 @@
 <script>
 import { usePlayerStore } from '../main';
 import VueMultiselect from "vue-multiselect";
-import {useI18n} from "vue-i18n";
+
 export default {
   components: {
     VueMultiselect
-  },
-  setup() {
-    const { t } = useI18n()
-    return { t }
   },
   data() {
     const store = usePlayerStore();
@@ -62,6 +58,18 @@ export default {
               }
           );
         }
+        else if (this.type_pick === 'none') {
+          relevant_characters = relevant_characters.filter(
+              function (character) {
+                let found = -1;
+                vm.pick_multiselect.every(function(tag) {
+                  found = character.tags.findIndex((character_tag) => character_tag.code === tag.code);
+                  return (found === -1);
+                })
+                return (found === -1);
+              }
+          );
+        }
         else if (this.type_pick === 'each') {
           // TODO : each
           // vm.pick_multiselect.forEach(function(picked_tag) {
@@ -99,7 +107,7 @@ export default {
               let found = character.tags.findIndex((character_tag) => character_tag.code === tag.code);
               if (found === -1) {
                 character.tags.push(tag);
-                // messages.push(vm.$t('tag ajouté', {tag_label: tag.label}) );
+                // messages.push(vm.$t('added_tag', {tag_label: tag.label}) );
               }
             });
           }
@@ -108,7 +116,7 @@ export default {
               let found = character.tags.findIndex((character_tag) => character_tag.code === tag.code);
               if (found !== -1) {
                 character.tags.splice(found, 1);
-                // messages.push(vm.$t('tag enlevé', {tag_label: tag.label}) );
+                // messages.push(vm.$t('removed_tag', {tag_label: tag.label}) );
               }
             });
           }
@@ -140,15 +148,10 @@ export default {
     addTag(tag_label, type) {
       let group = this.store.tag_groups.find((element) => (element.code === 'freetag'));
       if (group === undefined) {
-        group = {
-          label: this.$t('Tags des épreuves'),
-          code: 'freetag',
-          tags: [],
-          start: 'none',
-        };
-        this.store.tag_groups.push(group);
+        group = this.store.addGroupTag(true);
       }
       let tag = this.store.addTag(tag_label, group);
+      group.picking_array.push(tag.code);
       this.chosen_modifier_pick_add.push(tag);
     },
   }
@@ -159,11 +162,12 @@ export default {
   <div class="tab" ref="tab">
     <div id='tab-pick-content'>
       <div class="vertical-wrapper">
-        <input type="number" v-model="nb_targets" min="1">
+        <input ref="step_pick_1" type="number" v-model="nb_targets" min="1">
         <select v-model="type_pick">
-          <option value="one">{{ t('parmi les personnages ayant un de ces tags') }}</option>
-          <option value="all">{{ t('parmi les personnages ayant tous ces tags') }}</option>
-          <option disabled value="each">{{ t('personnages par tags') }} - en chantier</option>
+          <option value="one">{{ $t('admin_pick_one') }}</option>
+          <option value="all">{{ $t('admin_pick_all') }}</option>
+          <option value="none">{{ $t('admin_pick_none') }}</option>
+          <option disabled value="each">{{ $t('admin_pick_each') }} - {{ $t('future_feature') }}</option>
         </select>
         <vue-multiselect
             ref="pick_multiselect"
@@ -174,9 +178,9 @@ export default {
             group-values="tags"
             group-label="label"
             :group-select="true"
-            :placeholder="$t('Choisir un tag')"
-            :tagPlaceholder="$t('Choisir un tag')"
-            noOptions="Tout le monde"
+            :placeholder="$t('select_tag')"
+            :tagPlaceholder="$t('select_tag')"
+            :noOptions="$t('everyone')"
             :options=store.tag_groups
             :multiple="true"
             :taggable="false"
@@ -185,7 +189,7 @@ export default {
       </div>
 
       <div id="consequences" class="vertical-wrapper">
-        <span class="label-wrapper">{{ t('Conséquences supplémentaires du tirage') }}</span>
+        <span class="label-wrapper">{{ $t('admin_pick_add_csq') }}</span>
         <div>
           <div class="modifiers-buttons" v-for="(gauge, key) in store.current_game.gauges">
             <span class="modifier-label">{{ gauge.name }}</span>
@@ -205,15 +209,15 @@ export default {
           </div>
         </div>
         <div class="full">
-          <label for='chosen_modifier_pick_add'>{{ t('Ajouter les tags') }}</label>
+          <label for='chosen_modifier_pick_add'>{{ $t('add_tags') }}</label>
           <vue-multiselect
               id='chosen_modifier_pick_add'
               v-model="chosen_modifier_pick_add"
               label="label"
               track-by="code"
-              :tag-placeholder="$t('Ajouter un tag')"
-              :placeholder="$t('Tapez un mot')"
-              :noOptions="$t('Aucun autre tag, inventez-en un !')"
+              :tag-placeholder="$t('add_tag')"
+              :placeholder="$t('input_word')"
+              :noOptions="$t('no_tag_create')"
               group-values="tags"
               group-label="label"
               :group-select="false"
@@ -225,13 +229,13 @@ export default {
           ></vue-multiselect>
         </div>
         <div class="full">
-          <label for='chosen_modifier_pick_remove'>{{ t('Retirer les tags') }}</label>
+          <label for='chosen_modifier_pick_remove'>{{ $t('remove_tag') }}</label>
           <vue-multiselect
               id='chosen_modifier_pick_remove'
               v-model="chosen_modifier_pick_remove"
               label="label"
               track-by="code"
-              :placeholder="$t('Tapez un mot')"
+              :placeholder="$t('input_word')"
               :showNoOptions="false"
               group-values="tags"
               group-label="label"
@@ -244,7 +248,7 @@ export default {
         </div>
       </div>
 
-      <button id="admin_pick_button" class="btn-valid" @click="launchPick">{{ t('Lancer le tirage') }}</button>
+      <button id="admin_pick_button" class="btn-valid" @click="launchPick">{{ $t('admin_pick_launch') }}</button>
     </div>
   </div>
 </template>

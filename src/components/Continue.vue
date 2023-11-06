@@ -1,15 +1,10 @@
 <script>
 import router, { usePlayerStore }  from '../main';
 import { ref } from 'vue'
-import { useI18n } from "vue-i18n";
 import { Peer } from "peerjs";
 
 export default {
   setup() {
-    const { t } = useI18n({
-      warnHtmlMessage: false,
-      warnHtmlInMessage: 'off'
-    });
     const version = APP_VERSION;
     const versions = version.split('.');
     let games_storage = localStorage.getItem('games');
@@ -17,7 +12,7 @@ export default {
     const games = ref(games_storage);
 
     return {
-      games, t, versions, version
+      games, versions, version
     }
   },
   data() {
@@ -46,7 +41,7 @@ export default {
           return this.$t('continue_game', {name: found.name});
         }
       }
-      return this.$t('Gérer vos parties');
+      return this.$t('game_manage');
     },
   },
   methods: {
@@ -68,7 +63,7 @@ export default {
     },
     deleteGame(id, event) {
       if (!this.confirmDelete) {
-        event.target.innerText = this.$t('Confirmer ?');
+        event.target.innerText = this.$t('confirm_question');
         this.confirmDelete = true;
       }
       else {
@@ -83,7 +78,7 @@ export default {
     },
     deleteAllGames(event) {
       if (!this.confirmDelete) {
-        event.target.innerText = this.$t('Confirmer ?');
+        event.target.innerText = this.$t('confirm_question');
         this.confirmDelete = true;
       }
       else {
@@ -139,23 +134,23 @@ export default {
         <span>{{ game.name }}<span class="danger" v-if="game.version !== undefined && versionIsDeprecated(game.version)">*</span></span>
         <span class="date" v-if="activated !== key">{{ formatDate(game.date) }}</span>
       </div>
-      <span v-if="activated !== key">{{ t('count_personnage', {count: game.characters.length}) }}</span>
+      <span v-if="activated !== key">{{ $t('count_personnage', game.characters.length, {count: game.characters.length}) }}</span>
       <div class="hidden-mobile" :class="{active: activated === key}">
-        <button class="btn-valid" @click="askPublicId(game.id)">{{ t('Continuer') }}</button>
-        <button class="btn-danger" @click="deleteGame(game.id, $event)">{{ t('Supprimer') }}</button>
+        <button class="btn-valid" @click="askPublicId(game.id)">{{ $t('continue') }}</button>
+        <button class="btn-danger" @click="deleteGame(game.id, $event)">{{ $t('delete') }}</button>
       </div>
-      <button class="visible-mobile" @click="activated = key;" v-if="activated !== key">{{ t('Voir plus') }}</button>
+      <button class="visible-mobile" @click="activated = key;" v-if="activated !== key">{{ $t('see_more') }}</button>
     </div>
     <div class="vertical-wrapper" v-if="!games.length">
-      <span>{{ t("Vous n'avez créé aucune partie.") }}</span>
-      <router-link to="/create">{{ t("Créer une partie") }}</router-link>
+      <span>{{ $t("any_game") }}</span>
+      <router-link to="/create">{{ $t("game_create") }}</router-link>
     </div>
-    <button v-if="games.length > 1 && !ask_id" class="btn-danger delete-all" @click="deleteAllGames($event)">{{ t('Supprimer toutes les parties') }}</button>
+    <button v-if="games.length > 1 && !ask_id" class="btn-danger delete-all" @click="deleteAllGames($event)">{{ $t('delete_all_games') }}</button>
     <div class="continue-game" v-if="ask_id">
       <input name="id_admin" type="text" id="id_admin" v-model="id_admin">
-      <label for="id_admin">{{ t("Cet identifiant sera inclus dans votre lien d'invitation. Vous pouvez choisir le vôtre.") }}</label>
-      <button class="btn-valid" @click="continueGame()">{{ t('Lancer la partie') }}</button>
-      <button @click="cancelContinue()" >{{ t('Annuler') }}</button>
+      <label for="id_admin">{{ $t("game_id_help") }}</label>
+      <button class="btn-valid" @click="continueGame()">{{ $t('start_game') }}</button>
+      <button @click="cancelContinue()" >{{ $t('cancel') }}</button>
     </div>
   </div>
 </template>
@@ -199,7 +194,7 @@ export default {
     display: grid;
     grid-template-columns: 1fr 1fr 2fr;
     align-items: center;
-    gap: 60px;
+    gap: 20px 60px;
     text-align: left;
     background: var(--background-card-color);
     border-radius: 10px;

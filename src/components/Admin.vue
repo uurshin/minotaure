@@ -11,7 +11,6 @@ import AdminTabPoll from '../components/AdminTabPoll.vue'
 import AdminTabChallenge from '../components/AdminTabChallenge.vue'
 import AdminTabPick from '../components/AdminTabPick.vue'
 import AdminTour from '../components/AdminTour.vue'
-import { useI18n } from "vue-i18n";
 import { Peer } from "peerjs";
 
 export default {
@@ -46,12 +45,11 @@ export default {
   },
   setup() {
     const store = usePlayerStore();
-    const { t } = useI18n();
     const is_live = ref[false];
     const btn_live = ref('Démarrer la vidéo');
     const current_tab = ref('');
     return {
-      store, t, is_live, btn_live, current_tab
+      store, is_live, btn_live, current_tab
     }
   },
   data() {
@@ -65,12 +63,12 @@ export default {
       temp_game_name: '',
       tabs: [
         {id: 'intro', label: 'Introduction'},
-        {id: 'characters', label: 'Personnages', tutorial: 'off' },
-        {id: 'poll', label: 'Sondages', tutorial: 'off' },
-        {id: 'challenge', label: 'Épreuve', tutorial: 'off' },
-        {id: 'pick', label: 'Tirage', tutorial: 'off' },
-        {id: 'tags', label: 'Tags', tutorial: 'blink' },
-        {id: 'settings', label: 'Paramètres', tutorial: 'blink' }
+        {id: 'characters', label: 'characters', tutorial: 'off' },
+        {id: 'poll', label: 'polls', tutorial: 'off' },
+        {id: 'challenge', label: 'challenge', tutorial: 'off' },
+        {id: 'pick', label: 'draw', tutorial: 'off' },
+        {id: 'tags', label: 'tags', tutorial: 'blink' },
+        {id: 'settings', label: 'settings', tutorial: 'blink' }
       ]
     }
   },
@@ -86,7 +84,7 @@ export default {
       }
     },
     gameLabel: function() {
-      return (this.game_name_focused === 0 ? this.$t('Renommer la partie') : this.store.current_game.name);
+      return (this.game_name_focused === 0 ? this.$t('game_rename') : this.store.current_game.name);
     }
   },
   created() {
@@ -127,12 +125,12 @@ export default {
     // It's the first time the game is loaded, so initialize some data.
     if (vm.store.current_game.initialized === false) {
       vm.store.current_game.stats = {
-        fo1: {name: vm.$t('Physique')},
-        me1: {name: vm.$t('Mental')}
+        fo1: {name: vm.$t('strength')},
+        me1: {name: vm.$t('mind')}
       }
       vm.store.current_game.gauges = {
-        li1: {name: vm.$t('Vie'), value: 10, deadly: true},
-        wi1: {name: vm.$t('Volonté'), value: 10, deadly: false}
+        li1: {name: vm.$t('health'), value: 10, deadly: true},
+        wi1: {name: vm.$t('will'), value: 10, deadly: false}
       }
       vm.store.current_game.tag_groups = [];
       vm.store.current_game.polls = {};
@@ -184,20 +182,28 @@ export default {
       conn.on('data', function (data) {
         // Player connected and waiting for the game ID.
         if (data.handshake === 'readyForCall') {
-          // The game has already started, send the corresponding signal.
-          if (vm.store.current_game.game_started) {
+          // Host and player versions are not compatible.
+          if (data.version === undefined || data.version !== APP_VERSION) {
             conn.send({
-              handshake:'gameStart',
-              game_token: vm.store.current_game.id
+              handshake:'versionError'
             });
           }
           else {
-            // The game has not started, send the corresponding signal.
-            vm.store.temp_connections.push(conn);
-            conn.send({
-              handshake:'gameWait',
-              game_token: vm.store.current_game.id
-            });
+            // The game has already started, send the corresponding signal.
+            if (vm.store.current_game.game_started) {
+              conn.send({
+                handshake:'gameStart',
+                game_token: vm.store.current_game.id
+              });
+            }
+            else {
+              // The game has not started, send the corresponding signal.
+              vm.store.temp_connections.push(conn);
+              conn.send({
+                handshake:'gameWait',
+                game_token: vm.store.current_game.id
+              });
+            }
           }
         }
         // The player is connected and waiting for a character.
@@ -209,7 +215,7 @@ export default {
           let new_character;
 
           // The player submitted a character token to retrieve a (possibly) existing character.
-          if (data.token !== undefined) {
+          if (data.token !== undefined && data.token !== null) {
             new_character = vm.store.retrieveCharacter(data.token);
             // The character exists and should be sent to the player.
             if (new_character !== undefined) {
@@ -231,6 +237,7 @@ export default {
           // New character should be created (it could be after death), send a creation form.
           if (new_character === undefined || data.reset !== undefined) {
             message.handshake = 'initCharacter';
+            message.game_token = vm.store.current_game.id;
             message.creation_form = {
               options: vm.store.getStartGroupTags()
             };
@@ -277,7 +284,7 @@ export default {
         }
         tab_found = this.tabs.find((tab) => tab.tutorial === 'blink');
         if (tab_found === undefined) {
-          this.$refs['start'].classList.add('attention');
+          this.$refs['step_start'].classList.add('attention');
         }
       }
       if (this.current_tab != null) {
@@ -290,15 +297,15 @@ export default {
       const vm = this;
       if (window.location.origin === 'null') {
         navigator.clipboard.writeText(this.store.peer.id);
-        event.target.innerText = this.$t("Identifiant de partie copié !");
+        event.target.innerText = this.$t("game_id_copied");
       }
       else {
         navigator.clipboard.writeText(window.location.href.slice(0, location.href.lastIndexOf("/")) + 'join?id=' + this.store.peer.id);
-        event.target.innerText = this.$t("Lien d'invitation copié !");
+        event.target.innerText = this.$t("invite_link_copied");
       }
 
       setTimeout(function() {
-        event.target.innerText = vm.$t('Inviter à jouer');
+        event.target.innerText = vm.$t('invite_to_play');
       }, 2000)
     },
     startTour() {
@@ -355,7 +362,7 @@ export default {
   <admin-tour ref="admin_tour"></admin-tour>
   <div id="admin-wrapper" v-if="store.current_game != null">
     <div class="tabs">
-      <button v-if="game_name_focused < 1" class="game-name" @keyup.enter="gameStartRename" @click="gameStartRename">{{ gameLabel }}</button>
+      <button ref='step_game_name' v-if="game_name_focused < 1" class="game-name" @keyup.enter="gameStartRename" @click="gameStartRename">{{ gameLabel }}</button>
       <input maxlength="25" ref="input_game_name" id="input-game-name" v-show="game_name_focused === 1" type="text" v-model="temp_game_name" @blur="gameConfirmRename" @keyup.enter="gameConfirmRename" />
       <div
           tabindex="0"
@@ -366,15 +373,15 @@ export default {
           class="tab-label"
           :class="{open: current_tab === tab.id, attention: tab.tutorial === 'blink' && this.store.current_game.tuto_on}"
       >
-        {{ t(tab.label) }}
+        {{ $t(tab.label) }}
       </div>
       <div class="tab-details">
-        <button @click="startTour">{{ t('Aide')}}</button>
-        <button class="icon-email" v-if="peer !== undefined" @click="shareLink">
-          {{ t("Inviter à jouer") }}
+        <button ref="step_help" @click="startTour" class="icon-question">{{ $t('help')}}</button>
+        <button ref="step_invite" class="icon-email" v-if="peer !== undefined" @click="shareLink">
+          {{ $t("invite_to_play") }}
         </button>
-        <button ref="start" class="icon-play" :class="{'btn-important': !store.current_game.tuto_on, attention: !this.store.current_game.tuto_on}" v-if="!store.current_game.game_started" @click="startGame">
-          {{ t("Démarrer") }}
+        <button ref="step_start" class="icon-play" :class="{'btn-important': !store.current_game.tuto_on, attention: !this.store.current_game.tuto_on}" v-if="!store.current_game.game_started" @click="startGame">
+          {{ $t("start") }}
         </button>
       </div>
     </div>
@@ -451,7 +458,7 @@ export default {
       top: -21px;
       right: 0;
       width: auto;
-      min-width: 120px;
+      min-width: 140px;
       margin: var(--margin-multiselect);
       text-align: center;
       color: black;
@@ -637,6 +644,7 @@ export default {
 
   .attention {
     background-color: black;
+    color: white;
     animation-name: color;
     animation-duration: 2s;
     animation-iteration-count: infinite;
@@ -646,6 +654,14 @@ export default {
       animation-name: invert-color;
       animation-duration: 2s;
       animation-iteration-count: infinite;
+    }
+  }
+
+  .vue-simple-context-menu {
+    font-size: 14px;
+
+    li {
+      padding-top: 0;
     }
   }
 

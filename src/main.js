@@ -33,7 +33,10 @@ const i18n = createI18n({
     legacy: false,
     locale: (Intl.DateTimeFormat().resolvedOptions().locale !== undefined ? Intl.DateTimeFormat().resolvedOptions().locale.slice(0, 2) : 'fr'),
     fallbackLocale: 'en', // fallback locale
-    messages
+    messages,
+    warnHtmlMessage: false,
+    warnHtmlInMessage: 'off',
+    globalInjection: true
 })
 
 const app = createApp(Main)
@@ -41,7 +44,7 @@ app.use(i18n)
 app.use(createPinia())
 app.use(router)
 
-window.vm = app.mount('#app')
+window.vm = app.mount('#app');
 
 export const usePlayerStore = defineStore('playerStore', {
     state: () => ({
@@ -71,12 +74,12 @@ export const usePlayerStore = defineStore('playerStore', {
         current_game: (state) => state._current_game,
         characters: (state) => state._current_game.characters,
         alive_characters: (state) => state._current_game.characters.filter((character) => character.alive),
-        picked_characters: (state) => state._current_game.picked_characters.filter((character) => character.picked),
+        picked_characters: (state) => state._current_game.characters.filter((character) => character.picked),
         tag_groups: (state) => state._current_game.tag_groups,
         tag_groups_plus_targets: function(state) {
-            if (state._current_game.has_picked) {
+            if (this.picked_characters.length) {
                 let altered_group = [...state._current_game.tag_groups];
-                altered_group.unshift({code: 'targets', label: 'Tirés au sort', tags: [{code: 'targets', label: 'Tirés au sort'}]});
+                altered_group.unshift({code: 'targets', label: i18n.global.t('selected'), tags: [{code: 'targets', label: i18n.global.t('selected')}]});
                 return altered_group;
             }
             else {
@@ -157,10 +160,24 @@ export const usePlayerStore = defineStore('playerStore', {
                 color: [this.current_game.current_basic_color, 100, 40 + Math.floor(Math.random() * 40)],
                 group: group.code
             }
+
             group.tags.push(tag);
+            group.picking_array.push(tag.code);
+
             // Refresh the css rules to display the color fo the new tag.
             this.generateCss();
             return tag;
+        },
+        addGroupTag(freetag = false) {
+            let group = {
+                tags: [],
+                picking_array: [],
+                label: freetag ? i18n.global.t('other_tags') : i18n.global.t('group_nb', {nb: this.tag_groups.length + 1})
+            }
+            group.code = freetag ? 'freetag' : Math.floor(Math.random() * 10000000);
+            group.start =  freetag ? 'none' : 'random';
+            this.tag_groups.push(group);
+            return group;
         },
         generateCss() {
             let game_css = document.getElementById('game_css');
@@ -168,11 +185,14 @@ export const usePlayerStore = defineStore('playerStore', {
             this.tags.forEach((tag) => css_str += '.tag-' + tag.code + ' .label-name:before { background-color:hsl(' + tag.color[0] + ',' + tag.color[1] + '%' + ',' + tag.color[2] + '%)' + ' !important} ');
             game_css.innerHTML = css_str;
         },
+        getGroupTags() {
+            return this.tag_groups;
+        },
         getStartGroupTags() {
             return this.tag_groups.filter((group) => group.start === 'start' && group.tags.length > 0);
         },
         getRandomGroupTags() {
-            return this.tag_groups.filter((group) => group.start === 'random' && group.tags.length > 0);
+            return this.tag_groups.filter((group) => (group.start === 'random' || group.start === 'equitable') && group.tags.length > 0);
         },
         getTagFromCode(code) {
             return this.tags.find((tag) => tag.code === code);
@@ -247,10 +267,16 @@ export const usePlayerStore = defineStore('playerStore', {
                     }
                 });
             }
+          
+            if (data === null) {
+                this.getStartGroupTags().forEach(function(group) {
+                    tags.push(vm.getRandomTagFromGroup(group));
+                })
+            }
 
-            this.getRandomGroupTags().forEach(function(group_tags) {
-                let choice = group_tags.tags[Math.floor(Math.random() * group_tags.tags.length)];
-                tags.push(choice);
+            // Choose one tag for each random tag group.
+            this.getRandomGroupTags().forEach(function(group) {
+                tags.push(vm.getRandomTagFromGroup(group));
             })
 
             let character = {
@@ -382,17 +408,50 @@ export const usePlayerStore = defineStore('playerStore', {
             )
         },
         filterCharacterByTagsAndPicked(character, chosen_tags) {
-            // Todo separate UX
+            let is_picked = false;
             if (chosen_tags.findIndex((tag) => tag.code === 'targets') > -1) {
-                return (character.picked !== undefined && character.picked);
+                is_picked = (character.picked !== undefined && character.picked);
             }
-            else {
+            if (!is_picked) {
                 return(
                     character.tags.find(
                         (tag) => chosen_tags.find((chosen_tag) => chosen_tag.code === tag.code)
                     )
                 )
             }
+            else {
+                return true;
+            }
+        },
+        getRandomTagFromGroup(group) {
+            // Remove an instance of this tag code from the pool so that it's now less probable to pick.
+            let random_number = Math.floor(Math.random() * group.picking_array.length);
+            let choice_index;
+            if (group.start === 'equitable') {
+                if (group.picking_array.length === 0) {
+                    group.tags.forEach(function(tag) {
+                        for (let i = 0; i < (tag.probability ?? 1); i++) {
+                            group.picking_array.push(tag.code);
+                        }
+                    })
+                }
+
+                choice_index = group.picking_array.splice(random_number, 1)[0];
+            }
+            else {
+                if (group.picking_array.length < group.tags.length) {
+                    group.picking_array = [];
+                    group.tags.forEach(function(tag) {
+                        for (let i = 0; i < (tag.probability ?? 1); i++) {
+                            group.picking_array.push(tag.code);
+                        }
+                    })
+                }
+                choice_index = group.picking_array[random_number];
+            }
+
+            // Add the tag to the selected array of tags selected for the new characters.
+            return group.tags.find((tag) => tag.code === choice_index);
         },
         removeTagFromAll(deleted_tag) {
             this.characters.forEach(function(character) {
@@ -528,7 +587,6 @@ export const usePlayerStore = defineStore('playerStore', {
             picked_characters.forEach((character) => character.picked = true);
         },
         resetPickedCharacters() {
-            this.current_game.has_picked = false;
             this.characters.map(function (character) {
                 if (character.picked) {
                     character.picked = false;

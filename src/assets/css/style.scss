@@ -35,6 +35,9 @@ button[class^="icon-"] {
 .icon-edit:before {
   content: "\e906";
 }
+.icon-question:before {
+  content: "\e901";
+}
 
 body {
   margin: 0;
@@ -178,7 +181,7 @@ input[type="text"]:not(.multiselect__input), select {
 }
 
 input, select {
-  border: var(--select-border);
+  border: none;
 }
 
 button.btn-valid:not(:disabled) {
