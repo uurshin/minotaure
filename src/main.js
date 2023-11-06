@@ -267,7 +267,7 @@ export const usePlayerStore = defineStore('playerStore', {
                     }
                 });
             }
-
+          
             if (data === null) {
                 this.getStartGroupTags().forEach(function(group) {
                     tags.push(vm.getRandomTagFromGroup(group));
