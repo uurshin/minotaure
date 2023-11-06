@@ -481,4 +481,19 @@ export default {
       padding: 15px;
     }
   }
+
+  .group-choice {
+    select {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background: transparent;
+      background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+      background-repeat: no-repeat;
+      background-position-x: 100%;
+      margin-right: 2rem;
+      padding-right: 2rem;
+      border: 1px solid var(--border-color);
+    }
+  }
+
 </style>

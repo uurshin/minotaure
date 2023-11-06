@@ -181,7 +181,7 @@ input[type="text"]:not(.multiselect__input), select {
 }
 
 input, select {
-  border: var(--select-border);
+  border: none;
 }
 
 button.btn-valid:not(:disabled) {

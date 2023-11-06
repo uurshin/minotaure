@@ -34,6 +34,7 @@ $breakpoints: (
   --select-border: none;
   --margin-multiselect: 0;
   --tab-border-color: white;
+  --character-picked: gold;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -53,13 +54,13 @@ $breakpoints: (
   --background-color: white;
   --button-background: black;
   --button-color: white;
-  --background-card-color: #ccc;
-  --border-input: 1px solid black;
+  --background-card-color: #90c0ff;
   --content-background: rgba(0,0,0,0.1);
   --border-color: #777;
   --warning-background: #804200;
-  --margin-multiselect: 0 -1px 0 -1px;
   --tab-border-color: black;
+  --character-picked: black;
+  --select-border: 1px solid black;
 
   &.picker {
 	  background: white;

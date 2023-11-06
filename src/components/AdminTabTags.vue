@@ -393,6 +393,10 @@ export default {
         text-align: left;
       }
 
+      .multiselect__tags {
+        border-radius: 5px;
+      }
+
       .multiselect__tags-wrap {
         .multiselect__tag {
           padding: 6px 10px;
