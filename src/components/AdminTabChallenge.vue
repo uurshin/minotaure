@@ -408,6 +408,7 @@ export default {
         align-items: center;
         gap: 30px;
 
+
         > div.modifiers-buttons {
           display: flex;
           align-items: center;
@@ -418,7 +419,7 @@ export default {
 
           > div {
             display: flex;
-            gap: 10px;
+            gap: 5px;
             align-items: center;
 
             > .modifier-value {
@@ -429,7 +430,7 @@ export default {
               display: inline-block;
               border-radius: 100%;
               width: 30px;
-              height: 30px;
+              height: 28px;
               padding: 0;
               flex: 1;
             }
