@@ -105,13 +105,19 @@ export const usePlayerStore = defineStore('playerStore', {
         polls: (state) => state._current_game.polls,
         active_polls: (state) => state._current_game.polls !== undefined ?
             Object.fromEntries(Object.entries(state._current_game.polls)
-            .filter((poll) => poll[1].active)
+            .filter((poll) => poll[1].active === 1)
             .sort(function(a, b) {
                 return b[0] - a[0];
             })) : [],
+        drafted_polls: (state) => state._current_game.polls !== undefined ?
+            Object.fromEntries(Object.entries(state._current_game.polls)
+                .filter((poll) => poll[1].active === 0)
+                .sort(function(a, b) {
+                    return b[0] - a[0];
+                })) : [],
         past_polls: (state) => state._current_game.polls !== undefined ?
             Object.fromEntries(Object.entries(state._current_game.polls)
-            .filter((poll) => !poll[1].active)
+            .filter((poll) => poll[1].active === -1)
             .sort(function(a, b) {
                 return b[0] - a[0];
             })) : []
@@ -466,7 +472,7 @@ export const usePlayerStore = defineStore('playerStore', {
             })
         },
         pollAddAnswer(code, answer) {
-            if (this.polls[code] !== undefined && this.polls[code].options[answer] !== undefined && this.polls[code].active) {
+            if (this.polls[code] !== undefined && this.polls[code].options[answer] !== undefined && this.polls[code].active === 1) {
                 this.polls[code].options[answer].count += 1;
             }
         },
