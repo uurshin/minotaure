@@ -68,13 +68,15 @@ export default {
     },
     distributeGroupTag: function(group) {
       const vm = this;
-      this.store.characters.forEach(function(character) {
-        // Check if the character already has a tag from this group.
-        let found = character.tags.findIndex((tag) => tag.group === group.code);
-        if (found === -1) {
-          character.tags.push(vm.store.getRandomTagFromGroup(group));
-        }
-      })
+      if (group.tags.length) {
+        this.store.characters.forEach(function(character) {
+          // Check if the character already has a tag from this group.
+          let found = character.tags.findIndex((tag) => tag.group === group.code);
+          if (found === -1) {
+            character.tags.push(vm.store.getRandomTagFromGroup(group));
+          }
+        })
+      }
     },
     shuffleGroupTag: function(group) {
       const vm = this;
