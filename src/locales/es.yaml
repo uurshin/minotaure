@@ -1,0 +1,284 @@
+game_create: 'Crear partida'
+game_manage: 'Gestionar partidas'
+game_join: 'Unirse a partida'
+character_manage: 'Gestionar personajes'
+read_more: "Leer más"
+character_help: "Tus personajes se guardan en tu navegador, lo que permite recuperarlos al unirte a una partida previamente creada. Puedes jugar en otro navegador exportando tus personajes."
+character_nb: "No tienes personajes para exportar | Tienes un personaje para exportar | Tienes { count } personajes para exportar"
+challenge_success: "Has superado un desafío de {stat}."
+challenge_failure: "Has fallado un desafío de {stat}."
+result_bonus: "Ganas {points} puntos de {name}."
+result_malus: "Pierdes {points} puntos de {name}."
+
+# Admin
+characters: "Personajes"
+bars: "Barras"
+polls: "Encuestas"
+challenge: "Desafío"
+stats: "Estadísticas"
+settings: "Configuración"
+tags: "Etiquetas"
+draw: "Sorteo"
+help: "Ayuda"
+start: "Iniciar"
+invite_to_play: "Invitar a jugar"
+invite_link_copied: "¡Enlace de invitación copiado!"
+game_id_copied: "¡Identificador de partida copiado!"
+strength: "Fuerza"
+mind: "Mente"
+health: "Vida"
+will: "Voluntad"
+game_rename: "Renombrar partida"
+selected: "Seleccionado"
+
+# Continuar
+continue_game: "Continuar - {name}"
+count_personnage: "1 personaje | {count} personajes"
+continue: "Continuar"
+see_more: "Ver más"
+any_game: "No has creado ninguna partida."
+# game_id: "Identificador de tu partida"
+# Este identificador se usará para unirse a la partida para los participantes.: "Este identificador se usará para unirse a la partida para los participantes."
+cancel: "Cancelar"
+in_progress: "En progreso"
+start_game: "Iniciar partida"
+warning_version: "Las partidas marcadas con un <span class='danger'>*</span> no son compatibles con tu versión de Minotauro ({version}), podrían no funcionar correctamente."
+delete_all_games: "Eliminar todas las partidas"
+confirm_question: "¿Confirmar?"
+
+# Crear
+game_name_invite: "Nombre de tu partida. Puedes cambiarlo más tarde."
+my_game: "Mi partida"
+game_id_help: "Este identificador se incluirá en tu enlace de invitación. Puedes elegir el tuyo."
+
+# AdminTabPoll
+add_poll: "Agregar encuesta"
+active_polls: "Ver encuestas activas"
+past_polls: "Ver encuestas pasadas"
+question: "Pregunta"
+possible_choices: "Opciones posibles"
+add_poll_choice: "Agregar opción"
+start_poll: "Iniciar encuesta"
+show_poll_results: "Mostrar resultados de la encuesta"
+close_poll: "Cerrar encuesta"
+nb_choice: "Opción {choice}"
+choice_gives_tag: "Esta opción otorgará la siguiente etiqueta"
+turnout: "Participación: "
+other_tags: "Otras etiquetas"
+
+# AdminTabIntro
+minotaure_welcome: "Bienvenido a Minotauro"
+tutorial_help_1: "Puedes iniciar el tutorial en cualquier momento haciendo clic en el botón <strong class='icon-question'>Ayuda</strong> (el tutorial completo estará disponible en una versión futura)."
+tutorial_help_2: "Antes de comenzar tu partida, puedes modificar la <strong>configuración</strong> y las <strong>etiquetas</strong> en las pestañas correspondientes."
+tutorial_help_3: "Puedes invitar a tus jugadores al juego haciendo clic en el botón <strong class='icon-email'>Invitar a jugar</strong>."
+tutorial_help_4: "Hasta que no hagas clic en <strong class='icon-play'>Iniciar</strong>, estarán en la sala de espera."
+
+# AdminTour
+next: "Siguiente"
+end_tour: "Finalizar recorrido"
+end_tab_tour: "Finalizar recorrido de esta pestaña"
+step_help: "¿Deseas seguir el recorrido completo o solo obtener ayuda para esta pestaña?"
+see_all_tutorial: "Recorrido completo"
+see_page_tutorial: "Recorrido de esta pestaña"
+step_game_name: "Puedes cambiar el nombre de la partida en cualquier momento."
+step_invite: "Al hacer clic en este botón, se copiará un enlace de invitación que te permitirá invitar a unirse a tu partida."
+step_start: "Hasta que no hagas clic en este botón, tus invitados esperarán en una pantalla de espera."
+tab_label_settings: "Los ajustes son la configuración de la partida que te recomendamos modificar antes de iniciarla, pero que siempre podrás cambiar durante la partida."
+step_settings_gauges:
+  "Las barras son reservas de puntos para cada personaje. Cuando creas una partida, se crean dos barras por defecto: vida y voluntad."
+step_settings_add_gauge: "Puedes agregar tantas barras como desees."
+step_settings_gauge:
+  "Todos los personajes tienen estas barras al ser creados, con una cantidad de puntos inicial que puedes modificar."
+step_settings_gauge_delete:
+  "Puedes eliminar una barra en cualquier momento."
+step_settings_gauge_make_deadly:
+  "Puedes hacer que llegar a 0 en una barra resulte en la muerte de un personaje haciendo clic en este botón (esta acción es reversible, pero los personajes ya muertos no resucitarán)."
+step_settings_stats:
+  "Las características funcionan de la misma manera que en la mayoría de los juegos de rol. Cuando creas una partida, se crean dos características: física y mental."
+step_settings_add_stat: "Puedes agregar tantas características como desees."
+step_settings_stat:
+  "Todos los personajes tienen estas características al ser creados, con una cantidad de puntos inicial de 10 + un número aleatorio entre -9 y +9. <br>
+  El total de las características de un personaje al ser creado siempre es de 10 veces el número de características, para garantizar el mismo total de puntos a todos los participantes."
+step_settings_stat_delete:
+  "Puedes eliminar una característica en cualquier momento."
+tab_label_tags:
+  "Las etiquetas son etiquetas asignadas a los personajes y son la gran fuerza de Minotauro.<br>"
+step_tags:
+  "Cada etiqueta pertenece a un grupo de etiquetas, que puede tener un nombre (ejemplo: profesiones, género, pueblo, ventajas, desventajas, etc.). 
+  Una etiqueta puede funcionar como una clase de personaje, pero es lo suficientemente versátil como para permitir otros usos."
+step_tags_group_add:
+  "Puedes agregar tantos grupos de etiquetas como desees."
+step_tags_group:
+  "Comienza a escribir texto y valida para crear una etiqueta. Se le asignará un color."
+step_tags_group_distribution:
+  "Para cada grupo de etiquetas, puedes elegir un modo de distribución de etiquetas:
+  <ul>
+  <li>- elegidas por el jugador al crear el personaje</li>
+  <li>- asignadas al azar</li>
+  <li>- asignadas equitativamente (el sistema elegirá entre las etiquetas menos asignadas para equilibrar la distribución)</li>
+  <li>- no asignadas al principio (las usarás de otra manera que al principio)</li>
+  </ul>"
+step_tags_group_distribute:
+  "Haz clic aquí para distribuir una etiqueta de este grupo a todos los personajes que aún no tengan una. Útil si creaste el grupo durante la partida."
+step_tags_group_shuffle:
+  "Haz clic aquí para distribuir una etiqueta de este grupo a todos los personajes que ya tengan una. La nueva etiqueta reemplazará la anterior. Útil si no estás satisfecho con la distribución actual."
+step_tags_group_rename:
+  "Puedes renombrar un grupo de etiquetas en cualquier momento."
+step_tags_tag:
+  "Cada etiqueta puede influir en las barras y características de un personaje al ser creado. Al hacer clic en una etiqueta, puedes:
+    <ul>
+    <li>- asociarle una <strong>característica principal</strong>. Si un personaje obtiene esta etiqueta al ser creado, automáticamente será su característica principal más alta. Ejemplo: una etiqueta 'mago' podría tener la característica principal 'Magia'.</li>
+    <li>- asociarle una <strong>característica secundaria</strong>. Si un personaje obtiene esta etiqueta al ser creado, automáticamente será su segunda característica más alta.</li>
+    <li>- asociarle <strong>bonificaciones</strong> y <strong>penalizaciones</strong> que modificarán el resultado de las características iniciales o el valor inicial de algunas barras.</li>
+    <li>- aumentar o disminuir su <strong>probabilidad</strong> de asignación aleatoria.</li>
+    <li>- cambiar su <strong>color</strong></li>
+    </ul>"
+example: 'ejemplo'
+step_tags_group_delete:
+  "Puedes eliminar un grupo de etiquetas en cualquier momento. Esto eliminará las etiquetas correspondientes para los personajes."
+tab_label_characters:
+  "Esta es la pestaña que mostrarás más a menudo durante el juego: presenta todos los personajes creados y resume sus propiedades (nombre del personaje, seudónimo del jugador, barras, características, etiquetas, etc.). Puedes buscar personajes según muchos criterios."
+tab_label_poll:
+  "Puedes iniciar una encuesta que te permitirá saber en qué dirección llevar la partida. También puedes agregar etiquetas a los personajes según las elecciones de cada jugador en la encuesta."
+tab_label_challenge:
+  "Puedes iniciar el equivalente a lanzamientos de dados que generarán consecuencias para cada personaje involucrado según su éxito o fracaso."
+tab_label_pick:
+  "Los sorteos te permiten seleccionar al azar un número de personajes de tu elección entre toda o parte de la población. También puedes aplicar consecuencias a los personajes seleccionados al azar."
+
+# AdminTabSettings
+add: "Agregar"
+gauge_start: "Comienza en {gauge_value}"
+kills_at_0: "Mata a 0"
+submit: "Aceptar"
+make_normal: "Hacer normal"
+make_fatal: "Hacer mortal"
+modify: "Modificar"
+delete: "Eliminar"
+name: "Nombre"
+starts_at: "Comienza en"
+rename: "Renombrar"
+# stat_name: "Nombre de la característica"
+
+# AdminTabChallenge
+dif_cake: "Trivial"
+dif_ext_easy: "Fácil Extrema"
+dif_very_easy: "Fácil"
+dif_easy: "Fácil Suficiente"
+dif_moderate: "Moderado"
+dif_hard: "Difícil"
+dif_very_hard: "Difícil Extrema"
+dif_extreme: "Extrema"
+dif_impossible: "Imposible"
+added_tag: "etiqueta añadida: {tag_label}"
+removed_tag: "etiqueta eliminada: {tag_label}"
+must_first: "Debes primero "
+add_stat: "crear una característica"
+tested_stat: "Característica a probar"
+choose_stat: "Elegir una característica"
+difficulty: "Dificultad: "
+targets: "Objetivos"
+add_target: "Agregar un objetivo"
+everyone: "Todos"
+positive_csq: "Consecuencias de éxito"
+negative_csq: "Consecuencias de fracaso"
+add_tags: "Agregar las etiquetas"
+add_tag: "Agregar una etiqueta"
+input_word: "Escribe una palabra"
+no_tag_create: "Ninguna otra etiqueta, ¡inventa una!"
+remove_tag: "Quitar las etiquetas"
+this_will_test: "Vas a desencadenar una prueba de "
+for_everyone: "Para todos"
+for_every: "Para cada: "
+challenge_characters: "Los personajes "
+that_pass: "que pasen"
+that_fail: "que fallen"
+will_have: " obtendrán: "
+get_following_tags: "Estas etiquetas adicionales: "
+lose_following_tags: "Estas etiquetas menos (si las tienen): "
+start_challenge: "¡Iniciar la prueba!"
+
+# AdminTabCharacters
+context_add_selection_character: "Agregar a la selección (mayús + clic izquierdo)"
+context_remove_selection_character: "Quitar de la selección (mayús + clic izquierdo)"
+context_delete_character: "Eliminar el personaje"
+context_edit_character: "Editar el personaje (próximamente)"
+last_challenge_success_rate: "La última prueba tuvo una tasa de éxito del "
+select_tag: "Elegir una etiqueta"
+# filter_tag: "Filtrar por etiqueta"
+alive: "Vivos"
+connected: "Conectados"
+passed: "Éxitos"
+failed: "Fracasos"
+show_all_characters: "Mostrar todos"
+spawn_npc: "Generar un PNJ"
+characters_on: " en "
+no_characters_to_show_try_different_filter: "No hay personajes que coincidan con estos filtros"
+search_character: "Buscar un personaje"
+start_typing: "Empieza a escribir"
+clear_selection: "Borrar la selección"
+char_picked: "Seleccionados"
+add_all_to_selection: "Agregar todo a la selección"
+
+# AdminTabTags
+group_nb: "Grupo {nb}"
+bonus_gauge: "Aumentar la barra {name}"
+malus_gauge: "Disminuir la barra {name}"
+bonus_stat: "Aumentar la característica {name}"
+malus_stat: "Disminuir la característica {name}"
+linkStatToTag: "Asociar a {statname} como característica principal"
+unlinkStatToTag: "Dejar de asociar a {statname} como característica principal"
+link2StatToTag: "Asociar a {statname} como característica secundaria"
+unlink2StatToTag: "Dejar de asociar a {statname} como característica secundaria"
+change_tag_color: "Cambiar el color"
+add_groug_of_tag: "Agregar un grupo de etiquetas"
+# left_click_to_mod_stats: "Clic izquierdo en una etiqueta para modificar sus características"
+distribution_mode: "Regla de asignación: "
+randomly_distributed_at_creation: "Distribuido al azar al crearlo"
+equitably_distributed_at_creation: "Distribuido equitativamente al crearlo"
+chosen_at_char_creation: "Elegido al crear el personaje"
+not_autodistributed: "Sin regla"
+distribute: "Distribuir"
+shuffle: "Mezclar"
+shuffle_help: "Para cada personaje que ya tenga una etiqueta de este grupo, se le asignará al azar una etiqueta del grupo en su lugar"
+main_stat: " Característica principal: "
+secondary_stat: " Característica secundaria: "
+tags_submit: "Terminar"
+a_tag_will_be_assigned_to_char: "A cada personaje que aún no tenga una etiqueta de este grupo, se le asignará al azar una etiqueta"
+delete_groupe_tags_and_remove_from_chars: "Todas las etiquetas de este grupo se eliminarán y se quitarán de los personajes"
+increase_probability: "Aumentar la probabilidad"
+decrease_probability: "Disminuir la probabilidad"
+tag_probability: "1 oportunidad entre {total} | {count} oportunidades entre {total}"
+
+# Characters
+count_char_import: "1 personaje importado | {count} personajes importados"
+invalid_qr_code: "Código QR no válido"
+export_char: "Exportar tus personajes"
+import_char: "Importar tus personajes"
+delete_all_chars: "Eliminar todos tus personajes"
+
+# AdminTabPick
+admin_pick_one: "entre los personajes que tienen una de estas etiquetas:"
+admin_pick_all: "entre los personajes que tienen todas estas etiquetas:"
+admin_pick_none: "entre los personajes que no tienen ninguna de estas etiquetas:"
+admin_pick_each: "personajes por etiqueta:"
+admin_pick_launch: "Lanzar el sorteo"
+future_feature: "característica futura"
+admin_pick_add_csq: "Consecuencias adicionales del sorteo"
+
+# Join
+game_id: "ID de la partida"
+join: "Unirse"
+
+# Main
+back_to_home: "Volver a inicio"
+
+# Player
+waiting_for_game_start: "Esperando el inicio de la partida"
+char_name: "Nombre de tu personaje"
+user_name: "Tu seudónimo (opcional)"
+your_char: "Tu personaje es "
+submit_your_char: "Enviar tu personaje"
+send_answer: "Enviar mi elección"
+is_dead: "{charname} ha muerto"
+poll_pending: "Encuesta {pollnb} pendiente"
+create_new_char: "Crear un nuevo personaje"
