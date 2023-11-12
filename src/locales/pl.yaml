@@ -37,12 +37,10 @@ count_personnage: '1 postać | {count} postacie'
 continue: 'Kontynuuj'
 see_more: 'Zobacz więcej'
 any_game: 'Nie utworzyłeś jeszcze żadnej gry.'
-# game_id: 'Identyfikator twojej gry'
-# Tożsamość ta posłuży do dołączenia do gry przez uczestników.: 'Tożsamość ta posłuży do dołączenia do gry przez uczestników.'
 cancel: 'Anuluj'
 in_progress: 'W trakcie'
 start_game: 'Rozpocznij grę'
-warning_version: 'Gry oznaczone gwiazdką <span class=\'danger\'>*</span> nie są kompatybilne z twoją wersją Minotaur ({version}), mogą nie działać poprawnie.'
+warning_version: "Gry oznaczone gwiazdką <span class='danger'>*</span> nie są kompatybilne z twoją wersją Minotaur ({version}), mogą nie działać poprawnie."
 delete_all_games: 'Usuń wszystkie gry'
 confirm_question: 'Potwierdzić?'
 
@@ -50,6 +48,36 @@ confirm_question: 'Potwierdzić?'
 game_name_invite: 'Nazwa twojej gry. Możesz ją później zmienić.'
 my_game: 'Moja gra'
 game_id_help: 'Tożsamość ta będzie zawarta w twoim linku zaproszeniowym. Możesz wybrać własną.'
+
+#AdminTabPoll
+add_poll: "Dodaj ankietę"
+active_polls: "Zobacz aktywne ankiety"
+past_polls: "Zobacz wcześniejsze ankiety"
+question: "Pytanie"
+question_label: "Pytanie: "
+possible_choices: "Możliwe odpowiedzi"
+add_poll_choice: "Dodaj wybór"
+start_poll: "Uruchom ankietę"
+show_poll_results: "Pokaż wyniki"
+close_poll: "Zamknij ankietę"
+nb_choice: "Wybór {nb}"
+nb_choice_label: "Wybór {nb}: "
+choice_gives_tag: "Dodaj następujące tagi dla tego wyboru"
+turnout: "Frekwencja: "
+other_tags: "Inne"
+choose_name_draft: "Możesz wybrać nazwę dla swojego szkicu"
+save_draft_poll: "Zapisz jako szkic"
+drafted_polls: "Zobacz szkice"
+load_poll: "Wczytaj ankietę"
+show_poll_details: "Pokaż szczegóły"
+see_less: "Pokaż mniej"
+
+#AdminTabIntro
+minotaure_welcome: "Witaj w Minotaure"
+tutorial_help_1: "Rozpocznij samouczek, klikając przycisk <strong class='icon-question'>Pomoc</strong> (pełny samouczek będzie dostępny w przyszłej wersji)"
+tutorial_help_2: "Przed rozpoczęciem gry możesz modyfikować <strong>ustawienia</strong> i <strong>tagi</strong> w odpowiednich zakładkach."
+tutorial_help_3: "Możesz zaprosić swoich graczy do gry od razu, klikając przycisk <strong class='icon-email'>Zaproś do gry</strong>."
+tutorial_help_4: "Do czasu kliknięcia przycisku <strong class='icon-play'>Start</strong> będą oni w poczekalni."
 
 #AdminTour
 next: "Następny"
@@ -137,7 +165,6 @@ delete: "Usuń"
 name: "Nazwa"
 starts_at: "Zaczyna się od"
 rename: "Zmień nazwę"
-# stat_name: "Nazwa cechy"
 
 #AdminTabChallenge
 dif_cake: "Banalne"
@@ -184,7 +211,6 @@ context_delete_character: "Usuń postać"
 context_edit_character: "Edytuj postać (nadchodzi)"
 last_challenge_success_rate: "Ostatnie wyzwanie miało wskaźnik sukcesu wynoszący "
 select_tag: "Wybierz tag"
-# filter_tag: "Filtruj według tagu"
 alive: "Żywi"
 connected: "Podłączeni"
 passed: "Zdane"
@@ -211,7 +237,6 @@ link2StatToTag: "Powiąż z {statname} jako drugorzędną cechą"
 unlink2StatToTag: "Przerwij powiązanie z {statname} jako drugorzędną cechą"
 change_tag_color: "Zmień kolor"
 add_groug_of_tag: "Dodaj grupę tagów"
-# left_click_to_mod_stats: "Kliknij lewym przyciskiem myszy na tagu, aby edytować cechy"
 distribution_mode: "Tryb przydzielania : "
 randomly_distributed_at_creation: "Przydzielane losowo przy tworzeniu postaci"
 equitably_distributed_at_creation: "Przydzielane równo przy tworzeniu postaci"

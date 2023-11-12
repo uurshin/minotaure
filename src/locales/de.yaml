@@ -40,7 +40,7 @@ any_game: 'Sie haben noch kein Spiel erstellt.'
 cancel: 'Abbrechen'
 in_progress: 'In Bearbeitung'
 start_game: 'Spiel starten'
-warning_version: 'Spiele, die mit einem <span class='danger'>*</span> markiert sind, sind nicht mit Ihrer Minotaure-Version ({version}) kompatibel und könnten möglicherweise nicht ordnungsgemäß funktionieren.'
+warning_version: "Spiele, die mit einem <span class='danger'>*</span> markiert sind, sind nicht mit Ihrer Minotaure-Version ({version}) kompatibel und könnten möglicherweise nicht ordnungsgemäß funktionieren."
 delete_all_games: 'Alle Spiele löschen'
 confirm_question: 'Bestätigen?'
 
@@ -49,27 +49,35 @@ game_name_invite: 'Name Ihres Spiels. Sie können ihn später ändern.'
 my_game: 'Mein Spiel'
 game_id_help: 'Diese ID wird in Ihren Einladungslink aufgenommen. Sie können Ihre eigene wählen.'
 
-# AdminTabPoll
-add_poll: 'Umfrage hinzufügen'
-active_polls: 'Aktive Umfragen anzeigen'
-past_polls: 'Vergangene Umfragen anzeigen'
-question: 'Frage'
-possible_choices: 'Mögliche Antworten'
-add_poll_choice: 'Antwort hinzufügen'
-start_poll: 'Umfrage starten'
-show_poll_results: 'Ergebnisse anzeigen'
-close_poll: 'Umfrage beenden'
-nb_choice: 'Antwort {choice}'
-choice_gives_tag: 'Diese Antwort gibt den folgenden Tag'
-turnout: 'Teilnahme: '
-other_tags: 'Andere Tags'
+#AdminTabPoll
+add_poll: "Umfrage hinzufügen"
+active_polls: "Aktive Umfragen anzeigen"
+past_polls: "Vergangene Umfragen anzeigen"
+question: "Frage"
+question_label: "Frage: "
+possible_choices: "Mögliche Antworten"
+add_poll_choice: "Antwort hinzufügen"
+start_poll: "Umfrage starten"
+show_poll_results: "Ergebnisse anzeigen"
+close_poll: "Umfrage beenden"
+nb_choice: "Auswahl {nb}"
+nb_choice_label: "Auswahl {nb}: "
+choice_gives_tag: "Füge für diese Auswahl die folgenden Tags hinzu"
+turnout: "Beteiligung: "
+other_tags: "Verschiedenes"
+choose_name_draft: "Sie können einen Namen für Ihren Entwurf wählen"
+save_draft_poll: "Als Entwurf speichern"
+drafted_polls: "Entwürfe anzeigen"
+load_poll: "Umfrage laden"
+show_poll_details: "Details anzeigen"
+see_less: "Weniger anzeigen"
 
-# AdminTabIntro
-minotaure_welcome: 'Willkommen bei Minotaure'
-tutorial_help_1: 'Sie können das Tutorial jederzeit starten, indem Sie auf die Schaltfläche <strong class='icon-question'>Hilfe</strong> klicken (das vollständige Tutorial wird in einer zukünftigen Version verfügbar sein).'
-tutorial_help_2: 'Bevor Sie Ihr Spiel starten, können Sie die <strong>Einstellungen</strong> und <strong>Tags</strong> in den entsprechenden Registerkarten anpassen.'
-tutorial_help_3: 'Sie können jetzt Ihre Spieler zur Teilnahme am Spiel einladen, indem Sie auf die Schaltfläche <strong class='icon-email'>Zum Spielen einladen</strong> klicken.'
-tutorial_help_4: 'Solange Sie nicht auf <strong class='icon-play'>Starten</strong> klicken, befinden sie sich im Wartebereich.'
+#AdminTabIntro
+minotaure_welcome: "Willkommen bei Minotaure"
+tutorial_help_1: "Sie können das Tutorial starten, indem Sie auf die <strong class='icon-question'>Hilfe</strong>-Schaltfläche klicken (ein vollständiges Tutorial wird in einer zukünftigen Version verfügbar sein)"
+tutorial_help_2: "Bevor Sie Ihr Spiel starten, können Sie die <strong>Einstellungen</strong> und <strong>Tags</strong> in den entsprechenden Registerkarten ändern."
+tutorial_help_3: "Sie können Ihre Spieler sofort zum Spiel einladen, indem Sie auf die Schaltfläche <strong class='icon-email'>Zum Spielen einladen</strong> klicken."
+tutorial_help_4: "Bis Sie auf <strong class='icon-play'>Start</strong> geklickt haben, befinden sie sich in einem Wartezimmer."
 
 # AdminTour
 next: "Weiter"
@@ -155,7 +163,6 @@ delete: "Löschen"
 name: "Name"
 starts_at: "Startet bei"
 rename: "Umbenennen"
-# stat_name: "Name des Merkmals"
 
 #AdminTabChallenge
 dif_cake: "Trivial"
@@ -202,7 +209,6 @@ context_delete_character: "Charakter löschen"
 context_edit_character: "Charakter bearbeiten (kommt bald)"
 last_challenge_success_rate: "Die letzte Herausforderung hatte eine Erfolgsrate von "
 select_tag: "Tag auswählen"
-# filter_tag: "Nach Tag filtern"
 alive: "Lebendig"
 connected: "Verbunden"
 passed: "Erfolgreich"
@@ -229,7 +235,6 @@ link2StatToTag: "Mit {statname} als Nebenmerkmal verknüpfen"
 unlink2StatToTag: "Verknüpfung mit {statname} als Nebenmerkmal aufheben"
 change_tag_color: "Farbe ändern"
 add_groug_of_tag: "Tag-Gruppe hinzufügen"
-# left_click_to_mod_stats: "Linksklick auf einen Tag, um seine Eigenschaften zu ändern"
 distribution_mode: "Verteilungsregel: "
 randomly_distributed_at_creation: "Zufällige Verteilung bei der Erstellung"
 equitably_distributed_at_creation: "Gleichmäßige Verteilung bei der Erstellung"
