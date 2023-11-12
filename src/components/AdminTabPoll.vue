@@ -37,7 +37,6 @@ export default {
           nb_valid += 1;
         }
       }
-      console.log(nb_valid);
       return nb_valid < 2;
     },
   },
