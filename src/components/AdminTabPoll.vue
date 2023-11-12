@@ -77,11 +77,22 @@ export default {
     finishPoll(id_poll) {
       const vm = this;
       this.store.polls[id_poll].active = -1;
+
+      let options = Object.entries(vm.store.polls[id_poll].options);
+      options.forEach(function(option) {
+        if (option[1].tags !== undefined) {
+          option[1].tags = option[1].tags.filter((tag) => vm.store.getTagFromCode(tag.code) !== undefined);
+        }
+      });
+
+      this.store.polls[id_poll].options = Object.fromEntries(options);
       this.store.characters.forEach(function(character) {
         if (character.polls[id_poll] !== undefined) {
           if (character.polls[id_poll].answer !== undefined && vm.store.polls[id_poll].options[character.polls[id_poll].answer].tags !== undefined) {
             let new_tags = vm.store.polls[id_poll].options[character.polls[id_poll].answer].tags;
-            new_tags.forEach((tag) => character.tags.push(tag));
+            new_tags.forEach(function(tag) {
+              character.tags.push(tag);
+            });
           }
           delete character.polls[id_poll];
         }
@@ -146,7 +157,9 @@ export default {
       this.label = poll.label;
       Object.entries(poll.options).forEach(function(option) {
         vm.answers[option[0]] = option[1].label;
-        vm.chosen_tags[option[0]] = option[1].tags;
+        if (option[1].tags !== undefined) {
+          vm.chosen_tags[option[0]] = option[1].tags.filter((tag) => vm.store.getTagFromCode(tag.code) !== undefined);
+        }
       });
       this.nb_options = Object.entries(poll.options).length;
       this.poll_tab = 'add';
@@ -316,6 +329,7 @@ export default {
         .title {
           display: flex;
           gap: 10px;
+          align-items: center;
 
           &:before {
             content: counter(poll);

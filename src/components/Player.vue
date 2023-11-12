@@ -278,10 +278,10 @@ export default {
         <div class="poll-content" v-if="poll.active && poll.answer === undefined">
           <span class="title">{{ poll.label }}</span>
           <span v-for="(option, poll_key) in poll.options">
-              <input type="radio" :value="poll_key" :name="'poll_' + key" :id="'poll_' + key + '_' + poll_key" v-model="answers[key]">
-              <label :for="'poll_' + key + '_' + poll_key">{{ option }}</label>
-            </span>
-          <button @click="sendAnswer(key)">{{ $t("send_answer") }}</button>
+            <input type="radio" :value="poll_key" :name="'poll_' + key" :id="'poll_' + key + '_' + poll_key" v-model="answers[key]">
+            <label :for="'poll_' + key + '_' + poll_key">{{ option }}</label>
+          </span>
+          <button :disabled="answers[key] === undefined" @click="sendAnswer(key)">{{ $t("send_answer") }}</button>
         </div>
       </div>
     </div>
