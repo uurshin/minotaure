@@ -1,8 +1,9 @@
 $breakpoints: (
         phone: 640px,
         tablet: 768px,
-        desktop: 1280px
-) !default;
+        laptop: 1280px,
+        desktop: 1440px
+);
 
 :root {
   font-family: Helvetica, system-ui, Avenir, Inter, Arial, sans-serif;
@@ -24,7 +25,7 @@ $breakpoints: (
   --border-color: #777;
   --failure-background: #8c3232;
   --success-background: #277e27;
-  --success-color: #3ec23e;
+  --success-color: #277e27;
   --danger-color: #8c3232;
   --valid-color: #266226;
   --tag-color: #1c1a1a;

@@ -12,8 +12,21 @@ export default {
     const add_stat_enabled = false;
     const temp_stat_name = '';
 
+    const add_marker_enabled = false;
+    const temp_marker_name = '';
+    const temp_marker_value = 0;
+
     return {
-      store, change_label_enabled, add_gauge_enabled, temp_gauge_name, temp_gauge_value, add_stat_enabled, temp_stat_name
+      store,
+      change_label_enabled,
+      add_gauge_enabled,
+      temp_gauge_name,
+      temp_gauge_value,
+      add_stat_enabled,
+      temp_stat_name,
+      add_marker_enabled,
+      temp_marker_name,
+      temp_marker_value
     }
   },
   mounted() {
@@ -84,6 +97,20 @@ export default {
       });
       this.add_stat_enabled = false;
       this.temp_stat_name = '';
+    },
+    addMarker: function() {
+      let code = Math.floor(Math.random() * 10000000).toString();
+      this.store.markers[code] = {
+        name: this.temp_marker_name,
+        value: this.temp_marker_value,
+      };
+      this.add_marker_enabled = false;
+      this.temp_marker_name = '';
+    },
+    changeMarker: function(key) {
+      this.store.markers[key].name = this.$refs['marker_' + key][0].value;
+      this.store.markers[key].value = parseInt(this.$refs['marker_value_' + key][0].value);
+      this.change_label_enabled[key] = false;
     },
   }
 }
@@ -161,6 +188,46 @@ export default {
         </div>
       </div>
 
+      <div ref="step_settings_markers" class="wrapper-settings">
+        <div class="wrapper-title">
+          <h2>{{ $t('markers') }}</h2>
+          <button ref="step_settings_add_marker"  class="icon-add btn-valid" v-if="!add_marker_enabled" @click="add_marker_enabled = true">{{ $t('add') }}</button>
+        </div>
+        <div class="wrapper-list">
+          <template v-for="(marker, key, index) in store.markers">
+            <div class="marker list-item" :ref="index === 0 ? 'step_settings_marker' : null">
+              <div v-if="!change_label_enabled[key]" class="wrapper-marker-title">
+                <span class="marker-name">{{ marker.name }}</span>
+                <span>{{ marker.value }}</span>
+              </div>
+              <input :ref="'marker_' + key" :value="marker.name" id="'marker_'+key" type="text" v-if="change_label_enabled[key]">
+              <input :ref="'marker_value_' + key" :value="marker.value" min="1" id="'marker_value'+key" type="number" v-if="change_label_enabled[key]">
+              <button class="btn-valid" @click="changeMarker(key)" v-if="change_label_enabled[key]">{{ $t('submit') }}</button>
+              <button @click="change_label_enabled[key] = false" v-if="change_label_enabled[key]">{{ $t('cancel') }}</button>
+              <div class="action">
+                <button @click="change_label_enabled[key] = true" v-if="!change_label_enabled[key]">{{ $t('modify') }}</button>
+                <button
+                    class="btn-danger"
+                    @keyup.enter="remove(key, 'markers')"
+                    @click="remove(key, 'markers')"
+                    v-if="!change_label_enabled[key]"
+                    :ref="index === 0 ? 'step_settings_marker_delete' : null">
+                  {{ $t('delete') }}
+                </button>
+              </div>
+            </div>
+          </template>
+          <div class="action-group" v-if="add_marker_enabled">
+            <label for="temp_marker">{{ $t('name') }}</label>
+            <input id="temp_marker" type="text" v-model="temp_marker_name" @keyup.enter="addMarker()">
+            <label for="temp_marker_value">{{ $t('starts_at') }}</label>
+            <input id="temp_marker_value" type="number" min="1" v-model="temp_marker_value">
+            <button class="btn-valid" @click="addMarker()">{{ $t('submit') }}</button>
+            <button @click="add_marker_enabled = false">{{ $t('cancel') }}</button>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </template>
@@ -168,6 +235,7 @@ export default {
 <style lang="scss" scoped>
   #tab-settings-content {
     flex-direction: row;
+    flex-wrap: wrap;
   }
   .wrapper-settings {
     gap: 15px;
@@ -213,6 +281,14 @@ export default {
 
     span:not(.gauge-name) {
       font-size: 0.9em;
+    }
+  }
+  .wrapper-marker-title {
+    display: flex;
+    gap: 10px;
+
+    .marker-name {
+      font-weight: bold;
     }
   }
 

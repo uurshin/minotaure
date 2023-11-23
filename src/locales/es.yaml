@@ -5,15 +5,12 @@ character_manage: 'Gestionar personajes'
 read_more: "Leer más"
 character_help: "Tus personajes se guardan en tu navegador, lo que permite recuperarlos al unirte a una partida previamente creada. Puedes jugar en otro navegador exportando tus personajes."
 character_nb: "No tienes personajes para exportar | Tienes un personaje para exportar | Tienes { count } personajes para exportar"
-challenge_success: "Has superado un desafío de {stat}."
-challenge_failure: "Has fallado un desafío de {stat}."
-result_bonus: "Ganas {points} puntos de {name}."
-result_malus: "Pierdes {points} puntos de {name}."
 
 # Admin
 characters: "Personajes"
 bars: "Barras"
 polls: "Encuestas"
+markers: "Marcadores"
 challenge: "Desafío"
 stats: "Estadísticas"
 settings: "Configuración"
@@ -31,7 +28,7 @@ will: "Voluntad"
 game_rename: "Renombrar partida"
 selected: "Seleccionado"
 
-# Continuar
+#Continue
 continue_game: "Continuar - {name}"
 count_personnage: "1 personaje | {count} personajes"
 continue: "Continuar"
@@ -44,7 +41,7 @@ warning_version: "Las partidas marcadas con un <span class='danger'>*</span> no 
 delete_all_games: "Eliminar todas las partidas"
 confirm_question: "¿Confirmar?"
 
-# Crear
+#Create
 game_name_invite: "Nombre de tu partida. Puedes cambiarlo más tarde."
 my_game: "Mi partida"
 game_id_help: "Este identificador se incluirá en tu enlace de invitación. Puedes elegir el tuyo."
@@ -199,8 +196,11 @@ that_pass: "que pasen"
 that_fail: "que fallen"
 will_have: " obtendrán: "
 get_following_tags: "Estas etiquetas adicionales: "
-lose_following_tags: "Estas etiquetas menos (si las tienen): "
+lose_following_tags: "Estas etiquetas menos: "
 start_challenge: "¡Iniciar la prueba!"
+group_consequences_summary_failure: "Si menos del {rate}% de los personajes tienen éxito, todos los personajes recibirán:"
+group_consequences_summary_success: "Si más del {rate}% de los personajes tienen éxito, todos los personajes recibirán:"
+success_threshold: "Umbral de éxito del grupo"
 
 # AdminTabCharacters
 context_add_selection_character: "Agregar a la selección (mayús + clic izquierdo)"
@@ -285,3 +285,12 @@ send_answer: "Enviar mi elección"
 is_dead: "{charname} ha muerto"
 poll_pending: "Encuesta {pollnb} pendiente"
 create_new_char: "Crear un nuevo personaje"
+roll: "Tirar"
+temporary_disconnected: "Desconexión temporal"
+challenge_success: "Has superado un desafío de {stat}."
+challenge_failure: "Has fallado un desafío de {stat}."
+result_bonus: "Ganas {points} puntos de {name}."
+result_malus: "Pierdes {points} puntos de {name}."
+result_group_success: "El grupo superó la prueba"
+result_group_neutral: "La prueba no tiene efecto en el grupo"
+result_group_failure: "El grupo falló en la prueba"

@@ -121,7 +121,6 @@ export default {
             });
           }
 
-          // character.challenge = {date: date, result: result, message: messages };
           delete character.in_progress;
         })
       }
@@ -129,6 +128,7 @@ export default {
       this.nb_targets = 1;
       this.stat_modifier = {};
       this.gauge_modifier = {};
+      this.pick_multiselect = [];
       this.chosen_modifier_pick_add = [];
       this.chosen_modifier_pick_remove = [];
 

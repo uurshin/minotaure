@@ -123,6 +123,15 @@ export default {
     }
 
     // It's the first time the game is loaded, so initialize some data.
+    let init_keys = {
+      tag_groups: [],
+      gauges: {},
+      polls: {},
+      challenges: [],
+      stats: {},
+      settings: {},
+      markers: {}
+    }
     if (vm.store.current_game.initialized === false) {
       vm.store.current_game.stats = {
         fo1: {name: vm.$t('strength')},
@@ -132,17 +141,20 @@ export default {
         li1: {name: vm.$t('health'), value: 10, deadly: true},
         wi1: {name: vm.$t('will'), value: 10, deadly: false}
       }
-      vm.store.current_game.tag_groups = [];
-      vm.store.current_game.polls = {};
       vm.store.current_game.initialized = true;
+      vm.store.current_game.settings = {};
+      vm.store.current_game.settings.timer = 15;
     }
-    else {
-      let init_keys = ['stats', 'tag_groups', 'gauges'];
-      init_keys.forEach(function(init_key) {
-        if (vm.store.current_game[init_key] === undefined) {
-          vm.store.current_game[init_key] = [];
-        }
-      })
+
+    Object.entries(init_keys).forEach(function(init_key) {
+      if (vm.store.current_game[init_key[0]] === undefined) {
+        vm.store.current_game[init_key[0]] = init_key[1];
+      }
+    })
+
+    if (vm.store.last_challenge !== undefined && vm.store.last_challenge.active) {
+      vm.store.rollRemaining();
+      vm.store.last_challenge.resolved = true;
     }
 
     this.peer = this.store.peer;
@@ -230,7 +242,7 @@ export default {
               // It's a death reset and we should erase some data of the dead.
               else {
                 new_character.connection = null;
-                new_character.token = null;
+                new_character.token = Math.random() + Math.random();
               }
             }
           }
@@ -262,6 +274,12 @@ export default {
           if (character && data.code !== undefined && character.polls[data.code] !== undefined) {
             vm.store.pollAddAnswer(data.code, data.answer);
             character.polls[data.code].answer = data.answer;
+          }
+        }
+        else if (data.handshake === 'roll') {
+          let character = vm.store.retrieveCharacter(data.token);
+          if (character && character.challenge.wait_roll !== undefined && character.challenge.wait_roll) {
+            vm.store.resolveRoll(character);
           }
         }
       });
@@ -549,7 +567,7 @@ export default {
       font-weight: 500;
       border-bottom: 1px solid var(--font-color);
 
-      @include media("<desktop") {
+      @include media("<=desktop") {
         padding: 15px 10px;
       }
 
@@ -594,6 +612,10 @@ export default {
       display: none;
       padding: 30px;
       flex-grow: 1;
+
+      @include media("<=desktop") {
+        padding: 20px;
+      }
 
       &.open {
         display: block;
@@ -663,6 +685,24 @@ export default {
     li {
       padding-top: 0;
     }
+  }
+
+  .summary {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .select {
+    height: 49px;
+    background: var(--font-color);
+    border-radius: 8px;
+    color: var(--background-color);
+    border: 1px solid var(--font-color);
+  }
+
+  .multiselect__placeholder {
+    display: none;
   }
 
   @keyframes color {

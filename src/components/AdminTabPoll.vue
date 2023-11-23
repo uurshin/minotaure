@@ -49,8 +49,8 @@ export default {
       let poll = this.addPoll();
 
       let selectedCharacters
-      if (this.tags_poll.length) {
-        selectedCharacters = this.store.connected_characters(true).filter((character) => vm.store.filterCharacterByTagsAndPicked(character, vm.tags_poll));
+      if (poll.targets.length) {
+        selectedCharacters = this.store.connected_characters(true).filter((character) => vm.store.filterCharacterByTagsAndPicked(character, poll.targets));
       }
       else {
         selectedCharacters = this.store.connected_characters(true);
@@ -125,7 +125,8 @@ export default {
         label: this.label,
         active: draft ? 0 : 1,
         name: draft ? this.name_draft : '',
-        options: {}
+        options: {},
+        targets: this.tags_poll
       };
 
       for (const key in this.answers) {
@@ -139,7 +140,6 @@ export default {
       }
 
       this.resetPoll();
-
       return this.store.polls[date];
     },
     deletePoll(code) {
@@ -258,12 +258,12 @@ export default {
         </div>
         <div class="poll-group-btn" v-if="!draft_in_progress">
           <button class="btn-valid" :disabled="isNewPollInvalid" @click="startPoll">{{ $t('start_poll') }}</button>
-          <button @click="draft_in_progress = true" :disabled="isNewPollInvalid">{{ $t('save_draft_poll') }}</button>
+          <button @keyup.enter="draft_in_progress = true; this.$refs['save_draft_poll'][0].focus();" @click="draft_in_progress = true" :disabled="isNewPollInvalid">{{ $t('save_draft_poll') }}</button>
           <button class='cancel-poll btn-danger' @click="resetPoll">{{ $t('cancel') }}</button>
         </div>
         <div class="poll-group-btn" v-else>
           <label for="name_draft">{{ this.$t('choose_name_draft') }}</label>
-          <input type="text" id="name_draft" v-model="name_draft"/>
+          <input ref="save_draft_poll" type="text" id="name_draft" v-model="name_draft"/>
           <button class="btn-valid" @click="saveDraftPoll()">{{ $t('save_draft_poll') }}</button>
           <button class='cancel-poll btn-danger' @click="draft_in_progress = false">{{ $t('cancel') }}</button>
         </div>
@@ -305,7 +305,7 @@ export default {
 
       <div class="vertical-wrapper" v-if="poll_tab === 'past'">
         <div :class="{open: (key === open_poll)}" class="list-polls poll-past" v-for="(poll, key) in store.past_polls">
-        <div class="wrapper-title">
+          <div class="wrapper-title">
             <span class="title">{{ poll.label}}</span>
             <button class='see-more' @click="togglePoll(key)">{{ $t('see_more') }}</button>
             <button @click="loadPoll(key, false)">{{ $t('load_poll') }}</button>
@@ -407,6 +407,7 @@ export default {
 
     .full_attendance {
       color: var(--success-color);
+      font-weight: bold;
     }
 
     &.poll-active {
@@ -419,6 +420,9 @@ export default {
       border-radius: 10px;
       padding: 10px 15px;
 
+      > span, .results {
+        font-size: 1.5em;
+      }
       .results {
         flex-basis: 100%;
         filter: blur(10px);

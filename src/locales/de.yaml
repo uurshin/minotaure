@@ -5,15 +5,12 @@ character_manage: 'Charaktere verwalten'
 read_more: 'Mehr erfahren'
 character_help: 'Ihre Charaktere werden im Browser gespeichert und können bei erneuter Anmeldung in einem zuvor beigetretenen Spiel wiederhergestellt werden. Sie können auch in einem anderen Browser spielen, indem Sie Ihre Charaktere exportieren.'
 character_nb: 'Sie haben keinen Charakter zu exportieren | Sie haben einen Charakter zu exportieren | Sie haben { count } Charaktere zu exportieren'
-challenge_success: 'Sie haben eine Herausforderung für {stat} erfolgreich gemeistert.'
-challenge_failure: 'Sie haben eine Herausforderung für {stat} nicht bestanden.'
-result_bonus: 'Sie erhalten {points} Punkte für {name}.'
-result_malus: 'Sie verlieren {points} Punkte für {name}.'
 
 # Admin
 characters: 'Charaktere'
 bars: 'Balken'
 polls: 'Umfragen'
+markers: "Markierungen"
 challenge: 'Herausforderung'
 stats: 'Attribute'
 settings: 'Einstellungen'
@@ -31,7 +28,7 @@ will: 'Willenskraft'
 game_rename: 'Spiel umbenennen'
 selected: 'Ausgewählt'
 
-# Weiter
+#Continue
 continue_game: 'Fortsetzen - {name}'
 count_personnage: '1 Charakter | {count} Charaktere'
 continue: 'Fortsetzen'
@@ -44,7 +41,7 @@ warning_version: "Spiele, die mit einem <span class='danger'>*</span> markiert s
 delete_all_games: 'Alle Spiele löschen'
 confirm_question: 'Bestätigen?'
 
-# Erstellen
+#Create
 game_name_invite: 'Name Ihres Spiels. Sie können ihn später ändern.'
 my_game: 'Mein Spiel'
 game_id_help: 'Diese ID wird in Ihren Einladungslink aufgenommen. Sie können Ihre eigene wählen.'
@@ -199,8 +196,11 @@ that_pass: "die erfolgreich sind"
 that_fail: "die scheitern"
 will_have: "werden erhalten: "
 get_following_tags: "Folgende Tags zusätzlich: "
-lose_following_tags: "Folgende Tags weniger (falls vorhanden): "
+lose_following_tags: "Folgende Tags weniger: "
 start_challenge: "Herausforderung starten!"
+group_consequences_summary_failure: "Wenn weniger als {rate}% der Charaktere erfolgreich sind, erhalten alle Charaktere:"
+group_consequences_summary_success: "Wenn mehr als {rate}% der Charaktere erfolgreich sind, erhalten alle Charaktere:"
+success_threshold: "Erfolgsschwelle der Gruppe"
 
 #AdminTabCharacters
 context_add_selection_character: "Zur Auswahl hinzufügen (Strg + Linksklick)"
@@ -285,3 +285,12 @@ send_answer: "Antwort senden"
 is_dead: "{charname} ist gestorben"
 poll_pending: "Umfrage {pollnb} ausstehend"
 create_new_char: "Neuen Charakter erstellen"
+roll: "Werfen"
+temporary_disconnected: "Vorübergehende Trennung"
+challenge_success: 'Sie haben eine Herausforderung für {stat} erfolgreich gemeistert.'
+challenge_failure: 'Sie haben eine Herausforderung für {stat} nicht bestanden.'
+result_bonus: 'Sie erhalten {points} Punkte für {name}.'
+result_malus: 'Sie verlieren {points} Punkte für {name}.'
+result_group_success: "Die Gruppe hat die Prüfung bestanden"
+result_group_neutral: "Die Prüfung hat keine Auswirkungen auf die Gruppe"
+result_group_failure: "Die Gruppe hat die Prüfung nicht bestanden"

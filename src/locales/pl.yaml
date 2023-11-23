@@ -5,15 +5,12 @@ character_manage: 'Zarządzaj swoimi postaciami'
 read_more: 'Dowiedz się więcej'
 character_help: 'Twoje postacie są przechowywane w przeglądarce, co pozwala na ich odzyskiwanie podczas ponownego dołączania do wcześniej dołączonej gry. Możesz grać na innej przeglądarce, eksportując swoje postacie.'
 character_nb: 'Nie masz postaci do wyeksportowania | Masz jedną postać do wyeksportowania | Masz { count } postaci do wyeksportowania'
-challenge_success: 'Udało ci się w wyzwaniu {stat}.'
-challenge_failure: 'Nie udało ci się w wyzwaniu {stat}.'
-result_bonus: 'Zdobywasz {points} punktów {name}.'
-result_malus: 'Tracisz {points} punktów {name}.'
 
 #Admin
 characters: 'Postacie'
 bars: 'Paski'
 polls: 'Ankiety'
+markers: "Wskaźniki"
 challenge: 'Wyzwanie'
 stats: 'Statystyki'
 settings: 'Ustawienia'
@@ -201,8 +198,11 @@ that_pass: "które zdadzą"
 that_fail: "które nie zaliczą"
 will_have: " otrzymają: "
 get_following_tags: "Te tagi dodatkowe: "
-lose_following_tags: "Te tagi zostaną odebrane (jeśli je posiadają): "
+lose_following_tags: "Te tagi zostaną odebrane: "
 start_challenge: "Rozpocznij wyzwanie !"
+group_consequences_summary_failure: "Jeśli mniej niż {rate}% postaci odniesie sukces, wszyscy bohaterowie otrzymają:"
+group_consequences_summary_success: "Jeśli więcej niż {rate}% postaci odniesie sukces, wszyscy bohaterowie otrzymają:"
+success_threshold: "Próg sukcesu grupy"
 
 #AdminTabCharacters
 context_add_selection_character: "Dodaj do wyboru (maj + lewy przycisk myszy)"
@@ -287,3 +287,12 @@ send_answer: "Wyślij moje wybory"
 is_dead: "{charname} nie żyje"
 poll_pending: "Ankieta {pollnb} oczekuje"
 create_new_char: "Stwórz nową postać"
+roll: "Rzucić"
+temporary_disconnected: "Tymczasowe rozłączenie"
+challenge_success: 'Udało ci się w wyzwaniu {stat}.'
+challenge_failure: 'Nie udało ci się w wyzwaniu {stat}.'
+result_bonus: 'Zdobywasz {points} punktów {name}.'
+result_malus: 'Tracisz {points} punktów {name}.'
+result_group_success: "Grupa zdała egzamin"
+result_group_neutral: "Egzamin nie ma efektu dla grupy"
+result_group_failure: "Grupa nie zdała egzaminu"

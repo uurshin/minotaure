@@ -4,6 +4,7 @@ import VueMultiselect from 'vue-multiselect'
 import {Dataset, DatasetItem, DatasetSearch, DatasetInfo, DatasetShow} from "vue-dataset";
 import VueSimpleContextMenu from 'vue-simple-context-menu';
 import { ref } from 'vue';
+import Slider from "@vueform/slider"
 
 export default {
   components: {
@@ -13,7 +14,8 @@ export default {
     DatasetSearch,
     DatasetInfo,
     DatasetShow,
-    VueSimpleContextMenu
+    VueSimpleContextMenu,
+    Slider
   },
   setup() {
     const card_centered = ref(null)
@@ -29,8 +31,24 @@ export default {
       tag_filter: [],
       search_character: '',
       filters: {},
-      options_contextual: [{}],
-
+      options_contextual: [{}]
+    }
+  },
+  computed: {
+    current_challenge_rate: function() {
+      if (this.store.last_challenge === undefined || !this.store.last_challenge.active) {
+        return false;
+      }
+      return Math.floor(100 / this.store.last_challenge.nb_targets * this.store.last_challenge.nb_success);
+    },
+    class_scale: function() {
+      if (this.store.last_challenge.scale instanceof Array) {
+        if (this.current_challenge_rate > this.store.last_challenge.scale[1]) { return 'scale-success' }
+        else if (this.current_challenge_rate > this.store.last_challenge.scale[0]) { return 'scale-neutral' }
+      }
+      else if (this.current_challenge_rate > this.store.last_challenge.scale) { return 'scale-success' }
+      else if (this.current_challenge_rate === this.store.last_challenge.scale) { return 'scale-neutral' }
+      return 'scale-failure';
     }
   },
   mounted() {
@@ -39,7 +57,7 @@ export default {
   methods: {
     getClasses(character) {
       let classes = [];
-      if (character.challenge !== undefined && character.challenge.date === this.store.last_challenge.date) {
+      if (this.store.last_challenge !== undefined && this.store.last_challenge.active && character.challenge !== undefined && character.challenge.date === this.store.last_challenge.date) {
         classes.push('result-' + character.challenge.result);
       }
       else {
@@ -93,6 +111,9 @@ export default {
       return true;
     },
     filterChallenge(challenge) {
+      if (this.store.last_challenge === undefined) {
+        return true;
+      }
       if (this.filters['challenge'] !== undefined) {
         if (challenge.date === undefined) {
           return false;
@@ -127,7 +148,7 @@ export default {
       this.search_character = '';
     },
     sortAsChallenge(challenge) {
-      return (challenge !== undefined && challenge.date === this.store.last_challenge.date);
+      return (this.store.last_challenge !== undefined && this.store.last_challenge.active && challenge !== undefined && challenge.date === this.store.last_challenge.date);
     },
     sortAsConnected(connection) {
       return (
@@ -149,6 +170,7 @@ export default {
       }
       options.push({name: this.$t('context_edit_character'), effect: 'edit'});
       options.push({name: this.$t('context_delete_character'), effect: 'delete'});
+      // options.push({name: 'roll_dice', effect: 'roll'});
       return options;
     },
     optionClicked(event) {
@@ -167,6 +189,9 @@ export default {
             break;
           case 'toggle':
             this.toggleCharacter(character);
+            break;
+          case 'roll':
+            this.store.resolveRoll(character);
             break;
         }
       }
@@ -188,7 +213,7 @@ export default {
         this.card_centered.classList.remove('centered');
         this.card_centered = null;
       }
-      if (expand) {
+      if (expand && this.$refs[id] !== undefined) {
         this.card_centered = this.$refs[id];
         var rect = this.$refs[id].getBoundingClientRect();
         let scale = 2;
@@ -215,10 +240,46 @@ export default {
   />
   <div :style="cssVars" class="tab" ref="tab">
     <div id='tab-characters-content'>
-      <div class="full" v-if="this.store.last_challenge.date !== 0">
-        <span>{{ $t('last_challenge_success_rate') }}
-          <span class="result-challenge" :class="store.last_challenge.rate <= 50 ? (store.last_challenge.rate < 50 ? 'failure' : '') : 'success'">{{ store.last_challenge.rate}}%</span>
-        </span>
+      <div class="challenge-container" v-if="this.store.last_challenge !== undefined && this.store.last_challenge.active">
+        <div v-if="this.store.last_challenge !== undefined && this.store.last_challenge.active" class="scale-container" :class="class_scale" >
+          <Slider
+              :options="{connect: [true, false] }"
+              v-model="current_challenge_rate"
+              :disabled="true"
+              :tooltips="false"
+          />
+          <div v-if="this.store.last_challenge.scale instanceof Array">
+          <span class="target-scale"
+                :class="{validated: current_challenge_rate > this.store.last_challenge.scale[0]}"
+                :style="{ left: this.store.last_challenge.scale[0] + '%' }"
+          >
+            {{ this.store.last_challenge.scale[0] }}% = aucun effet
+          </span>
+            <span class="target-scale"
+                  :class="{validated: current_challenge_rate > this.store.last_challenge.scale[1]}"
+                  :style="{ left: this.store.last_challenge.scale[1] + '%' }"
+            >
+            {{ this.store.last_challenge.scale[1] }}% = réussite
+          </span>
+          </div>
+
+          <div v-else>
+          <span class="target-scale"
+                :class="{validated: current_challenge_rate > this.store.last_challenge.scale}"
+                :style="{ left: this.store.last_challenge.scale + '%' }"
+          >
+            {{ this.store.last_challenge.scale }}% réussite
+          </span>
+          </div>
+        </div>
+        <div class="timer-challenge" v-if="this.store.last_challenge.resolved === undefined">Fin de l'épreuve dans : {{ this.store.last_challenge.timer }}s</div>
+        <button v-else class="btn-valid" @click="this.store.finishChallenge()">Terminer l'épreuve</button>
+      </div>
+
+      <div v-if="this.store.markers !== undefined" class="markers-container">
+        <div v-for="marker in this.store.markers">
+          <span>{{ marker.name }}</span><span class="value">{{ marker.value }}</span>
+        </div>
       </div>
       <div class="filter-data">
         <div v-if="store.tags.length">
@@ -243,7 +304,7 @@ export default {
         <button @click="switchFilter('dead')" :class="{active : filters.dead !== undefined}">{{ $t('alive') }}</button>
         <button @click="switchFilter('connected')" :class="{active : filters.connected !== undefined}">{{ $t('connected') }}</button>
         <button v-if="store.picked_characters !== undefined && store.picked_characters.length" @click="switchFilter('picked')" :class="{active : filters.picked !== undefined}">{{ $t('char_picked') }}</button>
-        <div class="dual-button" v-if="store.last_challenge.date !== 0">
+        <div class="dual-button" v-if="current_challenge_rate !== false">
           <button @click="switchFilterChallenge('success')" class="success-button badge" :class="{active : filters.challenge !== undefined && filters.challenge === 'success'}">
             {{ $t('passed') }}<span>{{ store.last_challenge.nb_success }}</span>
           </button>
@@ -326,6 +387,128 @@ export default {
 
     .multiselect__tags {
       border: var(--select-border);
+    }
+
+    .markers-container {
+      flex-basis: 100%;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      font-size: 25px;
+
+      > div {
+        display: flex;
+        gap: 5px;
+
+        .value {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 35px;
+          height: 35px;
+          background: var(--button-background);
+          color: var(--button-color);
+          border-radius: 100%;
+        }
+      }
+    }
+
+    .challenge-container {
+      display: flex;
+      flex-basis: 100%;
+      gap: 15px;
+
+      > .timer-challenge {
+        align-self: center;
+        padding: 10px;
+        flex-shrink: 0;
+        font-size: 1.5em;
+      }
+      > button {
+        align-self: center;
+        flex-shrink: 0;
+      }
+    }
+    .scale-container {
+      position: relative;
+      flex-basis: 100%;
+      margin: 60px 0;
+
+      .slider-base, .slider-connects, .slider-connect {
+        border-radius: 0;
+      }
+      .slider-connect {
+        transition: all 1s ease-in-out;
+      }
+      &.scale-success {
+        .slider-connect {
+          background: var(--success-background);
+        }
+      }
+      &.scale-neutral {
+        .slider-connect {
+          background: yellow;
+        }
+      }
+      &.scale-failure {
+        .slider-connect {
+          background: var(--failure-background);
+        }
+      }
+
+      .slider-origin {
+        display: none;
+      }
+
+      > div {
+        width: 100%;
+
+        .target-scale {
+          position: absolute;
+          top: -105%;
+          z-index: 1;
+          background: var(--font-color);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: var(--inverse-font-color);
+          padding: 0 10px;
+          height: 80%;
+
+          &:after {
+            content: "";
+            background: var(--font-color);
+            display: block;
+            width: 2px;
+            height: 157%;
+            position: absolute;
+            bottom: -155%;
+            left: 0;
+          }
+
+          &.validated:before {
+            display: flex;
+            content: "✅";
+            color: green;
+            width: 24px;
+            height: 24px;
+            border-radius: 100%;
+            align-items: center;
+            justify-content: center;
+            margin-right: 3px;
+          }
+
+          + .target-scale {
+            top: unset;
+            bottom: -105%;
+
+            &:after {
+              bottom: unset;
+              top: -157%;
+            }
+          }
+        }
+      }
     }
   }
 
