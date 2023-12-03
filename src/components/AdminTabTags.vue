@@ -266,7 +266,7 @@ export default {
       <template v-for="(group, key) in store.getGroupTags()">
         <div class="group-tag" :ref="key === 0 ? 'step_tags_group' : null">
           <span class="group-label">
-            <input :ref="'group_name_input_'+ key" @keydown.enter="group_selected = null;" v-if="group_selected === key" type="text" v-model="store.current_game.tag_groups[key].label"/>
+            <input :ref="'group_name_input_'+ key" @keyup.enter="group_selected = null;" v-if="group_selected === key" type="text" v-model="store.current_game.tag_groups[key].label"/>
             <button
                 v-show="group_selected !== key"
                 @keyup.enter="focusLabelGroup($event, key)"

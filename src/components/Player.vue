@@ -294,6 +294,14 @@ export default {
     },
     updateClock() {
       this.date = Date.now();
+    },
+    spendGauge(key) {
+      const vm = this;
+      this.store.connection.send({
+        handshake: 'spendGauge',
+        code: key,
+        token: vm.character.token,
+      });
     }
   },
 }
@@ -352,10 +360,9 @@ export default {
     <div class="backface">
       <div id="challenge" class="vertical-wrapper" v-if="character.challenge !== undefined && Object.entries(character.challenge).length">
         <div class="challenge-in-progress">
-          <span class="wrapper-label">Épreuve de {{ character.stats[character.challenge.stat].label }} en cours</span>
-          <span>Vous devez faire moins que {{ difficulty }} pour réussir</span>
+          <span class="wrapper-label">{{ $t('challenge_in_progress' , {label: character.stats[character.challenge.stat].label}) }}</span>
+          <span v-if="challengeTimer > 0 && character.challenge.wait_roll" class="timer">{{ $t('challenge_ends_in', {timer: challengeTimer}) }}</span>
         </div>
-
         <div class="die-wrapper">
           <div class="die" :class="classesChallenge()">
             <div class="frontface">
@@ -368,9 +375,17 @@ export default {
             </div>
           </div>
         </div>
-
         <div class="challenge-done">
-          <span v-if="challengeTimer > 0 && character.challenge.wait_roll" class="timer">L'épreuve se termine dans {{ challengeTimer }}s</span>
+          <span v-if="challengeTimer > 0 && character.challenge.wait_roll">{{ $t('difficulty_threshold' , {difficulty: difficulty}) }}</span>
+          <span v-else>{{ $t('difficulty_threshold_past', {difficulty: character.challenge.locked_difficulty}) }}</span>
+          <div v-if="challengeTimer > 0 && character.challenge.wait_roll" class="container-modifiers">
+            <span>{{ $t('gauge_spending_description') }}</span>
+            <template v-for="(gauge, key) in character.gauges">
+              <button v-if="character.challenge.spendable[key] !== undefined && (gauge.deadly === undefined ? gauge.value > 1 : gauge.value > 0)" @click="spendGauge(key)" class="btn-valid" >
+                {{ $t('gauge_spending_button_text', {label: gauge.label}) }}
+              </button>
+            </template>
+          </div>
           <Transition>
             <ul v-if="character.challenge.roll !== undefined">
               <li v-for="message in character.challenge.message">{{ message }}</li>
@@ -381,7 +396,7 @@ export default {
       <div class="vertical-wrapper polls" v-if="activePolls">
         <div :class="{waiting: poll.active && poll.answer === undefined}" class="poll-wrapper" v-for="(poll, key, index) in character.polls">
           <div class="poll-content" v-if="poll.active && poll.answer === undefined">
-            <span class="wrapper-label">Sondage en cours</span>
+            <span class="wrapper-label">{{ $t('poll_in_progress')}}</span>
             <span class="title">{{ poll.label }}</span>
             <div class="radios-wrapper">
               <div class="radio-wrapper" v-for="(option, poll_key) in poll.options">
@@ -389,7 +404,6 @@ export default {
                 <label :for="'poll_' + key + '_' + poll_key">{{ option }}</label>
               </div>
             </div>
-
             <button :disabled="answers[key] === undefined" @click="sendAnswer(key)">{{ $t("send_answer") }}</button>
           </div>
         </div>
@@ -414,7 +428,6 @@ export default {
     color: var(--font-color);
     gap: 10px;
     margin-top: 20px;
-    padding: 10px;
     transform-style: preserve-3d;
     transition: all 1s ease-in-out;
     rotate: y 0deg;
@@ -435,7 +448,7 @@ export default {
     > .backface, > .frontface {
       grid-area: 1 / 1;
       background: var(--background-card-color);
-      padding: 10px;
+      padding: 10px 0;
       display: flex;
       justify-content: center;
       transform-style: preserve-3d;
@@ -756,6 +769,19 @@ export default {
     }
   }
 
+  .container-modifiers {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: stretch;
+
+    > span {
+      max-width: 230px;
+      margin: auto;
+    }
+  }
+
   @keyframes wait_roll {
     from {
       opacity: 1;
@@ -771,97 +797,5 @@ export default {
     display: flex;
     flex-direction: column;
     gap: 10px;
-
-    .radio-wrapper {
-      display: flex;
-      gap: 10px;
-
-      input[type=radio] {
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        height: 21px;
-        outline: none;
-        gap: 8px;
-        vertical-align: top;
-        margin: 0;
-        cursor: pointer;
-        border: 1px solid #BBC1E1;
-        background: var(--b, #fff);
-        transition: background 0.6s, border-color 0.3s, box-shadow 0.2s;
-        width: 21px;
-        position: relative;
-        translate: 0 0 1px;
-
-        border-radius: 7px;
-
-        &:after {
-          width: 5px;
-          height: 9px;
-          border: 2px solid #fff;
-          border-top: 0;
-          border-left: 0;
-          left: 7px;
-          top: 4px;
-          transform: rotate(var(--r, 20deg));
-          content: "";
-          display: block;
-          position: absolute;
-          transition: transform all var(--d-t-e, ease), opacity var(--d-o, 0.2s);
-        }
-
-        &:checked {
-          --r: 43deg;
-          --b: #275EFE;
-          --bc: #275EFE;
-          --d-o: .3s;
-          --d-t: .6s;
-          --d-t-e: cubic-bezier(.2, .85, .32, 1.2);
-        }
-
-        &:disabled {
-          --b: #F6F8FF;
-          cursor: not-allowed;
-          opacity: 0.9;
-
-          &:checked {
-            --b: #E1E6F9;
-            --bc: var(--border);
-          }
-
-          + label {
-            cursor: not-allowed;
-          }
-        }
-
-        &:hover:not(:checked):not(:disabled) {
-          --bc: #275EFE;
-        }
-
-        &:focus {
-          box-shadow: 0 0 0 2px rgba(39, 94, 254, .3);
-        }
-
-        &:after {
-          opacity: var(--o, 0);
-        }
-
-        &:checked {
-          --o: 1;
-        }
-
-        + label {
-          display: inline-block;
-          cursor: pointer;
-        }
-      }
-
-      * {
-        box-sizing: inherit;
-        &:before,
-        &:after {
-          box-sizing: inherit;
-        }
-      }
-    }
   }
 </style>

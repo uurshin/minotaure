@@ -58,7 +58,7 @@ export const usePlayerStore = defineStore('playerStore', {
         _reconnect_interval: null,
         _reconnect_timeout: null,
         _message: '',
-        _temp_connections: []
+        _temp_connections: [],
     }),
     getters: {
         peer: (state) => state._user_peer,
@@ -83,6 +83,7 @@ export const usePlayerStore = defineStore('playerStore', {
         stats: (state) => state._current_game.stats,
         gauges: (state) => state._current_game.gauges,
         markers: (state) => state._current_game.markers,
+        settings: (state) => state._current_game.settings,
         leaving: (state) => state._leaving,
         temp_peer: (state) => state._temp_peer,
         temp_connections: (state) => state._temp_connections,
@@ -116,9 +117,20 @@ export const usePlayerStore = defineStore('playerStore', {
             .filter((poll) => poll[1].active === -1)
             .sort(function(a, b) {
                 return b[0] - a[0];
-            })) : []
+            })) : [],
     },
     actions: {
+        getPeerOptions() {
+            let self_host = localStorage.getItem('self_host');
+            if (self_host !== null) {
+                return {
+                    host: "localhost",
+                    port: 9000,
+                    path: "/myapp"
+                }
+            }
+            return {}
+        },
         connected_characters(alive = false) {
             const temp = this;
             return this.current_game.characters.filter(function(character) {
@@ -227,6 +239,32 @@ export const usePlayerStore = defineStore('playerStore', {
         },
         characterWatch(new_character) {
             let vm = this;
+            if (new_character.editing) {
+                for (const [key, gauge] of Object.entries(new_character.gauges)) {
+                    if (vm.gauges[key] !== undefined) {
+                        if (typeof gauge.value === 'string' || gauge.value instanceof String) {
+                            gauge.value = parseInt(gauge.value);
+                        }
+                        if (isNaN(gauge.value) || gauge.value === undefined || gauge.value <= 0) {
+                            new_character.gauges[key].value = vm.gauges[key].deadly ? 1 : 0;
+                        }
+                    }
+                }
+                for (const [key, stat] of Object.entries(new_character.stats)) {
+                    if (vm.stats[key] !== undefined) {
+                        if (typeof stat.value === 'string' || stat.value instanceof String) {
+                            stat.value = parseInt(stat.value);
+                        }
+                        if (isNaN(stat.value) || stat.value === undefined || stat.value <= 0) {
+                            new_character.stats[key].value = 1;
+                        }
+                        else if (stat.value > 20) {
+                            new_character.stats[key].value = 20;
+                        }
+                    }
+                }
+            }
+
             for (const [key, gauge] of Object.entries(new_character.gauges)) {
                 if (vm.gauges[key] !== undefined && vm.gauges[key].deadly && gauge.value <= 0) {
                     new_character.gauges[key].value = 0;
@@ -260,32 +298,11 @@ export const usePlayerStore = defineStore('playerStore', {
             let tags = [];
             let ranking_stat = [];
 
-            // Gather the tags selected by the player.
-            if (data != null) {
-                data.choices.forEach(function(code) {
-                    let found_tag = vm.getTagFromCode(code);
-                    if (found_tag) {
-                        tags.push(found_tag);
-                    }
-                });
-            }
-          
-            if (data === null) {
-                this.getStartGroupTags().forEach(function(group) {
-                    tags.push(vm.getRandomTagFromGroup(group));
-                })
-            }
-
-            // Choose one tag for each random tag group.
-            this.getRandomGroupTags().forEach(function(group) {
-                tags.push(vm.getRandomTagFromGroup(group));
-            })
-
             let character = {
                 game_name: this.current_game.name,
                 token: token,
                 name: data != null ? data.name : 'Perso ' + Math.floor(Math.random() * Math.random() * 100000),
-                pseudo: data != null ? data.pseudo : null,
+                pseudo: data != null ? data.pseudo : i18n.global.t('non_player'),
                 stats: {},
                 gauges: {},
                 alive: true,
@@ -295,6 +312,27 @@ export const usePlayerStore = defineStore('playerStore', {
                 connection: conn != null ? conn : false,
                 watched: false,
             }
+
+            // Gather the tags selected by the player.
+            if (data !== null) {
+                data.choices.forEach(function(code) {
+                    let found_tag = vm.getTagFromCode(code);
+                    if (found_tag) {
+                        tags.push(found_tag);
+                    }
+                });
+            }
+            else {
+                this.getStartGroupTags().forEach(function(group) {
+                    tags.push(vm.getRandomTagFromGroup(group));
+                })
+                character.npc = true;
+            }
+
+            // Choose one tag for each random tag group.
+            this.getRandomGroupTags().forEach(function(group) {
+                tags.push(vm.getRandomTagFromGroup(group));
+            })
 
             // Roll the dices to determine the character's stats.
             // The sum of all dice rolls should be (10 * number of stats).
@@ -409,9 +447,25 @@ export const usePlayerStore = defineStore('playerStore', {
                 )
             )
         },
-        filterCharacterByTagsAndPicked(character, chosen_tags) {
+        getCharacters(alive = true, connected = true, npc = true) {
+            const vm = this;
+            return this.characters.filter(
+              function (character) {
+                  return (
+                    (alive ? character.alive : true) &&
+                    (connected ? (
+                      character.npc !== undefined ||
+                      (character.connection !== null &&
+                      vm.connections[character.connection] !== undefined &&
+                      vm.connections[character.connection].open === true)
+                    ) : true) &&
+                    (npc ? character.npc === undefined : true)
+                  )
+              })
+        },
+        filterCharacterByTagsAndPicked(character, chosen_tags, select_picked = false) {
             let is_picked = false;
-            if (chosen_tags.findIndex((tag) => tag.code === 'targets') > -1) {
+            if (select_picked) {
                 is_picked = (character.picked !== undefined && character.picked);
             }
             if (!is_picked) {
@@ -479,7 +533,7 @@ export const usePlayerStore = defineStore('playerStore', {
             challenge.nb_failure = 0;
             challenge.nb_target = 0;
             challenge.active = true;
-            challenge.timer = this.current_game.settings.timer ?? 15;
+            challenge.timer = this.current_game.settings.challenge_timer ?? 15;
             this.challenges.push(challenge);
             this.last_challenge.interval = setInterval(
                 this.challengeTimerIncrement
@@ -487,11 +541,10 @@ export const usePlayerStore = defineStore('playerStore', {
         },
         challengeTimerIncrement() {
             const vm = this;
-            if (vm.last_challenge.timer === 0) {
+            if (vm.last_challenge.timer === 0 || (vm.last_challenge.nb_success + vm.last_challenge.nb_failure === vm.last_challenge.nb_targets)) {
                 clearInterval(vm.last_challenge.interval);
                 vm.rollRemaining();
                 vm.groupConsequencesResolve();
-                vm.last_challenge.resolved = true;
             }
             else {
                 vm.last_challenge.timer -= 1;
@@ -501,6 +554,7 @@ export const usePlayerStore = defineStore('playerStore', {
             const vm = this;
             let challenge = this.last_challenge;
             let rate = Math.floor(100 / challenge.nb_targets * challenge.nb_success);
+
             let result = '';
             if (challenge.scale instanceof Array) {
                 if (rate > challenge.scale[1]) {
@@ -513,11 +567,8 @@ export const usePlayerStore = defineStore('playerStore', {
                     result = 'failure'
                 }
             }
-            else if (rate > challenge.scale) {
+            else if (rate >= challenge.scale) {
                 result = 'success'
-            }
-            else if (rate === challenge.scale) {
-                result =  'neutral'
             }
             else {
                 result = 'failure';
@@ -572,6 +623,7 @@ export const usePlayerStore = defineStore('playerStore', {
                     }
                 }
             )
+            challenge.result = result;
         },
         finishChallenge() {
             const vm = this;
@@ -602,8 +654,12 @@ export const usePlayerStore = defineStore('playerStore', {
             character.challenge.wait_roll = false;
             let messages = [];
             let result = 'failure';
-            let real_die_throw = Math.floor(Math.random() * 20 + 1) + challenge.difficulty;
-            let die_throw = real_die_throw + challenge.difficulty;
+            let real_die_throw = Math.floor(Math.random() * 20 + 1);
+            let die_throw = real_die_throw + character.challenge.difficulty;
+
+            // Used to lock the number to beat of the character sheet.
+            character.challenge.locked_difficulty = Math.min(Math.max(character.stats[character.challenge.stat].value - character.challenge.difficulty, 1), 19);
+
             if (die_throw !== 20 && (die_throw === 1 || die_throw <= character.stats[challenge.stat].value)) {
                 result = 'success';
                 challenge.nb_success += 1;
@@ -624,6 +680,12 @@ export const usePlayerStore = defineStore('playerStore', {
                 for (const [key, bonus] of Object.entries(challenge.stat_modifier[result])) {
                     messages.push(i18n.global.t('result_' + (bonus >= 0 ? 'bonus' : 'malus'), {points: bonus, name: vm.stats[key].name}));
                     character.stats[key].value += bonus;
+                }
+            }
+            if (challenge.marker_modifier[result] !== undefined) {
+                for (const [key, bonus] of Object.entries(challenge.marker_modifier[result])) {
+                    messages.push(i18n.global.t('marker_result_' + (bonus >= 0 ? 'bonus' : 'malus'), {points: bonus, name: vm.markers[key].name}));
+                    vm.markers[key].value += bonus;
                 }
             }
             if (challenge.chosen_modifier_tags_add[result] !== undefined) {
@@ -672,7 +734,7 @@ export const usePlayerStore = defineStore('playerStore', {
             let peer_client;
             let attempting_reconnect = false;
             let join_id = Math.floor(Math.random() * (10000000) + 1)
-            peer_client = new Peer(join_id);
+            peer_client = new Peer(join_id, this.getPeerOptions());
             localStorage.setItem('gm_id', id);
 
             peer_client.on('open', function () {

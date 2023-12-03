@@ -5,6 +5,7 @@ character_manage: 'Charaktere verwalten'
 read_more: 'Mehr erfahren'
 character_help: 'Ihre Charaktere werden im Browser gespeichert und können bei erneuter Anmeldung in einem zuvor beigetretenen Spiel wiederhergestellt werden. Sie können auch in einem anderen Browser spielen, indem Sie Ihre Charaktere exportieren.'
 character_nb: 'Sie haben keinen Charakter zu exportieren | Sie haben einen Charakter zu exportieren | Sie haben { count } Charaktere zu exportieren'
+version: "Version: {version}"
 
 # Admin
 characters: 'Charaktere'
@@ -35,11 +36,13 @@ continue: 'Fortsetzen'
 see_more: 'Mehr anzeigen'
 any_game: 'Sie haben noch kein Spiel erstellt.'
 cancel: 'Abbrechen'
-in_progress: 'In Bearbeitung'
+waiting_name: "Warten auf den Namen deines Spiels"
+please_wait: "Bitte warten"
 start_game: 'Spiel starten'
 warning_version: "Spiele, die mit einem <span class='danger'>*</span> markiert sind, sind nicht mit Ihrer Minotaure-Version ({version}) kompatibel und könnten möglicherweise nicht ordnungsgemäß funktionieren."
 delete_all_games: 'Alle Spiele löschen'
 confirm_question: 'Bestätigen?'
+clone: "Duplizieren"
 
 #Create
 game_name_invite: 'Name Ihres Spiels. Sie können ihn später ändern.'
@@ -92,6 +95,10 @@ step_settings_gauges:
 step_settings_add_gauge: "Sie können so viele Anzeigen hinzufügen, wie Sie möchten."
 step_settings_gauge:
   "Alle Charaktere haben diese Anzeigen bei ihrer Erstellung, mit einer Startpunktzahl, die Sie ändern können."
+step_settings_gauge_name: "Sie können den Namen einer Anzeige jederzeit ändern."
+step_settings_gauge_value: "Diese Zahl bestimmt den Grundwert einer Anzeige für eine Figur bei ihrer Erstellung."
+step_settings_gauge_spending: "Wenn Sie eine Herausforderung mit der ausgewählten Eigenschaft starten, können die Spieler Punkte aus dieser Anzeige ausgeben, um die Schwierigkeit ihrer Herausforderung um 1 für jeden ausgegebenen Punkt zu verringern."
+step_settings_gauge_cancel: "Sie sind nicht verpflichtet, Ihre Änderungen zu bestätigen; Sie können alle Änderungen bestätigen oder abbrechen."
 step_settings_gauge_delete:
   "Sie können eine Anzeige jederzeit löschen."
 step_settings_gauge_make_deadly:
@@ -104,6 +111,11 @@ step_settings_stat:
   Die Gesamtpunktzahl der Attribute eines Charakters bei seiner Erstellung beträgt immer 10-mal die Anzahl der Attribute, um eine gleichbleibende Gesamtpunktzahl für alle Teilnehmer zu gewährleisten."
 step_settings_stat_delete:
   "Sie können ein Attribut jederzeit löschen."
+step_settings_markers: "Die Marker sind globale Zähler für das Spiel. Ihr Wert kann von diesem Bildschirm aus geändert werden, kann aber auch automatisch nach einem Erfolg oder Misserfolg der Gruppe bei einer Herausforderung erhöht oder verringert werden."
+step_settings_settings: "Sie können einige Einstellungen des Spiels anpassen."
+step_settings_challenge_timer: "Stellen Sie die Zeit ein, die den Spielern nach dem Start einer Herausforderung für Entscheidungen und das Werfen ihres Würfels gewährt wird."
+step_settings_disconnected_prevent: "Sie können wählen, dass getrennte Charaktere niemals bei den von Ihnen gestarteten Herausforderungen und Ziehungen berücksichtigt werden."
+step_settings_npc_prevent: "Sie können auch wählen, dass Nicht-Spielercharaktere (die Sie im Tab 'Charaktere' erstellen können) niemals bei den von Ihnen gestarteten Herausforderungen und Ziehungen berücksichtigt werden."
 tab_label_tags:
   "Tags sind Etiketten, die Charakteren zugeordnet sind und die die große Stärke von Minotaure ausmachen.<br>"
 step_tags:
@@ -153,13 +165,17 @@ add: "Hinzufügen"
 gauge_start: "Startet bei {gauge_value}"
 kills_at_0: "Tötet bei 0"
 submit: "Bestätigen"
-make_normal: "Normal machen"
-make_fatal: "Tödlich machen"
 modify: "Ändern"
 delete: "Löschen"
 name: "Name"
 starts_at: "Startet bei"
+used_for_challenges: "Verwendet für Herausforderungen:"
 rename: "Umbenennen"
+challenge_timer: "Sekunden Wartezeit vor dem Ende einer Herausforderung"
+disconnected_prevent: "Verhindere, dass getrennte Spieler an Herausforderungen und Ziehungen teilnehmen"
+npc_prevent: "Verhindere, dass Nicht-Spieler-Charaktere an Herausforderungen und Ziehungen teilnehmen"
+spend_on: "Spieler können diese Punkte ausgeben, um die Herausforderungen von"
+gauge_deadly_description: "Charaktere sterben, wenn dieser Anzeiger 0 erreicht"
 
 #AdminTabChallenge
 dif_cake: "Trivial"
@@ -201,12 +217,21 @@ start_challenge: "Herausforderung starten!"
 group_consequences_summary_failure: "Wenn weniger als {rate}% der Charaktere erfolgreich sind, erhalten alle Charaktere:"
 group_consequences_summary_success: "Wenn mehr als {rate}% der Charaktere erfolgreich sind, erhalten alle Charaktere:"
 success_threshold: "Erfolgsschwelle der Gruppe"
+remove_neutral_zone: "Neutralen Bereich entfernen"
+add_neutral_zone: "Neutralen Bereich hinzufügen"
+individual_consequences_description: "Jede Figur wirft einen Würfel, dem die Schwierigkeit hinzugefügt wird, und muss weniger als die getestete Eigenschaft erreichen."
+group_consequences_description: "Jede Figur erleidet Konsequenzen entsprechend dem Prozentsatz des Gruppenerfolgs."
+need_challenge_end: "Du musst die aktuelle Herausforderung abschließen, um eine neue zu starten."
+consequences_per_character: "Konsequenzen pro Charakter"
+consequences_for_group: "Konsequenzen für die Gruppe"
+global_marker: "(für alle gemeinsam)"
+please_select_stat: "Wähle eine Statistik, um die Herausforderung zu starten"
 
 #AdminTabCharacters
 context_add_selection_character: "Zur Auswahl hinzufügen (Strg + Linksklick)"
 context_remove_selection_character: "Aus der Auswahl entfernen (Strg + Linksklick)"
 context_delete_character: "Charakter löschen"
-context_edit_character: "Charakter bearbeiten (kommt bald)"
+context_edit_character: "Charakter bearbeiten"
 last_challenge_success_rate: "Die letzte Herausforderung hatte eine Erfolgsrate von "
 select_tag: "Tag auswählen"
 alive: "Lebendig"
@@ -222,6 +247,14 @@ start_typing: "Tippen Sie hier"
 clear_selection: "Auswahl aufheben"
 char_picked: "Ausgewählt"
 add_all_to_selection: "Alle zur Auswahl hinzufügen"
+challenged_end_in: "Herausforderung endet in {timer}s"
+finish_challenge: "Herausforderung abschließen"
+challenge_scale_label: "{scale}% = Erfolg"
+challenge_scale_label_neutral: "{scale}% = keine Wirkung"
+challenge_result_success: "Erfolg der Gruppe!"
+challenge_result_neutral: "Weder Gruppenversagen noch -erfolg..."
+challenge_result_failure: "Gruppenversagen!"
+non_player: "Nicht-Spieler"
 
 #AdminTabTags
 group_nb: "Gruppe {nb}"
@@ -270,6 +303,7 @@ admin_pick_add_csq: "Zusätzliche Konsequenzen der Auswahl"
 
 #Join
 game_id: "Spiel-ID"
+waiting: "Warten"
 join: "Beitreten"
 
 #Main
@@ -294,3 +328,10 @@ result_malus: 'Sie verlieren {points} Punkte für {name}.'
 result_group_success: "Die Gruppe hat die Prüfung bestanden"
 result_group_neutral: "Die Prüfung hat keine Auswirkungen auf die Gruppe"
 result_group_failure: "Die Gruppe hat die Prüfung nicht bestanden"
+challenge_in_progress: "Herausforderung {label} läuft"
+difficulty_threshold: "Du musst {difficulty} oder weniger würfeln, um erfolgreich zu sein"
+difficulty_threshold_past: "Du musstest {difficulty} oder weniger würfeln, um erfolgreich zu sein"
+challenge_ends_in: "Herausforderung endet in {timer}s"
+poll_in_progress: "Umfrage läuft"
+gauge_spending_description: "Verringere die Schwierigkeit um 1, indem du einen Anzeigenpunkt ausgibst"
+gauge_spending_button_text: "Einen {label}-Punkt ausgeben"

@@ -5,6 +5,7 @@ character_manage: 'Gestisci i tuoi personaggi'
 read_more: "Scopri di più su Minotaure"
 character_help: 'I tuoi personaggi sono memorizzati nel tuo browser, così puoi trovarli quando ti connetti a un gioco a cui ti sei unito in precedenza. Puoi giocare su un altro browser esportando i tuoi personaggi.'
 character_nb: 'Non hai personaggi da esportare | Hai un personaggio da esportare | Hai { count } personaggi da esportare'
+version: "Versione: {version}"
 
 #Admin
 characters: "Personaggi"
@@ -35,11 +36,13 @@ continue: "Continua"
 see_more: "Vedi di più"
 any_game: "Non hai creato nessun gioco."
 cancel: "Annulla"
-in_progress: "Si prega di inserire il testo"
+waiting_name: "In attesa del nome del tuo gioco"
+please_wait: "Attendere prego"
 start_game: "Inizia gioco"
 warning_version: "Il gioco contrassegnato con <span class='danger'>*</span> non è compatibile con la tua versione di Minotaure ({version}), potrebbe non funzionare correttamente."
 delete_all_games: "Elimina tutti i giochi"
 confirm_question: "Sei sicuro?"
+clone: "Clona"
 
 #Create
 game_name_invite: "Dai un nome al tuo gioco. Puoi cambiarlo in seguito."
@@ -87,12 +90,18 @@ step_game_name: "Puoi cambiare il nome del gioco in qualsiasi momento."
 step_invite: "Cliccando su questo pulsante verrà copiato un link di invito che ti permetterà di invitare persone a unirsi al tuo gioco."
 step_start: "Finché non clicchi su questo pulsante, i tuoi ospiti saranno in attesa su una schermata di attesa."
 tab_label_settings: "Le impostazioni sono le impostazioni del gioco che ti consigliamo di modificare prima che il gioco inizi, ma che puoi sempre cambiare durante il gioco."
+step_settings_disconnected_prevent: "Puoi scegliere che i personaggi disconnessi non siano mai presi in considerazione durante le sfide e i sorteggi che lanci."
+step_settings_npc_prevent: "Puoi anche scegliere che i personaggi non giocanti (che puoi creare nella scheda Personaggi) non siano mai presi in considerazione durante le sfide e i sorteggi che lanci."
 step_settings_gauges:
   "Le barre sono riserve di punti per ogni personaggio. Quando crei un gioco, vengono create di default due barre: vita e volontà."
 step_settings_add_gauge: "Puoi aggiungere quante barre desideri."
 step_settings_gauge:
   "Tutti i personaggi hanno queste barre quando vengono creati, con un numero di punti iniziali che 
   puoi cambiare."
+step_settings_gauge_name: "È possibile modificare il nome di una barra in qualsiasi momento."
+step_settings_gauge_value: "Questo numero determina il valore di base di una barra per un personaggio al momento della creazione."
+step_settings_gauge_spending: "Quando lanci una sfida usando le caratteristiche selezionate, i giocatori possono spendere i punti di questa barra per ridurre di 1 la difficoltà della loro sfida per ogni punto speso."
+step_settings_gauge_cancel: "Non è obbligatorio confermare le modifiche, puoi confermare o annullare tutte le modifiche."
 step_settings_gauge_delete:
   "Puoi eliminare una barra in qualsiasi momento."
 step_settings_gauge_make_deadly:
@@ -105,6 +114,9 @@ step_settings_stat:
   "Tutti i personaggi hanno queste statistiche alla loro creazione, con un numero di punti iniziali di 10 + un numero casuale compreso tra -9 e +9. <br>
   Il totale dei punti di tutte le statistiche alla creazione di un personaggio è sempre 10 volte il numero di statistiche, per garantire lo stesso totale di punti per tutti i partecipanti."
 step_settings_stat_delete: "Puoi eliminare una statistica in qualsiasi momento."
+step_settings_markers: "I marcatori sono contatori globali per il gioco. Il loro valore può essere modificato da questa schermata, ma anche aumentato o diminuito automaticamente in seguito a un successo o a un fallimento del gruppo durante una sfida."
+step_settings_settings: "Puoi regolare alcune impostazioni del gioco."
+step_settings_challenge_timer: "Imposta il tempo concesso ai giocatori per fare scelte e lanciare il loro dado dopo l'inizio di una sfida."
 tab_label_tags:
   "I tag sono etichette assegnate ai personaggi e sono una grande forza di Minotaure.<br>"
 step_tags:
@@ -147,13 +159,17 @@ add: "Aggiungi"
 gauge_start: "Inizia a {gauge_value}"
 kills_at_0: "Uccide a 0"
 submit: "Invia"
-make_normal: "Rendi normale"
-make_fatal: "Rendi fatale"
 modify: "Modifica"
 delete: "Elimina"
 name: "Nome"
 starts_at: "Inizia a"
+used_for_challenges: "Usato per le sfide:"
 rename: "Rinomina"
+challenge_timer: "secondi di attesa prima della fine di una sfida"
+disconnected_prevent: "Impedisci ai giocatori disconnessi di partecipare a sfide e sorteggi"
+npc_prevent: "Impedisci ai personaggi non giocatori di partecipare a sfide e sorteggi"
+spend_on: "I giocatori possono spendere questi punti per facilitare le sfide di"
+gauge_deadly_description: "I personaggi muoiono se questo indicatore raggiunge 0"
 
 #AdminTabChallenge
 dif_cake: "Gioco da ragazzi"
@@ -195,12 +211,21 @@ start_challenge: "Avvia la sfida!"
 group_consequences_summary_failure: "Se meno del {rate}% dei personaggi avrà successo, tutti i personaggi otterranno:"
 group_consequences_summary_success: "Se più del {rate}% dei personaggi avrà successo, tutti i personaggi otterranno:"
 success_threshold: "Soglia di successo del gruppo"
+remove_neutral_zone: "Rimuovere la zona neutra"
+add_neutral_zone: "Aggiungere una zona neutra"
+individual_consequences_description: "Ogni personaggio lancerà un dado, al quale sarà aggiunta la difficoltà, e dovrà ottenere un risultato inferiore alla caratteristica testata."
+group_consequences_description: "Ogni personaggio subirà le conseguenze in base alla percentuale di successo del gruppo."
+need_challenge_end: "Devi concludere la sfida attuale per avviarne una nuova."
+consequences_per_character: "Conseguenze per personaggio"
+consequences_for_group: "Conseguenze per il gruppo"
+global_marker: "(condiviso per tutti)"
+please_select_stat: "Seleziona una statistica per lanciare la sfida"
 
 #AdminTabCharacters
 context_add_selection_character: "Aggiungi personaggio alla selezione (Maiusc + clic sinistro)"
 context_remove_selection_character: "Rimuovi personaggio dalla selezione (Maiusc + clic sinistro)"
 context_delete_character: "Elimina personaggio"
-context_edit_character: "Modifica personaggio (funzionalità futura)"
+context_edit_character: "Modifica personaggi"
 last_challenge_success_rate: "Tasso di successo dell'ultima sfida: "
 select_tag: "Seleziona tag"
 alive: "Vivo"
@@ -216,6 +241,14 @@ start_typing: "Inizia a digitare"
 clear_selection: "Cancella selezione"
 char_picked: "Personaggi selezionati"
 add_all_to_selection: "Aggiungi tutti alla selezione"
+challenged_end_in: "Fine della sfida tra {timer}s"
+finish_challenge: "Concludi la sfida"
+challenge_scale_label: "{scale}% = successo"
+challenge_scale_label_neutral: "{scale}% = nessun effetto"
+challenge_result_success: "Successo del gruppo!"
+challenge_result_neutral: "Né fallimento né successo del gruppo..."
+challenge_result_failure: "Fallimento del gruppo!"
+non_player: "Non giocatore"
 
 #AdminTabTags
 group_nb: "Gruppo {nb}"
@@ -264,6 +297,7 @@ admin_pick_add_csq: "Conseguenze aggiuntive dell'estrazione"
 
 #Join
 game_id: "ID del gioco"
+waiting: "In attesa"
 join: "Unisciti al gioco"
 
 #Main
@@ -288,3 +322,10 @@ result_malus: "Perdi {points} punti di {name}."
 result_group_success: "Il gruppo ha superato la prova"
 result_group_neutral: "La prova non ha effetto sul gruppo"
 result_group_failure: "Il gruppo ha fallito la prova"
+challenge_in_progress: "Sfida {label} in corso"
+difficulty_threshold: "Devi ottenere {difficulty} o meno per avere successo"
+difficulty_threshold_past: "Dovevi ottenere {difficulty} o meno per avere successo"
+challenge_ends_in: "La sfida termina in {timer}s"
+poll_in_progress: "Sondaggio in corso"
+gauge_spending_description: "Diminuisci la difficoltà di 1 spendendo un punto di indicatore"
+gauge_spending_button_text: "Spendi un punto {label}"

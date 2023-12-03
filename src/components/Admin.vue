@@ -1,6 +1,6 @@
 <script>
 import router, { usePlayerStore } from '../main';
-import { ref, watch, toRefs } from 'vue'
+import { ref, watch } from 'vue'
 import '../assets/css/shepherd.css';
 import 'vue-simple-context-menu/dist/vue-simple-context-menu.css'
 import AdminTabIntro from '../components/AdminTabIntro.vue'
@@ -34,7 +34,7 @@ export default {
         let games = JSON.parse(localStorage.getItem('games'));
         let found = games.find((element) => element.id === temp_game_parsed.id);
         this.store.setCurrentGame(found);
-        let peer = new Peer(temp_game_parsed.peer);
+        let peer = new Peer(temp_game_parsed.peer, this.store.getPeerOptions());
         peer.reconnect();
         this.store.setPeer(peer);
       }
@@ -45,11 +45,9 @@ export default {
   },
   setup() {
     const store = usePlayerStore();
-    const is_live = ref[false];
-    const btn_live = ref('Démarrer la vidéo');
     const current_tab = ref('');
     return {
-      store, is_live, btn_live, current_tab
+      store, current_tab
     }
   },
   data() {
@@ -57,8 +55,6 @@ export default {
       stream: null,
       calls: [],
       peer: null,
-      video: null,
-      is_live: false,
       game_name_focused: -1,
       temp_game_name: '',
       tabs: [
@@ -138,12 +134,14 @@ export default {
         me1: {name: vm.$t('mind')}
       }
       vm.store.current_game.gauges = {
-        li1: {name: vm.$t('health'), value: 10, deadly: true},
-        wi1: {name: vm.$t('will'), value: 10, deadly: false}
+        li1: {name: vm.$t('health'), value: 10, deadly: true, spending: {}},
+        wi1: {name: vm.$t('will'), value: 10, deadly: false, spending: {}}
       }
       vm.store.current_game.initialized = true;
       vm.store.current_game.settings = {};
-      vm.store.current_game.settings.timer = 15;
+      vm.store.current_game.settings.challenge_timer = 15;
+      vm.store.current_game.settings.disconnected_prevent = true;
+      vm.store.current_game.settings.npc_prevent = false;
     }
 
     Object.entries(init_keys).forEach(function(init_key) {
@@ -154,8 +152,10 @@ export default {
 
     if (vm.store.last_challenge !== undefined && vm.store.last_challenge.active) {
       vm.store.rollRemaining();
-      vm.store.last_challenge.resolved = true;
+      vm.store.groupConsequencesResolve();
     }
+
+    watch(this.store.markers, this.validateNumber);
 
     this.peer = this.store.peer;
 
@@ -282,6 +282,17 @@ export default {
             vm.store.resolveRoll(character);
           }
         }
+        else if (data.handshake === 'spendGauge') {
+          let character = vm.store.retrieveCharacter(data.token);
+          if (character && character.challenge.wait_roll !== undefined && character.challenge.wait_roll) {
+            if (data.code !== undefined) {
+              if (character.gauges[data.code].value > (vm.store.gauges[data.code].deadly ? 1 : 0)) {
+                character.gauges[data.code].value -= 1;
+                character.challenge.difficulty -= 1;
+              }
+            }
+          }
+        }
       });
 
       conn.on('close', function() {
@@ -371,6 +382,21 @@ export default {
         game_token: vm.store.current_game.id,
         character: vm.store.prepareCharacter(character)
       });
+    },
+    validateNumber(objects) {
+      this.$nextTick(() => {
+        for (const [key, object] of Object.entries(objects)) {
+          if (typeof objects[key].value === 'string' || objects[key].value instanceof String) {
+            let temp_value = parseInt(object.value);
+            if (isNaN(temp_value) || temp_value === undefined) {
+              objects[key].value = 0;
+            }
+            else {
+              objects[key].value = temp_value;
+            }
+          }
+        }
+      });
     }
   }
 }
@@ -423,8 +449,14 @@ export default {
     button {
       background-color: var(--button-background);
 
-      &.active {
-        border: 1px solid #39c6ff;
+      &:not(.badge) {
+        &.active {
+          filter: brightness(150%);
+          outline: 1px solid var(--button-border-active)
+        }
+      }
+      &:hover {
+        filter: brightness(150%);
       }
     }
 
@@ -514,9 +546,6 @@ export default {
         border-top-right-radius: 0;
         border-top-left-radius: 0;
       }
-      //.multiselect__input {
-      //  left: 0;
-      //}
     }
 
     .multiselect__tags-wrap {

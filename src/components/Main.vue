@@ -1,6 +1,5 @@
 <script>
 import { ref } from 'vue'
-import router from '../main';
 
 export default {
   setup() {
@@ -8,9 +7,12 @@ export default {
     return { current_route } // return render context that included `t`
   },
   data() {
+    const current_theme = localStorage.getItem('theme_name');
     return {
       locale: localStorage.getItem('locale_name') ?? this.$i18n.locale,
-      themes: ['dark', 'light', 'blue'],
+      themes: ['dark', 'light', 'blue', 'sepia'],
+      current_theme: current_theme ?? 'dark',
+      theme_picker_open: false,
       root: null
     };
   },
@@ -22,8 +24,10 @@ export default {
   },
   methods: {
     changeTheme(name) {
+      this.current_theme = name;
       localStorage.setItem('theme_name', name);
       document.documentElement.setAttribute('data-theme', name);
+      this.theme_picker_open = false;
     },
     changeLocale() {
       this.$i18n.locale = this.locale;
@@ -39,7 +43,8 @@ export default {
       <router-view></router-view>
     </div>
     <div class="options-switch">
-      <div id="theme-switch">
+      <div class="picker current-theme" :data-theme='this.current_theme' @click="this.theme_picker_open = !this.theme_picker_open"></div>
+      <div id="theme-switch" :class="{open: this.theme_picker_open}">
         <div v-for="theme in themes" class="picker" :data-theme='theme' @click="changeTheme(theme)"></div>
       </div>
       <router-link v-if="$route.path !== '/home'" to="/home">{{ $t("back_to_home") }}</router-link>
@@ -65,6 +70,11 @@ export default {
       padding-right: 30px;
     }
 
+    @include media("<tiny") {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+
     > a {
       margin-top: auto;
       margin-bottom: 30px;
@@ -86,12 +96,24 @@ export default {
     align-self: stretch;
     justify-content: space-between;
     padding: 15px;
+    position: relative;
 
-    > :last-child,
-    > :first-child {
-      flex-grow: 1;
-      flex-basis: 0;
+    .picker {
+      width: 20px;
+      height: 20px;
+      border-radius: 100%;
+      outline: 3px solid var(--font-color);
+
+      &:hover {
+        outline: 3px solid gold;
+      }
     }
+
+    //> :last-child,
+    //> :first-child {
+    //  flex-grow: 1;
+    //  flex-basis: 0;
+    //}
 
     :last-child {
       text-align: right;
@@ -100,17 +122,13 @@ export default {
     #theme-switch {
       display: flex;
       gap: 10px;
+      position: absolute;
+      top: -16px;
+      opacity: 0;
+      transition: opacity 0.3s linear;
 
-      > div {
-        width: 20px;
-        height: 20px;
-        border-radius: 100%;
-
-        outline: 3px solid var(--font-color);
-
-        &:hover {
-          outline: 3px solid gold;
-        }
+      &.open {
+        opacity: 1;
       }
     }
 

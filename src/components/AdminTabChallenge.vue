@@ -2,57 +2,41 @@
 import router, { usePlayerStore } from '../main';
 import VueMultiselect from 'vue-multiselect'
 import Slider from "@vueform/slider"
-import {watch} from "vue";
+import contenteditable from 'vue-contenteditable';
 
 export default {
-  components: { VueMultiselect, Slider },
+  components: { contenteditable, VueMultiselect, Slider},
   data() {
-    const store = usePlayerStore();
-    const types = ['success', 'failure'];
-    const chosen_stat = '';
-    const chosen_tags = [];
-    const stat_modifier = {'success': {}, 'failure': {}};
-    const gauge_modifier = {'success': {}, 'failure': {}};
-    const stat_group_modifier = {'success': {}, 'failure': {}};
-    const gauge_group_modifier = {'success': {}, 'failure': {}};
-    const marker_group_modifier = {'success': {}, 'failure': {}};
-    const chosen_modifier_tags_add = {'success': [], 'failure': []};
-    const chosen_modifier_tags_remove = {'success': [], 'failure': []};
-    const chosen_group_modifier_tags_add = {'success': [], 'failure': []};
-    const chosen_group_modifier_tags_remove = {'success': [], 'failure': []};
-    const challenge_difficulty = 0;
-    const group_slider = 50;
-    const group_connect = [true, true];
-    const has_neutral_zone = false;
-    const consequences_individual = false;
-    const consequences_group = false;
-    const targets_operator = 'one'
-    const tab_consequences_open = false;
-
     return {
-      store,
-      types,
-      chosen_tags,
-      chosen_stat,
-      stat_modifier,
-      gauge_modifier,
-      stat_group_modifier,
-      gauge_group_modifier,
-      marker_group_modifier,
-      group_slider,
-      group_connect,
-      has_neutral_zone,
-      chosen_modifier_tags_add,
-      chosen_modifier_tags_remove,
-      chosen_group_modifier_tags_add,
-      chosen_group_modifier_tags_remove,
-      challenge_difficulty,
-      consequences_individual,
-      consequences_group,
-      tab_consequences_open
+      store: usePlayerStore(),
+      types: ['success', 'failure'],
+      modifier_categories: ['gauge', 'stat', 'marker'],
+      chosen_stat: '',
+      chosen_tags: [],
+      stat_modifier: { 'success': {}, 'failure': {} },
+      gauge_modifier: { 'success': {}, 'failure': {} },
+      marker_modifier: { 'success': {}, 'failure': {} },
+      stat_group_modifier: { 'success': {}, 'failure': {} },
+      gauge_group_modifier: { 'success': {}, 'failure': {} },
+      marker_group_modifier: { 'success': {}, 'failure': {} },
+      chosen_modifier_tags_add: { 'success': [], 'failure': [] },
+      chosen_modifier_tags_remove: { 'success': [], 'failure': [] },
+      chosen_group_modifier_tags_add: { 'success': [], 'failure': [] },
+      chosen_group_modifier_tags_remove: { 'success': [], 'failure': [] },
+      challenge_difficulty: 0,
+      group_slider: 50,
+      group_connect: [true, true],
+      has_neutral_zone: false,
+      consequences_individual: false,
+      consequences_group: false,
+      targets_operator: 'one',
+      tab_consequences_open: false,
+      modifier_interval: null,
+      modifier_interval_step: 0
     }
   },
   mounted() {
+    const vm = this;
     this.updateColorDifficulty();
   },
   computed: {
@@ -96,17 +80,28 @@ export default {
       let rgba = 'rgba(' + red + ',' + green + ',0,1)';
       document.documentElement.style.setProperty('--slider-connect-bg', rgba);
     },
-    modifierChange(name, type, key, value, group = false) {
-      let str_modifier = group ? '_group_modifier' : '_modifier';
-      if (this[name + str_modifier][type][key] === undefined) {
-        this[name + str_modifier][type][key] = value;
+    startModifierChange(object, type, key, value) {
+      const vm = this;
+      vm.modifierChange(object, type, key, value);
+      this.modifier_interval = setInterval(function() {
+        vm.modifier_interval_step += 1;
+        vm.modifierChange(object,  type, key, value * Math.floor(vm.modifier_interval_step / 10 + 1));
+      }, 100)
+    },
+    modifierChange(object, type, key, value) {
+      if (object[type][key] === undefined) {
+        object[type][key] = value;
       }
       else {
-        this[name + str_modifier][type][key] += value
+        object[type][key] += value
       }
-      if (this[name + str_modifier][type][key] === 0) {
-        delete this[name + str_modifier][type][key];
+      if (object[type][key] === 0) {
+        delete object[type][key];
       }
+    },
+    stopModifierChange() {
+      this.modifier_interval_step = 0;
+      clearInterval(this.modifier_interval);
     },
     addTag(tag_label, type, is_group_consequences = false) {
       let group = this.store.tag_groups.find((element) => (element.code === 'freetag'));
@@ -130,6 +125,7 @@ export default {
         tags: vm.chosen_tags,
         gauge_modifier: vm.gauge_modifier,
         stat_modifier: vm.stat_modifier,
+        marker_modifier: vm.marker_modifier,
         gauge_group_modifier: vm.gauge_group_modifier,
         stat_group_modifier: vm.stat_group_modifier,
         marker_group_modifier: vm.marker_group_modifier,
@@ -137,64 +133,68 @@ export default {
         chosen_modifier_tags_remove: vm.chosen_modifier_tags_remove,
         chosen_group_modifier_tags_add: vm.chosen_group_modifier_tags_add,
         chosen_group_modifier_tags_remove: vm.chosen_group_modifier_tags_remove,
-        scale: vm.group_slider
+        scale: vm.group_slider,
       };
       vm.store.addChallenge(challenge);
 
-      let selectedCharacters
+      let selectedCharacters;
+      let has_picked = false;
+      if (vm.chosen_tags.findIndex((tag) => tag.code === 'targets') > -1) {
+        has_picked = true;
+      }
+
+      if (has_picked) {
+        selectedCharacters = this.store.alive_characters;
+      }
+      else {
+        selectedCharacters = this.store.getCharacters(true, this.store.settings.disconnected_prevent, this.store.settings.npc_prevent)
+      }
+
       if (this.chosen_tags.length) {
-        selectedCharacters = this.store.alive_characters.filter(
+        selectedCharacters = selectedCharacters.filter(
           function(character) {
-            return vm.store.filterCharacterByTagsAndPicked(character, vm.chosen_tags);
+            return vm.store.filterCharacterByTagsAndPicked(character, vm.chosen_tags, has_picked);
           }
         )
       }
-      else {
-        selectedCharacters = this.store.alive_characters;
-      }
       challenge.nb_targets = selectedCharacters.length;
+
+      let spendable = {};
+      for (const [key, gauge] of Object.entries(this.store.gauges)) {
+        if (gauge.spending[challenge.stat]) {
+          spendable[key] = true;
+        }
+      }
 
       // Loop on each character to trigger rolls.
       selectedCharacters.forEach(function(character) {
-        let player_challenge = {
+        character.challenge = {
           date: challenge.date,
           wait_roll: true,
           difficulty: challenge.difficulty,
           stat: challenge.stat,
-          timer: vm.store.current_game.settings.timer ?? 15
+          timer: vm.store.settings.challenge_timer ?? 15,
+          spendable: spendable
         };
-
-        if (
-            character.connection !== null &&
-            vm.store.connections[character.connection] !== undefined &&
-            vm.store.connections[character.connection].open
-        ) {
-          // Send an ask for an action before roll for connected character.
-          character.challenge = player_challenge;
-        }
-        else {
-          // Roll directly for disconnected characters (npc or disconnected player).
-          //vm.store.resolveRoll(character);
-          character.challenge = player_challenge;
-        }
       });
 
       this.$parent.changeTab('characters');
       this.resetChallenge();
     },
     resetChallenge() {
+      const vm = this;
+      this.modifier_categories.forEach(function(name) {
+        vm[name + '_modifier'] = {'success': {}, 'failure': {}}
+        vm[name + '_group_modifier'] = {'success': {}, 'failure': {}}
+      });
       this.challenge_difficulty = 0;
       this.chosen_stat = '';
       this.chosen_tags = [];
-      this.stat_modifier = {'success': {}, 'failure': {}};
-      this.gauge_modifier = {'success': {}, 'failure': {}};
       this.chosen_modifier_tags_add = {'success': [], 'failure': []};
       this.chosen_modifier_tags_remove = {'success': [], 'failure': []};
-      this.stat_group_modifier = {'success': {}, 'failure': {}};
-      this.gauge_group_modifier = {'success': {}, 'failure': {}};
-      this.marker_group_modifier = {'success': {}, 'failure': {}};
       this.chosen_group_modifier_tags_add = {'success': [], 'failure': []};
       this.chosen_group_modifier_tags_remove = {'success': [], 'failure': []};
+      this.tab_consequences_open = false;
     },
     toggleNeutralZone() {
       if (this.has_neutral_zone) {
@@ -206,6 +206,18 @@ export default {
         this.group_connect = [true, false, true];
       }
       this.has_neutral_zone = !this.has_neutral_zone;
+    },
+    getModifierClass(object) {
+      if (object === undefined) {
+        return '';
+      }
+      else if (object > 0) {
+        return 'positive';
+      }
+      else if (object < 0) {
+        return 'negative';
+      }
+      return '';
     }
   }
 }
@@ -240,7 +252,7 @@ export default {
             <label for="group-difficulty-slider">{{ $t('success_threshold') }}</label>
             <Slider
                 id="group-difficulty-slider"
-                :options="{connect: group_connect, padding: [1, 1]}"
+                :options="{connect: group_connect}"
                 v-model="group_slider"
                 :min="0"
                 :max="100"
@@ -248,7 +260,7 @@ export default {
             return Math.round(value) + '%';
           }"
             />
-            <button @click="toggleNeutralZone">{{ has_neutral_zone ? $t('Retirer la zone sans effet') : $t('Ajouter une zone sans effet') }}</button>
+            <button @click="toggleNeutralZone">{{ has_neutral_zone ? $t('remove_neutral_zone') : $t('add_neutral_zone') }}</button>
           </div>
           <div id="challenge-targets">
             <label for="chosen_tags">{{ $t('targets') }}</label>
@@ -263,7 +275,7 @@ export default {
                 :group-select="true"
                 :placeholder="$t('add_target')"
                 :tagPlaceholder="$t('add_target')"
-                :noOptions="$t('everyone')"
+                :showNoOptions="false"
                 :options=store.tag_groups_plus_targets
                 :multiple="true"
                 :taggable="false"
@@ -281,36 +293,28 @@ export default {
         </div>
         <div id="consequences">
           <div class="buttons">
-            <button :class="{open: tab_consequences_open === false}" @click="tab_consequences_open = false">Conséquences par personnage</button>
-            <button :class="{open: tab_consequences_open === true}" @click="tab_consequences_open = true">Conséquence pour le groupe</button>
+            <button class="icon-character" :class="{open: tab_consequences_open === false}" @click="tab_consequences_open = false">{{ $t('consequences_per_character') }}</button>
+            <button class="icon-crowd" :class="{open: tab_consequences_open === true}" @click="tab_consequences_open = true">{{ $t('consequences_for_group') }}</button>
           </div>
           <div id="individual-consequences" :class="{open: tab_consequences_open === false}">
-            <div class="description-wrapper">{{ $t('Chaque personnage lancera un dé, auquel sera ajoutée la difficulté, et devra faire moins que la caractéristique testée.') }}</div>
+            <div class="description-wrapper">{{ $t('individual_consequences_description') }}</div>
             <div class="type-wrapper">
               <template v-for="type in types">
                 <div :id="'chosen-'+type" :class="'type type-'+type" >
                   <span class="label-wrapper">{{ type === 'success' ?  $t('positive_csq')  :  $t('negative_csq') }}</span>
                   <div class="modifiers-buttons-container">
-                    <div class="modifiers-buttons" v-for="(gauge, key) in store.current_game.gauges">
-                      <span class="modifier-label">{{ gauge.name }}</span>
-                      <div>
-                        <button @click="modifierChange('gauge', type, key,  1)">+</button>
-                        <span class="modifier-value" :class="gauge_modifier[type][key] > 0 ? 'positive' : (gauge_modifier[type][key] < 0 ? 'negative' : '')">
-                          {{ gauge_modifier[type][key] !== undefined ? (gauge_modifier[type][key] >= 0 ? "+" : '') + gauge_modifier[type][key] : "+0" }}
-                        </span>
-                        <button @click="modifierChange('gauge', type, key, -1)">-</button>
+                    <template v-for="key_name in modifier_categories">
+                      <div class="modifiers-buttons" v-for="(object, key) in store.current_game[key_name + 's']">
+                        <span class="modifier-label">{{ object.name }}</span>
+                        <div>
+                          <button @mouseup="stopModifierChange()" @keyup.enter="modifierChange(this[key_name + '_modifier'], type, key, 1)" @mousedown="startModifierChange(this[key_name + '_modifier'], type, key, 1)">-</button>
+                          <span class="modifier-value" :class="getModifierClass(this[key_name + '_modifier'][type][key])">
+                            {{ this[key_name + '_modifier'][type][key] === undefined ? '0' : this[key_name + '_modifier'][type][key] }}
+                          </span>
+                          <button @mouseup="stopModifierChange()" @keyup.enter="modifierChange(this[key_name + '_modifier'], type, key, -1)" @mousedown="startModifierChange(this[key_name + '_modifier'], type, key, -1)">+</button>
+                        </div>
                       </div>
-                    </div>
-                    <div class="modifiers-buttons" v-for="(stat, key) in store.current_game.stats">
-                      <span class="modifier-label">{{ stat.name }}</span>
-                      <div>
-                        <button @click="modifierChange('stat', type, key, 1)">+</button>
-                        <span class="modifier-value" :class="stat_modifier[type][key] > 0 ? 'positive' : (stat_modifier[type][key] < 0 ? 'negative' : '')">
-                          {{ stat_modifier[type][key] !== undefined ? (stat_modifier[type][key] >= 0 ? "+" : '') + stat_modifier[type][key] : "+0" }}
-                        </span>
-                        <button @click="modifierChange('stat', type, key, -1)">-</button>
-                      </div>
-                    </div>
+                    </template>
                   </div>
                   <div class="select-tags-wrapper">
                     <div class="select-tags">
@@ -322,9 +326,10 @@ export default {
                           track-by="code"
                           :tag-placeholder="$t('add_tag')"
                           :placeholder="$t('input_word')"
-                          :noOptions="$t('no_tag_create')"
+                          :showNoOptions="false"
                           group-values="tags"
                           group-label="label"
+                          openDirection="bottom"
                           :group-select="false"
                           :options=store.tag_groups
                           :multiple="true"
@@ -344,6 +349,7 @@ export default {
                           :showNoOptions="false"
                           group-values="tags"
                           group-label="label"
+                          openDirection="bottom"
                           :group-select="false"
                           :options=store.tag_groups
                           :multiple="true"
@@ -357,40 +363,24 @@ export default {
             </div>
           </div>
           <div id="group-consequences" :class="{open: tab_consequences_open === true}">
-            <div class="description-wrapper">{{ $t('Chaque personnage subira les conséquences selon le pourcentage de réussite du groupe.') }}</div>
+            <div class="description-wrapper">{{ $t('group_consequences_description') }}</div>
             <div class="type-wrapper">
               <template v-for="type in types">
                 <div :id="'chosen-group-'+type" :class="'type type-'+type" >
                   <span class="label-wrapper">{{ type === 'success' ?  $t('positive_csq')  :  $t('negative_csq') }}</span>
                   <div class="modifiers-buttons-container">
-                    <div class="modifiers-buttons" v-for="(gauge, key) in store.current_game.gauges">
-                      <span class="modifier-label">{{ gauge.name }}</span>
-                      <div>
-                        <button @click="modifierChange('gauge', type, key,  -1, true)">-</button>
-                        <span class="modifier-value" :class="gauge_group_modifier[type][key] > 0 ? 'positive' : (gauge_group_modifier[type][key] < 0 ? 'negative' : '')">
-                          {{ gauge_group_modifier[type][key] !== undefined ? (gauge_group_modifier[type][key] >= 0 ? "+" : '') + gauge_group_modifier[type][key] : "+0" }}
-                        </span>
-                        <button @click="modifierChange('gauge', type, key, 1, true)">+</button>
+                    <template v-for="key_name in modifier_categories">
+                      <div class="modifiers-buttons" v-for="(object, key) in store.current_game[key_name + 's']">
+                        <span class="modifier-label">{{ object.name }}</span>
+                        <div>
+                          <button @mouseup="stopModifierChange()" @keyup.enter="modifierChange(this[key_name + '_group_modifier'], type, key, 1)" @mousedown="startModifierChange(this[key_name + '_group_modifier'], type, key, 1)">-</button>
+                          <span class="modifier-value" :class="getModifierClass(this[key_name + '_group_modifier'][type][key])">
+                            {{ this[key_name + '_group_modifier'][type][key] === undefined ? '0' : this[key_name + '_group_modifier'][type][key] }}
+                          </span>
+                          <button @mouseup="stopModifierChange()" @keyup.enter="modifierChange(this[key_name + '_group_modifier'], type, key, -1)" @mousedown="startModifierChange(this[key_name + '_group_modifier'], type, key, -1)">+</button>
+                        </div>
                       </div>
-                    </div>
-                    <div class="modifiers-buttons" v-for="(stat, key) in store.current_game.stats">
-                      <span class="modifier-label">{{ stat.name }}</span>
-                      <div>
-                        <button @click="modifierChange('stat', type, key, -1, true)">-</button>
-                        <span class="modifier-value" :class="stat_group_modifier[type][key] > 0 ? 'positive' : (stat_group_modifier[type][key] < 0 ? 'negative' : '')">
-                          {{ stat_group_modifier[type][key] !== undefined ? (stat_group_modifier[type][key] >= 0 ? "+" : '') + stat_group_modifier[type][key] : "+0" }}
-                        </span>
-                        <button @click="modifierChange('stat', type, key, 1, true)">+</button>
-                      </div>
-                    </div>
-                    <div class="modifiers-buttons" v-for="(marker, key) in store.current_game.markers">
-                      <span class="modifier-label">{{ marker.name }}</span>
-                      <div>
-                        <button @click="modifierChange('marker', type, key, -1, true)">-</button>
-                        <span class="modifier-value">{{ marker_group_modifier[type][key] !== undefined ? (marker_group_modifier[type][key] >= 0 ? "+" : '') + marker_group_modifier[type][key] : "+0" }}</span>
-                        <button @click="modifierChange('marker', type, key, 1, true)">+</button>
-                      </div>
-                    </div>
+                    </template>
                   </div>
                   <div class="select-tags-wrapper">
                     <div class="select-tags">
@@ -402,9 +392,10 @@ export default {
                           track-by="code"
                           :tag-placeholder="$t('add_tag')"
                           :placeholder="$t('input_word')"
-                          :noOptions="$t('no_tag_create')"
+                          :showNoOptions="false"
                           group-values="tags"
                           group-label="label"
+                          openDirection="bottom"
                           :group-select="false"
                           :options=store.tag_groups
                           :multiple="true"
@@ -424,6 +415,7 @@ export default {
                           :showNoOptions="false"
                           group-values="tags"
                           group-label="label"
+                          openDirection="bottom"
                           :group-select="false"
                           :options=store.tag_groups
                           :multiple="true"
@@ -436,10 +428,12 @@ export default {
               </template>
             </div>
           </div>
-
         </div>
-        <div id="challenge-summary" v-if="chosen_stat !== ''">
-          <div>
+        <div id="challenge-summary">
+          <span v-if="chosen_stat === ''">
+            {{ $t('please_select_stat') }}
+          </span>
+          <div v-if="chosen_stat !== ''">
             <span>{{ $t('this_will_test') }}{{ store.stats[chosen_stat].name.toLowerCase() }}</span>
             <span v-if="chosen_tags.length === 0">{{ $t('for_everyone') }}</span>
             <div class="summmary-tags" v-if="chosen_tags.length > 0">
@@ -449,15 +443,19 @@ export default {
               </span>
             </div>
           </div>
-          <div>
+          <div v-if="chosen_stat !== ''">
             <template v-for="type in types">
-              <span v-if="Object.keys(gauge_modifier[type]).length || Object.keys(stat_modifier[type]).length || chosen_modifier_tags_add[type].length || chosen_modifier_tags_remove[type].length">{{ $t('challenge_characters') }}{{ type === 'success' ? $t('that_pass') : $t('that_fail') }}{{ $t('will_have') }}</span>
-              <div v-if="Object.keys(gauge_modifier[type]).length || Object.keys(stat_modifier[type]).length">
+              <span v-if="Object.keys(marker_modifier[type]).length || Object.keys(gauge_modifier[type]).length || Object.keys(stat_modifier[type]).length || chosen_modifier_tags_add[type].length || chosen_modifier_tags_remove[type].length">
+                {{ $t('challenge_characters') }}{{ type === 'success' ? $t('that_pass') : $t('that_fail') }}{{ $t('will_have') }}</span>
+              <div>
                 <span v-for="(modifier, key) in gauge_modifier[type]">
                   {{ store.gauges[key].name }} {{ modifier > 0 ? '+' + modifier : modifier }}
                 </span>
                 <span v-for="(modifier, key) in stat_modifier[type]">
                   {{ store.stats[key].name }} {{ modifier > 0 ? '+' + modifier : modifier }}
+                </span>
+                <span v-for="(modifier, key) in marker_modifier[type]">
+                  {{ store.markers[key].name }} {{ modifier > 0 ? '+' + modifier : modifier }} {{ $t('global_marker') }}
                 </span>
               </div>
               <div class="summmary-tags" v-if="chosen_modifier_tags_add[type].length > 0">
@@ -474,21 +472,23 @@ export default {
               </div>
             </template>
           </div>
-
-          <div>
+          <div v-if="chosen_stat !== ''">
             <template v-for="type in types">
-            <span v-if="Object.keys(gauge_group_modifier[type]).length || Object.keys(stat_group_modifier[type]).length || chosen_group_modifier_tags_add[type].length || chosen_group_modifier_tags_remove[type].length">
+            <span v-if="Object.keys(marker_group_modifier[type]).length || Object.keys(gauge_group_modifier[type]).length || Object.keys(stat_group_modifier[type]).length || chosen_group_modifier_tags_add[type].length || chosen_group_modifier_tags_remove[type].length">
               {{ type === 'success' ?
                 $t('group_consequences_summary_success', {rate: group_slider[1] === undefined ? group_slider : group_slider[0]}) :
                 $t('group_consequences_summary_failure', {rate: group_slider[1] ?? group_slider }) }}
             </span>
-              <div v-if="Object.keys(gauge_group_modifier[type]).length || Object.keys(stat_group_modifier[type]).length">
-              <span v-for="(modifier, key) in gauge_group_modifier[type]">
-                {{ store.gauges[key].name }} {{ modifier > 0 ? '+' + modifier : modifier }}
-              </span>
+              <div>
+                <span v-for="(modifier, key) in gauge_group_modifier[type]">
+                  {{ store.gauges[key].name }} {{ modifier > 0 ? '+' + modifier : modifier }}
+                </span>
                 <span v-for="(modifier, key) in stat_group_modifier[type]">
-                {{ store.stats[key].name }} {{ modifier > 0 ? '+' + modifier : modifier }}
-              </span>
+                  {{ store.stats[key].name }} {{ modifier > 0 ? '+' + modifier : modifier }}
+                </span>
+                <span v-for="(modifier, key) in marker_group_modifier[type]">
+                  {{ store.markers[key].name }} {{ modifier > 0 ? '+' + modifier : modifier }} {{ $t('global_marker') }}
+                </span>
               </div>
               <div class="summmary-tags" v-if="chosen_group_modifier_tags_add[type].length > 0">
                 <span>{{ $t('get_following_tags') }}</span>
@@ -508,9 +508,9 @@ export default {
         </div>
       </div>
       <div class="finish-challenge" v-else>
-        <div>Vous devez terminer l'épreuve en cours pour en démarrer une nouvelle.</div>
-        <div v-if="this.store.last_challenge.resolved === undefined">Fin de l'épreuve dans : {{ this.store.last_challenge.timer }}s</div>
-        <button v-else class="btn-valid btn-finish-challenge" @click="this.store.finishChallenge()">Terminer l'épreuve</button>
+        <div>{{ $t('need_challenge_end') }}</div>
+        <div v-if="this.store.last_challenge.result === undefined">{{ $t('challenged_end_in', {timer: this.store.last_challenge.timer}) }}</div>
+        <button v-else class="btn-valid btn-finish-challenge" @click="this.store.finishChallenge()">{{ $t('finish_challenge') }}</button>
       </div>
     </div>
   </div>
@@ -562,10 +562,24 @@ export default {
             border-radius: 10px 10px 0 0;
             background: lightgrey;
             color: black;
+            align-items: center;
 
             &.open {
               background: var(--background-card-color);
               color: var(--font-color);
+
+              &:hover {
+                filter: unset;
+                border-color: var(--background-card-color);
+                cursor: default;
+              }
+            }
+
+            &:before {
+              font-size: 2em;
+              background: white;
+              border-radius: 100%;
+              color: black;
             }
           }
         }
@@ -599,8 +613,6 @@ export default {
       }
 
       #challenge-basics {
-        align-self: flex-start;
-
         > span {
           margin-bottom: auto;
         }
@@ -621,46 +633,48 @@ export default {
           }
         }
 
-        #group-difficulty-slider {
-          gap: 10px;
-          height: 40px;
-          margin: 20px 0;
-
-          .slider-target {
-            flex: 1;
-          }
-
+        #group-difficulty {
           button {
-            font-size: 0.75em;
-            height: 40px;
+            font-size: 0.8em;
           }
 
-          .slider-base {
+          #group-difficulty-slider {
+            gap: 10px;
             height: 40px;
-          }
+            margin: 15px 0;
 
-          .slider-connect {
-            background: var(--failure-background);
-
-            + .slider-connect {
-              background: var(--success-background);
+            .slider-target {
+              flex: 1;
             }
-          }
 
-          .slider-origin {
-            .slider-tooltip {
+
+            .slider-base {
+              height: 40px;
+            }
+
+            .slider-connect {
               background: var(--failure-background);
-              color: white;
-            }
 
-            .slider-tooltip-top:before {
-              border: none;
-            }
-
-            + .slider-origin {
-              .slider-tooltip {
+              + .slider-connect {
                 background: var(--success-background);
-                transform: translate(-50%, 200%);
+              }
+            }
+
+            .slider-origin {
+              .slider-tooltip {
+                background: var(--failure-background);
+                color: white;
+              }
+
+              .slider-tooltip-top:before {
+                border: none;
+              }
+
+              + .slider-origin {
+                .slider-tooltip {
+                  background: var(--success-background);
+                  transform: translate(-50%, 200%);
+                }
               }
             }
           }
@@ -688,6 +702,10 @@ export default {
       #challenge-summary {
         text-align: left;
 
+        > span {
+          text-align: center;
+        }
+
         > div {
           display: flex;
           flex-direction: column;
@@ -701,12 +719,10 @@ export default {
 
           > div {
             display: flex;
-            gap: 10px;
+            flex-wrap: wrap;
+            gap: 0 5px;
 
             &.summmary-tags {
-              gap: 0 5px;
-              flex-wrap: wrap;
-
               span:nth-child(n+2) {
                 border-radius: 5px;
                 background: black;
@@ -803,14 +819,20 @@ export default {
               flex-direction: column;
 
               > .modifier-value {
+                color: black;
+                background: white;
                 border: 1px solid black;
-                width: 25px;
+                min-width: 25px;
                 border-radius: 5px;
                 transition: all 0.5s linear;
 
                 &.positive {
                   background: var(--success-background);
                   color: white;
+
+                  &:before {
+                    content: '+';
+                  }
                 }
                 &.negative {
                   background: var(--failure-background);

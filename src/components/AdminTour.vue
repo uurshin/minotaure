@@ -26,13 +26,57 @@ export default {
       {id: 'tab_label_settings', goto: 'settings'},
       {parent: 'settings', id: 'step_settings_gauges'},
       {parent: 'settings', id: 'step_settings_add_gauge'},
-      {parent: 'settings', id: 'step_settings_gauge', position: 'right'},
+      {parent: 'settings', id: 'step_settings_gauge', position: 'right',
+        beforeShow: function () {
+          return new Promise(function (resolve) {
+            if (vm.$parent.$refs['admin_tab_settings'].$refs['step_settings_gauge_cancel'] !== undefined && vm.$parent.$refs['admin_tab_settings'].$refs['step_settings_gauge_cancel'].length) {
+              vm.$parent.$refs['admin_tab_settings'].$refs['step_settings_gauge_cancel'][0].click();
+            }
+            resolve();
+          });
+        }
+      },
+      {parent: 'settings', id: 'step_settings_gauge_name',
+        beforeShow: function () {
+          return new Promise(function (resolve) {
+            if (vm.$parent.$refs['admin_tab_settings'].$refs['step_settings_gauge_modify'] !== undefined && vm.$parent.$refs['admin_tab_settings'].$refs['step_settings_gauge_modify'].length) {
+              vm.$parent.$refs['admin_tab_settings'].$refs['step_settings_gauge_modify'][0].click();
+            }
+            resolve();
+          });
+        }
+      },
+      {parent: 'settings', id: 'step_settings_gauge_value'},
       {parent: 'settings', id: 'step_settings_gauge_make_deadly'},
-      {parent: 'settings', id: 'step_settings_gauge_delete'},
+      {parent: 'settings', id: 'step_settings_gauge_spending'},
+      {parent: 'settings', id: 'step_settings_gauge_cancel',
+        beforeShow: function () {
+          return new Promise(function (resolve) {
+            if (vm.$parent.$refs['admin_tab_settings'].$refs['step_settings_gauge_modify'] !== undefined && vm.$parent.$refs['admin_tab_settings'].$refs['step_settings_gauge_modify'].length) {
+              vm.$parent.$refs['admin_tab_settings'].$refs['step_settings_gauge_modify'][0].click();
+            }
+            resolve();
+          });
+        }},
+      {parent: 'settings', id: 'step_settings_gauge_delete',
+        beforeShow: function () {
+          return new Promise(function (resolve) {
+            if (vm.$parent.$refs['admin_tab_settings'].$refs['step_settings_gauge_cancel'] !== undefined && vm.$parent.$refs['admin_tab_settings'].$refs['step_settings_gauge_cancel'].length) {
+              vm.$parent.$refs['admin_tab_settings'].$refs['step_settings_gauge_cancel'][0].click();
+            }
+            resolve();
+          });
+        }
+      },
       {parent: 'settings', id: 'step_settings_stats'},
       {parent: 'settings', id: 'step_settings_add_stat'},
       {parent: 'settings', id: 'step_settings_stat', position: 'right'},
-      {parent: 'settings', id: 'step_settings_stat_delete', group_finish: true},
+      {parent: 'settings', id: 'step_settings_stat_delete'},
+      {parent: 'settings', id: 'step_settings_markers'},
+      {parent: 'settings', id: 'step_settings_settings'},
+      {parent: 'settings', id: 'step_settings_challenge_timer'},
+      {parent: 'settings', id: 'step_settings_disconnected_prevent'},
+      {parent: 'settings', id: 'step_settings_npc_prevent', group_finish: true},
       {id: 'tab_label_tags', goto: 'tags'},
       {parent: 'tags', id: 'step_tags'},
       {
@@ -180,6 +224,10 @@ export default {
           }
           else {
             element = vm.$parent.$refs[step.id];
+          }
+
+          if (element === undefined) {
+            return null;
           }
 
           return element.classList ? element : element[0];

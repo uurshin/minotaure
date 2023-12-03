@@ -1,6 +1,5 @@
 <script>
 import { usePlayerStore }  from '../main';
-import logo from '../assets/images/minotaure_logo.svg'
 
 export default {
   setup() {
@@ -37,7 +36,7 @@ export default {
       </div>
     </div>
     <div class="small-wrapper infos">
-      <span>Version : {{ version }}</span>
+      <span>{{ $t('version', {version: version}) }}</span>
       <a href="https://github.com/uurshin/minotaure">{{ $t('read_more') }}</a>
     </div>
   </div>
@@ -71,6 +70,10 @@ export default {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
       gap: 10px;
+
+      a {
+        font-weight: normal;
+      }
 
       @include media("<tablet") {
         display: flex;

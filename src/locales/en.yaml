@@ -5,6 +5,7 @@ character_manage: 'Manage your characters'
 read_more: "More about Minotaure"
 character_help: 'Your characters are stored in your browser, so you can find them again when you connect to a previously joined game. You can play on another browser by exporting your characters.'
 character_nb: 'You have no character to export | You have one character to export | You have { count } characters to export'
+version: "Version : {version}"
 
 #Admin
 characters: "Characters"
@@ -35,11 +36,13 @@ continue: "Continue"
 see_more: "View more"
 any_game: "You didn't create any game."
 cancel: "Cancel"
-in_progress: "Please input text"
+waiting_name: "Waiting for your game name"
+please_wait: "Please wait"
 start_game: "Start game"
 warning_version: "The game marked with <span class='danger'>*</span> are not compatible with your Minotaure version ({version}), it might not work properly."
 delete_all_games: "Delete all games"
 confirm_question: "Are you sure?"
+clone: "Duplicate"
 
 #Create
 game_name_invite: "Name your game. You can change it later."
@@ -93,6 +96,10 @@ step_settings_add_gauge: "You can add as many bars as you like."
 step_settings_gauge:
   "All characters have these bars when they are created, with a number of starting points that 
   you can change."
+step_settings_gauge_name: "You can change the name of a gauge at any time."
+step_settings_gauge_value: "This number determines the base value of a gauge for a character at its creation."
+step_settings_gauge_spending: "When you launch a challenge using the checked characteristic, players can spend points from this gauge to decrease the difficulty of their challenge by 1 for each point spent."
+step_settings_gauge_cancel: "You are not obligated to validate your changes; you can confirm or cancel all changes."
 step_settings_gauge_delete:
   "You can delete a bar at any time."
 step_settings_gauge_make_deadly:
@@ -105,6 +112,11 @@ step_settings_stat:
   "All characters have these stats at their creation, with a starting number of points of 10 + a random number between -9 and +9. <br>
   The point total of all stats of a the creation of a character is always 10 times the number of stats, to ensure the same total points for all participants."
 step_settings_stat_delete: "You can delete a stat at any time."
+step_settings_markers: "Markers are global counters for the game. Their value can be modified from this screen but also increased or decreased automatically after a success or failure of the group during a challenge."
+step_settings_settings: "You can adjust some game settings."
+step_settings_challenge_timer: "Set the time granted to players for making choices and rolling their dice after the start of a challenge."
+step_settings_disconnected_prevent: "You can choose that disconnected characters are never taken into account during the challenges and draws you launch."
+step_settings_npc_prevent: "You can also choose that non-player characters (which you can create in the Characters tab) are never taken into account during the challenges and draws you launch."
 tab_label_tags:
   "Tags are labels assigned to characters and are a great strength of Minotaure.<br>"
 step_tags:
@@ -147,13 +159,17 @@ add: "Add"
 gauge_start: "Starts at {gauge_value}"
 kills_at_0: "Kills at 0"
 submit: "Submit"
-make_normal: "Make normal"
-make_fatal: "Make fatal"
 modify: "Modify"
 delete: "Delete"
 name: "Name"
 starts_at: "Start at"
+used_for_challenges: "Used for challenges:"
 rename: "Rename"
+challenge_timer: "seconds waiting before the end of a challenge"
+disconnected_prevent: "Prevent disconnected players from participating in challenges and draws"
+npc_prevent: "Prevent non-player characters from participating in challenges and draws"
+spend_on: "Players can spend these points to facilitate the challenges of"
+gauge_deadly_description: "Characters die if this gauge reaches 0"
 
 #AdminTabChallenge
 dif_cake: "Piece of cake"
@@ -195,6 +211,15 @@ start_challenge: "Start Challenge!"
 group_consequences_summary_failure: "If fewer than {rate}% of characters succeed, all characters will receive:"
 group_consequences_summary_success: "If more than {rate}% of characters succeed, all characters will receive:"
 success_threshold: "Group success threshold"
+remove_neutral_zone: "Remove the neutral zone"
+add_neutral_zone: "Add a neutral zone"
+individual_consequences_description: "Each character will roll a die, to which the difficulty will be added, and must score less than the tested characteristic."
+group_consequences_description: "Each character will face consequences based on the group's success percentage."
+need_challenge_end: "You need to finish the current challenge to start a new one."
+consequences_per_character: "Consequences per character"
+consequences_for_group: "Consequences for the group"
+global_marker: "(shared for everyone)"
+please_select_stat: "Select a stat to launch the challenge"
 
 #AdminTabCharacters
 context_add_selection_character: "Add character to selection (maj + left click)"
@@ -216,6 +241,14 @@ start_typing: "Start typing"
 clear_selection: "Clear selection"
 char_picked: "Selected characters"
 add_all_to_selection: "Add all to selection"
+challenged_end_in: "End of challenge in {timer}s"
+finish_challenge: "Finish the challenge"
+challenge_scale_label: "{scale}% = success"
+challenge_scale_label_neutral: "{scale}% = no effect"
+challenge_result_success: "Group succeeded!"
+challenge_result_neutral: "Neither group failure nor success..."
+challenge_result_failure: "Group failed!"
+non_player: "Non-player"
 
 #AdminTabTags
 group_nb: "Group {nb}"
@@ -264,6 +297,7 @@ admin_pick_add_csq: "Additional consequences of the draw"
 
 #Join
 game_id: "Game ID"
+waiting: "Waiting"
 join: "Join Game"
 
 #Main
@@ -288,3 +322,10 @@ result_malus: "You lose {points} points of {name}."
 result_group_success: "The group succeeded in the challenge"
 result_group_neutral: "The challenge has no effect on the group"
 result_group_failure: "The group failed the challenge"
+challenge_in_progress: "{label} Challenge in progress"
+difficulty_threshold: "You must roll {difficulty} or lower to succeed"
+difficulty_threshold_past: "You needed to roll {difficulty} or lower to succeed"
+challenge_ends_in: "Challenge ends in {timer}s"
+poll_in_progress: "Poll in progress"
+gauge_spending_description: "Decrease difficulty by 1 by spending a gauge point"
+gauge_spending_button_text: "Spend one {label} point"

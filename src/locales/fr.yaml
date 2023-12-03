@@ -5,6 +5,7 @@ character_manage: 'Gérer vos personnages'
 read_more: "En savoir plus"
 character_help: "Vos personnages sont conservés dans votre navigateur, ce qui permet de les retrouver lors d'une connexion à une partie rejointe auparavant. Vous pouvez jouer sur un autre navigateur en exportant vos personnages."
 character_nb: "Vous n'avez aucun personnage à exporter | Vous avez un personnage à exporter | Vous avez { count } personnages à exporter"
+version: "Version : {version}"
 
 #Admin
 characters: "Personnages"
@@ -35,11 +36,13 @@ continue: "Continuer"
 see_more: "Voir plus"
 any_game: "Vous n'avez créé aucune partie."
 cancel: "Annuler"
-in_progress: "En attente"
+waiting_name: "En attente de votre nom de partie"
+please_wait: "Veuillez patienter"
 start_game: "Lancer la partie"
 warning_version: "Les parties marquées d'un <span class='danger'>*</span> ne sont pas compatibles avec votre version de Minotaure ({version}), elles pourraient ne pas fonctionner correctement."
 delete_all_games: "Supprimer toutes les parties"
 confirm_question: "Confirmer ?"
+clone: "Dupliquer"
 
 #Create
 game_name_invite: "Nom de votre partie. Vous pourrez le changer plus tard."
@@ -90,6 +93,10 @@ tab_label_settings: "Les paramètres sont les réglages de la partie que nous vo
 step_settings_gauges:
   "Les jauges sont des réserves de points pour chaque personnage. Quand vous créez une partie, deux jauges sont créées par défaut : vie et volonté."
 step_settings_add_gauge: "Vous pouvez ajouter autant de jauge que vous le souhaitez."
+step_settings_gauge_name: "Vous pouvez changer le nom d'une jauge à tout moment."
+step_settings_gauge_value: "Ce nombre détermine la valeur de base d'une jauge pour un personnage à sa création."
+step_settings_gauge_spending: "Lorsque vous lancez une épreuve utilisant les caractéristique cochée, les joueurs peuvent dépenser des points de cette jauge pour diminuer de 1 par point dépensé la difficulté de leur épreuve."
+step_settings_gauge_cancel: "Vous n'êtes pas obligé de valider vos modifications, vous pouvez valider ou annuler tous les changements."
 step_settings_gauge:
   "Tous les personnages possèdent ces jauges à leur création, avec un nombre de points de départ que 
   vous pouvez modifier."
@@ -107,6 +114,15 @@ step_settings_stat:
   Le total des caractéristiques d'un personnage à sa création est toujours de 10 x le nombre de caractéristiques, pour garantir le même total de points à tous les participants."
 step_settings_stat_delete:
   "Vous pouvez supprimer une caractéristique à tout moment."
+step_settings_markers:
+  "Les marqueurs sont des compteurs globaux pour la partie.
+  Leur valeur peut être modifiée depuis cet écran mais également augmentée ou diminuée automatiquement suite à une réussite ou un échec du groupe lors d'une épreuve."
+step_settings_settings:
+  "Vous pouvez ajuster certains réglages de la partie."
+step_settings_challenge_timer:
+  "Réglez le temps accordé aux joueurs pour faire des choix et lancer leur dé après le démarrage d'une épreuve."
+step_settings_disconnected_prevent: "Vous pouvez choisir que les personnages déconnectés ne soient jamais pris en compte lors des épreuves et tirages que vous lancez."
+step_settings_npc_prevent: "Vous pouvez également choisir que les personnages non-joueurs (que vous pouvez créer dans l'onglet Personnages) ne soient jamais pris en compte lors des épreuves et tirages que vous lancez."
 tab_label_tags:
   "Les tags sont des étiquettes attribuées aux personnages et font la grande force de Minotaure.<br>"
 step_tags:
@@ -156,13 +172,17 @@ add: "Ajouter"
 gauge_start: "Démarre à {gauge_value}"
 kills_at_0: "Tue à 0"
 submit: "Valider"
-make_normal: "Rendre normale"
-make_fatal: "Rendre fatale"
 modify: "Modifier"
 delete: "Supprimer"
 name: "Nom"
 starts_at: "Démarre à"
+used_for_challenges: "Utilisé pour les épreuves de :"
 rename: "Renommer"
+challenge_timer: "secondes d'attente avant la fin d'une épreuve"
+disconnected_prevent: "Empêcher les déconnectés de participer aux épreuves et tirages"
+npc_prevent: "Empêcher les personnages non-joueur de participer aux épreuves et tirages"
+spend_on: "Les joueurs peuvent dépenser ces points pour faciliter les épreuves de"
+gauge_deadly_description: "Les personnages meurent si cette jauge arrive à 0"
 
 #AdminTabChallenge
 dif_cake: "Trivial"
@@ -204,12 +224,20 @@ start_challenge: "Lancer l'épreuve !"
 group_consequences_summary_failure: "Si moins de {rate}% de personnages réussissent, tous les personnages obtiendront :"
 group_consequences_summary_success: "Si plus de {rate}% de personnages réussissent, tous les personnages obtiendront :"
 success_threshold: "Seuil de succès du groupe"
+remove_neutral_zone: "Retirer la zone sans effet"
+add_neutral_zone: "Ajouter une zone sans effet"
+individual_consequences_description: "Chaque personnage lancera un dé, auquel sera ajoutée la difficulté, et devra faire moins que la caractéristique testée."
+group_consequences_description: "Chaque personnage subira les conséquences selon le pourcentage de réussite du groupe."
+consequences_per_character: "Conséquences par personnage"
+consequences_for_group: "Conséquences pour le groupe"
+global_marker: "(partagé pour tout le monde)"
+please_select_stat: "Sélectionnez une caractéristique pour lancer l'épreuve"
 
 #AdminTabCharacters
 context_add_selection_character: "Ajouter à la sélection (maj + clic gauche)"
 context_remove_selection_character: "Retirer de la sélection (maj + clic gauche)"
 context_delete_character: "Supprimer le personnage"
-context_edit_character: "Modifier le personnage (à venir)"
+context_edit_character: "Modifier le personnage"
 last_challenge_success_rate: "La dernière épreuve a connu un pourcentage de réussite de "
 select_tag: "Choisir un tag"
 alive: "Vivants"
@@ -225,6 +253,15 @@ start_typing: "Commencez à taper"
 clear_selection: "Effacer la sélection"
 char_picked: "Sélectionnés"
 add_all_to_selection: "Tout ajouter à la sélection"
+challenged_end_in: "Fin de l'épreuve dans {timer}s"
+finish_challenge: "Terminer l'épreuve"
+need_challenge_end: "Vous devez terminer l'épreuve en cours pour en démarrer une nouvelle."
+challenge_scale_label: "{scale}% = réussite"
+challenge_scale_label_neutral: "{scale}% = sans effet"
+challenge_result_success: "Réussite du groupe !"
+challenge_result_neutral: "Ni échec, ni réussite du groupe..."
+challenge_result_failure: "Échec du groupe !"
+non_player: "Non-joueur"
 
 #AdminTabTags
 group_nb: "Groupe {nb}"
@@ -273,6 +310,7 @@ admin_pick_add_csq: "Conséquences supplémentaires du tirage"
 
 #Join
 game_id: "ID de la partie"
+waiting: "En attente"
 join: "Rejoindre"
 
 #Main
@@ -297,3 +335,10 @@ result_malus: "Vous perdez {points} points de {name}."
 result_group_success: "L'épreuve a été réussie par le groupe"
 result_group_neutral: "L'épreuve est sans effet pour le groupe"
 result_group_failure: "L'épreuve a été ratée par le groupe"
+challenge_in_progress: "Épreuve de {label} en cours"
+difficulty_threshold: "Vous devez faire {difficulty} ou moins pour réussir"
+difficulty_threshold_past: "Vous deviez faire {difficulty} ou moins pour réussir"
+challenge_ends_in: "L'épreuve se termine dans {timer}s"
+poll_in_progress: "Sondage en cours"
+gauge_spending_description: "Diminuez la difficulté de 1 en dépensant un points de jauge"
+gauge_spending_button_text: "Dépenser un point de {label}"

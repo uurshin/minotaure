@@ -61,10 +61,22 @@ export default {
       const date = new Date(dateString);
       return new Intl.DateTimeFormat('en-GB').format(date);
     },
+    cloneGame(id) {
+      let found = this.games.find((element) => element.id === id);
+      if (found !== undefined) {
+        let new_game = {...found};
+        new_game.id = new_game.date = Date.now();
+        new_game.name += '_copy';
+        new_game.characters = [];
+        new_game.date = Date.now();
+        new_game.init = false;
+        this.games.push(new_game)
+        localStorage.setItem('games', JSON.stringify(this.games));
+      }
+    },
     deleteGame(id, event) {
-      if (!this.confirmDelete) {
-        event.target.innerText = this.$t('confirm_question');
-        this.confirmDelete = true;
+      if (this.confirmDelete === false) {
+        this.confirmDelete = id;
       }
       else {
         let found = this.games.findIndex((element) => element.id === id);
@@ -95,7 +107,7 @@ export default {
         this.store.peer.destroy();
       }
       this.ask_id = id;
-      let peer = new Peer();
+      let peer = new Peer(null, this.store.getPeerOptions());
       peer.on('open', function (conn) {
         vm.store.setPeer(peer);
         console.log(peer.id);
@@ -106,18 +118,10 @@ export default {
       this.ask_id = false;
     },
     continueGame() {
-      const vm = this;
       let found = this.games.find((element) => element.id === this.ask_id);
-      if (found) {
+      if (found && this.id_admin !== '') {
         this.store.setCurrentGame(found);
         this.store.current_game.game_started = false;
-        if (this.id_admin !== '' && this.store.peer.id !== this.id_admin) {
-          this.store.peer.destroy();
-          let peer = new Peer(this.id_admin);
-          peer.on('open', function () {
-            vm.store.setPeer(peer);
-          });
-        }
         router.push('/admin');
       }
     }
@@ -137,7 +141,8 @@ export default {
       <span v-if="activated !== key">{{ $t('count_personnage', game.characters.length, {count: game.characters.length}) }}</span>
       <div class="hidden-mobile" :class="{active: activated === key}">
         <button class="btn-valid" @click="askPublicId(game.id)">{{ $t('continue') }}</button>
-        <button class="btn-danger" @click="deleteGame(game.id, $event)">{{ $t('delete') }}</button>
+        <button @click="cloneGame(game.id)">{{ $t('clone') }}</button>
+        <button class="btn-danger" @click="deleteGame(game.id, $event)">{{ game.id === confirmDelete ? this.$t('confirm_question') : $t('delete') }}</button>
       </div>
       <button class="visible-mobile" @click="activated = key;" v-if="activated !== key">{{ $t('see_more') }}</button>
     </div>
@@ -147,9 +152,7 @@ export default {
     </div>
     <button v-if="games.length > 1 && !ask_id" class="btn-danger delete-all" @click="deleteAllGames($event)">{{ $t('delete_all_games') }}</button>
     <div class="continue-game" v-if="ask_id">
-      <input name="id_admin" type="text" id="id_admin" v-model="id_admin">
-      <label for="id_admin">{{ $t("game_id_help") }}</label>
-      <button class="btn-valid" @click="continueGame()">{{ $t('start_game') }}</button>
+      <button :disabled="id_admin === ''" class="btn-valid" @click="continueGame()">{{ id_admin === '' ? $t('please_wait') : $t('start_game') }}</button>
       <button @click="cancelContinue()" >{{ $t('cancel') }}</button>
     </div>
   </div>
@@ -192,7 +195,7 @@ export default {
 
   .game {
     display: grid;
-    grid-template-columns: 1fr 1fr 2fr;
+    grid-template-columns: 1fr 1fr 3fr;
     align-items: center;
     gap: 20px 60px;
     text-align: left;

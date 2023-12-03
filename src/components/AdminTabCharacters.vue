@@ -3,8 +3,8 @@ import { usePlayerStore } from '../main';
 import VueMultiselect from 'vue-multiselect'
 import {Dataset, DatasetItem, DatasetSearch, DatasetInfo, DatasetShow} from "vue-dataset";
 import VueSimpleContextMenu from 'vue-simple-context-menu';
-import { ref } from 'vue';
 import Slider from "@vueform/slider"
+import contenteditable from 'vue-contenteditable';
 
 export default {
   components: {
@@ -15,12 +15,13 @@ export default {
     DatasetInfo,
     DatasetShow,
     VueSimpleContextMenu,
-    Slider
+    Slider,
+    contenteditable
   },
   setup() {
-    const card_centered = ref(null)
+    const character_centered = null;
     return {
-      card_centered
+      character_centered
     };
   },
   data() {
@@ -31,13 +32,17 @@ export default {
       tag_filter: [],
       search_character: '',
       filters: {},
-      options_contextual: [{}]
+      options_contextual: [{}],
+      character_edit: 0
     }
   },
   computed: {
     current_challenge_rate: function() {
       if (this.store.last_challenge === undefined || !this.store.last_challenge.active) {
         return false;
+      }
+      else if (this.store.last_challenge.nb_targets * this.store.last_challenge.nb_success === 0) {
+        return 0;
       }
       return Math.floor(100 / this.store.last_challenge.nb_targets * this.store.last_challenge.nb_success);
     },
@@ -46,8 +51,11 @@ export default {
         if (this.current_challenge_rate > this.store.last_challenge.scale[1]) { return 'scale-success' }
         else if (this.current_challenge_rate > this.store.last_challenge.scale[0]) { return 'scale-neutral' }
       }
-      else if (this.current_challenge_rate > this.store.last_challenge.scale) { return 'scale-success' }
-      else if (this.current_challenge_rate === this.store.last_challenge.scale) { return 'scale-neutral' }
+      else if (this.current_challenge_rate >= this.store.last_challenge.scale) { return 'scale-success' }
+      else if (this.current_challenge_rate === false) {
+        return '';
+      }
+
       return 'scale-failure';
     }
   },
@@ -170,7 +178,6 @@ export default {
       }
       options.push({name: this.$t('context_edit_character'), effect: 'edit'});
       options.push({name: this.$t('context_delete_character'), effect: 'delete'});
-      // options.push({name: 'roll_dice', effect: 'roll'});
       return options;
     },
     optionClicked(event) {
@@ -185,7 +192,10 @@ export default {
             this.store.characters.splice(foundIndex, 1);
             break;
           case 'edit':
-            // Todo edit.
+            character.editing = true;
+            if (this.character_centered === null || this.character_centered.token !== character.token) {
+              this.animateToCenter(character);
+            }
             break;
           case 'toggle':
             this.toggleCharacter(character);
@@ -203,28 +213,33 @@ export default {
     selectVisible(ds) {
       ds.dsRows.forEach((row) => ds.dsData[row].picked = true);
     },
-    animateToCenter(id) {
+    animateToCenter(character) {
       let expand = false;
-      if (this.card_centered !== this.$refs[id]) {
+      if (this.character_centered === null || this.character_centered.token !== character.token) {
         expand = true;
       }
-      if (this.card_centered !== null) {
-        this.card_centered.style.transform = null;
-        this.card_centered.classList.remove('centered');
-        this.card_centered = null;
+      else {
+        character.editing = 0;
       }
-      if (expand && this.$refs[id] !== undefined) {
-        this.card_centered = this.$refs[id];
-        var rect = this.$refs[id].getBoundingClientRect();
+
+      if (this.character_centered !== null) {
+        this.$refs[this.character_centered.token].style.transform = null;
+        this.$refs[this.character_centered.token].classList.remove('centered');
+        this.character_centered.editing = 0;
+        this.character_centered = null;
+      }
+      if (expand && character !== undefined) {
+        this.character_centered = character;
+        var rect = this.$refs[character.token].getBoundingClientRect();
         let scale = 2;
         // For bigger screens, the expanded card can take more space.
         if (window.screen.availHeight > 1000) {
           scale = 3;
         }
-        let diffX = (window.innerWidth / 2) - rect.left - this.$refs[id].offsetWidth * scale / 2;
-        let diffY = (window.innerHeight / 2) - rect.top - this.$refs[id].offsetHeight * scale / 2;
-        this.$refs[id].style.transform = 'translate(' + diffX + 'px ,' + diffY + 'px) scale3D(' + scale + ',' + scale + ',' + scale + ')';
-        this.$refs[id].classList.add('centered');
+        let diffX = (window.innerWidth / 2) - rect.left - this.$refs[character.token].offsetWidth * scale / 2;
+        let diffY = (window.innerHeight / 2) - rect.top - this.$refs[character.token].offsetHeight * scale / 2;
+        this.$refs[character.token].style.transform = 'translate(' + diffX + 'px ,' + diffY + 'px) scale3D(' + scale + ',' + scale + ',' + scale + ')';
+        this.$refs[character.token].classList.add('centered');
       }
     }
   }
@@ -249,36 +264,42 @@ export default {
               :tooltips="false"
           />
           <div v-if="this.store.last_challenge.scale instanceof Array">
-          <span class="target-scale"
-                :class="{validated: current_challenge_rate > this.store.last_challenge.scale[0]}"
-                :style="{ left: this.store.last_challenge.scale[0] + '%' }"
-          >
-            {{ this.store.last_challenge.scale[0] }}% = aucun effet
-          </span>
             <span class="target-scale"
-                  :class="{validated: current_challenge_rate > this.store.last_challenge.scale[1]}"
-                  :style="{ left: this.store.last_challenge.scale[1] + '%' }"
+                  :class="{validated: current_challenge_rate > this.store.last_challenge.scale[0]}"
+                  :style="{ left: this.store.last_challenge.scale[0] + '%' }"
             >
-            {{ this.store.last_challenge.scale[1] }}% = réussite
-          </span>
+              {{ $t('challenge_scale_label_neutral', {scale: this.store.last_challenge.scale[0]}) }}
+            </span>
+              <span class="target-scale"
+                    :class="{validated: current_challenge_rate > this.store.last_challenge.scale[1]}"
+                    :style="{ left: this.store.last_challenge.scale[1] + '%' }"
+              >
+              {{ $t('challenge_scale_label', {scale: this.store.last_challenge.scale[1]}) }}
+            </span>
           </div>
 
           <div v-else>
-          <span class="target-scale"
-                :class="{validated: current_challenge_rate > this.store.last_challenge.scale}"
-                :style="{ left: this.store.last_challenge.scale + '%' }"
-          >
-            {{ this.store.last_challenge.scale }}% réussite
-          </span>
+            <span class="target-scale"
+                  :class="{validated: current_challenge_rate > this.store.last_challenge.scale}"
+                  :style="{ left: this.store.last_challenge.scale + '%' }"
+            >
+              {{ $t('challenge_scale_label', {scale: this.store.last_challenge.scale}) }}
+            </span>
           </div>
         </div>
-        <div class="timer-challenge" v-if="this.store.last_challenge.resolved === undefined">Fin de l'épreuve dans : {{ this.store.last_challenge.timer }}s</div>
-        <button v-else class="btn-valid" @click="this.store.finishChallenge()">Terminer l'épreuve</button>
+        <div class="timer-challenge attention" v-if="this.store.last_challenge.result === undefined">
+          {{ $t('challenged_end_in', {timer: this.store.last_challenge.timer}) }}
+        </div>
+        <div v-else class="result-container">
+          <span>{{ $t('challenge_result_' + this.store.last_challenge.result) }} </span>
+          <button class="btn-valid" @click="this.store.finishChallenge()">{{ $t('finish_challenge') }}</button>
+        </div>
       </div>
 
       <div v-if="this.store.markers !== undefined" class="markers-container">
         <div v-for="marker in this.store.markers">
-          <span>{{ marker.name }}</span><span class="value">{{ marker.value }}</span>
+          <span>{{ marker.name }}</span>
+          <contenteditable class="value" tag="span" contenteditable="true" v-model="marker.value" :no-nl="true" :no-html="true" />
         </div>
       </div>
       <div class="filter-data">
@@ -294,7 +315,7 @@ export default {
               :group-select="true"
               :placeholder="$t('select_tag')"
               :tagPlaceholder="$t('select_tag')"
-              :noOptions="$t('everyone')"
+              :showNoOptions="false"
               :options=store.tag_groups
               :multiple="true"
               :taggable="false"
@@ -332,16 +353,30 @@ export default {
         <div class="summary full">{{ $t('count_personnage', {count: ds.dsResultsNumber}) }}{{ $t('characters_on') }}{{ store.characters.length }}</div>
         <dataset-item class="full" id="character-list">
           <template #default="{ row, rowIndex }">
-            <div @click.exact="animateToCenter(row.token)" :ref="row.token" :key="row.token" @click.shift.exact="toggleCharacter(row)" @contextmenu.prevent.stop="handleClick($event, row)" class="character" :class="[getClasses(row), !row.alive ? 'dead' : '']">
+            <div @click.exact="animateToCenter(row)" :ref="row.token" :key="row.token" @click.shift.exact="toggleCharacter(row)" @contextmenu.prevent.stop="handleClick($event, row)" class="character" :class="[getClasses(row), !row.alive ? 'dead' : '']">
               <div class="character-names">
-                <span class="character-name">{{ row.name }}</span>
-                <span class="pseudo">{{ row.pseudo }}</span>
+                <contenteditable @click.stop v-if="row.editing" class="value" tag="span" contenteditable="true" v-model="row.name" spellcheck="false" :no-nl="true" :no-html="true" />
+                <span v-else class="character-name">
+                  {{ row.name }}
+                </span>
+                <contenteditable @click.stop v-if="row.editing" class="value" tag="span" contenteditable="true" v-model="row.pseudo" spellcheck="false" :no-nl="true" :no-html="true" />
+                <span v-else class="pseudo">
+                  {{ row.pseudo }}
+                </span>
               </div>
               <div class="gauges">
-                <span v-for="gauge in row.gauges"><span>{{ gauge.label }}</span><span>{{ gauge.value }}</span></span>
+                <span v-for="gauge in row.gauges">
+                  <span>{{ gauge.label }}</span>
+                  <contenteditable @click.stop v-if="row.editing" class="value" tag="span" contenteditable="true" v-model="gauge.value" :no-nl="true" :no-html="true" />
+                  <span v-else>{{ gauge.value }}</span>
+                </span>
               </div>
               <div class="stats">
-                <span v-for="stat in row.stats"><span>{{ stat.label }}</span><span>{{ stat.value }}</span></span>
+                <span v-for="stat in row.stats">
+                  <span>{{ stat.label }}</span>
+                  <contenteditable @click.stop v-if="row.editing" class="value" tag="span" contenteditable="true" v-model="stat.value" :no-nl="true" :no-html="true" />
+                  <span v-else>{{ stat.value }}</span>
+                </span>
               </div>
               <div class="tags" v-if="row.tags !== undefined && row.tags.length">
                 <span class="tag" v-for="tag in row.tags" :class="'tag-' + tag.code">
@@ -382,11 +417,13 @@ export default {
 
     input:not(.multiselect__input) {
       padding: 0.6em 1.2em;
-      border: var(--select-border);
     }
 
-    .multiselect__tags {
-      border: var(--select-border);
+    span[contenteditable] {
+      background: white;
+      color: black;
+      border-radius: 2px;
+      padding: 0 2px;
     }
 
     .markers-container {
@@ -398,118 +435,146 @@ export default {
 
       > div {
         display: flex;
-        gap: 5px;
+        gap: 10px;
 
         .value {
           display: flex;
           align-items: center;
           justify-content: center;
-          width: 35px;
-          height: 35px;
           background: var(--button-background);
           color: var(--button-color);
-          border-radius: 100%;
+          border-radius: 8px;
+          padding: 0 10px;
         }
       }
     }
 
     .challenge-container {
       display: flex;
+      margin: 42px 0;
       flex-basis: 100%;
-      gap: 15px;
+      align-items: center;
 
       > .timer-challenge {
         align-self: center;
-        padding: 10px;
         flex-shrink: 0;
-        font-size: 1.5em;
+        background: #d1d5db;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 15px;
+        border-left: 1Px solid black;
+        font-weight: bold;
       }
+
       > button {
         align-self: center;
         flex-shrink: 0;
+        margin-left: 15px;
       }
-    }
-    .scale-container {
-      position: relative;
-      flex-basis: 100%;
-      margin: 60px 0;
 
-      .slider-base, .slider-connects, .slider-connect {
-        border-radius: 0;
-      }
-      .slider-connect {
-        transition: all 1s ease-in-out;
-      }
-      &.scale-success {
-        .slider-connect {
-          background: var(--success-background);
+      .scale-container {
+        position: relative;
+        flex: 1;
+
+        &.double-scale {
+          margin: 60px 0;
         }
-      }
-      &.scale-neutral {
-        .slider-connect {
-          background: yellow;
+
+        .slider-base, .slider-connects, .slider-connect {
+          border-radius: 0;
         }
-      }
-      &.scale-failure {
         .slider-connect {
-          background: var(--failure-background);
+          transition: all 1s ease-in-out;
         }
-      }
-
-      .slider-origin {
-        display: none;
-      }
-
-      > div {
-        width: 100%;
-
-        .target-scale {
-          position: absolute;
-          top: -105%;
-          z-index: 1;
-          background: var(--font-color);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: var(--inverse-font-color);
-          padding: 0 10px;
-          height: 80%;
-
-          &:after {
-            content: "";
-            background: var(--font-color);
-            display: block;
-            width: 2px;
-            height: 157%;
-            position: absolute;
-            bottom: -155%;
-            left: 0;
+        &.scale-success {
+          .slider-connect {
+            background: var(--success-background);
           }
+        }
+        &.scale-neutral {
+          .slider-connect {
+            background: yellow;
+          }
+        }
+        &.scale-failure {
+          .slider-connect {
+            background: var(--failure-background);
+          }
+        }
 
-          &.validated:before {
+        .slider-origin {
+          display: none;
+        }
+
+        > div {
+          width: 100%;
+
+          .target-scale {
+            position: absolute;
+            top: -105%;
+            z-index: 1;
+            background: var(--font-color);
             display: flex;
-            content: "✅";
-            color: green;
-            width: 24px;
-            height: 24px;
-            border-radius: 100%;
             align-items: center;
             justify-content: center;
-            margin-right: 3px;
-          }
-
-          + .target-scale {
-            top: unset;
-            bottom: -105%;
+            color: var(--inverse-font-color);
+            padding: 0 10px;
+            height: 80%;
 
             &:after {
-              bottom: unset;
-              top: -157%;
+              content: "";
+              background: var(--font-color);
+              display: block;
+              width: 2px;
+              height: 157%;
+              position: absolute;
+              bottom: -155%;
+              left: 0;
+            }
+
+            &.validated:before {
+              display: flex;
+              content: "✅";
+              color: green;
+              width: 24px;
+              height: 24px;
+              border-radius: 100%;
+              align-items: center;
+              justify-content: center;
+              margin-right: 3px;
+            }
+
+            + .target-scale {
+              top: unset;
+              bottom: -105%;
+
+              &:after {
+                bottom: unset;
+                top: -157%;
+              }
             }
           }
         }
       }
+
+      .result-container {
+        display: flex;
+        flex-direction: column;
+        margin-left: 15px;
+        gap: 6px;
+        position: relative;
+
+        > span {
+          font-weight: bold;
+          position: absolute;
+          top: -37px;
+          width: 100%;
+        }
+      }
     }
+
   }
 
   .summary {
@@ -528,7 +593,7 @@ export default {
     > .character {
       display: flex;
       flex-direction: column;
-      gap: 3px;
+      gap: 6px;
       padding: 3px 6px 6px 6px;
       border: 1px solid var(--border-color);
       background: var(--background-card-color);
@@ -574,6 +639,7 @@ export default {
       > .stats, .gauges {
         display: flex;
         flex-direction: column;
+        gap: 1px;
 
         > span {
           display: flex;
@@ -584,11 +650,13 @@ export default {
       .character-names {
         display: flex;
         flex-direction: column;
-        margin-bottom: 6px;
 
         .character-name {
           font-size: 1.2em;
           font-weight: bold;
+        }
+        .pseudo {
+          min-height: 20px;
         }
       }
     }
@@ -675,17 +743,19 @@ export default {
   }
 
   .tags {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
     gap: 3px;
     margin-top: auto;
 
     > .tag {
       border-radius: 10px;
       padding: 1px 5px;
-
-      display: flex;
-      align-items: center;
       gap: 2px;
-      justify-content: center;
+      margin-top: auto;
 
       .label-name {
         display: flex;

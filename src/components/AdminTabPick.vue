@@ -36,7 +36,8 @@ export default {
       this.store.current_game.has_picked = true;
 
       const vm = this;
-      let relevant_characters = this.store.alive_characters;
+
+      let relevant_characters = this.store.getCharacters(true, this.store.settings.disconnected_prevent, this.store.settings.npc_prevent)
 
       if (this.pick_multiselect.length) {
         if (this.type_pick === 'one') {
@@ -180,7 +181,7 @@ export default {
             :group-select="true"
             :placeholder="$t('select_tag')"
             :tagPlaceholder="$t('select_tag')"
-            :noOptions="$t('everyone')"
+            :showNoOptions="false"
             :options=store.tag_groups
             :multiple="true"
             :taggable="false"
@@ -217,7 +218,7 @@ export default {
               track-by="code"
               :tag-placeholder="$t('add_tag')"
               :placeholder="$t('input_word')"
-              :noOptions="$t('no_tag_create')"
+              :showNoOptions="false"
               group-values="tags"
               group-label="label"
               :group-select="false"

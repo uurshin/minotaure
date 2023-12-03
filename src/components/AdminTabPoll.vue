@@ -49,8 +49,14 @@ export default {
       let poll = this.addPoll();
 
       let selectedCharacters
+
+      let has_picked = false;
+      if (vm.chosen_tags.findIndex((tag) => tag.code === 'targets') > -1) {
+        has_picked = true;
+      }
+
       if (poll.targets.length) {
-        selectedCharacters = this.store.connected_characters(true).filter((character) => vm.store.filterCharacterByTagsAndPicked(character, poll.targets));
+        selectedCharacters = this.store.connected_characters(true).filter((character) => vm.store.filterCharacterByTagsAndPicked(character, poll.targets, has_picked));
       }
       else {
         selectedCharacters = this.store.connected_characters(true);
@@ -214,7 +220,7 @@ export default {
               :group-select="true"
               :placeholder="$t('select_tag')"
               :tagPlaceholder="$t('select_tag')"
-              :noOptions="$t('everyone')"
+              :showNoOptions="false"
               :options=store.tag_groups_plus_targets
               :multiple="true"
               :taggable="false"
@@ -242,7 +248,7 @@ export default {
                   track-by="code"
                   :tag-placeholder="$t('add_tag')"
                   :placeholder="$t('input_word')"
-                  :noOptions="$t('no_tag_create')"
+                  :showNoOptions="false"
                   group-values="tags"
                   group-label="label"
                   :group-select="false"
