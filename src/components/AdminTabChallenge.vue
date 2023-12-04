@@ -86,7 +86,7 @@ export default {
       this.modifier_interval = setInterval(function() {
         vm.modifier_interval_step += 1;
         vm.modifierChange(object,  type, key, value * Math.floor(vm.modifier_interval_step / 10 + 1));
-      }, 100)
+      }, 200)
     },
     modifierChange(object, type, key, value) {
       if (object[type][key] === undefined) {

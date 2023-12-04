@@ -448,12 +448,12 @@ export default {
     > .backface, > .frontface {
       grid-area: 1 / 1;
       background: var(--background-card-color);
-      padding: 10px 0;
+      padding: 10px;
       display: flex;
       justify-content: center;
       transform-style: preserve-3d;
       border-radius: 20px;
-      min-width: 300px;
+      min-width: 280px;
       backface-visibility: hidden;
 
       &:after {
@@ -491,7 +491,8 @@ export default {
 
     .tags {
       display: flex;
-      flex-direction: column;
+      flex-wrap: wrap;
+      flex-direction: row;
       gap: 10px;
 
       > span {

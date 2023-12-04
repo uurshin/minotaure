@@ -33,7 +33,9 @@ export default {
       search_character: '',
       filters: {},
       options_contextual: [{}],
-      character_edit: 0
+      character_edit: 0,
+      temp_character: null,
+      edited_character: null
     }
   },
   computed: {
@@ -166,6 +168,9 @@ export default {
       )
     },
     handleClick(event, item) {
+      if (this.edited_character !== null) {
+        return;
+      }
       this.options_contextual = this.generateOptions(item)
       this.$refs.context_character.showMenu(event, item)
     },
@@ -192,7 +197,8 @@ export default {
             this.store.characters.splice(foundIndex, 1);
             break;
           case 'edit':
-            character.editing = true;
+            this.edited_character = character;
+            this.temp_character = JSON.parse(JSON.stringify(character));
             if (this.character_centered === null || this.character_centered.token !== character.token) {
               this.animateToCenter(character);
             }
@@ -214,18 +220,23 @@ export default {
       ds.dsRows.forEach((row) => ds.dsData[row].picked = true);
     },
     animateToCenter(character) {
+      if (this.edited_character !== null && this.character_centered !== null && this.character_centered.token !== character.token) {
+        // Never allow centering when
+        return;
+      }
+
       let expand = false;
       if (this.character_centered === null || this.character_centered.token !== character.token) {
+        // A card is open but it's not the one clicked.
         expand = true;
-      }
-      else {
-        character.editing = 0;
       }
 
       if (this.character_centered !== null) {
         this.$refs[this.character_centered.token].style.transform = null;
         this.$refs[this.character_centered.token].classList.remove('centered');
-        this.character_centered.editing = 0;
+        if (this.edited_character !== null && this.character_centered.token === this.edited_character.token) {
+          this.validateCharacterEdition(this.edited_character);
+        }
         this.character_centered = null;
       }
       if (expand && character !== undefined) {
@@ -241,6 +252,42 @@ export default {
         this.$refs[character.token].style.transform = 'translate(' + diffX + 'px ,' + diffY + 'px) scale3D(' + scale + ',' + scale + ',' + scale + ')';
         this.$refs[character.token].classList.add('centered');
       }
+    },
+    validateCharacterEdition(character) {
+      const vm = this;
+      for (const [key, gauge] of Object.entries(this.temp_character.gauges)) {
+        if (vm.store.gauges[key] !== undefined) {
+          if (typeof gauge.value === 'string' || gauge.value instanceof String) {
+            gauge.value = parseInt(gauge.value);
+          }
+          if (isNaN(gauge.value) || gauge.value === undefined || gauge.value <= 0) {
+            this.temp_character.gauges[key].value = vm.store.gauges[key].deadly ? 1 : 0;
+          }
+        }
+      }
+      for (const [key, stat] of Object.entries(this.temp_character.stats)) {
+        if (vm.store.stats[key] !== undefined) {
+          if (typeof stat.value === 'string' || stat.value instanceof String) {
+            stat.value = parseInt(stat.value);
+          }
+          if (isNaN(stat.value) || stat.value === undefined || stat.value <= 0) {
+            this.temp_character.stats[key].value = 1;
+          }
+          else if (stat.value > 20) {
+            this.temp_character.stats[key].value = 20;
+          }
+        }
+      }
+      character.name = this.temp_character.name;
+      character.pseudo = this.temp_character.pseudo;
+      for (const [key, gauge] of Object.entries(this.temp_character.gauges)) {
+        character.gauges[key].value = gauge.value;
+      }
+      for (const [key, stat] of Object.entries(this.temp_character.stats)) {
+        character.stats[key].value = stat.value;
+      }
+
+      this.edited_character = null;
     }
   }
 }
@@ -355,26 +402,26 @@ export default {
           <template #default="{ row, rowIndex }">
             <div @click.exact="animateToCenter(row)" :ref="row.token" :key="row.token" @click.shift.exact="toggleCharacter(row)" @contextmenu.prevent.stop="handleClick($event, row)" class="character" :class="[getClasses(row), !row.alive ? 'dead' : '']">
               <div class="character-names">
-                <contenteditable @click.stop v-if="row.editing" class="value" tag="span" contenteditable="true" v-model="row.name" spellcheck="false" :no-nl="true" :no-html="true" />
+                <contenteditable @click.stop v-if="edited_character !== null && edited_character.token === row.token" class="value" tag="span" contenteditable="true" v-model="temp_character.name" spellcheck="false" :no-nl="true" :no-html="true" />
                 <span v-else class="character-name">
                   {{ row.name }}
                 </span>
-                <contenteditable @click.stop v-if="row.editing" class="value" tag="span" contenteditable="true" v-model="row.pseudo" spellcheck="false" :no-nl="true" :no-html="true" />
+                <contenteditable @click.stop v-if="edited_character !== null && edited_character.token === row.token" class="value" tag="span" contenteditable="true" v-model="temp_character.pseudo" spellcheck="false" :no-nl="true" :no-html="true" />
                 <span v-else class="pseudo">
                   {{ row.pseudo }}
                 </span>
               </div>
               <div class="gauges">
-                <span v-for="gauge in row.gauges">
+                <span v-for="(gauge, key) in row.gauges">
                   <span>{{ gauge.label }}</span>
-                  <contenteditable @click.stop v-if="row.editing" class="value" tag="span" contenteditable="true" v-model="gauge.value" :no-nl="true" :no-html="true" />
+                  <contenteditable @click.stop v-if="edited_character !== null && edited_character.token === row.token" class="value" tag="span" contenteditable="true" v-model="temp_character.gauges[key].value" :no-nl="true" :no-html="true" />
                   <span v-else>{{ gauge.value }}</span>
                 </span>
               </div>
               <div class="stats">
-                <span v-for="stat in row.stats">
+                <span v-for="(stat, key) in row.stats">
                   <span>{{ stat.label }}</span>
-                  <contenteditable @click.stop v-if="row.editing" class="value" tag="span" contenteditable="true" v-model="stat.value" :no-nl="true" :no-html="true" />
+                  <contenteditable @click.stop v-if="edited_character !== null && edited_character.token === row.token" class="value" tag="span" contenteditable="true" v-model="temp_character.stats[key].value" :no-nl="true" :no-html="true" />
                   <span v-else>{{ stat.value }}</span>
                 </span>
               </div>
@@ -745,8 +792,6 @@ export default {
   .tags {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
     flex: 1;
     gap: 3px;
     margin-top: auto;
@@ -755,7 +800,6 @@ export default {
       border-radius: 10px;
       padding: 1px 5px;
       gap: 2px;
-      margin-top: auto;
 
       .label-name {
         display: flex;

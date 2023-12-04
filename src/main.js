@@ -239,31 +239,6 @@ export const usePlayerStore = defineStore('playerStore', {
         },
         characterWatch(new_character) {
             let vm = this;
-            if (new_character.editing) {
-                for (const [key, gauge] of Object.entries(new_character.gauges)) {
-                    if (vm.gauges[key] !== undefined) {
-                        if (typeof gauge.value === 'string' || gauge.value instanceof String) {
-                            gauge.value = parseInt(gauge.value);
-                        }
-                        if (isNaN(gauge.value) || gauge.value === undefined || gauge.value <= 0) {
-                            new_character.gauges[key].value = vm.gauges[key].deadly ? 1 : 0;
-                        }
-                    }
-                }
-                for (const [key, stat] of Object.entries(new_character.stats)) {
-                    if (vm.stats[key] !== undefined) {
-                        if (typeof stat.value === 'string' || stat.value instanceof String) {
-                            stat.value = parseInt(stat.value);
-                        }
-                        if (isNaN(stat.value) || stat.value === undefined || stat.value <= 0) {
-                            new_character.stats[key].value = 1;
-                        }
-                        else if (stat.value > 20) {
-                            new_character.stats[key].value = 20;
-                        }
-                    }
-                }
-            }
 
             for (const [key, gauge] of Object.entries(new_character.gauges)) {
                 if (vm.gauges[key] !== undefined && vm.gauges[key].deadly && gauge.value <= 0) {
@@ -602,6 +577,12 @@ export const usePlayerStore = defineStore('playerStore', {
                                 character.stats[key].value += bonus;
                             }
                         }
+                        if (challenge.marker_group_modifier[result] !== undefined) {
+                            for (const [key, bonus] of Object.entries(challenge.marker_group_modifier[result])) {
+                                character.challenge.message.push(i18n.global.t('marker_result_' + (bonus >= 0 ? 'bonus' : 'malus'), {points: Math.abs(bonus), name: vm.markers[key].name}));
+                                vm.markers[key].value += bonus;
+                            }
+                        }
                         if (challenge.chosen_group_modifier_tags_add[result] !== undefined) {
                             challenge.chosen_group_modifier_tags_add[result].forEach(function(tag) {
                                 let found = character.tags.findIndex((character_tag) => character_tag.code === tag.code);
@@ -684,7 +665,7 @@ export const usePlayerStore = defineStore('playerStore', {
             }
             if (challenge.marker_modifier[result] !== undefined) {
                 for (const [key, bonus] of Object.entries(challenge.marker_modifier[result])) {
-                    messages.push(i18n.global.t('marker_result_' + (bonus >= 0 ? 'bonus' : 'malus'), {points: bonus, name: vm.markers[key].name}));
+                    messages.push(i18n.global.t('marker_result_' + (bonus >= 0 ? 'bonus' : 'malus'), {points: Math.abs(bonus), name: vm.markers[key].name}));
                     vm.markers[key].value += bonus;
                 }
             }
