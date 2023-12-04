@@ -341,6 +341,6 @@ difficulty_threshold_past: "Vous deviez faire {difficulty} ou moins pour réussi
 challenge_ends_in: "L'épreuve se termine dans {timer}s"
 poll_in_progress: "Sondage en cours"
 gauge_spending_description: "Diminuez la difficulté de 1 en dépensant un points de jauge"
-gauge_spending_button_text: "Dépenser un point de {label}"
+gauge_spending_button_text: "Dépenser 1 {label} ({current} restants)"
 marker_result_bonus: "Le groupe gagne {points} de {name}"
 marker_result_malus: "Le groupe perd {points} de {name}"

@@ -616,8 +616,12 @@ export default {
         > span {
           font-weight: bold;
           position: absolute;
-          top: -37px;
+          top: -52px;
           width: 100%;
+          height: 50px;
+          display: flex;
+          align-items: flex-end;
+          justify-content: center;
         }
       }
     }

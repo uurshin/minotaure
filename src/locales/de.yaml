@@ -334,6 +334,6 @@ difficulty_threshold_past: "Du musstest {difficulty} oder weniger würfeln, um e
 challenge_ends_in: "Herausforderung endet in {timer}s"
 poll_in_progress: "Umfrage läuft"
 gauge_spending_description: "Verringere die Schwierigkeit um 1, indem du einen Anzeigenpunkt ausgibst"
-gauge_spending_button_text: "Einen {label}-Punkt ausgeben"
+gauge_spending_button_text: "Einen {label} ausgeben ({current} verbleibend)"
 marker_result_bonus: "Die Gruppe gewinnt {points} von {name}"
 marker_result_malus: "Die Gruppe verliert {points} von {name}"

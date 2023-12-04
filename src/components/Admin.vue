@@ -286,7 +286,7 @@ export default {
           let character = vm.store.retrieveCharacter(data.token);
           if (character && character.challenge.wait_roll !== undefined && character.challenge.wait_roll) {
             if (data.code !== undefined) {
-              if (character.gauges[data.code].value > (vm.store.gauges[data.code].deadly ? 1 : 0)) {
+              if (character.gauges[data.code].value > (vm.store.gauges[data.code].deadly ? 1 : 0) && character.challenge.difficulty < 19) {
                 character.gauges[data.code].value -= 1;
                 character.challenge.difficulty -= 1;
               }

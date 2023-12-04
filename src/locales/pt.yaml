@@ -328,6 +328,6 @@ difficulty_threshold_past: "Você precisava tirar {difficulty} ou menos para ter
 challenge_ends_in: "Desafio termina em {timer}s"
 poll_in_progress: "Enquete em andamento"
 gauge_spending_description: "Diminua a dificuldade em 1 ao gastar um ponto de medidor"
-gauge_spending_button_text: "Gastar um ponto de {label}"
+gauge_spending_button_text: "Gastar 1 {label} ({current} restantes)"
 marker_result_bonus: "O grupo ganha {points} de {name}"
 marker_result_malus: "O grupo perde {points} de {name}"

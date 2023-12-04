@@ -65,6 +65,17 @@ export default {
         return 19;
       }
       return difficulty;
+    },
+    hasSpendingButtons() {
+      const vm = this;
+      if (this.difficulty === 19) {
+        return false;
+      }
+      return Object.entries(this.character.gauges).some(function(gauge) {
+        if (vm.character.challenge.spendable[gauge[0]] !== undefined && (gauge[1].deadly === undefined ? gauge[1].value > 1 : gauge[1].value > 0)) {
+          return true;
+        }
+      });
     }
   },
   mounted() {
@@ -332,7 +343,7 @@ export default {
             </select>
           </div>
         </template>
-        <button :disabled="characterIsInvalid" @click="sendCharacter()">{{ $t("submit_your_char") }}</button>
+        <button :disabled="characterIsInvalid" @click="sendCharacter()" class="btn-valid">{{ $t("submit_your_char") }}</button>
       </div>
 
       <div class="vertical-wrapper" id="sheet" v-else-if="character.alive">
@@ -378,11 +389,11 @@ export default {
         <div class="challenge-done">
           <span v-if="challengeTimer > 0 && character.challenge.wait_roll">{{ $t('difficulty_threshold' , {difficulty: difficulty}) }}</span>
           <span v-else>{{ $t('difficulty_threshold_past', {difficulty: character.challenge.locked_difficulty}) }}</span>
-          <div v-if="challengeTimer > 0 && character.challenge.wait_roll" class="container-modifiers">
+          <div v-if="challengeTimer > 0 && character.challenge.wait_roll && hasSpendingButtons" class="container-modifiers">
             <span>{{ $t('gauge_spending_description') }}</span>
             <template v-for="(gauge, key) in character.gauges">
-              <button v-if="character.challenge.spendable[key] !== undefined && (gauge.deadly === undefined ? gauge.value > 1 : gauge.value > 0)" @click="spendGauge(key)" class="btn-valid" >
-                {{ $t('gauge_spending_button_text', {label: gauge.label}) }}
+              <button v-if="character.challenge.spendable[key] !== undefined && difficulty < 19 && (gauge.deadly === undefined ? gauge.value > 1 : gauge.value > 0)" @click="spendGauge(key)" class="btn-valid" >
+                {{ $t('gauge_spending_button_text', {label: gauge.label, current: gauge.value }) }}
               </button>
             </template>
           </div>
@@ -528,11 +539,10 @@ export default {
 
     .indicator {
       padding: 5px;
-      border-radius: 100%;
-      border: 1px solid black;
-      background: black;
-      color: white;
-      width: 24px;
+      border-radius: 15px;
+      background: var(--button-background);
+      color: var(--button-color);
+      min-width: 24px;
     }
 
     &.disabled {
