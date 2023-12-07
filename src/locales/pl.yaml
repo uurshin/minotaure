@@ -28,6 +28,11 @@ health: 'Zdrowie'
 will: 'Wola'
 game_rename: 'Zmień nazwę gry'
 selected: 'Wybrane'
+share_invite_id: "Skopiuj identyfikator gry"
+share_invite_link: "Skopiuj link zaproszenia"
+qr_code_download: "Pobierz kod QR, aby później zintegrować go ze swoim overlayem."
+copy: "Kopiuj"
+download: "Pobierz"
 
 #Continue
 continue_game: 'Kontynuuj - {name}'
@@ -103,7 +108,9 @@ step_settings_gauge_make_deadly:
   na ten przycisk (ta akcja jest odwracalna, ale postacie już martwe nie zostaną wskrzeszone!)."
 step_settings_gauge_name: "Możesz zmieniać nazwę wskaźnika w dowolnym momencie."
 step_settings_gauge_value: "Ta liczba określa bazową wartość wskaźnika dla postaci przy jej tworzeniu."
-step_settings_gauge_spending: "Podczas uruchamiania wyzwania z wykorzystaniem zaznaczonej cechy, gracze mogą wydawać punkty z tego wskaźnika, aby zmniejszyć trudność wyzwania o 1 za każdy wydany punkt."
+step_settings_gauge_spending:
+  "Zaznacz pole dla cech, dla których chcesz umożliwić graczom wydawanie punktów wskaźnika w celu zmniejszenia trudności odpowiadających wyzwań 
+  (następnie możesz wybrać wartość zmniejszenia trudności za każdy wydany punkt)."
 step_settings_gauge_cancel: "Nie jesteś zobowiązany do zatwierdzania swoich zmian; możesz potwierdzić lub anulować wszystkie zmiany."
 step_settings_stats:
   "Cechy działają podobnie jak w większości gier fabularnych. Gdy tworzysz grę, automatycznie tworzone są dwie cechy: fizyczna i umysłowa."
@@ -178,6 +185,7 @@ disconnected_prevent: "Zapobiegaj udziałowi odłączonych graczy w wydarzeniach
 npc_prevent: "Zapobiegaj udziałowi postaci niebędących graczami w wydarzeniach i losowaniach"
 spend_on: "Gracze mogą wydawać te punkty, aby ułatwić zadania dla"
 gauge_deadly_description: "Postacie umierają, jeśli wskaźnik ten osiągnie 0"
+spending_diminish: ": wydanie 1 punktu zmniejsza trudność o "
 
 #AdminTabChallenge
 dif_cake: "Banalne"
@@ -331,6 +339,7 @@ result_group_success: "Grupa zdała egzamin"
 result_group_neutral: "Egzamin nie ma efektu dla grupy"
 result_group_failure: "Grupa nie zdała egzaminu"
 challenge_in_progress: "Wyzwanie {label} w trakcie"
+challenge_done: "Wyzwanie {label} ukończone"
 difficulty_threshold: "Musisz wyrzucić {difficulty} lub mniej, aby odnieść sukces"
 difficulty_threshold_past: "Musiałeś wyrzucić {difficulty} lub mniej, aby odnieść sukces"
 challenge_ends_in: "Wyzwanie kończy się za {timer}s"

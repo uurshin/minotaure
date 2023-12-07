@@ -9,20 +9,18 @@ export default {
     VueMultiselect
   },
   data() {
-    const store = usePlayerStore();
-    const nb_options = 0;
-    const answers = {};
-    const label = '';
-    const poll_tab = 'active';
-    const open_poll = null;
-    const poll_show = [];
-    const tags_poll = [];
-    const chosen_tags = [];
-    const name_draft = '';
-    const draft_in_progress = false;
-
     return {
-      store, nb_options, answers, label, poll_tab, open_poll, poll_show, tags_poll, chosen_tags, name_draft, draft_in_progress
+      store: usePlayerStore(),
+      nb_options: 0,
+      answers: {},
+      label: '',
+      poll_tab: 'active',
+      open_poll: null,
+      poll_show: [],
+      tags_poll: [],
+      chosen_tags: [],
+      name_draft: '',
+      draft_in_progress: false
     }
   },
   computed: {
@@ -206,32 +204,11 @@ export default {
       </div>
 
       <div class="vertical-wrapper add-poll" v-if="poll_tab === 'add'">
-        <div>
-          <label for="poll_targets">{{ $t('targets') }}</label>
-          <vue-multiselect
-              ref="poll_targets"
-              id="poll_targets"
-              class="left-multiselect"
-              v-model="tags_poll"
-              label="label"
-              track-by="code"
-              group-values="tags"
-              group-label="label"
-              :group-select="true"
-              :placeholder="$t('select_tag')"
-              :tagPlaceholder="$t('select_tag')"
-              :showNoOptions="false"
-              :options=store.tag_groups_plus_targets
-              :multiple="true"
-              :taggable="false"
-              :hideSelected="true"
-          ></vue-multiselect>
-        </div>
-        <div>
+        <div id="question-wrapper">
           <label for="question">{{ $t('question') }}</label>
           <input @keyup.enter="focus(0)" id="question" v-model=label type='text'>
         </div>
-        <div>
+        <div id="answers-wrapper">
           <span>{{ $t('possible_choices') }}</span>
           <div v-for="n in nb_options" class="poll-choice">
             <div>
@@ -261,6 +238,27 @@ export default {
             </div>
           </div>
           <button @click="nb_options += 1">{{ $t('add_poll_choice') }}</button>
+        </div>
+        <div id="targets-wrapper">
+          <label for="poll_targets">{{ $t('targets') }}</label>
+          <vue-multiselect
+              ref="poll_targets"
+              id="poll_targets"
+              class="left-multiselect"
+              v-model="tags_poll"
+              label="label"
+              track-by="code"
+              group-values="tags"
+              group-label="label"
+              :group-select="true"
+              :placeholder="$t('select_tag')"
+              :tagPlaceholder="$t('select_tag')"
+              :showNoOptions="false"
+              :options=store.tag_groups_plus_targets
+              :multiple="true"
+              :taggable="false"
+              :hideSelected="true"
+          ></vue-multiselect>
         </div>
         <div class="poll-group-btn" v-if="!draft_in_progress">
           <button class="btn-valid" :disabled="isNewPollInvalid" @click="startPoll">{{ $t('start_poll') }}</button>
@@ -394,6 +392,22 @@ export default {
   }
   .add-poll {
     text-align: left;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    #question-wrapper {
+      justify-content: space-between;
+      order: -2;
+      flex: 1;
+    }
+    #targets-wrapper {
+      order: -1;
+      flex: 1;
+    }
+
+    > div {
+      flex-basis: 100%;
+    }
   }
 
   .list-polls {

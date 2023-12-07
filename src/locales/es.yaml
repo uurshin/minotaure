@@ -28,6 +28,11 @@ health: "Vida"
 will: "Voluntad"
 game_rename: "Renombrar partida"
 selected: "Seleccionado"
+share_invite_id: "Copiar ID de juego"
+share_invite_link: "Copiar enlace de invitación"
+qr_code_download: "Descargar un código QR para integrarlo más tarde en tu superposición."
+copy: "Copiar"
+download: "Descargar"
 
 #Continue
 continue_game: "Continuar - {name}"
@@ -97,7 +102,9 @@ step_settings_gauge:
   "Todos los personajes tienen estas barras al ser creados, con una cantidad de puntos inicial que puedes modificar."
 step_settings_gauge_name: "Puedes cambiar el nombre de una barra en cualquier momento."
 step_settings_gauge_value: "Este número determina el valor base de una barra para un personaje al ser creado."
-step_settings_gauge_spending: "Cuando lanzas un desafío utilizando la característica marcada, los jugadores pueden gastar puntos de esta barra para disminuir la dificultad de su desafío en 1 por cada punto gastado."
+step_settings_gauge_spending:
+  "Marque la casilla de las características para las cuales desea permitir a los jugadores gastar puntos de la barra para reducir la dificultad de los desafíos correspondientes 
+  (luego puede elegir el valor de reducción de la dificultad por punto gastado)."
 step_settings_gauge_cancel: "No estás obligado a validar tus cambios; puedes confirmar o cancelar todos los cambios."
 step_settings_gauge_delete:
   "Puedes eliminar una barra en cualquier momento."
@@ -176,6 +183,7 @@ disconnected_prevent: "Evitar que los jugadores desconectados participen en desa
 npc_prevent: "Evitar que los personajes no jugadores participen en desafíos y sorteos"
 spend_on: "Los jugadores pueden gastar estos puntos para facilitar los desafíos de"
 gauge_deadly_description: "Los personajes mueren si este indicador llega a 0"
+spending_diminish: ": gastar 1 punto reduce la dificultad en "
 
 # AdminTabChallenge
 dif_cake: "Trivial"
@@ -329,6 +337,7 @@ result_group_success: "El grupo superó la prueba"
 result_group_neutral: "La prueba no tiene efecto en el grupo"
 result_group_failure: "El grupo falló en la prueba"
 challenge_in_progress: "Desafío de {label} en curso"
+challenge_done: "Desafío de {label} completado"
 difficulty_threshold: "Debes obtener {difficulty} o menos para tener éxito"
 difficulty_threshold_past: "Necesitabas obtener {difficulty} o menos para tener éxito"
 challenge_ends_in: "El desafío termina en {timer}s"

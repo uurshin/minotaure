@@ -10,23 +10,17 @@ import ColorPicker from '@radial-color-picker/vue-color-picker';
 export default {
   components: { VueMultiselect, VueSimpleContextMenu, ColorPicker },
   data() {
-    const store = usePlayerStore();
-    const options_contextual = [{}];
-    const color = reactive({
-      hue: 50,
-      saturation: 71,
-      luminosity: 50,
-      alpha: 1,
-    });
-    const color_picked = null;
-    const group_selected = null;
-
     return {
-      store,
-      options_contextual,
-      color,
-      color_picked,
-      group_selected
+      store: usePlayerStore(),
+      options_contextual: [{}],
+      color: reactive({
+        hue: 50,
+        saturation: 71,
+        luminosity: 50,
+        alpha: 1,
+      }),
+      color_picked: null,
+      group_selected: null
     }
   },
   mounted() {

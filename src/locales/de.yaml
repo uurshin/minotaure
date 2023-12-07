@@ -28,6 +28,11 @@ health: 'Leben'
 will: 'Willenskraft'
 game_rename: 'Spiel umbenennen'
 selected: 'Ausgewählt'
+share_invite_id: "Spiel-ID kopieren"
+share_invite_link: "Einladungslink kopieren"
+qr_code_download: "Laden Sie einen QR-Code herunter, um ihn später in Ihr Overlay zu integrieren."
+copy: "Kopieren"
+download: "Herunterladen"
 
 #Continue
 continue_game: 'Fortsetzen - {name}'
@@ -97,7 +102,9 @@ step_settings_gauge:
   "Alle Charaktere haben diese Anzeigen bei ihrer Erstellung, mit einer Startpunktzahl, die Sie ändern können."
 step_settings_gauge_name: "Sie können den Namen einer Anzeige jederzeit ändern."
 step_settings_gauge_value: "Diese Zahl bestimmt den Grundwert einer Anzeige für eine Figur bei ihrer Erstellung."
-step_settings_gauge_spending: "Wenn Sie eine Herausforderung mit der ausgewählten Eigenschaft starten, können die Spieler Punkte aus dieser Anzeige ausgeben, um die Schwierigkeit ihrer Herausforderung um 1 für jeden ausgegebenen Punkt zu verringern."
+step_settings_gauge_spending:
+  "Aktivieren Sie das Kontrollkästchen für die Merkmale, für die Sie den Spielern erlauben möchten, Punkte der Anzeige auszugeben, um die Schwierigkeit der entsprechenden Herausforderungen zu verringern 
+  (Sie können dann den Reduktionswert der Schwierigkeit pro ausgegebenem Punkt wählen)."
 step_settings_gauge_cancel: "Sie sind nicht verpflichtet, Ihre Änderungen zu bestätigen; Sie können alle Änderungen bestätigen oder abbrechen."
 step_settings_gauge_delete:
   "Sie können eine Anzeige jederzeit löschen."
@@ -176,6 +183,7 @@ disconnected_prevent: "Verhindere, dass getrennte Spieler an Herausforderungen u
 npc_prevent: "Verhindere, dass Nicht-Spieler-Charaktere an Herausforderungen und Ziehungen teilnehmen"
 spend_on: "Spieler können diese Punkte ausgeben, um die Herausforderungen von"
 gauge_deadly_description: "Charaktere sterben, wenn dieser Anzeiger 0 erreicht"
+spending_diminish: ": ausgeben von 1 Punkt reduziert die Schwierigkeit um "
 
 #AdminTabChallenge
 dif_cake: "Trivial"
@@ -328,7 +336,8 @@ result_malus: 'Sie verlieren {points} Punkte für {name}.'
 result_group_success: "Die Gruppe hat die Prüfung bestanden"
 result_group_neutral: "Die Prüfung hat keine Auswirkungen auf die Gruppe"
 result_group_failure: "Die Gruppe hat die Prüfung nicht bestanden"
-challenge_in_progress: "Herausforderung {label} läuft"
+challenge_in_progress: "Herausforderung von {label} läuft"
+challenge_done: "Herausforderung von {label} erledigt"
 difficulty_threshold: "Du musst {difficulty} oder weniger würfeln, um erfolgreich zu sein"
 difficulty_threshold_past: "Du musstest {difficulty} oder weniger würfeln, um erfolgreich zu sein"
 challenge_ends_in: "Herausforderung endet in {timer}s"

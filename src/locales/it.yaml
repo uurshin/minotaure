@@ -28,6 +28,11 @@ health: "Salute"
 will: "Volontà"
 game_rename : "Rinomina gioco"
 selected: "Selezionato"
+share_invite_id: "Copia ID partita"
+share_invite_link: "Copia link invito"
+qr_code_download: "Scarica un codice QR da integrare successivamente nel tuo overlay."
+copy: "Copia"
+download: "Scarica"
 
 #Continue
 continue_game: "Continua - {name}"
@@ -100,7 +105,9 @@ step_settings_gauge:
   puoi cambiare."
 step_settings_gauge_name: "È possibile modificare il nome di una barra in qualsiasi momento."
 step_settings_gauge_value: "Questo numero determina il valore di base di una barra per un personaggio al momento della creazione."
-step_settings_gauge_spending: "Quando lanci una sfida usando le caratteristiche selezionate, i giocatori possono spendere i punti di questa barra per ridurre di 1 la difficoltà della loro sfida per ogni punto speso."
+step_settings_gauge_spending:
+  "Seleziona la casella per le caratteristiche per le quali desideri consentire ai giocatori di spendere i punti scala per ridurre la difficoltà delle sfide corrispondenti 
+  (puoi quindi scegliere il valore di riduzione della difficoltà per punto speso)."
 step_settings_gauge_cancel: "Non è obbligatorio confermare le modifiche, puoi confermare o annullare tutte le modifiche."
 step_settings_gauge_delete:
   "Puoi eliminare una barra in qualsiasi momento."
@@ -170,6 +177,7 @@ disconnected_prevent: "Impedisci ai giocatori disconnessi di partecipare a sfide
 npc_prevent: "Impedisci ai personaggi non giocatori di partecipare a sfide e sorteggi"
 spend_on: "I giocatori possono spendere questi punti per facilitare le sfide di"
 gauge_deadly_description: "I personaggi muoiono se questo indicatore raggiunge 0"
+spending_diminish: ": spendere 1 punto riduce la difficoltà di "
 
 #AdminTabChallenge
 dif_cake: "Gioco da ragazzi"
@@ -322,7 +330,8 @@ result_malus: "Perdi {points} punti di {name}."
 result_group_success: "Il gruppo ha superato la prova"
 result_group_neutral: "La prova non ha effetto sul gruppo"
 result_group_failure: "Il gruppo ha fallito la prova"
-challenge_in_progress: "Sfida {label} in corso"
+challenge_in_progress: "Sfida di {label} in corso"
+challenge_done: "Sfida di {label} completata"
 difficulty_threshold: "Devi ottenere {difficulty} o meno per avere successo"
 difficulty_threshold_past: "Dovevi ottenere {difficulty} o meno per avere successo"
 challenge_ends_in: "La sfida termina in {timer}s"

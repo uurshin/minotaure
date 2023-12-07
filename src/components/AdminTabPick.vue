@@ -7,24 +7,15 @@ export default {
     VueMultiselect
   },
   data() {
-    const store = usePlayerStore();
-    const pick_multiselect = [];
-    const type_pick = 'all'
-    const nb_targets = 1;
-    const stat_modifier = {};
-    const gauge_modifier = {};
-    const chosen_modifier_pick_add = [];
-    const chosen_modifier_pick_remove = [];
-
     return {
-      store,
-      pick_multiselect,
-      type_pick,
-      nb_targets,
-      stat_modifier,
-      gauge_modifier,
-      chosen_modifier_pick_add,
-      chosen_modifier_pick_remove
+      store: usePlayerStore(),
+      pick_multiselect: [],
+      type_pick:'all',
+      nb_targets: 1,
+      stat_modifier: {},
+      gauge_modifier: {},
+      chosen_modifier_pick_add: [],
+      chosen_modifier_pick_remove: []
     }
   },
   mounted() {

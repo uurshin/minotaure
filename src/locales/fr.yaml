@@ -100,7 +100,9 @@ step_settings_gauges:
 step_settings_add_gauge: "Vous pouvez ajouter autant de jauge que vous le souhaitez."
 step_settings_gauge_name: "Vous pouvez changer le nom d'une jauge à tout moment."
 step_settings_gauge_value: "Ce nombre détermine la valeur de base d'une jauge pour un personnage à sa création."
-step_settings_gauge_spending: "Lorsque vous lancez une épreuve utilisant les caractéristique cochée, les joueurs peuvent dépenser des points de cette jauge pour diminuer de 1 par point dépensé la difficulté de leur épreuve."
+step_settings_gauge_spending:
+  "Cochez la case des caractéristiques pour lesquelles vous souhaitez permettre aux joueurs de dépenser des points de jauge pour diminuer la difficulté des épreuves correspondantes 
+  (vous pouvez ensuite choisir la valeur de réduction de la difficulté par point dépensé)."
 step_settings_gauge_cancel: "Vous n'êtes pas obligé de valider vos modifications, vous pouvez valider ou annuler tous les changements."
 step_settings_gauge:
   "Tous les personnages possèdent ces jauges à leur création, avec un nombre de points de départ que 

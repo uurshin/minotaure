@@ -28,6 +28,11 @@ health: "Saúde"
 will: "Vontade"
 game_rename : "Renomear jogo"
 selected: "Selecionado"
+share_invite_id: "Copiar ID do jogo"
+share_invite_link: "Copiar link de convite"
+qr_code_download: "Baixar um código QR para integrar mais tarde em sua sobreposição."
+copy: "Copiar"
+download: "Baixar"
 
 #Continue
 continue_game: "Continuar - {name}"
@@ -98,7 +103,9 @@ step_settings_gauge:
   você pode mudar."
 step_settings_gauge_name: "Você pode mudar o nome de uma barra a qualquer momento."
 step_settings_gauge_value: "Este número determina o valor base de uma barra para um personagem na sua criação."
-step_settings_gauge_spending: "Quando você lança um desafio usando a característica marcada, os jogadores podem gastar pontos dessa barra para diminuir a dificuldade do desafio em 1 para cada ponto gasto."
+step_settings_gauge_spending:
+  "Marque a caixa para as características para as quais deseja permitir que os jogadores gastem pontos de medidor para reduzir a dificuldade dos desafios correspondentes 
+  (você pode então escolher o valor de redução da dificuldade por ponto gasto)."
 step_settings_gauge_cancel: "Você não é obrigado a validar suas alterações; você pode confirmar ou cancelar todas as alterações."
 step_settings_gauge_delete:
   "Você pode excluir uma barra a qualquer momento."
@@ -170,6 +177,7 @@ disconnected_prevent: "Evitar que jogadores desconectados participem de desafios
 npc_prevent: "Evitar que personagens não jogadores participem de desafios e sorteios"
 spend_on: "Os jogadores podem gastar esses pontos para facilitar os desafios de"
 gauge_deadly_description: "Personagens morrem se esse medidor atingir 0"
+spending_diminish: ": gastar 1 ponto reduz a dificuldade em "
 
 #AdminTabChallenge
 dif_cake: "Fácil demais"
@@ -323,6 +331,7 @@ result_group_success: "O grupo obteve sucesso na prova"
 result_group_neutral: "A prova não teve efeito no grupo"
 result_group_failure: "O grupo falhou na prova"
 challenge_in_progress: "Desafio de {label} em andamento"
+challenge_done: "Desafio de {label} concluído"
 difficulty_threshold: "Você precisa tirar {difficulty} ou menos para ter sucesso"
 difficulty_threshold_past: "Você precisava tirar {difficulty} ou menos para ter sucesso"
 challenge_ends_in: "Desafio termina em {timer}s"
