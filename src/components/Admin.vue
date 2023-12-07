@@ -12,9 +12,12 @@ import AdminTabChallenge from '../components/AdminTabChallenge.vue'
 import AdminTabPick from '../components/AdminTabPick.vue'
 import AdminTour from '../components/AdminTour.vue'
 import { Peer } from "peerjs";
+import QrcodeVue from 'qrcode.vue';
+import { saveAs } from 'file-saver';
 
 export default {
   components: {
+    QrcodeVue,
     AdminTabIntro,
     AdminTabCharacters,
     AdminTabTags,
@@ -57,6 +60,7 @@ export default {
       peer: null,
       game_name_focused: -1,
       temp_game_name: '',
+      invite_modal: false,
       tabs: [
         {id: 'intro', label: 'Introduction'},
         {id: 'characters', label: 'characters', tutorial: 'off' },
@@ -81,7 +85,15 @@ export default {
     },
     gameLabel: function() {
       return (this.game_name_focused === 0 ? this.$t('game_rename') : this.store.current_game.name);
-    }
+    },
+    shareURL: function() {
+      if (window.location.origin === 'null') {
+        return '';
+      }
+      else {
+        return window.location.href.slice(0, location.href.lastIndexOf("/")) + 'join?id=' + this.store.peer.id;
+      }
+    },
   },
   created() {
     let vm = this;
@@ -284,13 +296,20 @@ export default {
         }
         else if (data.handshake === 'spendGauge') {
           let character = vm.store.retrieveCharacter(data.token);
-          if (character && character.challenge.wait_roll !== undefined && character.challenge.wait_roll) {
-            if (data.code !== undefined) {
-              if (character.gauges[data.code].value > (vm.store.gauges[data.code].deadly ? 1 : 0) && character.challenge.difficulty < 19) {
-                character.gauges[data.code].value -= 1;
-                character.challenge.difficulty -= 1;
-              }
+          if (
+              character &&
+              character.challenge.wait_roll &&
+              data.code !== undefined &&
+              character.challenge.spendable[data.code] && // The gauge is spendable.
+              character.gauges[data.code].value > (vm.store.gauges[data.code].deadly ? 1 : 0) && // Character still has the points to spend.
+              character.challenge.difficulty < 19 // Difficulty is not already max out.
+          ) {
+            let adjusted_difficulty = character.challenge.difficulty - character.challenge.spendable[data.code];
+            if (adjusted_difficulty > 19) {
+              adjusted_difficulty = 19;
             }
+            character.gauges[data.code].value -= 1;
+            character.challenge.difficulty = adjusted_difficulty;
           }
         }
       });
@@ -322,20 +341,27 @@ export default {
       this.current_tab = nameRef;
       this.$refs['admin_tab_' + nameRef].$refs['tab'].classList.add('open');
     },
-    shareLink(event) {
-      const vm = this;
+    shareLink() {
       if (window.location.origin === 'null') {
-        navigator.clipboard.writeText(this.store.peer.id);
-        event.target.innerText = this.$t("game_id_copied");
+        return this.store.peer.id;
       }
       else {
-        navigator.clipboard.writeText(window.location.href.slice(0, location.href.lastIndexOf("/")) + 'join?id=' + this.store.peer.id);
-        event.target.innerText = this.$t("invite_link_copied");
+        return (window.location.href.slice(0, location.href.lastIndexOf("/")) + 'join?id=' + this.store.peer.id);
       }
-
+    },
+    copyLink(event) {
+      const vm = this;
+      navigator.clipboard.writeText(this.shareLink());
+      event.target.innerText = window.location.origin === 'null' ? this.$t("game_id_copied") : this.$t("invite_link_copied");
       setTimeout(function() {
-        event.target.innerText = vm.$t('invite_to_play');
+        event.target.innerText = vm.$t("copy");
       }, 2000)
+    },
+    copyQR() {
+      let canvas = document.getElementById('qr-code');
+      canvas.toBlob(function(blob) {
+        saveAs(blob, "qr.png");
+      });
     },
     startTour() {
       this.$refs['admin_tour'].startTour();
@@ -421,12 +447,26 @@ export default {
       </div>
       <div class="tab-details">
         <button ref="step_help" @click="startTour" class="icon-question">{{ $t('help')}}</button>
-        <button ref="step_invite" class="icon-email" v-if="peer !== undefined" @click="shareLink">
+        <button ref="step_invite" class="icon-email" v-if="peer !== undefined" @keyup.enter="invite_modal = !invite_modal" @click="invite_modal = !invite_modal">
           {{ $t("invite_to_play") }}
         </button>
         <button ref="step_start" class="icon-play" :class="{'btn-important': !store.current_game.tuto_on, attention: !this.store.current_game.tuto_on}" v-if="!store.current_game.game_started" @click="startGame">
           {{ $t("start") }}
         </button>
+        <div id="invite-overlay" v-if="invite_modal" @click.self="invite_modal = false">
+          <div>
+            <div>
+              <span>{{ shareURL === '' ? $t('share_invite_id') : $t('share_invite_link') }} </span>
+              <span class="invite-link">{{ shareLink() }}</span>
+              <button @keyup.enter="copyLink($event)" @click="copyLink($event)">{{ $t('copy')}}</button>
+            </div>
+            <div v-if="shareURL !== ''">
+              <span>{{ $t('qr_code_download')}}</span>
+              <qrcode-vue id="qr-code" ref="qr_code" margin="3" :value="shareURL" :size="200" level="H" />
+              <button @keyup.enter="copyQR()" @click="copyQR()">{{ $t('download')}}</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="tabs-content">
@@ -754,6 +794,47 @@ export default {
     }
     100% {
       background-color: black;
+    }
+  }
+
+  #invite-overlay {
+    position: fixed;
+    z-index: 999;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.8);
+
+    .invite-link {
+      padding: 8px 16px;
+      border-radius: 8px;
+      border-style: dotted;
+    }
+
+    > div {
+      display: flex;
+      min-width: 400px;
+      gap: 15px;
+
+      > div {
+        flex: 1;
+        background: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 15px;
+        border-radius: 15px;
+      }
+
+      > canvas {
+        border: 10px solid white;
+      }
     }
   }
 </style>

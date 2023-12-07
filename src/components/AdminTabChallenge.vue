@@ -162,7 +162,7 @@ export default {
       let spendable = {};
       for (const [key, gauge] of Object.entries(this.store.gauges)) {
         if (gauge.spending[challenge.stat]) {
-          spendable[key] = true;
+          spendable[key] = gauge.spending[challenge.stat];
         }
       }
 

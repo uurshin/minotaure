@@ -14,7 +14,8 @@ export default {
       temp_stat_name: '',
       add_marker_enabled: false,
       temp_marker_name: '',
-      temp_marker_value: 0
+      temp_marker_value: 0,
+      temp_gauge_spending: {}
     }
   },
   mounted() {
@@ -39,10 +40,25 @@ export default {
         }
       });
       for (const key_stat of Object.keys(this.store.stats)) {
-        this.store.gauges[key].spending[key_stat] = this.$refs['gauge_' + key + '_spending_' + key_stat][0].checked;
+        if (this.$refs['gauge_' + key + '_spending_' + key_stat][0].checked) {
+          this.store.gauges[key].spending[key_stat] = this.$refs['gauge_' + key + '_spending_value_' + key_stat][0].value ?? 1;
+        }
+        else if (this.store.gauges[key].spending[key_stat] !== undefined) {
+          delete this.store.gauges[key].spending[key_stat];
+        }
       }
 
       this.change_gauge = '';
+    },
+    cancelGaugeChange() {
+      this.change_gauge = '';
+      this.temp_gauge_spending = {};
+    },
+    openGauge(key) {
+      this.change_gauge = key;
+      this.$nextTick(() => {
+        this.$refs['gauge_' + key][0].focus();
+      });
     },
     addGauge: function() {
       let code = Math.floor(Math.random() * 10000000).toString();
@@ -63,6 +79,9 @@ export default {
       this.add_gauge_enabled = false;
       this.temp_gauge_name = '';
       this.temp_gauge_value = 10;
+    },
+    hasSpending(gauge, key_stat) {
+      return (this.temp_gauge_spending[key_stat] || (this.temp_gauge_spending[key_stat] === undefined && gauge.spending[key_stat] !== undefined && gauge.spending[key_stat] > 0));
     },
     remove: function(key, type) {
       delete this.store[type][key];
@@ -127,6 +146,7 @@ export default {
           <h2>{{ $t('bars') }}</h2>
           <button ref="step_settings_add_gauge" class="icon-add btn-valid" v-if="!add_gauge_enabled" @keyup.enter="createGauge()" @click="createGauge()">{{ $t('add') }}</button>
         </div>
+
         <div class="wrapper-list">
           <template v-for="(gauge, key, index) in store.gauges">
             <div v-if="change_gauge === '' || change_gauge === key" class="gauge list-item" :ref="index === 0 ? 'step_settings_gauge' : null">
@@ -146,7 +166,7 @@ export default {
                 </div>
               </div>
               <div class="action" v-if="change_gauge !== key">
-                <button :ref="index === 0 ? 'step_settings_gauge_modify' : null" @keyup.enter="change_gauge = key" @click="change_gauge = key">{{ $t('modify') }}</button>
+                <button :ref="index === 0 ? 'step_settings_gauge_modify' : null" @keyup.enter="openGauge(key)" @click="openGauge(key)">{{ $t('modify') }}</button>
                 <button class="btn-danger" @keyup.enter="remove(key, 'gauges')"  @click="remove(key, 'gauges')" :ref="index === 0 ? 'step_settings_gauge_delete' : null">{{ $t('delete') }}</button>
               </div>
               <template v-else>
@@ -156,7 +176,7 @@ export default {
                     <input :ref="'gauge_' + key" :value="gauge.name" :id="'gauge_'+ key" type="text">
                   </div>
                   <button class="btn-valid" @click="changeGauge(key)">{{ $t('submit') }}</button>
-                  <button :ref="index === 0 ? 'step_settings_gauge_cancel' : null" @keyup.enter="change_gauge = ''" @click="change_gauge = ''">{{ $t('cancel') }}</button>
+                  <button :ref="index === 0 ? 'step_settings_gauge_cancel' : null" @keyup.enter="cancelGaugeChange()" @click="cancelGaugeChange()">{{ $t('cancel') }}</button>
                 </div>
                 <div :ref="index === 0 ? 'step_settings_gauge_value' : null">
                   <label :for="'gauge_value_'+key">{{ $t('starts_at') }}</label>
@@ -169,8 +189,14 @@ export default {
                 <fieldset class="spending-wrapper" :ref="index === 0 ? 'step_settings_gauge_spending' : null">
                   <legend>{{ $t('spend_on') }}</legend>
                   <div class="radio-wrapper" v-for="(stat, key_stat) in store.stats">
-                    <label :for="'gauge_spending_' + key + '_' + key_stat">{{ stat.name }}</label>
-                    <input :ref="'gauge_' + key + '_spending_' + key_stat" :checked="gauge.spending[key_stat]" :id="'gauge_spending_' + key + '_' + key_stat" type="checkbox">
+                    <input :id="'gauge_' + key + '_spending_' + key_stat" type="checkbox" :ref="'gauge_' + key + '_spending_' + key_stat" @change="function($event) { temp_gauge_spending[key_stat] = $event.target.checked }" :checked="hasSpending(gauge, key_stat)">
+                    <label :for="'gauge_' + key + '_spending_' + key_stat">
+                      <strong>{{ stat.name }}</strong>
+                    </label>
+                    <label :for="'gauge_' + key + '_spending_value_' + key_stat">
+                      <span v-if="hasSpending(gauge, key_stat)">{{ $t('spending_diminish') }}</span>
+                    </label>
+                    <input v-if="hasSpending(gauge, key_stat)" :ref="'gauge_' + key + '_spending_value_' + key_stat" :value="gauge.spending[key_stat] ?? 1" min="1" type="number">
                   </div>
                 </fieldset>
               </template>
@@ -389,10 +415,16 @@ export default {
     .spending-wrapper {
       flex-basis: 100%;
       display: flex;
+      flex-direction: column;
       gap: 15px;
 
       > div {
         gap: 5px;
+        align-items: center;
+
+        input[type=number] {
+          min-height: auto;
+        }
       }
     }
 

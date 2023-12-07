@@ -635,13 +635,15 @@ export const usePlayerStore = defineStore('playerStore', {
             character.challenge.wait_roll = false;
             let messages = [];
             let result = 'failure';
+            // The "real" die throw is always between 1 and 20.
             let real_die_throw = Math.floor(Math.random() * 20 + 1);
             let die_throw = real_die_throw + character.challenge.difficulty;
 
             // Used to lock the number to beat of the character sheet.
             character.challenge.locked_difficulty = Math.min(Math.max(character.stats[character.challenge.stat].value - character.challenge.difficulty, 1), 19);
 
-            if (die_throw !== 20 && (die_throw === 1 || die_throw <= character.stats[challenge.stat].value)) {
+            // There is always a possibility to fail or succeed on any difficulty level.
+            if (real_die_throw !== 20 && (real_die_throw === 1 || die_throw <= character.stats[challenge.stat].value)) {
                 result = 'success';
                 challenge.nb_success += 1;
             }

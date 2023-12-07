@@ -54,6 +54,9 @@ export default {
       let time_remaining = this.character.challenge.timer - Math.floor((this.date - this.character.challenge.date) / 1000);
       return (time_remaining <= 0 ? 0 : time_remaining);
     },
+    challengeInProgress() {
+      return this.challengeTimer > 0 && this.character.challenge.wait_roll;
+    },
     difficulty() {
       let difficulty = this.character.stats[this.character.challenge.stat].value - this.character.challenge.difficulty;
       // 1 is always a success.
@@ -371,8 +374,12 @@ export default {
     <div class="backface">
       <div id="challenge" class="vertical-wrapper" v-if="character.challenge !== undefined && Object.entries(character.challenge).length">
         <div class="challenge-in-progress">
-          <span class="wrapper-label">{{ $t('challenge_in_progress' , {label: character.stats[character.challenge.stat].label}) }}</span>
-          <span v-if="challengeTimer > 0 && character.challenge.wait_roll" class="timer">{{ $t('challenge_ends_in', {timer: challengeTimer}) }}</span>
+          <span class="wrapper-label">
+            {{ $t(challengeInProgress ? 'challenge_in_progress' : 'challenge_done', {label: character.stats[character.challenge.stat].label}) }}
+          </span>
+          <span v-if="challengeInProgress" class="timer">{{ $t('challenge_ends_in', {timer: challengeTimer}) }}</span>
+          <span v-if="challengeInProgress">{{ $t('difficulty_threshold' , {difficulty: difficulty}) }}</span>
+          <span v-else>{{ $t('difficulty_threshold_past', {difficulty: character.challenge.locked_difficulty}) }}</span>
         </div>
         <div class="die-wrapper">
           <div class="die" :class="classesChallenge()">
@@ -387,13 +394,11 @@ export default {
           </div>
         </div>
         <div class="challenge-done">
-          <span v-if="challengeTimer > 0 && character.challenge.wait_roll">{{ $t('difficulty_threshold' , {difficulty: difficulty}) }}</span>
-          <span v-else>{{ $t('difficulty_threshold_past', {difficulty: character.challenge.locked_difficulty}) }}</span>
-          <div v-if="challengeTimer > 0 && character.challenge.wait_roll && hasSpendingButtons" class="container-modifiers">
+          <div v-if="challengeInProgress && hasSpendingButtons" class="container-modifiers">
             <span>{{ $t('gauge_spending_description') }}</span>
             <template v-for="(gauge, key) in character.gauges">
               <button v-if="character.challenge.spendable[key] !== undefined && difficulty < 19 && (gauge.deadly === undefined ? gauge.value > 1 : gauge.value > 0)" @click="spendGauge(key)" class="btn-valid" >
-                {{ $t('gauge_spending_button_text', {label: gauge.label, current: gauge.value }) }}
+                {{ $t('gauge_spending_button_text', {label: gauge.label, current: gauge.value, modifier: character.challenge.spendable[key] }) }}
               </button>
             </template>
           </div>
