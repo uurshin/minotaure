@@ -1,22 +1,13 @@
 <script>
-import router, { usePlayerStore } from '../main';
+import { usePlayerStore } from '../main';
 
 export default {
-  components: {
-
-  },
   data() {
     const store = usePlayerStore();
 
     return {
       store
     }
-  },
-  mounted() {
-
-  },
-  methods: {
-
   }
 }
 </script>

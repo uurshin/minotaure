@@ -13,13 +13,13 @@
       return {
         peer_client: null,
         id_join: '',
-        btn_text: this.$t('in_progress')
+        btn_text: this.$t('waiting')
       }
     },
     computed: {
       isBtnDisabled() {
         if (this.id_join.length === 0) {
-          this.btn_text =  this.$t('in_progress');
+          this.btn_text =  this.$t('waiting');
           return true;
         }
         this.btn_text =  this.$t('join');
@@ -43,7 +43,7 @@
     </div>
   </Transition>
 
-  <h1>{{ $t("character_manage") }}</h1>
+  <h1>{{ $t("game_join") }}</h1>
   <div class="small-wrapper menu-wrapper">
     <label for="id_join">{{ $t("game_id") }}</label>
     <input name="id_join" autocomplete="off" type="text" id="id_join" v-model="id_join">

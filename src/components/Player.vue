@@ -19,7 +19,8 @@ export default {
       pseudo_picked: '',
       creation_form: false,
       gameStart: false,
-      answers: []
+      answers: [],
+      date: 0
     }
   },
   beforeMount() {
@@ -45,9 +46,43 @@ export default {
         return active_polls.length > 0;
       }
       return false;
+    },
+    hasChallenge: function() {
+      return this.character.challenge !== undefined && Object.entries(this.character.challenge).length;
+    },
+    challengeTimer () {
+      let time_remaining = this.character.challenge.timer - Math.floor((this.date - this.character.challenge.date) / 1000);
+      return (time_remaining <= 0 ? 0 : time_remaining);
+    },
+    challengeInProgress() {
+      return this.challengeTimer > 0 && this.character.challenge.wait_roll;
+    },
+    difficulty() {
+      let difficulty = this.character.stats[this.character.challenge.stat].value - this.character.challenge.difficulty;
+      // 1 is always a success.
+      if (difficulty < 1) {
+        return 1;
+      }
+      // 20 is always a failure.
+      else if (difficulty > 19) {
+        return 19;
+      }
+      return difficulty;
+    },
+    hasSpendingButtons() {
+      const vm = this;
+      if (this.difficulty === 19) {
+        return false;
+      }
+      return Object.entries(this.character.gauges).some(function(gauge) {
+        if (vm.character.challenge.spendable[gauge[0]] !== undefined && (gauge[1].deadly === undefined ? gauge[1].value > 1 : gauge[1].value > 0)) {
+          return true;
+        }
+      });
     }
   },
   mounted() {
+    const vm = this;
     this.store.stopReconnect();
     this.freeze = true;
     this.store._leaving = false;
@@ -70,6 +105,8 @@ export default {
         this.handshake();
       }
     })
+
+    setInterval(vm.updateClock, 1000);
   },
   methods: {
     handshake() {
@@ -224,6 +261,14 @@ export default {
         token: vm.character.token
       });
     },
+    roll() {
+      let vm = this;
+      this.store.connection.send({
+        handshake: 'roll',
+        data: {},
+        token: vm.character.token
+      });
+    },
     newCharacter() {
       let vm = this;
 
@@ -242,73 +287,143 @@ export default {
         token: vm.character.token,
         reset: true
       });
+    },
+    classesChallenge: function() {
+      if (this.character.challenge !== undefined && Object.entries(this.character.challenge).length) {
+        if (this.character.challenge.result) {
+          if (this.character.challenge.result === 'success') {
+            return ['received', 'challenge-success'];
+          }
+          else {
+            return ['received', 'challenge-failure'];
+          }
+        }
+        else if (this.character.challenge.wait_roll) {
+          return ['wait-roll']
+        }
+      }
+      else {
+        return {};
+      }
+    },
+    updateClock() {
+      this.date = Date.now();
+    },
+    spendGauge(key) {
+      const vm = this;
+      this.store.connection.send({
+        handshake: 'spendGauge',
+        code: key,
+        token: vm.character.token,
+      });
     }
-  }
+  },
 }
 </script>
 
 <template>
   <span class="game-name" v-if="character.game_name !== undefined">{{ character.game_name }}</span>
-  <div id="player-sheet" class="small-wrapper" :class="{ disabled: freeze }">
-    <div class="lds-ripple"><div></div><div></div></div>
-    <div class="game-wait" v-if="!gameStart">{{ $t("waiting_for_game_start") }}</div>
-
-    <div id="creation" class="vertical-wrapper" v-if="creation_form">
-      <label for="name">{{ $t("char_name") }}</label>
-      <input maxlength="12" type="text" id="name" v-model="name_picked" @keyup.enter="this.$refs['pseudo'].focus()" />
-      <label for="pseudo">{{ $t("user_name") }}</label>
-      <input ref="pseudo" maxlength="12" type="text" id="pseudo" v-model="pseudo_picked" @keyup.enter="sendCharacter()" />
-
-
-      <template v-for="(option, group_key) in creation_form.options">
-        <div class="group-choice">
-          <label :for="'tag-group-' + group_key">{{ $t("your_char") }}</label>
-          <select :id="'tag-group-' + group_key" v-model="option_picked[group_key]">
-            <option v-for="(value, key, index) in option.tags" :value="value.code">
-              {{ value.label }}
-            </option>
-          </select>
-        </div>
-      </template>
-      <button :disabled="characterIsInvalid" @click="sendCharacter()">{{ $t("submit_your_char") }}</button>
-    </div>
-
-    <div class="vertical-wrapper polls" v-else-if="activePolls">
-      <div class="poll-wrapper" v-for="(poll, key, index) in character.polls">
-        <div class="poll-content" v-if="poll.active && poll.answer === undefined">
-          <span class="title">{{ poll.label }}</span>
-          <span v-for="(option, poll_key) in poll.options">
-              <input type="radio" :value="poll_key" :name="'poll_' + key" :id="'poll_' + key + '_' + poll_key" v-model="answers[key]">
-              <label :for="'poll_' + key + '_' + poll_key">{{ option }}</label>
-            </span>
-          <button @click="sendAnswer(key)">{{ $t("send_answer") }}</button>
-        </div>
+  <div id="player-sheet" class="small-wrapper" :class="{ disabled: freeze, flipped: hasChallenge || activePolls}">
+    <div class="frontface">
+      <div v-if="!gameStart || freeze" class="vertical-wrapper waiting">
+        <div class="ripple"><div></div><div></div></div>
+        <div class="game-wait">{{ !gameStart ? $t("waiting_for_game_start") : $t("temporary_disconnected") }}</div>
       </div>
-    </div>
 
-    <div class="vertical-wrapper" id="sheet" v-else-if="character.alive">
-      <div class="character-names">
-        <span class="character-name">{{ character.name }}</span>
-        <span v-if="character.pseudo" class="pseudo">{{ character.pseudo }}</span>
+      <div id="creation" class="vertical-wrapper" v-if="creation_form">
+        <label for="name">{{ $t("char_name") }}</label>
+        <input maxlength="12" type="text" id="name" v-model="name_picked" @keyup.enter="this.$refs['pseudo'].focus()" />
+        <label for="pseudo">{{ $t("user_name") }}</label>
+        <input ref="pseudo" maxlength="12" type="text" id="pseudo" v-model="pseudo_picked" @keyup.enter="sendCharacter()" />
+
+        <template v-for="(option, group_key) in creation_form.options">
+          <div class="group-choice">
+            <label :for="'tag-group-' + group_key">{{ $t("your_char") }}</label>
+            <select :id="'tag-group-' + group_key" v-model="option_picked[group_key]">
+              <option v-for="(value, key, index) in option.tags" :value="value.code">
+                {{ value.label }}
+              </option>
+            </select>
+          </div>
+        </template>
+        <button :disabled="characterIsInvalid" @click="sendCharacter()" class="btn-valid">{{ $t("submit_your_char") }}</button>
       </div>
-      <div>
+
+      <div class="vertical-wrapper" id="sheet" v-else-if="character.alive">
+        <div class="character-names">
+          <span class="character-name">{{ character.name }}</span>
+          <span v-if="character.pseudo" class="pseudo">{{ character.pseudo }}</span>
+        </div>
+        <div>
         <span v-for="gauge in character.gauges">
           <span>{{ gauge.label }}</span><span class="indicator">{{ gauge.value }}</span></span>
-      </div>
-      <div>
+        </div>
+        <div>
         <span v-for="stat in character.stats">
           <span>{{ stat.label }}</span><span class="indicator">{{ stat.value }}</span></span>
+        </div>
+        <div class="tags">
+          <span v-for="tag in character.tags">{{ tag.label }}</span>
+        </div>
       </div>
-      <div class="tags">
-        <span v-for="tag in character.tags">{{ tag.label }}</span>
+      <div class="vertical-wrapper" v-else>
+        <span class="character-name">{{ $t('is_dead', {charname: character.name}) }}</span>
+        <button @keyup.enter="newCharacter" @click="newCharacter">{{ $t('create_new_char') }}</button>
       </div>
-      <ul v-if="character.challenge !== undefined && Object.entries(character.challenge).length">
-        <li v-for="message in character.challenge.message">{{ message }}</li>
-      </ul>
     </div>
-    <div class="vertical-wrapper" v-else>
-      <span class="character-name">{{ $t('is_dead', {charname: character.name}) }}</span>
-      <button @keyup.enter="newCharacter" @click="newCharacter">{{ $t('create_new_char') }}</button>
+    <div class="backface">
+      <div id="challenge" class="vertical-wrapper" v-if="character.challenge !== undefined && Object.entries(character.challenge).length">
+        <div class="challenge-in-progress">
+          <span class="wrapper-label">
+            {{ $t(challengeInProgress ? 'challenge_in_progress' : 'challenge_done', {label: character.stats[character.challenge.stat].label}) }}
+          </span>
+          <span v-if="challengeInProgress" class="timer">{{ $t('challenge_ends_in', {timer: challengeTimer}) }}</span>
+          <span v-if="challengeInProgress">{{ $t('difficulty_threshold' , {difficulty: difficulty}) }}</span>
+          <span v-else>{{ $t('difficulty_threshold_past', {difficulty: character.challenge.locked_difficulty}) }}</span>
+        </div>
+        <div class="die-wrapper">
+          <div class="die" :class="classesChallenge()">
+            <div class="frontface">
+              <button @click="roll()">
+                {{ $t('roll') }}
+              </button>
+            </div>
+            <div class="backface">
+              <span v-if="character.challenge.roll !== undefined">{{ character.challenge.roll }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="challenge-done">
+          <div v-if="challengeInProgress && hasSpendingButtons" class="container-modifiers">
+            <span>{{ $t('gauge_spending_description') }}</span>
+            <template v-for="(gauge, key) in character.gauges">
+              <button v-if="character.challenge.spendable[key] !== undefined && difficulty < 19 && (gauge.deadly === undefined ? gauge.value > 1 : gauge.value > 0)" @click="spendGauge(key)" class="btn-valid" >
+                {{ $t('gauge_spending_button_text', {label: gauge.label, current: gauge.value, modifier: character.challenge.spendable[key] }) }}
+              </button>
+            </template>
+          </div>
+          <Transition>
+            <ul v-if="character.challenge.roll !== undefined">
+              <li v-for="message in character.challenge.message">{{ message }}</li>
+            </ul>
+          </Transition>
+        </div>
+      </div>
+      <div class="vertical-wrapper polls" v-if="activePolls">
+        <div :class="{waiting: poll.active && poll.answer === undefined}" class="poll-wrapper" v-for="(poll, key, index) in character.polls">
+          <div class="poll-content" v-if="poll.active && poll.answer === undefined">
+            <span class="wrapper-label">{{ $t('poll_in_progress')}}</span>
+            <span class="title">{{ poll.label }}</span>
+            <div class="radios-wrapper">
+              <div class="radio-wrapper" v-for="(option, poll_key) in poll.options">
+                <input type="radio" :value="poll_key" :name="'poll_' + key" :id="'poll_' + key + '_' + poll_key" v-model="answers[key]">
+                <label :for="'poll_' + key + '_' + poll_key">{{ option }}</label>
+              </div>
+            </div>
+            <button :disabled="answers[key] === undefined" @click="sendAnswer(key)">{{ $t("send_answer") }}</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -317,9 +432,6 @@ export default {
   input {
     height: auto;
   }
-  .game-wait {
-    color: white;
-  }
 
   .game-name {
     font-size: 1.2em;
@@ -327,16 +439,56 @@ export default {
   }
 
   #player-sheet {
-    display: flex;
+    display: grid;
     border-radius: 10px;
-    color: var(--background-card-color);
-    flex-direction: column;
+    color: var(--font-color);
     gap: 10px;
     margin-top: 20px;
-    background: var(--font-color);
-    padding: 10px;
-    align-items: center;
-    justify-content: center;
+    transform-style: preserve-3d;
+    transition: all 1s ease-in-out;
+    rotate: y 0deg;
+
+    > .frontface {
+      rotate: y 0deg;
+      translate: 0 0 1px;
+      align-items: center;
+    }
+    > .backface {
+      rotate: y 180deg;
+      translate: 0 0 -1px;
+      align-items: stretch;
+      display: flex;
+      flex-direction: column;
+    }
+
+    > .backface, > .frontface {
+      grid-area: 1 / 1;
+      background: var(--background-card-color);
+      padding: 10px;
+      display: flex;
+      justify-content: center;
+      transform-style: preserve-3d;
+      border-radius: 20px;
+      min-width: 280px;
+      backface-visibility: hidden;
+
+      &:after {
+        content: '';
+        background: var(--background-card-color);
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        translate: 0 0 -1px;
+        transform-style: preserve-3d;
+        border-radius: 30px;
+      }
+    }
+
+    &.flipped {
+      rotate: y 180deg;
+    }
 
     input {
       border: 1px solid var(--border-color);
@@ -345,6 +497,7 @@ export default {
     .character-names {
       display: flex;
       flex-direction: column;
+      align-items: center;
       text-align: center;
 
       .character-name {
@@ -354,7 +507,8 @@ export default {
 
     .tags {
       display: flex;
-      flex-direction: column;
+      flex-wrap: wrap;
+      flex-direction: row;
       gap: 10px;
 
       > span {
@@ -363,7 +517,12 @@ export default {
         color: var(--font-color);
         padding: 5px;
         text-align: center;
+        text-transform: capitalize;
       }
+    }
+
+    .waiting {
+      align-items: center;
     }
 
     #sheet {
@@ -385,41 +544,169 @@ export default {
 
     .indicator {
       padding: 5px;
-      border-radius: 100%;
-      border: 1px solid black;
-      background: black;
-      color: white;
-      width: 24px;
+      border-radius: 15px;
+      background: var(--button-background);
+      color: var(--button-color);
+      min-width: 24px;
     }
 
     &.disabled {
       background: none;
       border: none;
 
-      .vertical-wrapper {
+      .vertical-wrapper:not(.waiting) {
         display: none;
       }
-      .lds-ripple {
+      .ripple {
         display: inline-block;
       }
     }
 
-    .lds-ripple {
+    #challenge {
+      display: grid;
+      grid-auto-rows: 1fr;
+
+      + .polls {
+        border-top: 2px solid white;
+        padding-top: 15px;
+      }
+
+      .challenge-done,
+      .challenge-in-progress {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        justify-content: flex-end;
+        gap: 10px;
+      }
+
+      .challenge-done {
+        justify-content: flex-start;
+      }
+
+      .die-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .die {
+          display: inline-block;
+          transform-style: preserve-3d;
+          perspective: 200px;
+          width: 100px;
+          height: 100px;
+          margin: 0 auto;
+          transition: 1s all ease-in-out;
+          rotate: y 0deg;
+          border-radius: 50%;
+          background: #c7c7c7;
+
+          &.challenge-success {
+            background: var(--success-background);
+          }
+          &.challenge-failure {
+            background: var(--failure-background);
+          }
+          &.wait-roll {
+            .frontface:after {
+              content: "";
+              animation: 0.5s linear 1s infinite alternate wait_roll;
+              width: 120%;
+              height: 120%;
+              background: var(--font-color);
+              position: absolute;
+              translate: 0 0 -1px;
+              z-index: -18;
+              border-radius: 100%;
+              opacity: 0;
+            }
+
+            &:hover .frontface:after {
+              animation-play-state: paused;
+              translate: 0 0 -2px !important;
+              transition: all 0.3s linear;
+              opacity: 1;
+            }
+          }
+          &.received {
+            rotate: y 180deg;
+          }
+
+          > div {
+            position: absolute;
+            display: flex;
+            width: 100px;
+            height: 100px;
+            align-items: center;
+            justify-content: center;
+            color: black;
+            transform-style: preserve-3d;
+            transition: all 1s ease-in-out;
+
+            &.frontface {
+              rotate: y 0deg;
+            }
+
+            &.backface {
+              rotate: y 180deg;
+              font-size: 53px;
+            }
+
+            > button,
+            > span {
+              font-weight: bold;
+              width: 100%;
+              height: 100%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              transform: translateZ(30px);
+              transform-style: preserve-3d;
+            }
+
+            > span {
+              color: white;
+            }
+
+            > button {
+              font-size: 19px;
+              color: black;
+              border: unset;
+              border-radius: 100%;
+              background: none;
+              text-transform: uppercase;
+              transition: unset;
+              outline: none;
+            }
+          }
+        }
+      }
+    }
+
+    .ripple {
       display: none;
       position: relative;
       width: 80px;
       height: 80px;
+
+      div {
+        position: absolute;
+        border: 4px solid var(--font-color);
+        opacity: 1;
+        border-radius: 50%;
+        animation: lds-ripple 1s ease-in-out infinite;
+
+        &:nth-child(2) {
+          animation-delay: -0.5s;
+        }
+      }
     }
-    .lds-ripple div {
-      position: absolute;
-      border: 4px solid #fff;
-      opacity: 1;
-      border-radius: 50%;
-      animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+
+    .wrapper-label {
+      font-size: 1.2em;
+      font-weight: bold;
     }
-    .lds-ripple div:nth-child(2) {
-      animation-delay: -0.5s;
-    }
+
     @keyframes lds-ripple {
       0% {
         top: 36px;
@@ -452,18 +739,26 @@ export default {
     }
   }
 
-
   .poll-wrapper {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
     gap: 10px;
+
+    &:not(.waiting) {
+      display: none;
+    }
+
+    &.waiting + .poll-wrapper {
+      border-top: 2px solid white;
+      padding-top: 15px;
+    }
 
     > .poll-content {
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
-      gap: 10px;
+      align-self: center;
+      gap: 30px;
 
       > span {
         display: flex;
@@ -475,25 +770,48 @@ export default {
         align-self: center;
       }
     }
-
-    > div, > span {
-      border: 1px solid black;
-      padding: 15px;
-    }
   }
 
   .group-choice {
     select {
       -webkit-appearance: none;
       -moz-appearance: none;
-      background: transparent;
+      background: white;
       background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
       background-repeat: no-repeat;
       background-position-x: 100%;
-      margin-right: 2rem;
-      padding-right: 2rem;
+      padding: 0 25px 0 5px;
       border: 1px solid var(--border-color);
     }
   }
 
+  .container-modifiers {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: stretch;
+
+    > span {
+      max-width: 230px;
+      margin: auto;
+    }
+  }
+
+  @keyframes wait_roll {
+    from {
+      opacity: 1;
+      translate: 0 0 -30px;
+    }
+    to {
+      opacity: 1;
+      translate: 0 0 -3px;
+    }
+  }
+
+  .radios-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
 </style>

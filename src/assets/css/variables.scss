@@ -1,8 +1,10 @@
 $breakpoints: (
+        tiny: 360px,
         phone: 640px,
         tablet: 768px,
-        desktop: 1280px
-) !default;
+        laptop: 1280px,
+        desktop: 1440px
+);
 
 :root {
   font-family: Helvetica, system-ui, Avenir, Inter, Arial, sans-serif;
@@ -19,19 +21,19 @@ $breakpoints: (
   --link-hover-color: #57A773;
   --background-color: black;
   --button-color: white;
+  --button-border-active: #39c6ff;
   --background-card-color: #222;
   --border-input: none;
   --border-color: #777;
   --failure-background: #8c3232;
   --success-background: #277e27;
-  --success-color: #3ec23e;
+  --success-color: #277e27;
   --danger-color: #8c3232;
   --valid-color: #266226;
   --tag-color: #1c1a1a;
   --background-select: white;
   --poll-background: #242424;
   --button-background: #0b6488;
-  --select-border: none;
   --margin-multiselect: 0;
   --tab-border-color: white;
   --character-picked: gold;
@@ -51,19 +53,17 @@ $breakpoints: (
   --font-color: black;
   --inverse-font-color: white;
   --input-font-color: black;
-  --background-color: white;
+  --background-color: #efefef;
   --button-background: black;
   --button-color: white;
+  --button-border-active: #90c0ff;
   --background-card-color: #90c0ff;
-  --content-background: rgba(0,0,0,0.1);
   --border-color: #777;
-  --warning-background: #804200;
   --tab-border-color: black;
   --character-picked: black;
-  --select-border: 1px solid black;
 
   &.picker {
-	  background: white;
+	  background: #efefef;
   }
 }
 
@@ -75,14 +75,33 @@ $breakpoints: (
   --background-card-color: #87BCDE;
   --button-background: black;
   --button-color: white;
-  --content-background: rgba(0,0,0,0.1);
+  --button-border-active: white;
   --border-color: #777;
-  --warning-background: #804200;
   --valid-color: #379634;
   --danger-color: #A63A50;
   --tab-border-color: black;
 
   &.picker {
     background: #5858c4;
+  }
+}
+
+[data-theme="sepia"] {
+  --font-color: #141204;
+  --inverse-font-color: white;
+  --input-font-color: #4d3f36;
+  --background-color: #e5e2da;
+  --button-background: #4d3f36;
+  --button-color: #e5e2da;
+  --button-border-active: black;
+  --background-card-color: #7796CB;
+  --border-color: #777;
+  --tab-border-color: #4d3f36;
+  --character-picked: #141204;
+  --success-background: #159241;
+  --failure-background: #AA4538;
+
+  &.picker {
+    background: #dbc6b8;
   }
 }

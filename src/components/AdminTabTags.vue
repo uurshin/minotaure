@@ -10,23 +10,17 @@ import ColorPicker from '@radial-color-picker/vue-color-picker';
 export default {
   components: { VueMultiselect, VueSimpleContextMenu, ColorPicker },
   data() {
-    const store = usePlayerStore();
-    const options_contextual = [{}];
-    const color = reactive({
-      hue: 50,
-      saturation: 71,
-      luminosity: 50,
-      alpha: 1,
-    });
-    const color_picked = null;
-    const group_selected = null;
-
     return {
-      store,
-      options_contextual,
-      color,
-      color_picked,
-      group_selected
+      store: usePlayerStore(),
+      options_contextual: [{}],
+      color: reactive({
+        hue: 50,
+        saturation: 71,
+        luminosity: 50,
+        alpha: 1,
+      }),
+      color_picked: null,
+      group_selected: null
     }
   },
   mounted() {
@@ -68,13 +62,15 @@ export default {
     },
     distributeGroupTag: function(group) {
       const vm = this;
-      this.store.characters.forEach(function(character) {
-        // Check if the character already has a tag from this group.
-        let found = character.tags.findIndex((tag) => tag.group === group.code);
-        if (found === -1) {
-          character.tags.push(vm.store.getRandomTagFromGroup(group));
-        }
-      })
+      if (group.tags.length) {
+        this.store.characters.forEach(function(character) {
+          // Check if the character already has a tag from this group.
+          let found = character.tags.findIndex((tag) => tag.group === group.code);
+          if (found === -1) {
+            character.tags.push(vm.store.getRandomTagFromGroup(group));
+          }
+        })
+      }
     },
     shuffleGroupTag: function(group) {
       const vm = this;
@@ -264,7 +260,7 @@ export default {
       <template v-for="(group, key) in store.getGroupTags()">
         <div class="group-tag" :ref="key === 0 ? 'step_tags_group' : null">
           <span class="group-label">
-            <input :ref="'group_name_input_'+ key" @keydown.enter="group_selected = null;" v-if="group_selected === key" type="text" v-model="store.current_game.tag_groups[key].label"/>
+            <input :ref="'group_name_input_'+ key" @keyup.enter="group_selected = null;" v-if="group_selected === key" type="text" v-model="store.current_game.tag_groups[key].label"/>
             <button
                 v-show="group_selected !== key"
                 @keyup.enter="focusLabelGroup($event, key)"

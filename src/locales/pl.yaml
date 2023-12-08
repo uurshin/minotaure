@@ -1,0 +1,350 @@
+game_create: 'Utwórz grę'
+game_manage: 'Zarządzaj swoimi grami'
+game_join: 'Dołącz do gry'
+character_manage: 'Zarządzaj swoimi postaciami'
+read_more: 'Dowiedz się więcej'
+character_help: 'Twoje postacie są przechowywane w przeglądarce, co pozwala na ich odzyskiwanie podczas ponownego dołączania do wcześniej dołączonej gry. Możesz grać na innej przeglądarce, eksportując swoje postacie.'
+character_nb: 'Nie masz postaci do wyeksportowania | Masz jedną postać do wyeksportowania | Masz { count } postaci do wyeksportowania'
+version: "Wersja: {version}"
+
+#Admin
+characters: 'Postacie'
+bars: 'Paski'
+polls: 'Ankiety'
+markers: "Wskaźniki"
+challenge: 'Wyzwanie'
+stats: 'Statystyki'
+settings: 'Ustawienia'
+tags: 'Tagi'
+draw: 'Losowanie'
+help: 'Pomoc'
+start: 'Rozpocznij'
+invite_to_play: 'Zaproś do gry'
+invite_link_copied: 'Skopiowano link zaproszenia!'
+game_id_copied: 'Skopiowano identyfikator gry!'
+strength: 'Siła'
+mind: 'Umysł'
+health: 'Zdrowie'
+will: 'Wola'
+game_rename: 'Zmień nazwę gry'
+selected: 'Wybrane'
+share_invite_id: "Skopiuj identyfikator gry"
+share_invite_link: "Skopiuj link zaproszenia"
+qr_code_download: "Pobierz kod QR, aby później zintegrować go ze swoim overlayem."
+copy: "Kopiuj"
+download: "Pobierz"
+
+#Continue
+continue_game: 'Kontynuuj - {name}'
+count_personnage: '1 postać | {count} postacie'
+continue: 'Kontynuuj'
+see_more: 'Zobacz więcej'
+any_game: 'Nie utworzyłeś jeszcze żadnej gry.'
+cancel: 'Anuluj'
+waiting_name: "Oczekiwanie na nazwę twojej gry"
+please_wait: "Proszę czekać"
+start_game: 'Rozpocznij grę'
+warning_version: "Gry oznaczone gwiazdką <span class='danger'>*</span> nie są kompatybilne z twoją wersją Minotaur ({version}), mogą nie działać poprawnie."
+delete_all_games: 'Usuń wszystkie gry'
+confirm_question: 'Potwierdzić?'
+clone: "Duplikat"
+
+#Create
+game_name_invite: 'Nazwa twojej gry. Możesz ją później zmienić.'
+my_game: 'Moja gra'
+game_id_help: 'Tożsamość ta będzie zawarta w twoim linku zaproszeniowym. Możesz wybrać własną.'
+
+#AdminTabPoll
+add_poll: "Dodaj ankietę"
+active_polls: "Zobacz aktywne ankiety"
+past_polls: "Zobacz wcześniejsze ankiety"
+question: "Pytanie"
+question_label: "Pytanie: "
+possible_choices: "Możliwe odpowiedzi"
+add_poll_choice: "Dodaj wybór"
+start_poll: "Uruchom ankietę"
+show_poll_results: "Pokaż wyniki"
+close_poll: "Zamknij ankietę"
+nb_choice: "Wybór {nb}"
+nb_choice_label: "Wybór {nb}: "
+choice_gives_tag: "Dodaj następujące tagi dla tego wyboru"
+turnout: "Frekwencja: "
+other_tags: "Inne"
+choose_name_draft: "Możesz wybrać nazwę dla swojego szkicu"
+save_draft_poll: "Zapisz jako szkic"
+drafted_polls: "Zobacz szkice"
+load_poll: "Wczytaj ankietę"
+show_poll_details: "Pokaż szczegóły"
+see_less: "Pokaż mniej"
+
+#AdminTabIntro
+minotaure_welcome: "Witaj w Minotaure"
+tutorial_help_1: "Rozpocznij samouczek, klikając przycisk <strong class='icon-question'>Pomoc</strong> (pełny samouczek będzie dostępny w przyszłej wersji)"
+tutorial_help_2: "Przed rozpoczęciem gry możesz modyfikować <strong>ustawienia</strong> i <strong>tagi</strong> w odpowiednich zakładkach."
+tutorial_help_3: "Możesz zaprosić swoich graczy do gry od razu, klikając przycisk <strong class='icon-email'>Zaproś do gry</strong>."
+tutorial_help_4: "Do czasu kliknięcia przycisku <strong class='icon-play'>Start</strong> będą oni w poczekalni."
+
+#AdminTour
+next: "Następny"
+end_tour: "Zakończ przewodnik"
+end_tab_tour: "Zakończ przewodnik dla tej karty"
+step_help: "Czy chcesz przejść cały przewodnik, czy uzyskać tylko pomoc dotyczącą tej karty?"
+see_all_tutorial: "Przewodnik kompletny"
+see_page_tutorial: "Przewodnik po tej karcie"
+step_game_name: "Możesz zmieniać nazwę gry w dowolnym momencie."
+step_invite: "Po kliknięciu tego przycisku skopiowany zostanie link zaproszenia, który pozwoli zaprosić do dołączenia do twojej gry."
+step_start: "Dopóki nie klikniesz tego przycisku, twoi goście będą czekać na ekranie oczekiwania."
+tab_label_settings: "Ustawienia to ustawienia gry, które zalecamy zmienić przed jej rozpoczęciem, ale zawsze możesz je zmienić w trakcie gry."
+step_settings_gauges:
+  "Jauges to rezerwy punktów dla każdej postaci. Gdy tworzysz grę, automatycznie tworzone są dwie jauges: życie i wola."
+step_settings_add_gauge: "Możesz dodać tyle jauges, ile chcesz."
+step_settings_gauge:
+  "Wszystkie postacie posiadają te jauges przy ich tworzeniu, z początkową liczbą punktów, którą
+  możesz zmienić."
+step_settings_gauge_delete:
+  "Możesz usunąć jauges w dowolnym momencie."
+step_settings_gauge_make_deadly:
+  "Możesz sprawić, że spadek jauges do 0 spowoduje śmierć postaci, klikając
+  na ten przycisk (ta akcja jest odwracalna, ale postacie już martwe nie zostaną wskrzeszone!)."
+step_settings_gauge_name: "Możesz zmieniać nazwę wskaźnika w dowolnym momencie."
+step_settings_gauge_value: "Ta liczba określa bazową wartość wskaźnika dla postaci przy jej tworzeniu."
+step_settings_gauge_spending:
+  "Zaznacz pole dla cech, dla których chcesz umożliwić graczom wydawanie punktów wskaźnika w celu zmniejszenia trudności odpowiadających wyzwań 
+  (następnie możesz wybrać wartość zmniejszenia trudności za każdy wydany punkt)."
+step_settings_gauge_cancel: "Nie jesteś zobowiązany do zatwierdzania swoich zmian; możesz potwierdzić lub anulować wszystkie zmiany."
+step_settings_stats:
+  "Cechy działają podobnie jak w większości gier fabularnych. Gdy tworzysz grę, automatycznie tworzone są dwie cechy: fizyczna i umysłowa."
+step_settings_add_stat: "Możesz dodać tyle cech, ile chcesz."
+step_settings_stat:
+  "Wszystkie postacie posiadają te cechy przy ich tworzeniu, z początkową liczbą punktów równą 10 + losowa liczba między -9 a +9. <br>
+  Całkowita liczba punktów cech postaci przy jej tworzeniu wynosi zawsze 10 razy liczbę cech, aby zapewnić tę samą całkowitą liczbę punktów wszystkim uczestnikom."
+step_settings_stat_delete:
+  "Możesz usunąć cechę w dowolnym momencie."
+step_settings_markers: "Markery to globalne liczniki dla gry. Ich wartość może być zmieniana z tego ekranu, ale także automatycznie zwiększana lub zmniejszana po sukcesie lub niepowodzeniu grupy podczas wyzwania."
+step_settings_settings: "Możesz dostosować niektóre ustawienia gry."
+step_settings_challenge_timer: "Ustaw czas, jaki graczom przyznano na dokonywanie wyborów i rzucanie kostką po rozpoczęciu wyzwania."
+step_settings_disconnected_prevent: "Możesz wybrać, aby odłączeni bohaterowie nigdy nie byli brani pod uwagę podczas wyzwań i losowań, które uruchamiasz."
+step_settings_npc_prevent: "Możesz także wybrać, aby postaci nie-graczy (które możesz tworzyć w zakładce Postacie) nigdy nie były brane pod uwagę podczas wyzwań i losowań, które uruchamiasz."
+tab_label_tags:
+  "Tagi to etykiety przypisane postaciom, które stanowią dużą siłę Minotaura.<br>"
+step_tags:
+  "Każdy tag jest częścią grupy tagów, która może być nazwana (na przykład: zawody, płeć, lud, zalety, wady, itp.).
+  Tag może służyć jako klasa postaci, ale jest wystarczająco wszechstronny, aby umożliwić inne zastosowania."
+step_tags_group_add:
+  "Możesz dodać tyle grup tagów, ile chcesz."
+step_tags_group:
+  "Zacznij pisać tekst i zatwierdź, aby utworzyć tag. Przypisany mu zostanie kolor."
+step_tags_group_distribution:
+  "Dla każdej grupy tagów możesz wybrać tryb dystrybucji tagów:
+  <ul>
+  <li>- wybierane przez gracza podczas tworzenia postaci</li>
+  <li>- przydzielane losowo</li>
+  <li>- przydzielane równo (system wybierze spośród tagów, które są najmniej przydzielane, aby zrównoważyć przydzielone tagi)</li>
+  <li>- nie przydzielane podczas tworzenia postaci (będziesz z nich korzystać w inny sposób niż podczas tworzenia postaci)</li>
+  </ul>"
+step_tags_group_distribute:
+  "Kliknij tutaj, aby przydzielić tag tej grupy wszystkim postaciom, które go jeszcze nie mają. Przydatne, jeśli utworzyłeś grupę podczas trwania gry."
+step_tags_group_shuffle:
+  "Kliknij tutaj, aby przydzielić tag tej grupy wszystkim postaciom, które już mają tag. Nowy tag zastąpi stary. Przydatne, jeśli nie jesteś zadowolony z obecnej dystrybucji."
+step_tags_group_rename:
+  "Możesz zmienić nazwę grupy tagów w dowolnym momencie."
+step_tags_tag:
+  "Każdy tag może wpływać na jauges i cechy postaci podczas jej tworzenia. Klikając na tag, możesz:
+    <ul>
+    <li>- przypisać mu <strong>główną cechę</strong>. Jeśli postać otrzyma ten tag podczas tworzenia, będzie to automatycznie jej najwyższa cecha. Przykład: tag \"magik\" może mieć główną cechę \"Magia\".</li>
+    <li>- przypisać mu <strong>drugorzędną cechę</strong>. Jeśli postać otrzyma ten tag podczas tworzenia, będzie to automatycznie jej druga najwyższa cecha.</li>
+    <li>- przypisać mu <strong>bonusy</strong> i <strong>kary</strong>, które zmieniają losowanie początkowych cech lub początkową wartość niektórych jauges.</li>
+    <li>- zwiększyć lub zmniejszyć jego <strong>prawdopodobieństwo</strong> przydzielania losowego.</li>
+    <li>- zmienić jego <strong>kolor</strong></li>
+    </ul>"
+example: 'przykład'
+step_tags_group_delete:
+  "Możesz usunąć grupę tagów w dowolnym momencie. Spowoduje to usunięcie odpowiednich tagów dla postaci."
+tab_label_characters:
+  "To jest karta, którą najczęściej pokazujesz podczas gry: przedstawia wszystkie stworzone postacie i podsumowuje ich właściwości (imię postaci, pseudonim gracza, jauges, cechy, tagi, itp.). Możesz w niej szukać postaci według wielu kryteriów."
+tab_label_poll:
+  "Możesz uruchomić ankietę, która pozwoli ci dowiedzieć się, w którą stronę kierować grę. Możesz także dodawać tagi do postaci w zależności od wyborów każdego gracza w ankiecie."
+tab_label_challenge:
+  "Możesz uruchomić odpowiednik rzutów kostką, które spowodują dla każdej postaci objętej wyzwaniem konsekwencje w zależności od jej sukcesu lub porażki."
+tab_label_pick:
+  "Losowania pozwalają ci losowo wybrać określoną liczbę postaci według własnego wyboru spośród całej populacji lub jej części. Możesz także nałożyć konsekwencje na wylosowane postacie."
+
+#AdminTabSettings
+add: "Dodaj"
+gauge_start: "Zaczyna się od {gauge_value}"
+kills_at_0: "Zabija przy 0"
+submit: "Zatwierdź"
+modify: "Modyfikuj"
+delete: "Usuń"
+name: "Nazwa"
+starts_at: "Zaczyna się od"
+used_for_challenges: "Używane do wyzwań:"
+rename: "Zmień nazwę"
+challenge_timer: "sekundy oczekiwania przed zakończeniem wydarzenia"
+disconnected_prevent: "Zapobiegaj udziałowi odłączonych graczy w wydarzeniach i losowaniach"
+npc_prevent: "Zapobiegaj udziałowi postaci niebędących graczami w wydarzeniach i losowaniach"
+spend_on: "Gracze mogą wydawać te punkty, aby ułatwić zadania dla"
+gauge_deadly_description: "Postacie umierają, jeśli wskaźnik ten osiągnie 0"
+spending_diminish: ": wydanie 1 punktu zmniejsza trudność o "
+
+#AdminTabChallenge
+dif_cake: "Banalne"
+dif_ext_easy: "łatwe"
+dif_very_easy: "Bardzo łatwe"
+dif_easy: "Dość łatwe"
+dif_moderate: "średnie"
+dif_hard: "Dość trudne"
+dif_very_hard: "Trudne"
+dif_extreme: "Ekstremalne"
+dif_impossible: "Niemożliwe"
+added_tag: "tag dodany: {tag_label}"
+removed_tag: "tag usunięty: {tag_label}"
+must_first: "Najpierw musisz "
+add_stat: "stworzyć cechę"
+tested_stat: "Cecha do przetestowania"
+choose_stat: "Wybierz cechę"
+difficulty: "Trudność: "
+targets: "Cele"
+add_target: "Dodaj cel"
+everyone: "Wszyscy"
+positive_csq: "Konsekwencje sukcesu"
+negative_csq: "Konsekwencje porażki"
+add_tags: "Dodaj tagi"
+add_tag: "Dodaj tag"
+input_word: "Wpisz słowo"
+no_tag_create: "Brak innych tagów, wymyśl jeden!"
+remove_tag: "Usuń tagi"
+this_will_test: "Zamierzasz przeprowadzić test "
+for_everyone: "Dla wszystkich"
+for_every: "Dla każdego: "
+challenge_characters: "Postacie "
+that_pass: "które zdadzą"
+that_fail: "które nie zaliczą"
+will_have: " otrzymają: "
+get_following_tags: "Te tagi dodatkowe: "
+lose_following_tags: "Te tagi zostaną odebrane: "
+start_challenge: "Rozpocznij wyzwanie !"
+group_consequences_summary_failure: "Jeśli mniej niż {rate}% postaci odniesie sukces, wszyscy bohaterowie otrzymają:"
+group_consequences_summary_success: "Jeśli więcej niż {rate}% postaci odniesie sukces, wszyscy bohaterowie otrzymają:"
+success_threshold: "Próg sukcesu grupy"
+remove_neutral_zone: "Usunąć strefę neutralną"
+add_neutral_zone: "Dodać strefę neutralną"
+individual_consequences_description: "Każda postać rzuci kością, do której dodana zostanie trudność, i musi uzyskać wynik niższy niż testowana cecha."
+group_consequences_description: "Każda postać poniesie konsekwencje w zależności od procentu sukcesu grupy."
+need_challenge_end: "Musisz zakończyć obecne wyzwanie, aby rozpocząć nowe."
+consequences_per_character: "Konsekwencje dla postaci"
+consequences_for_group: "Konsekwencje dla grupy"
+global_marker: "(wspólny dla wszystkich)"
+please_select_stat: "Wybierz statystykę, aby rozpocząć wyzwanie"
+
+#AdminTabCharacters
+context_add_selection_character: "Dodaj do wyboru (maj + lewy przycisk myszy)"
+context_remove_selection_character: "Usuń z wyboru (maj + lewy przycisk myszy)"
+context_delete_character: "Usuń postać"
+context_edit_character: "Edytuj postać"
+last_challenge_success_rate: "Ostatnie wyzwanie miało wskaźnik sukcesu wynoszący "
+select_tag: "Wybierz tag"
+alive: "Żywi"
+connected: "Podłączeni"
+passed: "Zdane"
+failed: "Niezdane"
+show_all_characters: "Pokaż wszystko"
+spawn_npc: "Generuj NPC"
+characters_on: " na "
+no_characters_to_show_try_different_filter: "Brak postaci spełniających te filtry"
+search_character: "Wyszukaj postać"
+start_typing: "Zacznij pisać"
+clear_selection: "Wyczyść wybór"
+char_picked: "Wybrane"
+add_all_to_selection: "Dodaj wszystko do wyboru"
+challenged_end_in: "Koniec wyzwania za {timer}s"
+finish_challenge: "Zakończ wyzwanie"
+challenge_scale_label: "{scale}% = sukces"
+challenge_scale_label_neutral: "{scale}% = brak efektu"
+challenge_result_success: "Sukces grupy!"
+challenge_result_neutral: "Ani porażka, ani sukces grupy..."
+challenge_result_failure: "Porażka grupy!"
+non_player: "Niegracz"
+
+#AdminTabTags
+group_nb: "Grupa {nb}"
+bonus_gauge: "Zwiększ wskaźnik {name}"
+malus_gauge: "Zmniejsz wskaźnik {name}"
+bonus_stat: "Zwiększ cechę {name}"
+malus_stat: "Zmniejsz cechę {name}"
+linkStatToTag: "Powiąż z {statname} jako główną cechą"
+unlinkStatToTag: "Przerwij powiązanie z {statname} jako główną cechą"
+link2StatToTag: "Powiąż z {statname} jako drugorzędną cechą"
+unlink2StatToTag: "Przerwij powiązanie z {statname} jako drugorzędną cechą"
+change_tag_color: "Zmień kolor"
+add_groug_of_tag: "Dodaj grupę tagów"
+distribution_mode: "Tryb przydzielania : "
+randomly_distributed_at_creation: "Przydzielane losowo przy tworzeniu postaci"
+equitably_distributed_at_creation: "Przydzielane równo przy tworzeniu postaci"
+chosen_at_char_creation: "Do wyboru przy tworzeniu postaci"
+not_autodistributed: "Brak reguły"
+distribute: "Przydziel"
+shuffle: "Tasuj"
+shuffle_help: "Dla każdej postaci posiadającej już tag z tej grupy, nowy tag z grupy zostanie przypisany losowo."
+main_stat: " Główna cecha : "
+secondary_stat: " Drugorzędną cecha : "
+tags_submit: "Zakończ"
+a_tag_will_be_assigned_to_char: "Dla każdej postaci, która jeszcze nie ma tagu z tej grupy, zostanie mu przypisany tag losowo."
+delete_groupe_tags_and_remove_from_chars: "Wszystkie tagi z tej grupy zostaną usunięte i usunięte z postaci."
+increase_probability: "Zwiększ szansę"
+decrease_probability: "Zmniejsz szansę"
+tag_probability: "1 szansa na {total} | {count} szans z {total}"
+
+#Characters
+count_char_import: "1 zaimportowana postać | {count} zaimportowane postacie"
+invalid_qr_code: "Nieprawidłowy kod QR"
+export_char: "Eksportuj swoje postacie"
+import_char: "Importuj swoje postacie"
+delete_all_chars: "Usuń wszystkie postacie"
+
+#AdminTabPick
+admin_pick_one: "spośród postaci posiadających jeden z tych tagów :"
+admin_pick_all: "spośród postaci posiadających wszystkie te tagi :"
+admin_pick_none: "spośród postaci nieposiadających żadnego z tych tagów :"
+admin_pick_each: "postaci na tag :"
+admin_pick_launch: "Rozpocznij losowanie"
+future_feature: "przyszła funkcja"
+admin_pick_add_csq: "Dodatkowe konsekwencje losowania"
+
+#Join
+game_id: "ID gry"
+waiting: "En attente"
+join: "Oczekiwanie"
+
+#Main
+back_to_home: "Powrót do strony głównej"
+
+#Player
+waiting_for_game_start: "Oczekiwanie na rozpoczęcie gry"
+char_name: "Nazwa twojej postaci"
+user_name: "Twój pseudonim (opcjonalnie)"
+your_char: "Twoja postać to "
+submit_your_char: "Zatwierdź swoją postać"
+send_answer: "Wyślij moje wybory"
+is_dead: "{charname} nie żyje"
+poll_pending: "Ankieta {pollnb} oczekuje"
+create_new_char: "Stwórz nową postać"
+roll: "Rzucić"
+temporary_disconnected: "Tymczasowe rozłączenie"
+challenge_success: 'Udało ci się w wyzwaniu {stat}.'
+challenge_failure: 'Nie udało ci się w wyzwaniu {stat}.'
+result_bonus: 'Zdobywasz {points} punktów {name}.'
+result_malus: 'Tracisz {points} punktów {name}.'
+result_group_success: "Grupa zdała egzamin"
+result_group_neutral: "Egzamin nie ma efektu dla grupy"
+result_group_failure: "Grupa nie zdała egzaminu"
+challenge_in_progress: "Wyzwanie {label} w trakcie"
+challenge_done: "Wyzwanie {label} ukończone"
+difficulty_threshold: "Musisz wyrzucić {difficulty} lub mniej, aby odnieść sukces"
+difficulty_threshold_past: "Musiałeś wyrzucić {difficulty} lub mniej, aby odnieść sukces"
+challenge_ends_in: "Wyzwanie kończy się za {timer}s"
+poll_in_progress: "Sondaż w trakcie"
+gauge_spending_description: "Zmniejsz trudność o 1, wydając punkt wskaźnika"
+gauge_spending_button_text: "Wydać 1 {label} ({current} pozostało)"
+marker_result_bonus: "Grupa zdobywa {points} z {name}"
+marker_result_malus: "Grupa traci {points} z {name}"

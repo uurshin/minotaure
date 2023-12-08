@@ -7,24 +7,15 @@ export default {
     VueMultiselect
   },
   data() {
-    const store = usePlayerStore();
-    const pick_multiselect = [];
-    const type_pick = 'all'
-    const nb_targets = 1;
-    const stat_modifier = {};
-    const gauge_modifier = {};
-    const chosen_modifier_pick_add = [];
-    const chosen_modifier_pick_remove = [];
-
     return {
-      store,
-      pick_multiselect,
-      type_pick,
-      nb_targets,
-      stat_modifier,
-      gauge_modifier,
-      chosen_modifier_pick_add,
-      chosen_modifier_pick_remove
+      store: usePlayerStore(),
+      pick_multiselect: [],
+      type_pick:'all',
+      nb_targets: 1,
+      stat_modifier: {},
+      gauge_modifier: {},
+      chosen_modifier_pick_add: [],
+      chosen_modifier_pick_remove: []
     }
   },
   mounted() {
@@ -36,7 +27,8 @@ export default {
       this.store.current_game.has_picked = true;
 
       const vm = this;
-      let relevant_characters = this.store.alive_characters;
+
+      let relevant_characters = this.store.getCharacters(true, this.store.settings.disconnected_prevent, this.store.settings.npc_prevent)
 
       if (this.pick_multiselect.length) {
         if (this.type_pick === 'one') {
@@ -121,7 +113,6 @@ export default {
             });
           }
 
-          // character.challenge = {date: date, result: result, message: messages };
           delete character.in_progress;
         })
       }
@@ -129,6 +120,7 @@ export default {
       this.nb_targets = 1;
       this.stat_modifier = {};
       this.gauge_modifier = {};
+      this.pick_multiselect = [];
       this.chosen_modifier_pick_add = [];
       this.chosen_modifier_pick_remove = [];
 
@@ -180,7 +172,7 @@ export default {
             :group-select="true"
             :placeholder="$t('select_tag')"
             :tagPlaceholder="$t('select_tag')"
-            :noOptions="$t('everyone')"
+            :showNoOptions="false"
             :options=store.tag_groups
             :multiple="true"
             :taggable="false"
@@ -217,7 +209,7 @@ export default {
               track-by="code"
               :tag-placeholder="$t('add_tag')"
               :placeholder="$t('input_word')"
-              :noOptions="$t('no_tag_create')"
+              :showNoOptions="false"
               group-values="tags"
               group-label="label"
               :group-select="false"

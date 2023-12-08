@@ -3,7 +3,8 @@ import { usePlayerStore } from '../main';
 import VueMultiselect from 'vue-multiselect'
 import {Dataset, DatasetItem, DatasetSearch, DatasetInfo, DatasetShow} from "vue-dataset";
 import VueSimpleContextMenu from 'vue-simple-context-menu';
-import { ref } from 'vue';
+import Slider from "@vueform/slider"
+import contenteditable from 'vue-contenteditable';
 
 export default {
   components: {
@@ -13,12 +14,14 @@ export default {
     DatasetSearch,
     DatasetInfo,
     DatasetShow,
-    VueSimpleContextMenu
+    VueSimpleContextMenu,
+    Slider,
+    contenteditable
   },
   setup() {
-    const card_centered = ref(null)
+    const character_centered = null;
     return {
-      card_centered
+      character_centered
     };
   },
   data() {
@@ -30,7 +33,32 @@ export default {
       search_character: '',
       filters: {},
       options_contextual: [{}],
+      character_edit: 0,
+      temp_character: null,
+      edited_character: null
+    }
+  },
+  computed: {
+    current_challenge_rate: function() {
+      if (this.store.last_challenge === undefined || !this.store.last_challenge.active) {
+        return false;
+      }
+      else if (this.store.last_challenge.nb_targets * this.store.last_challenge.nb_success === 0) {
+        return 0;
+      }
+      return Math.floor(100 / this.store.last_challenge.nb_targets * this.store.last_challenge.nb_success);
+    },
+    class_scale: function() {
+      if (this.store.last_challenge.scale instanceof Array) {
+        if (this.current_challenge_rate > this.store.last_challenge.scale[1]) { return 'scale-success' }
+        else if (this.current_challenge_rate > this.store.last_challenge.scale[0]) { return 'scale-neutral' }
+      }
+      else if (this.current_challenge_rate >= this.store.last_challenge.scale) { return 'scale-success' }
+      else if (this.current_challenge_rate === false) {
+        return '';
+      }
 
+      return 'scale-failure';
     }
   },
   mounted() {
@@ -39,7 +67,7 @@ export default {
   methods: {
     getClasses(character) {
       let classes = [];
-      if (character.challenge !== undefined && character.challenge.date === this.store.last_challenge.date) {
+      if (this.store.last_challenge !== undefined && this.store.last_challenge.active && character.challenge !== undefined && character.challenge.date === this.store.last_challenge.date) {
         classes.push('result-' + character.challenge.result);
       }
       else {
@@ -93,6 +121,9 @@ export default {
       return true;
     },
     filterChallenge(challenge) {
+      if (this.store.last_challenge === undefined) {
+        return true;
+      }
       if (this.filters['challenge'] !== undefined) {
         if (challenge.date === undefined) {
           return false;
@@ -127,7 +158,7 @@ export default {
       this.search_character = '';
     },
     sortAsChallenge(challenge) {
-      return (challenge !== undefined && challenge.date === this.store.last_challenge.date);
+      return (this.store.last_challenge !== undefined && this.store.last_challenge.active && challenge !== undefined && challenge.date === this.store.last_challenge.date);
     },
     sortAsConnected(connection) {
       return (
@@ -137,6 +168,9 @@ export default {
       )
     },
     handleClick(event, item) {
+      if (this.edited_character !== null) {
+        return;
+      }
       this.options_contextual = this.generateOptions(item)
       this.$refs.context_character.showMenu(event, item)
     },
@@ -163,10 +197,17 @@ export default {
             this.store.characters.splice(foundIndex, 1);
             break;
           case 'edit':
-            // Todo edit.
+            this.edited_character = character;
+            this.temp_character = JSON.parse(JSON.stringify(character));
+            if (this.character_centered === null || this.character_centered.token !== character.token) {
+              this.animateToCenter(character);
+            }
             break;
           case 'toggle':
             this.toggleCharacter(character);
+            break;
+          case 'roll':
+            this.store.resolveRoll(character);
             break;
         }
       }
@@ -178,29 +219,75 @@ export default {
     selectVisible(ds) {
       ds.dsRows.forEach((row) => ds.dsData[row].picked = true);
     },
-    animateToCenter(id) {
+    animateToCenter(character) {
+      if (this.edited_character !== null && this.character_centered !== null && this.character_centered.token !== character.token) {
+        // Never allow centering when
+        return;
+      }
+
       let expand = false;
-      if (this.card_centered !== this.$refs[id]) {
+      if (this.character_centered === null || this.character_centered.token !== character.token) {
+        // A card is open but it's not the one clicked.
         expand = true;
       }
-      if (this.card_centered !== null) {
-        this.card_centered.style.transform = null;
-        this.card_centered.classList.remove('centered');
-        this.card_centered = null;
+
+      if (this.character_centered !== null) {
+        this.$refs[this.character_centered.token].style.transform = null;
+        this.$refs[this.character_centered.token].classList.remove('centered');
+        if (this.edited_character !== null && this.character_centered.token === this.edited_character.token) {
+          this.validateCharacterEdition(this.edited_character);
+        }
+        this.character_centered = null;
       }
-      if (expand) {
-        this.card_centered = this.$refs[id];
-        var rect = this.$refs[id].getBoundingClientRect();
+      if (expand && character !== undefined) {
+        this.character_centered = character;
+        var rect = this.$refs[character.token].getBoundingClientRect();
         let scale = 2;
         // For bigger screens, the expanded card can take more space.
         if (window.screen.availHeight > 1000) {
           scale = 3;
         }
-        let diffX = (window.innerWidth / 2) - rect.left - this.$refs[id].offsetWidth * scale / 2;
-        let diffY = (window.innerHeight / 2) - rect.top - this.$refs[id].offsetHeight * scale / 2;
-        this.$refs[id].style.transform = 'translate(' + diffX + 'px ,' + diffY + 'px) scale3D(' + scale + ',' + scale + ',' + scale + ')';
-        this.$refs[id].classList.add('centered');
+        let diffX = (window.innerWidth / 2) - rect.left - this.$refs[character.token].offsetWidth * scale / 2;
+        let diffY = (window.innerHeight / 2) - rect.top - this.$refs[character.token].offsetHeight * scale / 2;
+        this.$refs[character.token].style.transform = 'translate(' + diffX + 'px ,' + diffY + 'px) scale3D(' + scale + ',' + scale + ',' + scale + ')';
+        this.$refs[character.token].classList.add('centered');
       }
+    },
+    validateCharacterEdition(character) {
+      const vm = this;
+      for (const [key, gauge] of Object.entries(this.temp_character.gauges)) {
+        if (vm.store.gauges[key] !== undefined) {
+          if (typeof gauge.value === 'string' || gauge.value instanceof String) {
+            gauge.value = parseInt(gauge.value);
+          }
+          if (isNaN(gauge.value) || gauge.value === undefined || gauge.value <= 0) {
+            this.temp_character.gauges[key].value = vm.store.gauges[key].deadly ? 1 : 0;
+          }
+        }
+      }
+      for (const [key, stat] of Object.entries(this.temp_character.stats)) {
+        if (vm.store.stats[key] !== undefined) {
+          if (typeof stat.value === 'string' || stat.value instanceof String) {
+            stat.value = parseInt(stat.value);
+          }
+          if (isNaN(stat.value) || stat.value === undefined || stat.value <= 0) {
+            this.temp_character.stats[key].value = 1;
+          }
+          else if (stat.value > 20) {
+            this.temp_character.stats[key].value = 20;
+          }
+        }
+      }
+      character.name = this.temp_character.name;
+      character.pseudo = this.temp_character.pseudo;
+      for (const [key, gauge] of Object.entries(this.temp_character.gauges)) {
+        character.gauges[key].value = gauge.value;
+      }
+      for (const [key, stat] of Object.entries(this.temp_character.stats)) {
+        character.stats[key].value = stat.value;
+      }
+
+      this.edited_character = null;
     }
   }
 }
@@ -215,10 +302,52 @@ export default {
   />
   <div :style="cssVars" class="tab" ref="tab">
     <div id='tab-characters-content'>
-      <div class="full" v-if="this.store.last_challenge.date !== 0">
-        <span>{{ $t('last_challenge_success_rate') }}
-          <span class="result-challenge" :class="store.last_challenge.rate <= 50 ? (store.last_challenge.rate < 50 ? 'failure' : '') : 'success'">{{ store.last_challenge.rate}}%</span>
-        </span>
+      <div class="challenge-container" v-if="this.store.last_challenge !== undefined && this.store.last_challenge.active">
+        <div v-if="this.store.last_challenge !== undefined && this.store.last_challenge.active" class="scale-container" :class="class_scale" >
+          <Slider
+              :options="{connect: [true, false] }"
+              v-model="current_challenge_rate"
+              :disabled="true"
+              :tooltips="false"
+          />
+          <div v-if="this.store.last_challenge.scale instanceof Array">
+            <span class="target-scale"
+                  :class="{validated: current_challenge_rate > this.store.last_challenge.scale[0]}"
+                  :style="{ left: this.store.last_challenge.scale[0] + '%' }"
+            >
+              {{ $t('challenge_scale_label_neutral', {scale: this.store.last_challenge.scale[0]}) }}
+            </span>
+              <span class="target-scale"
+                    :class="{validated: current_challenge_rate > this.store.last_challenge.scale[1]}"
+                    :style="{ left: this.store.last_challenge.scale[1] + '%' }"
+              >
+              {{ $t('challenge_scale_label', {scale: this.store.last_challenge.scale[1]}) }}
+            </span>
+          </div>
+
+          <div v-else>
+            <span class="target-scale"
+                  :class="{validated: current_challenge_rate > this.store.last_challenge.scale}"
+                  :style="{ left: this.store.last_challenge.scale + '%' }"
+            >
+              {{ $t('challenge_scale_label', {scale: this.store.last_challenge.scale}) }}
+            </span>
+          </div>
+        </div>
+        <div class="timer-challenge attention" v-if="this.store.last_challenge.result === undefined">
+          {{ $t('challenged_end_in', {timer: this.store.last_challenge.timer}) }}
+        </div>
+        <div v-else class="result-container">
+          <span>{{ $t('challenge_result_' + this.store.last_challenge.result) }} </span>
+          <button class="btn-valid" @click="this.store.finishChallenge()">{{ $t('finish_challenge') }}</button>
+        </div>
+      </div>
+
+      <div v-if="this.store.markers !== undefined" class="markers-container">
+        <div v-for="marker in this.store.markers">
+          <span>{{ marker.name }}</span>
+          <contenteditable class="value" tag="span" contenteditable="true" v-model="marker.value" :no-nl="true" :no-html="true" />
+        </div>
       </div>
       <div class="filter-data">
         <div v-if="store.tags.length">
@@ -233,7 +362,7 @@ export default {
               :group-select="true"
               :placeholder="$t('select_tag')"
               :tagPlaceholder="$t('select_tag')"
-              :noOptions="$t('everyone')"
+              :showNoOptions="false"
               :options=store.tag_groups
               :multiple="true"
               :taggable="false"
@@ -243,7 +372,7 @@ export default {
         <button @click="switchFilter('dead')" :class="{active : filters.dead !== undefined}">{{ $t('alive') }}</button>
         <button @click="switchFilter('connected')" :class="{active : filters.connected !== undefined}">{{ $t('connected') }}</button>
         <button v-if="store.picked_characters !== undefined && store.picked_characters.length" @click="switchFilter('picked')" :class="{active : filters.picked !== undefined}">{{ $t('char_picked') }}</button>
-        <div class="dual-button" v-if="store.last_challenge.date !== 0">
+        <div class="dual-button" v-if="current_challenge_rate !== false">
           <button @click="switchFilterChallenge('success')" class="success-button badge" :class="{active : filters.challenge !== undefined && filters.challenge === 'success'}">
             {{ $t('passed') }}<span>{{ store.last_challenge.nb_success }}</span>
           </button>
@@ -271,16 +400,30 @@ export default {
         <div class="summary full">{{ $t('count_personnage', {count: ds.dsResultsNumber}) }}{{ $t('characters_on') }}{{ store.characters.length }}</div>
         <dataset-item class="full" id="character-list">
           <template #default="{ row, rowIndex }">
-            <div @click.exact="animateToCenter(row.token)" :ref="row.token" :key="row.token" @click.shift.exact="toggleCharacter(row)" @contextmenu.prevent.stop="handleClick($event, row)" class="character" :class="[getClasses(row), !row.alive ? 'dead' : '']">
+            <div @click.exact="animateToCenter(row)" :ref="row.token" :key="row.token" @click.shift.exact="toggleCharacter(row)" @contextmenu.prevent.stop="handleClick($event, row)" class="character" :class="[getClasses(row), !row.alive ? 'dead' : '']">
               <div class="character-names">
-                <span class="character-name">{{ row.name }}</span>
-                <span class="pseudo">{{ row.pseudo }}</span>
+                <contenteditable @click.stop v-if="edited_character !== null && edited_character.token === row.token" class="value" tag="span" contenteditable="true" v-model="temp_character.name" spellcheck="false" :no-nl="true" :no-html="true" />
+                <span v-else class="character-name">
+                  {{ row.name }}
+                </span>
+                <contenteditable @click.stop v-if="edited_character !== null && edited_character.token === row.token" class="value" tag="span" contenteditable="true" v-model="temp_character.pseudo" spellcheck="false" :no-nl="true" :no-html="true" />
+                <span v-else class="pseudo">
+                  {{ row.pseudo }}
+                </span>
               </div>
               <div class="gauges">
-                <span v-for="gauge in row.gauges"><span>{{ gauge.label }}</span><span>{{ gauge.value }}</span></span>
+                <span v-for="(gauge, key) in row.gauges">
+                  <span>{{ gauge.label }}</span>
+                  <contenteditable @click.stop v-if="edited_character !== null && edited_character.token === row.token" class="value" tag="span" contenteditable="true" v-model="temp_character.gauges[key].value" :no-nl="true" :no-html="true" />
+                  <span v-else>{{ gauge.value }}</span>
+                </span>
               </div>
               <div class="stats">
-                <span v-for="stat in row.stats"><span>{{ stat.label }}</span><span>{{ stat.value }}</span></span>
+                <span v-for="(stat, key) in row.stats">
+                  <span>{{ stat.label }}</span>
+                  <contenteditable @click.stop v-if="edited_character !== null && edited_character.token === row.token" class="value" tag="span" contenteditable="true" v-model="temp_character.stats[key].value" :no-nl="true" :no-html="true" />
+                  <span v-else>{{ stat.value }}</span>
+                </span>
               </div>
               <div class="tags" v-if="row.tags !== undefined && row.tags.length">
                 <span class="tag" v-for="tag in row.tags" :class="'tag-' + tag.code">
@@ -321,12 +464,168 @@ export default {
 
     input:not(.multiselect__input) {
       padding: 0.6em 1.2em;
-      border: var(--select-border);
     }
 
-    .multiselect__tags {
-      border: var(--select-border);
+    span[contenteditable] {
+      background: white;
+      color: black;
+      border-radius: 2px;
+      padding: 0 2px;
     }
+
+    .markers-container {
+      flex-basis: 100%;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      font-size: 25px;
+
+      > div {
+        display: flex;
+        gap: 10px;
+
+        .value {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: var(--button-background);
+          color: var(--button-color);
+          border-radius: 8px;
+          padding: 0 10px;
+        }
+      }
+    }
+
+    .challenge-container {
+      display: flex;
+      margin: 42px 0;
+      flex-basis: 100%;
+      align-items: center;
+
+      > .timer-challenge {
+        align-self: center;
+        flex-shrink: 0;
+        background: #d1d5db;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 15px;
+        border-left: 1Px solid black;
+        font-weight: bold;
+      }
+
+      > button {
+        align-self: center;
+        flex-shrink: 0;
+        margin-left: 15px;
+      }
+
+      .scale-container {
+        position: relative;
+        flex: 1;
+
+        &.double-scale {
+          margin: 60px 0;
+        }
+
+        .slider-base, .slider-connects, .slider-connect {
+          border-radius: 0;
+        }
+        .slider-connect {
+          transition: all 1s ease-in-out;
+        }
+        &.scale-success {
+          .slider-connect {
+            background: var(--success-background);
+          }
+        }
+        &.scale-neutral {
+          .slider-connect {
+            background: yellow;
+          }
+        }
+        &.scale-failure {
+          .slider-connect {
+            background: var(--failure-background);
+          }
+        }
+
+        .slider-origin {
+          display: none;
+        }
+
+        > div {
+          width: 100%;
+
+          .target-scale {
+            position: absolute;
+            top: -105%;
+            z-index: 1;
+            background: var(--font-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--inverse-font-color);
+            padding: 0 10px;
+            height: 80%;
+
+            &:after {
+              content: "";
+              background: var(--font-color);
+              display: block;
+              width: 2px;
+              height: 157%;
+              position: absolute;
+              bottom: -155%;
+              left: 0;
+            }
+
+            &.validated:before {
+              display: flex;
+              content: "✅";
+              color: green;
+              width: 24px;
+              height: 24px;
+              border-radius: 100%;
+              align-items: center;
+              justify-content: center;
+              margin-right: 3px;
+            }
+
+            + .target-scale {
+              top: unset;
+              bottom: -105%;
+
+              &:after {
+                bottom: unset;
+                top: -157%;
+              }
+            }
+          }
+        }
+      }
+
+      .result-container {
+        display: flex;
+        flex-direction: column;
+        margin-left: 15px;
+        gap: 6px;
+        position: relative;
+
+        > span {
+          font-weight: bold;
+          position: absolute;
+          top: -52px;
+          width: 100%;
+          height: 50px;
+          display: flex;
+          align-items: flex-end;
+          justify-content: center;
+        }
+      }
+    }
+
   }
 
   .summary {
@@ -345,7 +644,7 @@ export default {
     > .character {
       display: flex;
       flex-direction: column;
-      gap: 3px;
+      gap: 6px;
       padding: 3px 6px 6px 6px;
       border: 1px solid var(--border-color);
       background: var(--background-card-color);
@@ -391,6 +690,7 @@ export default {
       > .stats, .gauges {
         display: flex;
         flex-direction: column;
+        gap: 1px;
 
         > span {
           display: flex;
@@ -401,11 +701,13 @@ export default {
       .character-names {
         display: flex;
         flex-direction: column;
-        margin-bottom: 6px;
 
         .character-name {
           font-size: 1.2em;
           font-weight: bold;
+        }
+        .pseudo {
+          min-height: 20px;
         }
       }
     }
@@ -492,17 +794,16 @@ export default {
   }
 
   .tags {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
     gap: 3px;
     margin-top: auto;
 
     > .tag {
       border-radius: 10px;
       padding: 1px 5px;
-
-      display: flex;
-      align-items: center;
       gap: 2px;
-      justify-content: center;
 
       .label-name {
         display: flex;

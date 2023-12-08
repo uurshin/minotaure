@@ -9,50 +9,94 @@ export default {
     VueMultiselect
   },
   data() {
-    const store = usePlayerStore();
-    const nb_options = 0;
-    const answers = {};
-    const label = '';
-    const poll_tab = 'active';
-    const open_past_poll = ref(null);
-    const poll_show = [];
-    const tags_poll = [];
-    const chosen_tags = [];
-
     return {
-      store, nb_options, answers, label, poll_tab, open_past_poll, poll_show, tags_poll, chosen_tags
+      store: usePlayerStore(),
+      nb_options: 0,
+      answers: {},
+      label: '',
+      poll_tab: 'active',
+      open_poll: null,
+      poll_show: [],
+      tags_poll: [],
+      chosen_tags: [],
+      name_draft: '',
+      draft_in_progress: false
     }
+  },
+  computed: {
+    isNewPollInvalid: function() {
+      if (this.nb_options < 2 || this.label === '') return true;
+      let nb_valid = 0;
+      for (let i = 1; i < this.nb_options + 1; i++) {
+        if ((this.answers[i] === '' || this.answers[i] === undefined) && (this.chosen_tags[i] !== undefined && this.chosen_tags[i].length > 0)) {
+          return true;
+        }
+        if (this.answers[i] !== '' && this.answers[i] !== undefined) {
+          nb_valid += 1;
+        }
+      }
+      return nb_valid < 2;
+    },
   },
   mounted() {
 
   },
   methods: {
     startPoll() {
-      const date = Date.now();
-      let poll = {
-        code: date,
-        label: this.label,
-        answers: this.answers,
-        active: true
+      const vm = this;
+      let poll = this.addPoll();
+
+      let selectedCharacters
+
+      let has_picked = false;
+      if (vm.chosen_tags.findIndex((tag) => tag.code === 'targets') > -1) {
+        has_picked = true;
       }
-      this.addPoll(poll);
+
+      if (poll.targets.length) {
+        selectedCharacters = this.store.connected_characters(true).filter((character) => vm.store.filterCharacterByTagsAndPicked(character, poll.targets, has_picked));
+      }
+      else {
+        selectedCharacters = this.store.connected_characters(true);
+      }
+
+      poll.nb_targets = selectedCharacters.length;
+      let answers = {};
+      Object.entries(poll.options).forEach((option) => answers[option[0]] = option[1].label)
+
+      selectedCharacters.forEach(function(character) {
+        character.polls[poll.code] = { label: poll.label, options: answers, active: true };
+      })
+
       this.poll_tab = 'active';
     },
-    toggle_poll(id_poll) {
-      if (this.open_past_poll != null) {
-        this.open_past_poll[0].classList.remove('open');
+    togglePoll(id_poll) {
+      if (this.open_poll === id_poll) {
+        this.open_poll = null;
       }
-      this.open_past_poll = this.$refs['past_poll_' + id_poll];
-      this.open_past_poll[0].classList.add('open');
+      else {
+        this.open_poll = id_poll;
+      }
     },
     finishPoll(id_poll) {
       const vm = this;
-      this.store.polls[id_poll].active = false;
+      this.store.polls[id_poll].active = -1;
+
+      let options = Object.entries(vm.store.polls[id_poll].options);
+      options.forEach(function(option) {
+        if (option[1].tags !== undefined) {
+          option[1].tags = option[1].tags.filter((tag) => vm.store.getTagFromCode(tag.code) !== undefined);
+        }
+      });
+
+      this.store.polls[id_poll].options = Object.fromEntries(options);
       this.store.characters.forEach(function(character) {
         if (character.polls[id_poll] !== undefined) {
           if (character.polls[id_poll].answer !== undefined && vm.store.polls[id_poll].options[character.polls[id_poll].answer].tags !== undefined) {
             let new_tags = vm.store.polls[id_poll].options[character.polls[id_poll].answer].tags;
-            new_tags.forEach((tag) => character.tags.push(tag));
+            new_tags.forEach(function(tag) {
+              character.tags.push(tag);
+            });
           }
           delete character.polls[id_poll];
         }
@@ -78,42 +122,61 @@ export default {
         return (100 / poll.nb_targets * count).toFixed(2)
       }
     },
-    addPoll(poll) {
-      const vm = this;
-      this.store.polls[poll.code] = {
-        label: poll.label,
-        active: true,
-        options: {}
+    addPoll(draft = false) {
+      const date = Date.now();
+      this.store.polls[date] = {
+        code: date,
+        label: this.label,
+        active: draft ? 0 : 1,
+        name: draft ? this.name_draft : '',
+        options: {},
+        targets: this.tags_poll
       };
 
-      for (const key in poll.answers) {
-        this.store.polls[poll.code].options[key] = {
-          label: poll.answers[key],
-          count: 0,
-          tags: this.chosen_tags[key]
+      for (const key in this.answers) {
+        if (this.answers[key] !== '') {
+          this.store.polls[date].options[key] = {
+            label: this.answers[key],
+            count: 0,
+            tags: this.chosen_tags[key]
+          }
         }
       }
 
-      let selectedCharacters
-      if (this.tags_poll.length) {
-        selectedCharacters = this.store.connected_characters(true).filter((character) => vm.store.filterCharacterByTagsAndPicked(character, vm.tags_poll));
+      this.resetPoll();
+      return this.store.polls[date];
+    },
+    deletePoll(code) {
+      delete this.store.polls[code];
+    },
+    saveDraftPoll() {
+      this.addPoll(true);
+      this.poll_tab = 'draft';
+      this.draft_in_progress = false;
+      this.name_draft = '';
+    },
+    loadPoll(code, destroy = true) {
+      const vm = this;
+      let poll = this.store.polls[code];
+      this.label = poll.label;
+      Object.entries(poll.options).forEach(function(option) {
+        vm.answers[option[0]] = option[1].label;
+        if (option[1].tags !== undefined) {
+          vm.chosen_tags[option[0]] = option[1].tags.filter((tag) => vm.store.getTagFromCode(tag.code) !== undefined);
+        }
+      });
+      this.nb_options = Object.entries(poll.options).length;
+      this.poll_tab = 'add';
+      if (destroy) {
+        this.deletePoll(code);
       }
-      else {
-        selectedCharacters = this.store.connected_characters(true);
-      }
-
-      this.store.polls[poll.code].nb_targets = selectedCharacters.length;
-      selectedCharacters.forEach(function(character) {
-        character.polls[poll.code] = { label: poll.label, options: poll.answers, active: true };
-      })
+    },
+    resetPoll() {
       this.nb_options = 0;
       this.label = '';
       this.tags_poll = [];
       this.chosen_tags = [];
       this.answers = {};
-    },
-    delete_poll(code) {
-      delete this.store.polls[code];
     },
     addTag(tag_label, key) {
       let group = this.store.tag_groups.find((element) => (element.code === 'freetag'));
@@ -136,40 +199,20 @@ export default {
       <div class="actions">
         <button @click="poll_tab = 'add'" class="icon-add" :class="{ active:poll_tab === 'add' }" >{{ $t("add_poll") }}</button>
         <button @click="poll_tab = 'active'" :class="{ active:poll_tab === 'active' }" >{{ $t("active_polls") }}</button>
+        <button @click="poll_tab = 'draft'" :class="{ active:poll_tab === 'draft' }" >{{ $t("drafted_polls") }}</button>
         <button @click="poll_tab = 'past'" :class="{ active:poll_tab === 'past' }" >{{ $t("past_polls") }}</button>
       </div>
 
       <div class="vertical-wrapper add-poll" v-if="poll_tab === 'add'">
-        <div>
-          <label for="poll_targets">{{ $t('targets') }}</label>
-          <vue-multiselect
-              ref="poll_targets"
-              id="poll_targets"
-              class="left-multiselect"
-              v-model="tags_poll"
-              label="label"
-              track-by="code"
-              group-values="tags"
-              group-label="label"
-              :group-select="true"
-              :placeholder="$t('select_tag')"
-              :tagPlaceholder="$t('select_tag')"
-              :noOptions="$t('everyone')"
-              :options=store.tag_groups_plus_targets
-              :multiple="true"
-              :taggable="false"
-              :hideSelected="true"
-          ></vue-multiselect>
-        </div>
-        <div>
+        <div id="question-wrapper">
           <label for="question">{{ $t('question') }}</label>
           <input @keyup.enter="focus(0)" id="question" v-model=label type='text'>
         </div>
-        <div>
+        <div id="answers-wrapper">
           <span>{{ $t('possible_choices') }}</span>
           <div v-for="n in nb_options" class="poll-choice">
             <div>
-              <label :for="'choice_' + n">{{ $t('nb_choice', {'nb':n}) }}</label>
+              <label :for="'choice_' + n">{{ $t('nb_choice', {'nb': n}) }}</label>
               <input :id="'choice_' + n" :ref="'choice_' + n" @keyup.enter="focus(n)" v-model=answers[n] type='text'>
             </div>
             <div>
@@ -182,7 +225,7 @@ export default {
                   track-by="code"
                   :tag-placeholder="$t('add_tag')"
                   :placeholder="$t('input_word')"
-                  :noOptions="$t('no_tag_create')"
+                  :showNoOptions="false"
                   group-values="tags"
                   group-label="label"
                   :group-select="false"
@@ -196,7 +239,38 @@ export default {
           </div>
           <button @click="nb_options += 1">{{ $t('add_poll_choice') }}</button>
         </div>
-        <button class="btn-valid" :disabled="nb_options < 2 || label === ''" @click="startPoll">{{ $t('start_poll') }}</button>
+        <div id="targets-wrapper">
+          <label for="poll_targets">{{ $t('targets') }}</label>
+          <vue-multiselect
+              ref="poll_targets"
+              id="poll_targets"
+              class="left-multiselect"
+              v-model="tags_poll"
+              label="label"
+              track-by="code"
+              group-values="tags"
+              group-label="label"
+              :group-select="true"
+              :placeholder="$t('select_tag')"
+              :tagPlaceholder="$t('select_tag')"
+              :showNoOptions="false"
+              :options=store.tag_groups_plus_targets
+              :multiple="true"
+              :taggable="false"
+              :hideSelected="true"
+          ></vue-multiselect>
+        </div>
+        <div class="poll-group-btn" v-if="!draft_in_progress">
+          <button class="btn-valid" :disabled="isNewPollInvalid" @click="startPoll">{{ $t('start_poll') }}</button>
+          <button @keyup.enter="draft_in_progress = true; this.$refs['save_draft_poll'][0].focus();" @click="draft_in_progress = true" :disabled="isNewPollInvalid">{{ $t('save_draft_poll') }}</button>
+          <button class='cancel-poll btn-danger' @click="resetPoll">{{ $t('cancel') }}</button>
+        </div>
+        <div class="poll-group-btn" v-else>
+          <label for="name_draft">{{ this.$t('choose_name_draft') }}</label>
+          <input ref="save_draft_poll" type="text" id="name_draft" v-model="name_draft"/>
+          <button class="btn-valid" @click="saveDraftPoll()">{{ $t('save_draft_poll') }}</button>
+          <button class='cancel-poll btn-danger' @click="draft_in_progress = false">{{ $t('cancel') }}</button>
+        </div>
       </div>
 
       <div class="vertical-wrapper" v-if="poll_tab === 'active'">
@@ -217,12 +291,29 @@ export default {
           </div>
         </div>
       </div>
+
+      <div class="vertical-wrapper wrapper-poll-draft" v-if="poll_tab === 'draft'">
+        <div :class="{open: (key === open_poll)}" class="list-polls poll-past" v-for="(poll, key) in store.drafted_polls">
+          <div class="wrapper-title">
+            <span class="title">{{ poll.name}}</span>
+            <button class='see-more' @click="togglePoll(key)">{{ (key === open_poll) ? $t('see_less') : $t('see_more') }}</button>
+            <button class="btn-valid" @click="loadPoll(key)">{{ $t('load_poll') }}</button>
+            <button class='btn-danger' @click="deletePoll(key)">{{ $t('delete') }}</button>
+          </div>
+          <div>{{ $t('question_label') }}{{ poll.label}}</div>
+          <div v-for="(option, key) in Object.entries(poll.options)">
+            {{ $t('nb_choice_label', {'nb': key + 1}) }}{{ option[1].label }}
+          </div>
+        </div>
+      </div>
+
       <div class="vertical-wrapper" v-if="poll_tab === 'past'">
-        <div :ref="'past_poll_'+ key" class="list-polls poll-past" v-for="(poll, key) in store.past_polls">
+        <div :class="{open: (key === open_poll)}" class="list-polls poll-past" v-for="(poll, key) in store.past_polls">
           <div class="wrapper-title">
             <span class="title">{{ poll.label}}</span>
-            <button class='see-more' @click="toggle_poll(key)">{{ $t('see_more') }}</button>
-            <button class="btn-danger" @click="delete_poll(key)">{{ $t('delete') }}</button>
+            <button class='see-more' @click="togglePoll(key)">{{ $t('see_more') }}</button>
+            <button @click="loadPoll(key, false)">{{ $t('load_poll') }}</button>
+            <button class="btn-danger" @click="deletePoll(key)">{{ $t('delete') }}</button>
           </div>
           <div v-for="option in Object.entries(poll.options).sort(function(a, b) { return b[1].count - a[1].count} )">
             {{ option[1].label }} : {{ option[1].count > 0 ? (100 / poll.nb_targets * option[1].count).toFixed(2) : 0 }}%
@@ -235,6 +326,34 @@ export default {
 
 <style scoped lang="scss">
   .vertical-wrapper {
+    &.wrapper-poll-draft {
+      counter-set: poll;
+
+      > div {
+        .title {
+          display: flex;
+          gap: 10px;
+          align-items: center;
+
+          &:before {
+            content: counter(poll);
+            counter-increment: poll;
+            padding: 5px;
+            border-radius: 100%;
+            background: var(--font-color);
+            color: var(--inverse-font-color);
+            align-self: baseline;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+        }
+      }
+    }
+
     > div {
       background: var(--background-card-color);
       padding: 10px;
@@ -242,6 +361,17 @@ export default {
       display: flex;
       flex-direction: column;
       gap: 15px;
+
+      &.poll-group-btn {
+        flex-direction: row;
+        align-items: center;
+        input, button {
+          flex: 0 0 auto;
+        }
+        .cancel-poll {
+          margin-left: auto;
+        }
+      }
     }
 
     input[type=text] {
@@ -262,7 +392,24 @@ export default {
   }
   .add-poll {
     text-align: left;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    #question-wrapper {
+      justify-content: space-between;
+      order: -2;
+      flex: 1;
+    }
+    #targets-wrapper {
+      order: -1;
+      flex: 1;
+    }
+
+    > div {
+      flex-basis: 100%;
+    }
   }
+
   .list-polls {
     display: flex;
     gap: 10px;
@@ -280,6 +427,7 @@ export default {
 
     .full_attendance {
       color: var(--success-color);
+      font-weight: bold;
     }
 
     &.poll-active {
@@ -292,6 +440,9 @@ export default {
       border-radius: 10px;
       padding: 10px 15px;
 
+      > span, .results {
+        font-size: 1.5em;
+      }
       .results {
         flex-basis: 100%;
         filter: blur(10px);
@@ -304,6 +455,7 @@ export default {
       transition: all 0.5s ease-in-out;
       transform-origin: top right;
     }
+
     &.poll-past {
       flex-direction: column;
       align-items: stretch;
@@ -323,9 +475,9 @@ export default {
         > div {
           display: flex;
         }
-        .see-more {
-          display: none;
-        }
+        //.see-more {
+        //  display: none;
+        //}
       }
     }
   }

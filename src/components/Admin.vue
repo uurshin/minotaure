@@ -1,6 +1,6 @@
 <script>
 import router, { usePlayerStore } from '../main';
-import { ref, watch, toRefs } from 'vue'
+import { ref, watch } from 'vue'
 import '../assets/css/shepherd.css';
 import 'vue-simple-context-menu/dist/vue-simple-context-menu.css'
 import AdminTabIntro from '../components/AdminTabIntro.vue'
@@ -12,9 +12,12 @@ import AdminTabChallenge from '../components/AdminTabChallenge.vue'
 import AdminTabPick from '../components/AdminTabPick.vue'
 import AdminTour from '../components/AdminTour.vue'
 import { Peer } from "peerjs";
+import QrcodeVue from 'qrcode.vue';
+import { saveAs } from 'file-saver';
 
 export default {
   components: {
+    QrcodeVue,
     AdminTabIntro,
     AdminTabCharacters,
     AdminTabTags,
@@ -34,7 +37,7 @@ export default {
         let games = JSON.parse(localStorage.getItem('games'));
         let found = games.find((element) => element.id === temp_game_parsed.id);
         this.store.setCurrentGame(found);
-        let peer = new Peer(temp_game_parsed.peer);
+        let peer = new Peer(temp_game_parsed.peer, this.store.getPeerOptions());
         peer.reconnect();
         this.store.setPeer(peer);
       }
@@ -45,11 +48,9 @@ export default {
   },
   setup() {
     const store = usePlayerStore();
-    const is_live = ref[false];
-    const btn_live = ref('Démarrer la vidéo');
     const current_tab = ref('');
     return {
-      store, is_live, btn_live, current_tab
+      store, current_tab
     }
   },
   data() {
@@ -57,10 +58,9 @@ export default {
       stream: null,
       calls: [],
       peer: null,
-      video: null,
-      is_live: false,
       game_name_focused: -1,
       temp_game_name: '',
+      invite_modal: false,
       tabs: [
         {id: 'intro', label: 'Introduction'},
         {id: 'characters', label: 'characters', tutorial: 'off' },
@@ -85,7 +85,15 @@ export default {
     },
     gameLabel: function() {
       return (this.game_name_focused === 0 ? this.$t('game_rename') : this.store.current_game.name);
-    }
+    },
+    shareURL: function() {
+      if (window.location.origin === 'null') {
+        return '';
+      }
+      else {
+        return window.location.href.slice(0, location.href.lastIndexOf("/")) + 'join?id=' + this.store.peer.id;
+      }
+    },
   },
   created() {
     let vm = this;
@@ -123,29 +131,52 @@ export default {
     }
 
     // It's the first time the game is loaded, so initialize some data.
+    let init_keys = {
+      tag_groups: [],
+      gauges: {},
+      polls: {},
+      challenges: [],
+      stats: {},
+      settings: {},
+      markers: {}
+    }
     if (vm.store.current_game.initialized === false) {
       vm.store.current_game.stats = {
         fo1: {name: vm.$t('strength')},
         me1: {name: vm.$t('mind')}
       }
       vm.store.current_game.gauges = {
-        li1: {name: vm.$t('health'), value: 10, deadly: true},
-        wi1: {name: vm.$t('will'), value: 10, deadly: false}
+        li1: {name: vm.$t('health'), value: 10, deadly: true, spending: {}},
+        wi1: {name: vm.$t('will'), value: 10, deadly: false, spending: {}}
       }
-      vm.store.current_game.tag_groups = [];
-      vm.store.current_game.polls = {};
       vm.store.current_game.initialized = true;
-    }
-    else {
-      let init_keys = ['stats', 'tag_groups', 'gauges'];
-      init_keys.forEach(function(init_key) {
-        if (vm.store.current_game[init_key] === undefined) {
-          vm.store.current_game[init_key] = [];
-        }
-      })
+      vm.store.current_game.settings = {};
+      vm.store.current_game.settings.challenge_timer = 15;
+      vm.store.current_game.settings.disconnected_prevent = true;
+      vm.store.current_game.settings.npc_prevent = false;
     }
 
+    Object.entries(init_keys).forEach(function(init_key) {
+      if (vm.store.current_game[init_key[0]] === undefined) {
+        vm.store.current_game[init_key[0]] = init_key[1];
+      }
+    })
+
+    // Resolve the last challenge if the game was stopped before it could end.
+    if (vm.store.last_challenge !== undefined && vm.store.last_challenge.active) {
+      vm.store.rollRemaining();
+      vm.store.groupConsequencesResolve();
+    }
+
+    // Markers have free edition, but only number should go into it, so watch and correct.
+    watch(this.store.markers, this.validateNumber);
+
     this.peer = this.store.peer;
+
+    // Remove the tutorial step for start button if the game is already started.
+    if (this.store.current_game.game_started) {
+      this.$refs['admin_tour'].removeStep('step_start');
+    }
 
     this.peer.on('error', function (err) {
       console.log('Minotaure : peer admin error - ' + err.type);
@@ -230,7 +261,7 @@ export default {
               // It's a death reset and we should erase some data of the dead.
               else {
                 new_character.connection = null;
-                new_character.token = null;
+                new_character.token = Math.random() + Math.random();
               }
             }
           }
@@ -264,6 +295,30 @@ export default {
             character.polls[data.code].answer = data.answer;
           }
         }
+        else if (data.handshake === 'roll') {
+          let character = vm.store.retrieveCharacter(data.token);
+          if (character && character.challenge.wait_roll !== undefined && character.challenge.wait_roll) {
+            vm.store.resolveRoll(character);
+          }
+        }
+        else if (data.handshake === 'spendGauge') {
+          let character = vm.store.retrieveCharacter(data.token);
+          if (
+              character &&
+              character.challenge.wait_roll &&
+              data.code !== undefined &&
+              character.challenge.spendable[data.code] && // The gauge is spendable.
+              character.gauges[data.code].value > (vm.store.gauges[data.code].deadly ? 1 : 0) && // Character still has the points to spend.
+              character.challenge.difficulty < 19 // Difficulty is not already max out.
+          ) {
+            let adjusted_difficulty = character.challenge.difficulty - character.challenge.spendable[data.code];
+            if (adjusted_difficulty > 19) {
+              adjusted_difficulty = 19;
+            }
+            character.gauges[data.code].value -= 1;
+            character.challenge.difficulty = adjusted_difficulty;
+          }
+        }
       });
 
       conn.on('close', function() {
@@ -293,20 +348,27 @@ export default {
       this.current_tab = nameRef;
       this.$refs['admin_tab_' + nameRef].$refs['tab'].classList.add('open');
     },
-    shareLink(event) {
-      const vm = this;
+    shareLink() {
       if (window.location.origin === 'null') {
-        navigator.clipboard.writeText(this.store.peer.id);
-        event.target.innerText = this.$t("game_id_copied");
+        return this.store.peer.id;
       }
       else {
-        navigator.clipboard.writeText(window.location.href.slice(0, location.href.lastIndexOf("/")) + 'join?id=' + this.store.peer.id);
-        event.target.innerText = this.$t("invite_link_copied");
+        return (window.location.href.slice(0, location.href.lastIndexOf("/")) + 'join?id=' + this.store.peer.id);
       }
-
+    },
+    copyLink(event) {
+      const vm = this;
+      navigator.clipboard.writeText(this.shareLink());
+      event.target.innerText = window.location.origin === 'null' ? this.$t("game_id_copied") : this.$t("invite_link_copied");
       setTimeout(function() {
-        event.target.innerText = vm.$t('invite_to_play');
+        event.target.innerText = vm.$t("copy");
       }, 2000)
+    },
+    copyQR() {
+      let canvas = document.getElementById('qr-code');
+      canvas.toBlob(function(blob) {
+        saveAs(blob, "qr.png");
+      });
     },
     startTour() {
       this.$refs['admin_tour'].startTour();
@@ -323,6 +385,7 @@ export default {
       this.store._temp_connections = [];
       this.store.current_game.tuto_on = false;
       this.changeTab('characters');
+      this.$refs['admin_tour'].removeStep('step_start');
     },
     gameStartRename() {
       this.game_name_focused = 1;
@@ -353,6 +416,21 @@ export default {
         game_token: vm.store.current_game.id,
         character: vm.store.prepareCharacter(character)
       });
+    },
+    validateNumber(objects) {
+      this.$nextTick(() => {
+        for (const [key, object] of Object.entries(objects)) {
+          if (typeof objects[key].value === 'string' || objects[key].value instanceof String) {
+            let temp_value = parseInt(object.value);
+            if (isNaN(temp_value) || temp_value === undefined) {
+              objects[key].value = 0;
+            }
+            else {
+              objects[key].value = temp_value;
+            }
+          }
+        }
+      });
     }
   }
 }
@@ -377,12 +455,26 @@ export default {
       </div>
       <div class="tab-details">
         <button ref="step_help" @click="startTour" class="icon-question">{{ $t('help')}}</button>
-        <button ref="step_invite" class="icon-email" v-if="peer !== undefined" @click="shareLink">
+        <button ref="step_invite" class="icon-email" v-if="peer !== undefined" @keyup.enter="invite_modal = !invite_modal" @click="invite_modal = !invite_modal">
           {{ $t("invite_to_play") }}
         </button>
         <button ref="step_start" class="icon-play" :class="{'btn-important': !store.current_game.tuto_on, attention: !this.store.current_game.tuto_on}" v-if="!store.current_game.game_started" @click="startGame">
           {{ $t("start") }}
         </button>
+        <div id="invite-overlay" v-if="invite_modal" @click.self="invite_modal = false">
+          <div>
+            <div>
+              <span>{{ shareURL === '' ? $t('share_invite_id') : $t('share_invite_link') }} </span>
+              <span class="invite-link">{{ shareLink() }}</span>
+              <button @keyup.enter="copyLink($event)" @click="copyLink($event)">{{ $t('copy')}}</button>
+            </div>
+            <div v-if="shareURL !== ''">
+              <span>{{ $t('qr_code_download')}}</span>
+              <qrcode-vue id="qr-code" ref="qr_code" margin="3" :value="shareURL" :size="200" level="H" />
+              <button @keyup.enter="copyQR()" @click="copyQR()">{{ $t('download')}}</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="tabs-content">
@@ -405,8 +497,14 @@ export default {
     button {
       background-color: var(--button-background);
 
-      &.active {
-        border: 1px solid #39c6ff;
+      &:not(.badge) {
+        &.active {
+          filter: brightness(150%);
+          outline: 1px solid var(--button-border-active)
+        }
+      }
+      &:hover {
+        filter: brightness(150%);
       }
     }
 
@@ -496,9 +594,6 @@ export default {
         border-top-right-radius: 0;
         border-top-left-radius: 0;
       }
-      //.multiselect__input {
-      //  left: 0;
-      //}
     }
 
     .multiselect__tags-wrap {
@@ -549,7 +644,7 @@ export default {
       font-weight: 500;
       border-bottom: 1px solid var(--font-color);
 
-      @include media("<desktop") {
+      @include media("<=desktop") {
         padding: 15px 10px;
       }
 
@@ -594,6 +689,10 @@ export default {
       display: none;
       padding: 30px;
       flex-grow: 1;
+
+      @include media("<=desktop") {
+        padding: 20px;
+      }
 
       &.open {
         display: block;
@@ -665,6 +764,24 @@ export default {
     }
   }
 
+  .summary {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .select {
+    height: 49px;
+    background: var(--font-color);
+    border-radius: 8px;
+    color: var(--background-color);
+    border: 1px solid var(--font-color);
+  }
+
+  .multiselect__placeholder {
+    display: none;
+  }
+
   @keyframes color {
     0% {
       background-color: var(--success-background);
@@ -685,6 +802,47 @@ export default {
     }
     100% {
       background-color: black;
+    }
+  }
+
+  #invite-overlay {
+    position: fixed;
+    z-index: 999;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.8);
+
+    .invite-link {
+      padding: 8px 16px;
+      border-radius: 8px;
+      border-style: dotted;
+    }
+
+    > div {
+      display: flex;
+      min-width: 400px;
+      gap: 15px;
+
+      > div {
+        flex: 1;
+        background: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 15px;
+        border-radius: 15px;
+      }
+
+      > canvas {
+        border: 10px solid white;
+      }
     }
   }
 </style>

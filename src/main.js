@@ -58,13 +58,7 @@ export const usePlayerStore = defineStore('playerStore', {
         _reconnect_interval: null,
         _reconnect_timeout: null,
         _message: '',
-        _temp_connections: [],
-        _last_challenge: {
-            date: 0,
-            nb_bonus: 0,
-            nb_malus: 0,
-            nb_target: 0
-        }
+        _temp_connections: []
     }),
     getters: {
         peer: (state) => state._user_peer,
@@ -88,11 +82,13 @@ export const usePlayerStore = defineStore('playerStore', {
         },
         stats: (state) => state._current_game.stats,
         gauges: (state) => state._current_game.gauges,
+        markers: (state) => state._current_game.markers,
+        settings: (state) => state._current_game.settings,
         leaving: (state) => state._leaving,
         temp_peer: (state) => state._temp_peer,
         temp_connections: (state) => state._temp_connections,
         message: (state) => state._message,
-        last_challenge: (state) => state._last_challenge,
+        last_challenge: (state) => state._current_game.challenges !== undefined ? state.challenges[state.challenges.length - 1] : undefined,
         tags(state) {
             let flatten_tags = [];
             if (state._current_game.tag_groups !== undefined) {
@@ -102,21 +98,39 @@ export const usePlayerStore = defineStore('playerStore', {
             }
             return flatten_tags;
         },
+        challenges: (state) => state._current_game.challenges,
         polls: (state) => state._current_game.polls,
         active_polls: (state) => state._current_game.polls !== undefined ?
             Object.fromEntries(Object.entries(state._current_game.polls)
-            .filter((poll) => poll[1].active)
+            .filter((poll) => poll[1].active === 1)
             .sort(function(a, b) {
                 return b[0] - a[0];
             })) : [],
+        drafted_polls: (state) => state._current_game.polls !== undefined ?
+            Object.fromEntries(Object.entries(state._current_game.polls)
+                .filter((poll) => poll[1].active === 0)
+                .sort(function(a, b) {
+                    return b[0] - a[0];
+                })) : [],
         past_polls: (state) => state._current_game.polls !== undefined ?
             Object.fromEntries(Object.entries(state._current_game.polls)
-            .filter((poll) => !poll[1].active)
+            .filter((poll) => poll[1].active === -1)
             .sort(function(a, b) {
                 return b[0] - a[0];
-            })) : []
+            })) : [],
     },
     actions: {
+        getPeerOptions() {
+            let self_host = localStorage.getItem('self_host');
+            if (self_host !== null) {
+                return {
+                    host: "localhost",
+                    port: 9000,
+                    path: "/myapp"
+                }
+            }
+            return {}
+        },
         connected_characters(alive = false) {
             const temp = this;
             return this.current_game.characters.filter(function(character) {
@@ -225,6 +239,7 @@ export const usePlayerStore = defineStore('playerStore', {
         },
         characterWatch(new_character) {
             let vm = this;
+
             for (const [key, gauge] of Object.entries(new_character.gauges)) {
                 if (vm.gauges[key] !== undefined && vm.gauges[key].deadly && gauge.value <= 0) {
                     new_character.gauges[key].value = 0;
@@ -258,32 +273,11 @@ export const usePlayerStore = defineStore('playerStore', {
             let tags = [];
             let ranking_stat = [];
 
-            // Gather the tags selected by the player.
-            if (data != null) {
-                data.choices.forEach(function(code) {
-                    let found_tag = vm.getTagFromCode(code);
-                    if (found_tag) {
-                        tags.push(found_tag);
-                    }
-                });
-            }
-          
-            if (data === null) {
-                this.getStartGroupTags().forEach(function(group) {
-                    tags.push(vm.getRandomTagFromGroup(group));
-                })
-            }
-
-            // Choose one tag for each random tag group.
-            this.getRandomGroupTags().forEach(function(group) {
-                tags.push(vm.getRandomTagFromGroup(group));
-            })
-
             let character = {
                 game_name: this.current_game.name,
                 token: token,
                 name: data != null ? data.name : 'Perso ' + Math.floor(Math.random() * Math.random() * 100000),
-                pseudo: data != null ? data.pseudo : null,
+                pseudo: data != null ? data.pseudo : i18n.global.t('non_player'),
                 stats: {},
                 gauges: {},
                 alive: true,
@@ -293,6 +287,27 @@ export const usePlayerStore = defineStore('playerStore', {
                 connection: conn != null ? conn : false,
                 watched: false,
             }
+
+            // Gather the tags selected by the player.
+            if (data !== null) {
+                data.choices.forEach(function(code) {
+                    let found_tag = vm.getTagFromCode(code);
+                    if (found_tag) {
+                        tags.push(found_tag);
+                    }
+                });
+            }
+            else {
+                this.getStartGroupTags().forEach(function(group) {
+                    tags.push(vm.getRandomTagFromGroup(group));
+                })
+                character.npc = true;
+            }
+
+            // Choose one tag for each random tag group.
+            this.getRandomGroupTags().forEach(function(group) {
+                tags.push(vm.getRandomTagFromGroup(group));
+            })
 
             // Roll the dices to determine the character's stats.
             // The sum of all dice rolls should be (10 * number of stats).
@@ -407,9 +422,25 @@ export const usePlayerStore = defineStore('playerStore', {
                 )
             )
         },
-        filterCharacterByTagsAndPicked(character, chosen_tags) {
+        getCharacters(alive = true, connected = true, npc = true) {
+            const vm = this;
+            return this.characters.filter(
+              function (character) {
+                  return (
+                    (alive ? character.alive : true) &&
+                    (connected ? (
+                      character.npc !== undefined ||
+                      (character.connection !== null &&
+                      vm.connections[character.connection] !== undefined &&
+                      vm.connections[character.connection].open === true)
+                    ) : true) &&
+                    (npc ? character.npc === undefined : true)
+                  )
+              })
+        },
+        filterCharacterByTagsAndPicked(character, chosen_tags, select_picked = false) {
             let is_picked = false;
-            if (chosen_tags.findIndex((tag) => tag.code === 'targets') > -1) {
+            if (select_picked) {
                 is_picked = (character.picked !== undefined && character.picked);
             }
             if (!is_picked) {
@@ -466,9 +497,203 @@ export const usePlayerStore = defineStore('playerStore', {
             })
         },
         pollAddAnswer(code, answer) {
-            if (this.polls[code] !== undefined && this.polls[code].options[answer] !== undefined && this.polls[code].active) {
+            if (this.polls[code] !== undefined && this.polls[code].options[answer] !== undefined && this.polls[code].active === 1) {
                 this.polls[code].options[answer].count += 1;
             }
+        },
+        addChallenge(challenge) {
+            const vm = this;
+            challenge.date = Date.now();
+            challenge.nb_success = 0;
+            challenge.nb_failure = 0;
+            challenge.nb_target = 0;
+            challenge.active = true;
+            challenge.timer = this.current_game.settings.challenge_timer ?? 15;
+            this.challenges.push(challenge);
+            this.last_challenge.interval = setInterval(
+                this.challengeTimerIncrement
+              , 1000)
+        },
+        challengeTimerIncrement() {
+            const vm = this;
+            if (vm.last_challenge.timer === 0 || (vm.last_challenge.nb_success + vm.last_challenge.nb_failure === vm.last_challenge.nb_targets)) {
+                clearInterval(vm.last_challenge.interval);
+                vm.rollRemaining();
+                vm.groupConsequencesResolve();
+            }
+            else {
+                vm.last_challenge.timer -= 1;
+            }
+        },
+        groupConsequencesResolve() {
+            const vm = this;
+            let challenge = this.last_challenge;
+            let rate = Math.floor(100 / challenge.nb_targets * challenge.nb_success);
+
+            let result = '';
+            if (challenge.scale instanceof Array) {
+                if (rate > challenge.scale[1]) {
+                    result = 'success'
+                }
+                else if (rate > challenge.scale[0]) {
+                    result = 'neutral'
+                }
+                else {
+                    result = 'failure'
+                }
+            }
+            else if (rate >= challenge.scale) {
+                result = 'success'
+            }
+            else {
+                result = 'failure';
+            }
+
+            if (challenge.marker_group_modifier !== undefined && challenge.marker_group_modifier[result] !== undefined) {
+                for (const [key, bonus] of Object.entries(challenge.marker_group_modifier[result])) {
+                    if (vm.markers[key] !== undefined) {
+                        vm.markers[key].value += bonus;
+                    }
+                }
+            }
+
+            this.alive_characters.forEach(
+                function(character) {
+                    if (character.challenge !== undefined && character.challenge.roll !== undefined) {
+                        if (character.challenge.message === undefined) {
+                            character.challenge.message = [];
+                        }
+                        character.challenge.message.push(i18n.global.t('result_group_' + result));
+
+                        if (challenge.gauge_group_modifier[result] !== undefined) {
+                            for (const [key, bonus] of Object.entries(challenge.gauge_group_modifier[result])) {
+                                character.challenge.message.push(i18n.global.t('result_' + (bonus >= 0 ? 'bonus' : 'malus'), {points: bonus, name: vm.gauges[key].name}));
+                                character.gauges[key].value += bonus;
+                            }
+                        }
+                        if (challenge.stat_group_modifier[result] !== undefined) {
+                            for (const [key, bonus] of Object.entries(challenge.stat_group_modifier[result])) {
+                                character.challenge.message.push(i18n.global.t('result_' + (bonus >= 0 ? 'bonus' : 'malus'), {points: bonus, name: vm.stats[key].name}));
+                                character.stats[key].value += bonus;
+                            }
+                        }
+                        if (challenge.marker_group_modifier[result] !== undefined) {
+                            for (const [key, bonus] of Object.entries(challenge.marker_group_modifier[result])) {
+                                character.challenge.message.push(i18n.global.t('marker_result_' + (bonus >= 0 ? 'bonus' : 'malus'), {points: Math.abs(bonus), name: vm.markers[key].name}));
+                                vm.markers[key].value += bonus;
+                            }
+                        }
+                        if (challenge.chosen_group_modifier_tags_add[result] !== undefined) {
+                            challenge.chosen_group_modifier_tags_add[result].forEach(function(tag) {
+                                let found = character.tags.findIndex((character_tag) => character_tag.code === tag.code);
+                                if (found === -1) {
+                                    character.tags.push(tag);
+                                    character.challenge.message.push(i18n.global.t('added_tag', {tag_label: tag.label}) );
+                                }
+                            });
+                        }
+                        if (challenge.chosen_group_modifier_tags_remove[result] !== undefined) {
+                            challenge.chosen_group_modifier_tags_remove[result].forEach(function(tag) {
+                                let found = character.tags.findIndex((character_tag) => character_tag.code === tag.code);
+                                if (found !== -1) {
+                                    character.tags.splice(found, 1);
+                                    character.challenge.message.push(i18n.global.t('removed_tag', {tag_label: tag.label}) );
+                                }
+                            });
+                        }
+                    }
+                }
+            )
+            challenge.result = result;
+        },
+        finishChallenge() {
+            const vm = this;
+            this.last_challenge.active = false;
+            this.characters.forEach(
+                function(character) {
+                    if (character.challenge !== undefined) {
+                        character.challenge = {};
+                    }
+                }
+            )
+        },
+        rollRemaining() {
+            const vm = this;
+            this.alive_characters.forEach(
+                function(character) {
+                    if (character.challenge.wait_roll !== undefined && character.challenge.wait_roll) {
+                        vm.resolveRoll(character);
+                    }
+                }
+            )
+        },
+        resolveRoll(character) {
+            const vm = this;
+            let challenge = this.last_challenge;
+
+            character.in_progress = true;
+            character.challenge.wait_roll = false;
+            let messages = [];
+            let result = 'failure';
+            // The "real" die throw is always between 1 and 20.
+            let real_die_throw = Math.floor(Math.random() * 20 + 1);
+            let die_throw = real_die_throw + character.challenge.difficulty;
+
+            // Used to lock the number to beat of the character sheet.
+            character.challenge.locked_difficulty = Math.min(Math.max(character.stats[character.challenge.stat].value - character.challenge.difficulty, 1), 19);
+
+            // There is always a possibility to fail or succeed on any difficulty level.
+            if (real_die_throw !== 20 && (real_die_throw === 1 || die_throw <= character.stats[challenge.stat].value)) {
+                result = 'success';
+                challenge.nb_success += 1;
+            }
+            else {
+                challenge.nb_failure += 1;
+            }
+
+            messages.push(i18n.global.t('challenge_' + result, {stat: vm.stats[challenge.stat].name}));
+
+            if (challenge.gauge_modifier[result] !== undefined) {
+                for (const [key, bonus] of Object.entries(challenge.gauge_modifier[result])) {
+                    messages.push(i18n.global.t('result_' + (bonus >= 0 ? 'bonus' : 'malus'), {points: bonus, name: vm.gauges[key].name}));
+                    character.gauges[key].value += bonus;
+                }
+            }
+            if (challenge.stat_modifier[result] !== undefined) {
+                for (const [key, bonus] of Object.entries(challenge.stat_modifier[result])) {
+                    messages.push(i18n.global.t('result_' + (bonus >= 0 ? 'bonus' : 'malus'), {points: bonus, name: vm.stats[key].name}));
+                    character.stats[key].value += bonus;
+                }
+            }
+            if (challenge.marker_modifier[result] !== undefined) {
+                for (const [key, bonus] of Object.entries(challenge.marker_modifier[result])) {
+                    messages.push(i18n.global.t('marker_result_' + (bonus >= 0 ? 'bonus' : 'malus'), {points: Math.abs(bonus), name: vm.markers[key].name}));
+                    vm.markers[key].value += bonus;
+                }
+            }
+            if (challenge.chosen_modifier_tags_add[result] !== undefined) {
+                challenge.chosen_modifier_tags_add[result].forEach(function(tag) {
+                    let found = character.tags.findIndex((character_tag) => character_tag.code === tag.code);
+                    if (found === -1) {
+                        character.tags.push(tag);
+                        messages.push(i18n.global.t('added_tag', {tag_label: tag.label}) );
+                    }
+                });
+            }
+            if (challenge.chosen_modifier_tags_remove[result] !== undefined) {
+                challenge.chosen_modifier_tags_remove[result].forEach(function(tag) {
+                    let found = character.tags.findIndex((character_tag) => character_tag.code === tag.code);
+                    if (found !== -1) {
+                        character.tags.splice(found, 1);
+                        messages.push(i18n.global.t('removed_tag', {tag_label: tag.label}) );
+                    }
+                });
+            }
+            character.challenge.result = result;
+            character.challenge.roll = real_die_throw;
+            character.challenge.message = messages;
+            character.challenge.group = false;
+            delete character.in_progress;
         },
         saveQuit() {
             let games = localStorage.getItem('games');
@@ -492,7 +717,7 @@ export const usePlayerStore = defineStore('playerStore', {
             let peer_client;
             let attempting_reconnect = false;
             let join_id = Math.floor(Math.random() * (10000000) + 1)
-            peer_client = new Peer(join_id);
+            peer_client = new Peer(join_id, this.getPeerOptions());
             localStorage.setItem('gm_id', id);
 
             peer_client.on('open', function () {
