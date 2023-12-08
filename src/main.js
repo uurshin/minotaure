@@ -58,7 +58,7 @@ export const usePlayerStore = defineStore('playerStore', {
         _reconnect_interval: null,
         _reconnect_timeout: null,
         _message: '',
-        _temp_connections: [],
+        _temp_connections: []
     }),
     getters: {
         peer: (state) => state._user_peer,

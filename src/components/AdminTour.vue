@@ -125,9 +125,6 @@ export default {
       store, vm, tour, steps, tab_tuto_enabled, added_steps
     }
   },
-  mounted() {
-
-  },
   methods: {
     startTour() {
       const vm = this;
@@ -239,6 +236,12 @@ export default {
       }
 
       vm.tour.addStep(new_step, index);
+    },
+    removeStep(step_id) {
+      let index = this.steps.findIndex((step) => step.id === step_id);
+      if (index > -1) {
+        this.steps.splice(index, 1);
+      }
     }
   }
 }

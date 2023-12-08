@@ -162,14 +162,21 @@ export default {
       }
     })
 
+    // Resolve the last challenge if the game was stopped before it could end.
     if (vm.store.last_challenge !== undefined && vm.store.last_challenge.active) {
       vm.store.rollRemaining();
       vm.store.groupConsequencesResolve();
     }
 
+    // Markers have free edition, but only number should go into it, so watch and correct.
     watch(this.store.markers, this.validateNumber);
 
     this.peer = this.store.peer;
+
+    // Remove the tutorial step for start button if the game is already started.
+    if (this.store.current_game.game_started) {
+      this.$refs['admin_tour'].removeStep('step_start');
+    }
 
     this.peer.on('error', function (err) {
       console.log('Minotaure : peer admin error - ' + err.type);
@@ -378,6 +385,7 @@ export default {
       this.store._temp_connections = [];
       this.store.current_game.tuto_on = false;
       this.changeTab('characters');
+      this.$refs['admin_tour'].removeStep('step_start');
     },
     gameStartRename() {
       this.game_name_focused = 1;
