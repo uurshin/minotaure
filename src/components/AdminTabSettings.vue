@@ -47,12 +47,11 @@ export default {
           delete this.store.gauges[key].spending[key_stat];
         }
       }
-
-      this.change_gauge = '';
+      this.cancelGaugeChange();
     },
     cancelGaugeChange() {
-      this.change_gauge = '';
       this.temp_gauge_spending = {};
+      this.change_gauge = '';
     },
     openGauge(key) {
       this.change_gauge = key;
