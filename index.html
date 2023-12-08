@@ -26118,7 +26118,7 @@ const Main = /* @__PURE__ */ _export_sfc(_sfc_main$h, [["render", _sfc_render$f]
 const Home_vue_vue_type_style_index_0_lang = "";
 const _sfc_main$g = {
   setup() {
-    const version2 = "1.1.0";
+    const version2 = "1.2.0";
     return {
       version: version2,
       store: usePlayerStore()
@@ -26267,7 +26267,7 @@ const _sfc_main$f = {
         name: this.name,
         characters: [],
         date: Date.now(),
-        version: "1.1.0",
+        version: "1.2.0",
         init: true,
         tag_groups: []
       };
@@ -38466,7 +38466,7 @@ const _sfc_main$3 = {
       vm.store.connections[conn.connectionId] = conn;
       conn.on("data", function(data2) {
         if (data2.handshake === "readyForCall") {
-          if (data2.version === void 0 || data2.version !== "1.1.0") {
+          if (data2.version === void 0 || data2.version !== "1.2.0") {
             conn.send({
               handshake: "versionError"
             });
@@ -38875,7 +38875,7 @@ const _sfc_main$2 = {
       console.log(this.store.peer.id);
       this.store.connection.send({
         handshake: "readyForCall",
-        version: "1.1.0"
+        version: "1.2.0"
       });
       console.log("Minotaure : ready for transaction");
       this.store.connection.once("close", function() {
@@ -39302,7 +39302,7 @@ const Player = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["render", _sfc_render$
 const Continue_vue_vue_type_style_index_0_scoped_b9335c44_lang = "";
 const _sfc_main$1 = {
   setup() {
-    const version2 = "1.1.0";
+    const version2 = "1.2.0";
     const versions = version2.split(".");
     let games_storage = localStorage.getItem("games");
     games_storage = games_storage == null ? [] : JSON.parse(games_storage);
