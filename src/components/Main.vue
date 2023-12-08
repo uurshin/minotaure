@@ -94,6 +94,7 @@ export default {
     margin-top: auto;
     display: flex;
     align-self: stretch;
+    align-items: center;
     justify-content: space-between;
     padding: 15px;
     position: relative;

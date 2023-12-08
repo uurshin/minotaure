@@ -139,7 +139,7 @@ export default {
         <span class="date" v-if="activated !== key">{{ formatDate(game.date) }}</span>
       </div>
       <span v-if="activated !== key">{{ $t('count_personnage', game.characters.length, {count: game.characters.length}) }}</span>
-      <div class="hidden-mobile" :class="{active: activated === key}">
+      <div class="hidden-mobile options" :class="{active: activated === key}">
         <button class="btn-valid" @click="askPublicId(game.id)">{{ $t('continue') }}</button>
         <button @click="cloneGame(game.id)">{{ $t('clone') }}</button>
         <button class="btn-danger" @click="deleteGame(game.id, $event)">{{ game.id === confirmDelete ? this.$t('confirm_question') : $t('delete') }}</button>
@@ -215,9 +215,16 @@ export default {
           font-size: 0.8em;
         }
       }
+
+      @include media("<tiny") {
+        &.options {
+          flex-direction: column;
+          gap: 5px;
+        }
+      }
     }
 
-    @include media("<tablet") {
+    @include media("<laptop") {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
