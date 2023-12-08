@@ -39299,7 +39299,7 @@ function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
   ], 64);
 }
 const Player = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["render", _sfc_render$2], ["__scopeId", "data-v-ba936217"]]);
-const Continue_vue_vue_type_style_index_0_scoped_b9335c44_lang = "";
+const Continue_vue_vue_type_style_index_0_scoped_165cb460_lang = "";
 const _sfc_main$1 = {
   setup() {
     const version2 = "1.2.0";
@@ -39465,7 +39465,7 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
           ]),
           $data.activated !== key ? (openBlock(), createElementBlock("span", _hoisted_7, toDisplayString$1(_ctx.$t("count_personnage", game.characters.length, { count: game.characters.length })), 1)) : createCommentVNode("", true),
           createBaseVNode("div", {
-            class: normalizeClass(["hidden-mobile", { active: $data.activated === key }])
+            class: normalizeClass(["hidden-mobile options", { active: $data.activated === key }])
           }, [
             createBaseVNode("button", {
               class: "btn-valid",
@@ -39515,7 +39515,7 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
     ])
   ], 64);
 }
-const Continue = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["render", _sfc_render$1], ["__scopeId", "data-v-b9335c44"]]);
+const Continue = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["render", _sfc_render$1], ["__scopeId", "data-v-165cb460"]]);
 var Sr = (n, i, a) => {
   if (!i.has(n))
     throw TypeError("Cannot " + a);
@@ -44436,6 +44436,7 @@ button.btn-danger {
   margin-top: auto;
   display: flex;
   align-self: stretch;
+  align-items: center;
   justify-content: space-between;
   padding: 15px;
   position: relative;
@@ -47728,7 +47729,7 @@ to {
   flex-direction: column;
   gap: 10px;
 }
-[data-v-b9335c44]:root {
+[data-v-165cb460]:root {
   font-family: Helvetica, system-ui, Avenir, Inter, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -47764,10 +47765,10 @@ to {
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
-[data-theme=dark].picker[data-v-b9335c44] {
+[data-theme=dark].picker[data-v-165cb460] {
   background: black;
 }
-[data-theme=light][data-v-b9335c44] {
+[data-theme=light][data-v-165cb460] {
   --font-color: black;
   --inverse-font-color: white;
   --input-font-color: black;
@@ -47780,10 +47781,10 @@ to {
   --tab-border-color: black;
   --character-picked: black;
 }
-[data-theme=light].picker[data-v-b9335c44] {
+[data-theme=light].picker[data-v-165cb460] {
   background: #efefef;
 }
-[data-theme=blue][data-v-b9335c44] {
+[data-theme=blue][data-v-165cb460] {
   --font-color: black;
   --inverse-font-color: white;
   --input-font-color: white;
@@ -47797,10 +47798,10 @@ to {
   --danger-color: #A63A50;
   --tab-border-color: black;
 }
-[data-theme=blue].picker[data-v-b9335c44] {
+[data-theme=blue].picker[data-v-165cb460] {
   background: #5858c4;
 }
-[data-theme=sepia][data-v-b9335c44] {
+[data-theme=sepia][data-v-165cb460] {
   --font-color: #141204;
   --inverse-font-color: white;
   --input-font-color: #4d3f36;
@@ -47815,7 +47816,7 @@ to {
   --success-background: #159241;
   --failure-background: #AA4538;
 }
-[data-theme=sepia].picker[data-v-b9335c44] {
+[data-theme=sepia].picker[data-v-165cb460] {
   background: #dbc6b8;
 }
 @font-face {
@@ -47840,14 +47841,14 @@ to {
   font-weight: 600;
   font-style: normal;
 }
-.continue-game[data-v-b9335c44] {
+.continue-game[data-v-165cb460] {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
   gap: 15px;
 }
-.continue-game input[type=text][data-v-b9335c44] {
+.continue-game input[type=text][data-v-165cb460] {
   padding: 10px;
   text-align: center;
   border-radius: 10px;
@@ -47855,22 +47856,22 @@ to {
   flex: 1;
 }
 @media (max-width: 767px) {
-.continue-game input[type=text][data-v-b9335c44] {
+.continue-game input[type=text][data-v-165cb460] {
     flex-basis: 100%;
     font-size: 0.9em;
 }
 }
-.continue-game label[data-v-b9335c44] {
+.continue-game label[data-v-165cb460] {
   flex: 1;
   text-align: left;
 }
-.continue-game button[data-v-b9335c44] {
+.continue-game button[data-v-165cb460] {
   flex-basis: 100%;
 }
-.continue-game button.btn-valid[data-v-b9335c44] {
+.continue-game button.btn-valid[data-v-165cb460] {
   margin-top: 30px;
 }
-.game[data-v-b9335c44] {
+.game[data-v-165cb460] {
   display: grid;
   grid-template-columns: 1fr 1fr 3fr;
   align-items: center;
@@ -47880,34 +47881,40 @@ to {
   border-radius: 10px;
   padding: 10px;
 }
-.game > div[data-v-b9335c44] {
+.game > div[data-v-165cb460] {
   display: flex;
   gap: 15px;
 }
-.game > div.title[data-v-b9335c44] {
+.game > div.title[data-v-165cb460] {
   flex-direction: column;
   gap: 0;
 }
-.game > div.title .date[data-v-b9335c44] {
+.game > div.title .date[data-v-165cb460] {
   font-size: 0.8em;
 }
-@media (max-width: 767px) {
-.game[data-v-b9335c44] {
+@media (max-width: 359px) {
+.game > div.options[data-v-165cb460] {
+    flex-direction: column;
+    gap: 5px;
+}
+}
+@media (max-width: 1279px) {
+.game[data-v-165cb460] {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
 }
-.game .hidden-mobile[data-v-b9335c44],
-  .game .visible-mobile[data-v-b9335c44] {
+.game .hidden-mobile[data-v-165cb460],
+  .game .visible-mobile[data-v-165cb460] {
     flex-basis: 100%;
     justify-content: space-between;
 }
-.game .hidden-mobile .btn-valid[data-v-b9335c44],
-  .game .visible-mobile .btn-valid[data-v-b9335c44] {
+.game .hidden-mobile .btn-valid[data-v-165cb460],
+  .game .visible-mobile .btn-valid[data-v-165cb460] {
     flex: 1;
 }
 }
-.delete-all[data-v-b9335c44] {
+.delete-all[data-v-165cb460] {
   margin-top: 30px;
   align-self: center;
 }
