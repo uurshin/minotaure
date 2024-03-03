@@ -241,9 +241,14 @@ export const usePlayerStore = defineStore('playerStore', {
             let vm = this;
 
             for (const [key, gauge] of Object.entries(new_character.gauges)) {
-                if (vm.gauges[key] !== undefined && vm.gauges[key].deadly && gauge.value <= 0) {
-                    new_character.gauges[key].value = 0;
-                    new_character.alive = false;
+                if (vm.gauges[key] !== undefined) {
+                    if (vm.gauges[key].deadly && gauge.value <= 0) {
+                        new_character.gauges[key].value = 0;
+                        new_character.alive = false;
+                    }
+                    else if (vm.gauges[key].max !== '' && new_character.gauges[key].value > vm.gauges[key].max) {
+                        new_character.gauges[key].value = vm.gauges[key].max;
+                    }
                 }
             }
             if (new_character.connection !== undefined && new_character.connection != null) {

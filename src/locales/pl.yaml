@@ -173,6 +173,7 @@ tab_label_pick:
 add: "Dodaj"
 gauge_start: "Zaczyna się od {gauge_value}"
 kills_at_0: "Zabija przy 0"
+maximum: "Maksymalny a {max}"
 submit: "Zatwierdź"
 modify: "Modyfikuj"
 delete: "Usuń"

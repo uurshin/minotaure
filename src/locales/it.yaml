@@ -165,6 +165,7 @@ tab_label_pick:
 add: "Aggiungi"
 gauge_start: "Inizia a {gauge_value}"
 kills_at_0: "Uccide a 0"
+maximum: "Massimo a {max}"
 submit: "Invia"
 modify: "Modifica"
 delete: "Elimina"
