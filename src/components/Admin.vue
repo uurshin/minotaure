@@ -87,11 +87,12 @@ export default {
       return (this.game_name_focused === 0 ? this.$t('game_rename') : this.store.current_game.name);
     },
     shareURL: function() {
-      if (window.location.origin === 'null') {
+      let location = window.location;
+      if (location.origin === 'null') {
         return '';
       }
       else {
-        return window.location.href.slice(0, location.href.lastIndexOf("/")) + 'join?id=' + this.store.peer.id;
+        return location.href.slice(0,location.href.lastIndexOf("/")) + 'join?id=' + this.store.peer.id;
       }
     },
   },
@@ -349,11 +350,12 @@ export default {
       this.$refs['admin_tab_' + nameRef].$refs['tab'].classList.add('open');
     },
     shareLink() {
-      if (window.location.origin === 'null') {
+      let location = window.location;
+      if (location.origin === 'null') {
         return this.store.peer.id;
       }
       else {
-        return (window.location.href.slice(0, location.href.lastIndexOf("/")) + 'join?id=' + this.store.peer.id);
+        return (location.href.slice(0, location.href.lastIndexOf("/")) + 'join?id=' + this.store.peer.id);
       }
     },
     copyLink(event) {
