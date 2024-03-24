@@ -110,6 +110,8 @@ step_settings_gauge_delete:
   "Puedes eliminar una barra en cualquier momento."
 step_settings_gauge_make_deadly:
   "Puedes hacer que llegar a 0 en una barra resulte en la muerte de un personaje haciendo clic en este botón (esta acción es reversible, pero los personajes ya muertos no resucitarán)."
+step_settings_gauge_max:
+  "Puede especificar un máximo opcional que los personajes no pueden exceder para esta barra."
 step_settings_stats:
   "Las características funcionan de la misma manera que en la mayoría de los juegos de rol. Cuando creas una partida, se crean dos características: física y mental."
 step_settings_add_stat: "Puedes agregar tantas características como desees."
@@ -256,6 +258,9 @@ start_typing: "Empieza a escribir"
 clear_selection: "Borrar la selección"
 char_picked: "Seleccionados"
 add_all_to_selection: "Agregar todo a la selección"
+add_to_selected: "Agregar a los seleccionados"
+remove_from_selected: "Eliminar de los seleccionados"
+filter_list: "Filtrar la lista"
 challenged_end_in: "Fin del desafío en {timer}s"
 finish_challenge: "Terminar el desafío"
 challenge_scale_label: "{scale}% = éxito"

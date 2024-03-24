@@ -372,12 +372,14 @@ export default {
 
       <div class="first-column">
         <button @click="toggleAction('filter')" :class="{ active: current_action === 'filter'}">
-          Filtrer la liste
+          {{ $t('filter_list') }}
         </button>
         <button v-if="Object.keys(filters).length || tag_filter.length || search_character !== ''" class="reset-filters btn-valid" @click="resetFilters">Supprimer les filtres</button>
         <button class='btn-valid clear-selection' v-if="store.picked_characters !== undefined && store.picked_characters.length" @click="this.store.resetPickedCharacters()">{{ $t('clear_selection') }}</button>
         <button v-else @click="selectVisible">{{ $t('add_all_to_selection') }}</button>
-        <button @click="toggleAction('tags')" :class="{ active: current_action === 'tags'}">Tagger / Détaguer</button>
+        <button @click="toggleAction('tags')" :class="{ active: current_action === 'tags'}">
+          {{ $t('Tag / untag') }}
+        </button>
         <button ref="step_characters_1" @click="toggleAction(); store.generateNpcCharacters(1)">{{ $t('spawn_npc') }}</button>
 
         <div v-if="this.store.markers !== undefined" class="markers-container">
@@ -420,7 +422,7 @@ export default {
               {{ $t('failed') }}<span>{{ store.last_challenge.nb_failure }}</span>
             </button>
           </div>
-          <input type="text" v-model="search_character" placeholder="Rechercher un personnage" @keyup="this.$refs['dataset'].search(search_character)">
+          <input type="text" v-model="search_character" :placeholder="$t('search_character')" @keyup="this.$refs['dataset'].search(search_character)">
         </div>
         <div v-if="current_action === 'tags'" class="filter-data">
           <div>
@@ -442,8 +444,8 @@ export default {
                 :hideSelected="true"
             ></vue-multiselect>
           </div>
-          <button @click="updateTagsOfSelection(true)">Ajouter à la sélection</button>
-          <button @click="updateTagsOfSelection(false)">Retirer à la sélection</button>
+          <button @click="updateTagsOfSelection(true)">{{ $t('add_to_selected') }}</button>
+          <button @click="updateTagsOfSelection(false)">{{ $t('remove_from_selected') }}</button>
         </div>
         <dataset
             v-slot="{ ds }"

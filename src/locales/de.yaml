@@ -110,6 +110,8 @@ step_settings_gauge_delete:
   "Sie können eine Anzeige jederzeit löschen."
 step_settings_gauge_make_deadly:
   "Sie können bewirken, dass das Sinken einer Anzeige auf einen Wert von 0 den Tod eines Charakters zur Folge hat, indem Sie auf diese Schaltfläche klicken (diese Aktion ist umkehrbar, aber bereits verstorbene Charaktere werden nicht wiederbelebt!)."
+step_settings_gauge_max:
+  "Sie können ein optionales Maximum angeben, das von den Charakteren für diese Anzeige nicht überschritten werden kann."
 step_settings_stats:
   "Die Attribute funktionieren wie in den meisten Rollenspielen. Beim Erstellen eines Spiels werden standardmäßig zwei Attribute erstellt: Physisch und Mental."
 step_settings_add_stat: "Sie können so viele Attribute hinzufügen, wie Sie möchten."
@@ -256,6 +258,9 @@ start_typing: "Tippen Sie hier"
 clear_selection: "Auswahl aufheben"
 char_picked: "Ausgewählt"
 add_all_to_selection: "Alle zur Auswahl hinzufügen"
+add_to_selected: "Zu den Ausgewählten hinzufügen"
+remove_from_selected: "Aus den Ausgewählten entfernen"
+filter_list: "Liste filtern"
 challenged_end_in: "Herausforderung endet in {timer}s"
 finish_challenge: "Herausforderung abschließen"
 challenge_scale_label: "{scale}% = Erfolg"
