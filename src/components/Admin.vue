@@ -127,6 +127,27 @@ export default {
       this.store.current_game.characters.forEach(function(character) {
         character.connection = null;
         character.watched = true;
+
+        // The character should be updated to the new system.
+        if (character.base_stats === undefined) {
+          let modifiers_stats = [];
+          character.tags.forEach(function (tag) {
+            if (tag.stat_modifiers !== undefined) {
+              for (const [key, stat] of Object.entries(tag.stat_modifiers)) {
+                modifiers_stats[key] = (modifiers_stats[key] ?? 0) + stat.value;
+              }
+            }
+          });
+
+          character.base_stats = {};
+          for (const [key, stat] of Object.entries(character.stats)) {
+            if (character.base_stats[key] === undefined) {
+              character.base_stats[key] = character.stats[key].value - (modifiers_stats[key] ?? 0);
+            }
+          }
+        }
+
+        character.recalculate = 1;
         watch(character, vm.store.characterWatch);
       });
     }
@@ -280,7 +301,7 @@ export default {
             conn.send({
               handshake:'displayCharacter',
               game_token: vm.store.current_game.id,
-              character: vm.store.prepareCharacter(new_character)
+              character: new_character
             });
           }
         }
@@ -318,6 +339,7 @@ export default {
             }
             character.gauges[data.code].value -= 1;
             character.challenge.difficulty = adjusted_difficulty;
+            character.recalculate = 1;
           }
         }
       });
@@ -416,7 +438,7 @@ export default {
       conn.send({
         handshake:'displayCharacter',
         game_token: vm.store.current_game.id,
-        character: vm.store.prepareCharacter(character)
+        character: character
       });
     },
     validateNumber(objects) {
@@ -635,6 +657,10 @@ export default {
     flex-wrap: wrap;
     align-content: flex-start;
     margin-bottom: 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: var(--background-color);
 
     > .tab-label {
       display: flex;
@@ -766,12 +792,6 @@ export default {
     }
   }
 
-  .summary {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-
   .select {
     height: 49px;
     background: var(--font-color);
@@ -833,6 +853,7 @@ export default {
       > div {
         flex: 1;
         background: white;
+        color: black;
         display: flex;
         flex-direction: column;
         align-items: center;

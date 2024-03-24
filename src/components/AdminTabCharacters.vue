@@ -30,12 +30,15 @@ export default {
     return {
       store,
       tag_filter: [],
+      tags_edit: [],
       search_character: '',
       filters: {},
       options_contextual: [{}],
       character_edit: 0,
       temp_character: null,
-      edited_character: null
+      edited_character: null,
+      current_action: null,
+      filtered_characters: []
     }
   },
   computed: {
@@ -63,6 +66,10 @@ export default {
   },
   mounted() {
     this.$refs['dataset'].showEntries(10000);
+    let vm = this;
+    document.querySelector('body').addEventListener('click', function(e) {
+      vm.closeEdition(e);
+    })
   },
   methods: {
     getClasses(character) {
@@ -156,6 +163,7 @@ export default {
       this.filters = {};
       this.tag_filter = [];
       this.search_character = '';
+      this.$refs['dataset'].search();
     },
     sortAsChallenge(challenge) {
       return (this.store.last_challenge !== undefined && this.store.last_challenge.active && challenge !== undefined && challenge.date === this.store.last_challenge.date);
@@ -173,6 +181,14 @@ export default {
       }
       this.options_contextual = this.generateOptions(item)
       this.$refs.context_character.showMenu(event, item)
+    },
+    toggleAction(action = null) {
+      if (this.current_action === action || action === null) {
+        this.current_action = null;
+      }
+      else {
+        this.current_action = action;
+      }
     },
     generateOptions(item) {
       let options = [];
@@ -216,22 +232,11 @@ export default {
       let found = this.store.characters.find((found_character) => found_character.token === character.token);
       found.picked = !found.picked;
     },
-    selectVisible(ds) {
-      ds.dsRows.forEach((row) => ds.dsData[row].picked = true);
+    selectVisible() {
+      this.filtered_characters.forEach((row) => row.picked = true);
     },
-    animateToCenter(character) {
-      if (this.edited_character !== null && this.character_centered !== null && this.character_centered.token !== character.token) {
-        // Never allow centering when
-        return;
-      }
-
-      let expand = false;
-      if (this.character_centered === null || this.character_centered.token !== character.token) {
-        // A card is open but it's not the one clicked.
-        expand = true;
-      }
-
-      if (this.character_centered !== null) {
+    closeEdition(e) {
+      if (e.target.closest('.centered') === null && this.character_centered !== null) {
         this.$refs[this.character_centered.token].style.transform = null;
         this.$refs[this.character_centered.token].classList.remove('centered');
         if (this.edited_character !== null && this.character_centered.token === this.edited_character.token) {
@@ -239,7 +244,13 @@ export default {
         }
         this.character_centered = null;
       }
-      if (expand && character !== undefined) {
+    },
+    animateToCenter(character) {
+      if (this.character_centered !== null) {
+        return;
+      }
+
+      if (character !== undefined) {
         this.character_centered = character;
         var rect = this.$refs[character.token].getBoundingClientRect();
         let scale = 2;
@@ -256,25 +267,25 @@ export default {
     validateCharacterEdition(character) {
       const vm = this;
       for (const [key, gauge] of Object.entries(this.temp_character.gauges)) {
-        if (vm.store.gauges[key] !== undefined) {
+        if (this.store.gauges[key] !== undefined) {
           if (typeof gauge.value === 'string' || gauge.value instanceof String) {
             gauge.value = parseInt(gauge.value);
           }
-          if (isNaN(gauge.value) || gauge.value === undefined || gauge.value <= 0) {
-            this.temp_character.gauges[key].value = vm.store.gauges[key].deadly ? 1 : 0;
+          if (isNaN(gauge.value) || gauge.value === undefined) {
+            gauge.value = 0;
+          }
+          if (this.store.gauges[key].deadly && gauge.value === 0) {
+            gauge.value = 1;
           }
         }
       }
       for (const [key, stat] of Object.entries(this.temp_character.stats)) {
         if (vm.store.stats[key] !== undefined) {
-          if (typeof stat.value === 'string' || stat.value instanceof String) {
-            stat.value = parseInt(stat.value);
+          if (typeof this.temp_character.base_stats[key] === 'string' || this.temp_character.base_stats[key] instanceof String) {
+            this.temp_character.base_stats[key] = parseInt(this.temp_character.base_stats[key]);
           }
-          if (isNaN(stat.value) || stat.value === undefined || stat.value <= 0) {
-            this.temp_character.stats[key].value = 1;
-          }
-          else if (stat.value > 20) {
-            this.temp_character.stats[key].value = 20;
+          if (isNaN(this.temp_character.base_stats[key]) || this.temp_character.base_stats[key] === undefined) {
+            this.temp_character.base_stats[key] = 1;
           }
         }
       }
@@ -283,13 +294,29 @@ export default {
       for (const [key, gauge] of Object.entries(this.temp_character.gauges)) {
         character.gauges[key].value = gauge.value;
       }
-      for (const [key, stat] of Object.entries(this.temp_character.stats)) {
-        character.stats[key].value = stat.value;
+      for (const [key, stat] of Object.entries(this.temp_character.base_stats)) {
+        character.base_stats[key] = stat;
       }
 
+      character.recalculate = 1;
       this.edited_character = null;
+    },
+    updateTagsOfSelection(add = true) {
+      let vm = this;
+      if (this.tags_edit !== undefined) {
+        this.tags_edit.forEach(function(tag) {
+          vm.store.picked_characters.forEach(function(character) {
+            if (add) {
+              vm.store.addTagToCharacter(character, tag);
+            }
+            else {
+              vm.store.removeTagFromCharacter(character, tag);
+            }
+          });
+        });
+      }
     }
-  }
+  },
 }
 </script>
 
@@ -343,102 +370,138 @@ export default {
         </div>
       </div>
 
-      <div v-if="this.store.markers !== undefined" class="markers-container">
-        <div v-for="marker in this.store.markers">
-          <span>{{ marker.name }}</span>
-          <contenteditable class="value" tag="span" contenteditable="true" v-model="marker.value" :no-nl="true" :no-html="true" />
-        </div>
-      </div>
-      <div class="filter-data">
-        <div v-if="store.tags.length">
-          <vue-multiselect
-              ref="tag_filter"
-              id="tag_filter"
-              v-model="tag_filter"
-              label="label"
-              track-by="code"
-              group-values="tags"
-              group-label="label"
-              :group-select="true"
-              :placeholder="$t('select_tag')"
-              :tagPlaceholder="$t('select_tag')"
-              :showNoOptions="false"
-              :options=store.tag_groups
-              :multiple="true"
-              :taggable="false"
-              :hideSelected="true"
-          ></vue-multiselect>
-        </div>
-        <button @click="switchFilter('dead')" :class="{active : filters.dead !== undefined}">{{ $t('alive') }}</button>
-        <button @click="switchFilter('connected')" :class="{active : filters.connected !== undefined}">{{ $t('connected') }}</button>
-        <button v-if="store.picked_characters !== undefined && store.picked_characters.length" @click="switchFilter('picked')" :class="{active : filters.picked !== undefined}">{{ $t('char_picked') }}</button>
-        <div class="dual-button" v-if="current_challenge_rate !== false">
-          <button @click="switchFilterChallenge('success')" class="success-button badge" :class="{active : filters.challenge !== undefined && filters.challenge === 'success'}">
-            {{ $t('passed') }}<span>{{ store.last_challenge.nb_success }}</span>
-          </button>
-          <button @click="switchFilterChallenge('failure')" class="failure-button badge" :class="{active : filters.challenge !== undefined && filters.challenge === 'failure'}">
-            {{ $t('failed') }}<span>{{ store.last_challenge.nb_failure }}</span>
-          </button>
-        </div>
-        <button v-if="Object.keys(filters).length || tag_filter.length" class="reset-filters" @click="resetFilters">{{ $t('show_all_characters') }}</button>
+      <div class="first-column">
+        <button @click="toggleAction('filter')" :class="{ active: current_action === 'filter'}">
+          Filtrer la liste
+        </button>
+        <button v-if="Object.keys(filters).length || tag_filter.length || search_character !== ''" class="reset-filters btn-valid" @click="resetFilters">Supprimer les filtres</button>
         <button class='btn-valid clear-selection' v-if="store.picked_characters !== undefined && store.picked_characters.length" @click="this.store.resetPickedCharacters()">{{ $t('clear_selection') }}</button>
-      </div>
-      <dataset
-          v-slot="{ ds }"
-          :ds-data="store.characters"
-          :ds-sortby="['-alive', '-challenge', '-connection', 'name']"
-          :ds-search-in="['name']"
-          :ds-filter-fields="{ tags: filterOnTag, connection: filterConnected, alive: filterDead, challenge: filterChallenge, picked: filterPicked }"
-          :ds-sort-as="{ challenge: sortAsChallenge, connection: sortAsConnected }"
-          ref="dataset"
-      >
-        <button @click="this.selectVisible(ds)">{{ $t('add_all_to_selection') }}</button>
-        <button ref="step_characters_1" @click="store.generateCharacters(1)">{{ $t('spawn_npc') }}</button>
-        <div class="wrapper-label">
-          <dataset-search :placeholder="$t('search_character')" v-model="search_character" id="search-character" :ds-search-placeholder="$t('start_typing')" />
+        <button v-else @click="selectVisible">{{ $t('add_all_to_selection') }}</button>
+        <button @click="toggleAction('tags')" :class="{ active: current_action === 'tags'}">Tagger / Détaguer</button>
+        <button ref="step_characters_1" @click="toggleAction(); store.generateNpcCharacters(1)">{{ $t('spawn_npc') }}</button>
+
+        <div v-if="this.store.markers !== undefined" class="markers-container">
+          <div v-for="marker in this.store.markers">
+            <span>{{ marker.name }}</span>
+            <contenteditable class="value" tag="span" contenteditable="true" v-model="marker.value" :no-nl="true" :no-html="true" />
+          </div>
         </div>
-        <div class="summary full">{{ $t('count_personnage', {count: ds.dsResultsNumber}) }}{{ $t('characters_on') }}{{ store.characters.length }}</div>
-        <dataset-item class="full" id="character-list">
-          <template #default="{ row, rowIndex }">
-            <div @click.exact="animateToCenter(row)" :ref="row.token" :key="row.token" @click.shift.exact="toggleCharacter(row)" @contextmenu.prevent.stop="handleClick($event, row)" class="character" :class="[getClasses(row), !row.alive ? 'dead' : '']">
-              <div class="character-names">
-                <contenteditable @click.stop v-if="edited_character !== null && edited_character.token === row.token" class="value" tag="span" contenteditable="true" v-model="temp_character.name" spellcheck="false" :no-nl="true" :no-html="true" />
-                <span v-else class="character-name">
+      </div>
+
+      <div class="second-column">
+        <div v-if="current_action === 'filter'" class="filter-data">
+          <div v-if="store.tags.length">
+            <vue-multiselect
+                ref="tag_filter"
+                id="tag_filter"
+                v-model="tag_filter"
+                label="label"
+                track-by="code"
+                group-values="tags"
+                group-label="label"
+                :group-select="true"
+                :placeholder="$t('select_tag')"
+                :tagPlaceholder="$t('select_tag')"
+                :showNoOptions="false"
+                :options=store.tag_groups
+                :multiple="true"
+                :taggable="false"
+                :hideSelected="true"
+            ></vue-multiselect>
+          </div>
+          <button @click="switchFilter('dead')" :class="{active : filters.dead !== undefined}">{{ $t('alive') }}</button>
+          <button @click="switchFilter('connected')" :class="{active : filters.connected !== undefined}">{{ $t('connected') }}</button>
+          <button v-if="store.picked_characters !== undefined && store.picked_characters.length" @click="switchFilter('picked')" :class="{active : filters.picked !== undefined}">{{ $t('char_picked') }}</button>
+          <div class="dual-button" v-if="current_challenge_rate !== false">
+            <button @click="switchFilterChallenge('success')" class="success-button badge" :class="{active : filters.challenge !== undefined && filters.challenge === 'success'}">
+              {{ $t('passed') }}<span>{{ store.last_challenge.nb_success }}</span>
+            </button>
+            <button @click="switchFilterChallenge('failure')" class="failure-button badge" :class="{active : filters.challenge !== undefined && filters.challenge === 'failure'}">
+              {{ $t('failed') }}<span>{{ store.last_challenge.nb_failure }}</span>
+            </button>
+          </div>
+          <input type="text" v-model="search_character" placeholder="Rechercher un personnage" @keyup="this.$refs['dataset'].search(search_character)">
+        </div>
+        <div v-if="current_action === 'tags'" class="filter-data">
+          <div>
+            <vue-multiselect
+                ref="tags_edit"
+                id="tags_edit"
+                v-model="tags_edit"
+                label="label"
+                track-by="code"
+                group-values="tags"
+                group-label="label"
+                :group-select="true"
+                :placeholder="$t('select_tag')"
+                :tagPlaceholder="$t('select_tag')"
+                :showNoOptions="false"
+                :options=store.tag_groups
+                :multiple="true"
+                :taggable="false"
+                :hideSelected="true"
+            ></vue-multiselect>
+          </div>
+          <button @click="updateTagsOfSelection(true)">Ajouter à la sélection</button>
+          <button @click="updateTagsOfSelection(false)">Retirer à la sélection</button>
+        </div>
+        <dataset
+            v-slot="{ ds }"
+            :ds-data="store.characters"
+            :ds-sortby="['-alive', '-challenge', '-connection', 'name']"
+            :ds-search-in="['name']"
+            :ds-filter-fields="{ tags: filterOnTag, connection: filterConnected, alive: filterDead, challenge: filterChallenge, picked: filterPicked }"
+            :ds-sort-as="{ challenge: sortAsChallenge, connection: sortAsConnected }"
+            ref="dataset"
+            @update:dsData="function(data) { filtered_characters = data }"
+        >
+          <dataset-item class="full" id="character-list">
+            <template #default="{ row, rowIndex }">
+              <div @click.exact="animateToCenter(row)" :ref="row.token" :key="row.token" @click.shift.exact="toggleCharacter(row)" @contextmenu.prevent.stop="handleClick($event, row)" class="character" :class="[getClasses(row), !row.alive ? 'dead' : '']">
+                <div class="character-names">
+                  <contenteditable @click.stop v-if="edited_character !== null && edited_character.token === row.token" class="value" tag="span" contenteditable="true" v-model="temp_character.name" spellcheck="false" :no-nl="true" :no-html="true" />
+                  <span v-else class="character-name">
                   {{ row.name }}
                 </span>
-                <contenteditable @click.stop v-if="edited_character !== null && edited_character.token === row.token" class="value" tag="span" contenteditable="true" v-model="temp_character.pseudo" spellcheck="false" :no-nl="true" :no-html="true" />
-                <span v-else class="pseudo">
+                  <contenteditable @click.stop v-if="edited_character !== null && edited_character.token === row.token" class="value" tag="span" contenteditable="true" v-model="temp_character.pseudo" spellcheck="false" :no-nl="true" :no-html="true" />
+                  <span v-else class="pseudo">
                   {{ row.pseudo }}
                 </span>
-              </div>
-              <div class="gauges">
+                </div>
+                <div class="gauges">
                 <span v-for="(gauge, key) in row.gauges">
                   <span>{{ gauge.label }}</span>
                   <contenteditable @click.stop v-if="edited_character !== null && edited_character.token === row.token" class="value" tag="span" contenteditable="true" v-model="temp_character.gauges[key].value" :no-nl="true" :no-html="true" />
                   <span v-else>{{ gauge.value }}</span>
                 </span>
-              </div>
-              <div class="stats">
+                </div>
+                <div class="stats">
                 <span v-for="(stat, key) in row.stats">
                   <span>{{ stat.label }}</span>
-                  <contenteditable @click.stop v-if="edited_character !== null && edited_character.token === row.token" class="value" tag="span" contenteditable="true" v-model="temp_character.stats[key].value" :no-nl="true" :no-html="true" />
+                  <template v-if="edited_character !== null && edited_character.token === row.token">
+                    <contenteditable @click.stop class="value" tag="span" contenteditable="true" v-model="temp_character.base_stats[key]" :no-nl="true" :no-html="true" />
+                    <span>
+                      {{ (stat.value - edited_character.base_stats[key]) >= 0 ? '+' : '' }}{{ stat.value - edited_character.base_stats[key] }}
+                    </span>
+                  </template>
                   <span v-else>{{ stat.value }}</span>
                 </span>
-              </div>
-              <div class="tags" v-if="row.tags !== undefined && row.tags.length">
+                </div>
+                <div class="tags" v-if="row.tags !== undefined && row.tags.length">
                 <span class="tag" v-for="tag in row.tags" :class="'tag-' + tag.code">
                   <span class="label-name">
                     {{ tag.label }}
                   </span>
                 </span>
+                </div>
               </div>
-            </div>
-          </template>
-          <template v-slot:noDataFound>
-            <div v-if="store.characters.length > 0" class="no-found">{{ $t('no_characters_to_show_try_different_filter') }}</div>
-          </template>
-        </dataset-item>
-      </dataset>
+            </template>
+            <template v-slot:noDataFound>
+              <div v-if="store.characters.length > 0" class="no-found">{{ $t('no_characters_to_show_try_different_filter') }}</div>
+            </template>
+          </dataset-item>
+        </dataset>
+      </div>
     </div>
   </div>
 </template>
@@ -459,7 +522,7 @@ export default {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    align-items: flex-end;
+    align-items: flex-start;
     justify-content: space-between;
 
     input:not(.multiselect__input) {
@@ -474,15 +537,32 @@ export default {
     }
 
     .markers-container {
-      flex-basis: 100%;
       display: flex;
-      justify-content: center;
-      gap: 30px;
-      font-size: 25px;
+      gap: 10px;
+      flex-direction: column;
+      align-items: end;
+      margin-left: -30px;
+      font-size: 20px;
+      line-height: 20px;
+
+      @include media("<=desktop") {
+        margin-left: -20px;
+      }
 
       > div {
         display: flex;
-        gap: 10px;
+        gap: 8px;
+        border-radius: 0 8px 8px 0;
+        border: 1px solid var(--tab-border-color);
+        border-left-style: none;
+        padding: 0.5em;
+        align-items: center;
+        flex-direction: column;
+        align-self: stretch;
+
+        > span:first-child {
+          word-break: break-word;
+        }
 
         .value {
           display: flex;
@@ -625,11 +705,11 @@ export default {
         }
       }
     }
-
   }
 
   .summary {
-    text-align: left;
+    margin-left: auto;
+    padding: 8px;
   }
 
   #character-list {
@@ -696,6 +776,14 @@ export default {
           display: flex;
           justify-content: space-between;
         }
+
+        .value {
+          margin-left : auto;
+
+          + span {
+            margin-left: 1px;
+          }
+        }
       }
 
       .character-names {
@@ -713,13 +801,8 @@ export default {
     }
   }
 
-  .clear-selection {
-    margin-left: auto;
-  }
-
   .filter-data {
     display: flex;
-    flex: 1;
     gap: 15px;
     flex-direction: row;
     align-items: flex-end;
@@ -728,6 +811,11 @@ export default {
       display: flex;
       flex-direction: column;
     }
+  }
+
+  .search-character {
+    margin-right: auto;
+    align-self: flex-end;
   }
 
   .result-challenge {
@@ -818,6 +906,41 @@ export default {
           border-radius:100%;
         }
       }
+    }
+  }
+
+  .first-column {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    position: sticky;
+    top: 85px;
+    max-width: 128px;
+
+    > button {
+      margin-left: -30px;
+      border-radius: 0 8px 8px 0;
+
+      @include media("<=desktop") {
+        margin-left: -20px;
+      }
+
+      &.active {
+        border: var(--button-border-active);
+      }
+    }
+  }
+  .second-column {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    flex: 1;
+    align-items: center;
+    justify-content: flex-end;
+
+    > * {
+      align-self: flex-end;
+      margin-right: auto;
     }
   }
 </style>

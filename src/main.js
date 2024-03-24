@@ -188,7 +188,7 @@ export const usePlayerStore = defineStore('playerStore', {
                 picking_array: [],
                 label: freetag ? i18n.global.t('other_tags') : i18n.global.t('group_nb', {nb: this.tag_groups.length + 1})
             }
-            group.code = freetag ? 'freetag' : Math.floor(Math.random() * 10000000);
+            group.code = freetag ? 'freetag' : (this.tag_groups.length ? this.tag_groups[this.tag_groups.length - 1].code : 0) + Math.floor(Math.random() * 10000000);
             group.start =  freetag ? 'none' : 'random';
             this.tag_groups.push(group);
             return group;
@@ -234,36 +234,120 @@ export const usePlayerStore = defineStore('playerStore', {
         setCurrentGame(game) {
             this._current_game = game;
         },
-        addCharacter(new_character) {
-            this.characters.push(new_character);
+        /**
+         * Add a new character to the store.
+         * @param {object} character : the character to add.
+         */
+        addCharacter(character) {
+            this.characters.push(character);
         },
-        characterWatch(new_character) {
+        /**
+         * Control and send the current version of a character to the connected
+         * player.
+         * @param {object} character : the character to target.
+         */
+        characterWatch(character) {
             let vm = this;
-
-            for (const [key, gauge] of Object.entries(new_character.gauges)) {
-                if (vm.gauges[key] !== undefined) {
-                    if (vm.gauges[key].deadly && gauge.value <= 0) {
-                        new_character.gauges[key].value = 0;
-                        new_character.alive = false;
-                    }
-                    else if (vm.gauges[key].max !== '' && new_character.gauges[key].value > vm.gauges[key].max) {
-                        new_character.gauges[key].value = vm.gauges[key].max;
-                    }
-                }
-            }
-            if (new_character.connection !== undefined && new_character.connection != null) {
+            // If the tags, base gauges or base stats of the character have been
+            // modified, we need to control and maybe update some data.
+            this.limitCharacter(character);
+            if (character.connection !== undefined && character.connection != null) {
                 if (
-                    vm.connections[new_character.connection] !== undefined &&
-                    vm.connections[new_character.connection].open
+                  vm.connections[character.connection] !== undefined &&
+                  vm.connections[character.connection].open
                 ) {
-                    vm.connections[new_character.connection].send({
+                    vm.connections[character.connection].send({
                         handshake: 'displayCharacter',
                         game_token: vm.current_game.id,
-                        character: vm.prepareCharacter(new_character)
+                        character: character
                     });
                 }
             }
         },
+        /**
+         * Alter the tags, stats and gauges of a character to be valid.
+         * This method is called by a watcher and use character.recalculate to
+         * avoid infinite loop to the modification of the character's data.
+         * @param {object} character : the character to alter.
+         * @param {boolean} creation : are we creating the character ?
+         */
+        limitCharacter(character, creation = false) {
+            if (character.recalculate === 1 || creation) {
+                let vm = this;
+                character.recalculate = 0;
+                let modifiers_stats = {};
+
+                // Sort the character's tags by group order.
+                character.tags.sort(function(a, b) {
+                    if (a.group < b.group) {
+                        return -1;
+                    }
+                    else if (a.group > b.group) {
+                        return 1;
+                    }
+                    return 0;
+                });
+
+                // Calculate the bonuses for stats values given by each tag of
+                // the character.
+                character.tags.forEach(function (tag) {
+                    if (tag.stat_modifiers !== undefined) {
+                        for (const [key, stat] of Object.entries(tag.stat_modifiers)) {
+                            modifiers_stats[key] = (modifiers_stats[key] ?? 0) + stat.value;
+                        }
+                    }
+                });
+
+                // Update the character gauges values.
+                for (const [key, gauge] of Object.entries(character.gauges)) {
+                    if (vm.gauges[key] !== undefined) {
+                        if (gauge.value <= 0) {
+                            if (vm.gauges[key].deadly) {
+                                // Characters should not die instantly when created.
+                                if (creation) {
+                                    character.gauges[key].value = 1;
+                                }
+                                else {
+                                    character.gauges[key].value = 0;
+                                    character.alive = false;
+                                }
+                            }
+                            else {
+                                character.gauges[key].value = 0;
+                            }
+                        }
+                        else if (vm.gauges[key].max !== '' && gauge.value > vm.gauges[key].max) {
+                            character.gauges[key].value = vm.gauges[key].max;
+                        }
+                    }
+                }
+                // Update the character stats values.
+                for (const [key, stat] of Object.entries(character.stats)) {
+                    let temp_stat_value = character.base_stats[key];
+                    if (modifiers_stats[key] !== undefined) {
+                        temp_stat_value += modifiers_stats[key];
+                    }
+
+                    if (vm.stats[key] !== undefined) {
+                        // Stats values should always be > 1 and <= 20.
+                        if (temp_stat_value <= 0) {
+                            character.stats[key].value = 1;
+                        }
+                        else if (temp_stat_value > 20) {
+                            character.stats[key].value = 20;
+                        }
+                        else {
+                            character.stats[key].value = temp_stat_value;
+                        }
+                    }
+                }
+            }
+        },
+        /**
+         * Retrieve the character associated with a token
+         * @param {string} token
+         * @return {object | null} the character found, or null if not found.
+         */
         retrieveCharacter(token) {
             if (this.current_game.characters.length === undefined) {
                 return null;
@@ -272,6 +356,13 @@ export const usePlayerStore = defineStore('playerStore', {
                 return this.current_game.characters.find((element) => element.token === token);
             }
         },
+        /**
+         * Generate a character.
+         * @param {object} data : data already choosen by the player.
+         * If data is null, it creates a npc with a random name.
+         * @param {object} conn : a DataConnection from the peerjs library
+         * @return {object} a new character.
+         */
         generateCharacter(data = null, conn = null) {
             const vm = this;
             let token = Math.random() + Math.random();
@@ -285,6 +376,7 @@ export const usePlayerStore = defineStore('playerStore', {
                 pseudo: data != null ? data.pseudo : i18n.global.t('non_player'),
                 stats: {},
                 gauges: {},
+                base_stats: {},
                 alive: true,
                 challenge: {},
                 polls: {},
@@ -372,41 +464,30 @@ export const usePlayerStore = defineStore('playerStore', {
                     die_choice = dice_rolls.splice(choice, 1)[0]
                 }
                 character.stats[key] = {label: stat.name, value: die_choice}
+                character.base_stats[key] = character.stats[key].value;
             }
 
             for (const [key, gauge] of Object.entries(this.gauges)) {
-                character.gauges[key] = {label: gauge.name, value: gauge.value}
+                character.gauges[key] = {label: gauge.name, value: gauge.value, deadly: this.gauges[key].deadly ?? false}
             }
 
             // Apply tag modifiers to stats and gauges.
+            character.tags = [];
             tags.forEach(function(tag) {
-                if (tag.stat_modifiers !== undefined) {
-                    for (const [key, stat] of Object.entries(tag.stat_modifiers)) {
-                        if (character.stats[key] !== undefined) {
-                            character.stats[key].value += stat.value;
-                            if (character.stats[key].value <= 0) {
-                                character.stats[key].value = 1;
-                            }
-                        }
-                    }
-                }
-                if (tag.gauge_modifiers !== undefined) {
-                    for (const [key, gauge] of Object.entries(tag.gauge_modifiers)) {
-                        if (character.gauges[key] !== undefined) {
-                            character.gauges[key].value += gauge.value;
-                            if (character.gauges[key].value <= 0) {
-                                character.gauges[key].value = 1;
-                            }
-                        }
-                    }
-                }
-            });
-            character.tags = tags;
+                vm.addTagToCharacter(character, tag);
+            })
 
+            // Get the gauges and stats back in the allowed limits.
+            this.limitCharacter(character, true);
             this.addCharacter(character);
+
             return character;
         },
-        generateCharacters(nb) {
+        /**
+         * Generate a given number of npc characters.
+         * @param {int} nb : the amount to generate.
+         */
+        generateNpcCharacters(nb) {
             for (let i = 0 ; i < nb ; i++) {
                 let character = this.generateCharacter();
                 let retrieved_character = this.retrieveCharacter(character.token);
@@ -416,17 +497,12 @@ export const usePlayerStore = defineStore('playerStore', {
                 }
             }
         },
-        prepareCharacter(character) {
-            // Future manipulation of character.
-            return character;
-        },
-        filterCharacterByTags(character, chosen_tags) {
-            return(
-                character.tags.find(
-                    (tag) => chosen_tags.find((chosen_tag) => chosen_tag.code === tag.code)
-                )
-            )
-        },
+        /**
+         * Retrieve a list of characters filtered by conditions.
+         * @param {boolean} alive : the character is alive.
+         * @param {boolean} connected : a player is connected to the character.
+         * @param {boolean} npc : the character is a npc.
+         */
         getCharacters(alive = true, connected = true, npc = true) {
             const vm = this;
             return this.characters.filter(
@@ -442,6 +518,96 @@ export const usePlayerStore = defineStore('playerStore', {
                     (npc ? character.npc === undefined : true)
                   )
               })
+        },
+        /**
+         * Search all characters for the ones with a specific tag. Update their gauge value.
+         * @param {object} target_tag : the searched tag.
+         * @param {int} modifier : the modified value.
+         */
+        updateGaugeModifier(target_tag, key, modifier) {
+            this.characters.forEach(function(character) {
+                let foundIndex = character.tags.findIndex(function(tag) {
+                    if (tag.code === target_tag.code) {
+                        return true;
+                    }
+                });
+                if (foundIndex > -1) {
+                    character.gauges[key].value += modifier;
+                    character.recalculate = 1;
+                }
+            })
+        },
+        updateStatModifier(target_tag) {
+            this.characters.forEach(function(character) {
+                let foundIndex = character.tags.findIndex(function(tag) {
+                    if (tag.code === target_tag.code) {
+                        return true;
+                    }
+                });
+                if (foundIndex > -1) {
+                  character.recalculate = 1;
+                }
+            })
+        },
+        /**
+         * Delete a specific tag from a character tag list if they already have it.
+         * @param {object} character : the character to target.
+         * @param {object} target_tag : the tag to delete.
+         * @param {boolean} inverse_modifier : if true, the gauges bonuses of
+         * the tag will be reversed on the character.
+         */
+        removeTagFromCharacter(character, target_tag, inverse_modifier= false) {
+            let found = character.tags.findIndex((tag) => tag.code === target_tag.code);
+            if (found > -1) {
+                character.tags.splice(found, 1);
+                if (inverse_modifier) {
+                    if (target_tag.gauge_modifiers !== undefined) {
+                        for (const [key, gauge_modifier] of Object.entries(target_tag.gauge_modifiers)) {
+                            character.gauges[key].value -= gauge_modifier.value;
+                        }
+                    }
+                }
+                character.recalculate = 1;
+            }
+            return (found > -1);
+        },
+        /**
+         * Add a specific tag to a character tag list if they already have it.
+         * @param {object} character : the character to target.
+         * @param {object} target_tag : the tag to add.
+         */
+        addTagToCharacter(character, target_tag) {
+            let found = character.tags.findIndex((tag) => tag.code === target_tag.code);
+            if (found === -1) {
+                if (target_tag.gauge_modifiers !== undefined) {
+                    for (const [key, gauge_modifier] of Object.entries(target_tag.gauge_modifiers)) {
+                        character.gauges[key].value += gauge_modifier.value;
+                    }
+                }
+                character.tags.push(target_tag);
+                character.recalculate = 1;
+            }
+            return (found === -1);
+        },
+        /**
+         * Modify a base gauge value of a character.
+         * @param {object} character : the character to target.
+         * @param {string} key : the gauge's key.
+         * @param {int} modifier : the bonus or malus to add.
+         */
+        modifyGaugeCharacter(character, key, modifier) {
+            character.gauges[key].value += modifier;
+            character.recalculate = 1;
+        },
+        /**
+         * Modify a base stat value of a character.
+         * @param {object} character : the character to target.
+         * @param {string} key : the stat's key.
+         * @param {int} modifier : the bonus or malus to add.
+         */
+        modifyStatCharacter(character, key, modifier) {
+            character.base_stats[key] += modifier;
+            character.recalculate = 1;
         },
         filterCharacterByTagsAndPicked(character, chosen_tags, select_picked = false) {
             let is_picked = false;
@@ -490,6 +656,7 @@ export const usePlayerStore = defineStore('playerStore', {
             return group.tags.find((tag) => tag.code === choice_index);
         },
         removeTagFromAll(deleted_tag) {
+            const vm = this;
             this.characters.forEach(function(character) {
                 let foundIndex = character.tags.findIndex(function(tag) {
                     if (tag.code === deleted_tag.code) {
@@ -497,7 +664,7 @@ export const usePlayerStore = defineStore('playerStore', {
                     }
                 });
                 if (foundIndex > -1) {
-                    character.tags.splice(foundIndex, 1);
+                    vm.removeTagFromCharacter(character, deleted_tag);
                 }
             })
         },
@@ -507,7 +674,6 @@ export const usePlayerStore = defineStore('playerStore', {
             }
         },
         addChallenge(challenge) {
-            const vm = this;
             challenge.date = Date.now();
             challenge.nb_success = 0;
             challenge.nb_failure = 0;
@@ -579,7 +745,7 @@ export const usePlayerStore = defineStore('playerStore', {
                         if (challenge.stat_group_modifier[result] !== undefined) {
                             for (const [key, bonus] of Object.entries(challenge.stat_group_modifier[result])) {
                                 character.challenge.message.push(i18n.global.t('result_' + (bonus >= 0 ? 'bonus' : 'malus'), {points: bonus, name: vm.stats[key].name}));
-                                character.stats[key].value += bonus;
+                                character.base_stats[key] += bonus;
                             }
                         }
                         if (challenge.marker_group_modifier[result] !== undefined) {
@@ -590,22 +756,19 @@ export const usePlayerStore = defineStore('playerStore', {
                         }
                         if (challenge.chosen_group_modifier_tags_add[result] !== undefined) {
                             challenge.chosen_group_modifier_tags_add[result].forEach(function(tag) {
-                                let found = character.tags.findIndex((character_tag) => character_tag.code === tag.code);
-                                if (found === -1) {
-                                    character.tags.push(tag);
+                                if (vm.addTagToCharacter(character, tag)) {
                                     character.challenge.message.push(i18n.global.t('added_tag', {tag_label: tag.label}) );
                                 }
                             });
                         }
                         if (challenge.chosen_group_modifier_tags_remove[result] !== undefined) {
                             challenge.chosen_group_modifier_tags_remove[result].forEach(function(tag) {
-                                let found = character.tags.findIndex((character_tag) => character_tag.code === tag.code);
-                                if (found !== -1) {
-                                    character.tags.splice(found, 1);
+                                if (vm.removeTagFromCharacter(character, tag)) {
                                     character.challenge.message.push(i18n.global.t('removed_tag', {tag_label: tag.label}) );
                                 }
                             });
                         }
+                        character.recalculate = 1;
                     }
                 }
             )
@@ -636,7 +799,6 @@ export const usePlayerStore = defineStore('playerStore', {
             const vm = this;
             let challenge = this.last_challenge;
 
-            character.in_progress = true;
             character.challenge.wait_roll = false;
             let messages = [];
             let result = 'failure';
@@ -661,13 +823,13 @@ export const usePlayerStore = defineStore('playerStore', {
             if (challenge.gauge_modifier[result] !== undefined) {
                 for (const [key, bonus] of Object.entries(challenge.gauge_modifier[result])) {
                     messages.push(i18n.global.t('result_' + (bonus >= 0 ? 'bonus' : 'malus'), {points: bonus, name: vm.gauges[key].name}));
-                    character.gauges[key].value += bonus;
+                    this.modifyGaugeCharacter(character, key, bonus);
                 }
             }
             if (challenge.stat_modifier[result] !== undefined) {
                 for (const [key, bonus] of Object.entries(challenge.stat_modifier[result])) {
                     messages.push(i18n.global.t('result_' + (bonus >= 0 ? 'bonus' : 'malus'), {points: bonus, name: vm.stats[key].name}));
-                    character.stats[key].value += bonus;
+                    this.modifyStatCharacter(character, key, bonus);
                 }
             }
             if (challenge.marker_modifier[result] !== undefined) {
@@ -678,18 +840,14 @@ export const usePlayerStore = defineStore('playerStore', {
             }
             if (challenge.chosen_modifier_tags_add[result] !== undefined) {
                 challenge.chosen_modifier_tags_add[result].forEach(function(tag) {
-                    let found = character.tags.findIndex((character_tag) => character_tag.code === tag.code);
-                    if (found === -1) {
-                        character.tags.push(tag);
+                    if (vm.addTagToCharacter(character, tag)) {
                         messages.push(i18n.global.t('added_tag', {tag_label: tag.label}) );
                     }
                 });
             }
             if (challenge.chosen_modifier_tags_remove[result] !== undefined) {
                 challenge.chosen_modifier_tags_remove[result].forEach(function(tag) {
-                    let found = character.tags.findIndex((character_tag) => character_tag.code === tag.code);
-                    if (found !== -1) {
-                        character.tags.splice(found, 1);
+                    if (vm.removeTagFromCharacter(character, tag)) {
                         messages.push(i18n.global.t('removed_tag', {tag_label: tag.label}) );
                     }
                 });
@@ -698,7 +856,6 @@ export const usePlayerStore = defineStore('playerStore', {
             character.challenge.roll = real_die_throw;
             character.challenge.message = messages;
             character.challenge.group = false;
-            delete character.in_progress;
         },
         saveQuit() {
             let games = localStorage.getItem('games');

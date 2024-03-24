@@ -39,6 +39,9 @@ export default {
       if (test_max !== '') {
         this.store.gauges[key].max = (test_max < test_value) ? test_value : test_max;
       }
+      else {
+        this.store.gauges[key].max = '';
+      }
 
       this.store.characters.forEach(function(character) {
         character.gauges[key].label = label;
@@ -50,6 +53,7 @@ export default {
             character.gauges[key].value = test_max;
           }
         }
+        character.gauges[key].deadly = deadly;
       });
       for (const key_stat of Object.keys(this.store.stats)) {
         if (this.$refs['gauge_' + key + '_spending_' + key_stat][0].checked) {
@@ -72,7 +76,6 @@ export default {
       this.temp_gauge_value = this.store.gauges[key].value;
       this.temp_gauge_max = this.store.gauges[key].max;
       this.temp_gauge_deadly = this.store.gauges[key].deadly;
-
 
       this.$nextTick(() => {
         this.$refs['gauge_' + key][0].focus();
@@ -209,7 +212,6 @@ export default {
                   <input :ref="'gauge_value_' + key" v-model="temp_gauge_value" min="1" :id="'gauge_value_'+key" type="number">
                 </div>
                 <div :ref="index === 0 ? 'step_settings_gauge_max' : null" class="gauge-max">
-                  {{ gauge.max }}
                   <label :for="'gauge_max_'+key">{{ $t('maximum') }}</label>
                   <input :ref="'gauge_max_' + key" v-model="temp_gauge_max" min="1" :id="'gauge_max_'+key" type="number">
                 </div>

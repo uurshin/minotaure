@@ -37,6 +37,8 @@ $breakpoints: (
   --margin-multiselect: 0;
   --tab-border-color: white;
   --character-picked: gold;
+  --player-tag-background: black;
+  --player-tag-color: white;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -61,6 +63,8 @@ $breakpoints: (
   --border-color: #777;
   --tab-border-color: black;
   --character-picked: black;
+  --player-tag-background: #efefef;
+  --player-tag-color: black;
 
   &.picker {
 	  background: #efefef;
@@ -80,6 +84,8 @@ $breakpoints: (
   --valid-color: #379634;
   --danger-color: #A63A50;
   --tab-border-color: black;
+  --player-tag-background: black;
+  --player-tag-color: white;
 
   &.picker {
     background: #5858c4;
@@ -100,6 +106,8 @@ $breakpoints: (
   --character-picked: #141204;
   --success-background: #159241;
   --failure-background: #AA4538;
+  --player-tag-background: #e5e2da;
+  --player-tag-color: #141204;
 
   &.picker {
     background: #dbc6b8;

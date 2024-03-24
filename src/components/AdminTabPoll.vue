@@ -95,7 +95,7 @@ export default {
           if (character.polls[id_poll].answer !== undefined && vm.store.polls[id_poll].options[character.polls[id_poll].answer].tags !== undefined) {
             let new_tags = vm.store.polls[id_poll].options[character.polls[id_poll].answer].tags;
             new_tags.forEach(function(tag) {
-              character.tags.push(tag);
+              vm.store.addTagToCharacter(character, tag);
             });
           }
           delete character.polls[id_poll];
