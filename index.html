@@ -18537,6 +18537,10 @@ const messages = {
       const { normalize: _normalize } = ctx;
       return _normalize(["Sie können bewirken, dass das Sinken einer Anzeige auf einen Wert von 0 den Tod eines Charakters zur Folge hat, indem Sie auf diese Schaltfläche klicken (diese Aktion ist umkehrbar, aber bereits verstorbene Charaktere werden nicht wiederbelebt!)."]);
     },
+    "step_settings_gauge_max": (ctx) => {
+      const { normalize: _normalize } = ctx;
+      return _normalize(["Sie können ein optionales Maximum angeben, das von den Charakteren für diese Anzeige nicht überschritten werden kann."]);
+    },
     "step_settings_stats": (ctx) => {
       const { normalize: _normalize } = ctx;
       return _normalize(["Die Attribute funktionieren wie in den meisten Rollenspielen. Beim Erstellen eines Spiels werden standardmäßig zwei Attribute erstellt: Physisch und Mental."]);
@@ -18644,6 +18648,10 @@ const messages = {
     "kills_at_0": (ctx) => {
       const { normalize: _normalize } = ctx;
       return _normalize(["Tötet bei 0"]);
+    },
+    "maximum": (ctx) => {
+      const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+      return _normalize(["Maximal bei ", _interpolate(_named("max"))]);
     },
     "submit": (ctx) => {
       const { normalize: _normalize } = ctx;
@@ -18964,6 +18972,18 @@ const messages = {
     "add_all_to_selection": (ctx) => {
       const { normalize: _normalize } = ctx;
       return _normalize(["Alle zur Auswahl hinzufügen"]);
+    },
+    "add_to_selected": (ctx) => {
+      const { normalize: _normalize } = ctx;
+      return _normalize(["Zu den Ausgewählten hinzufügen"]);
+    },
+    "remove_from_selected": (ctx) => {
+      const { normalize: _normalize } = ctx;
+      return _normalize(["Aus den Ausgewählten entfernen"]);
+    },
+    "filter_list": (ctx) => {
+      const { normalize: _normalize } = ctx;
+      return _normalize(["Liste filtern"]);
     },
     "challenged_end_in": (ctx) => {
       const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
@@ -19659,6 +19679,10 @@ const messages = {
       const { normalize: _normalize } = ctx;
       return _normalize(["You can make it so that a bar's passage to a score of 0 results in a character's death by clicking on this button (this action is reversible, but characters already dead will not be resurrected!)."]);
     },
+    "step_settings_gauge_max": (ctx) => {
+      const { normalize: _normalize } = ctx;
+      return _normalize(["You can specify an optional maximum that cannot be exceeded by the characters for this gauge."]);
+    },
     "step_settings_stats": (ctx) => {
       const { normalize: _normalize } = ctx;
       return _normalize(["The stats work in the same way as in most role-playing games. When you create a game, two stats are created: physical and mental."]);
@@ -19766,6 +19790,10 @@ const messages = {
     "kills_at_0": (ctx) => {
       const { normalize: _normalize } = ctx;
       return _normalize(["Kills at 0"]);
+    },
+    "maximum": (ctx) => {
+      const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+      return _normalize(["Maximum at ", _interpolate(_named("max"))]);
     },
     "submit": (ctx) => {
       const { normalize: _normalize } = ctx;
@@ -20086,6 +20114,14 @@ const messages = {
     "add_all_to_selection": (ctx) => {
       const { normalize: _normalize } = ctx;
       return _normalize(["Add all to selection"]);
+    },
+    "add_to_selected": (ctx) => {
+      const { normalize: _normalize } = ctx;
+      return _normalize(["Add to selected"]);
+    },
+    "remove_from_selected": (ctx) => {
+      const { normalize: _normalize } = ctx;
+      return _normalize(["Remove from selected"]);
     },
     "challenged_end_in": (ctx) => {
       const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
@@ -20781,6 +20817,10 @@ const messages = {
       const { normalize: _normalize } = ctx;
       return _normalize(["Puedes hacer que llegar a 0 en una barra resulte en la muerte de un personaje haciendo clic en este botón (esta acción es reversible, pero los personajes ya muertos no resucitarán)."]);
     },
+    "step_settings_gauge_max": (ctx) => {
+      const { normalize: _normalize } = ctx;
+      return _normalize(["Puede especificar un máximo opcional que los personajes no pueden exceder para esta barra."]);
+    },
     "step_settings_stats": (ctx) => {
       const { normalize: _normalize } = ctx;
       return _normalize(["Las características funcionan de la misma manera que en la mayoría de los juegos de rol. Cuando creas una partida, se crean dos características: física y mental."]);
@@ -20888,6 +20928,10 @@ const messages = {
     "kills_at_0": (ctx) => {
       const { normalize: _normalize } = ctx;
       return _normalize(["Mata a 0"]);
+    },
+    "maximum": (ctx) => {
+      const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+      return _normalize(["Máximo a ", _interpolate(_named("max"))]);
     },
     "submit": (ctx) => {
       const { normalize: _normalize } = ctx;
@@ -21208,6 +21252,18 @@ const messages = {
     "add_all_to_selection": (ctx) => {
       const { normalize: _normalize } = ctx;
       return _normalize(["Agregar todo a la selección"]);
+    },
+    "add_to_selected": (ctx) => {
+      const { normalize: _normalize } = ctx;
+      return _normalize(["Agregar a los seleccionados"]);
+    },
+    "remove_from_selected": (ctx) => {
+      const { normalize: _normalize } = ctx;
+      return _normalize(["Eliminar de los seleccionados"]);
+    },
+    "filter_list": (ctx) => {
+      const { normalize: _normalize } = ctx;
+      return _normalize(["Filtrar la lista"]);
     },
     "challenged_end_in": (ctx) => {
       const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
@@ -21903,6 +21959,10 @@ const messages = {
       const { normalize: _normalize } = ctx;
       return _normalize(["Vous pouvez faire en sorte que le passage d'une jauge à un score de 0 entraine la mort d'un personnage en cliquant sur ce bouton (cette action est réversible mais les personnages déjà morts ne seront pas ressuscités pour autant !)."]);
     },
+    "step_settings_gauge_max": (ctx) => {
+      const { normalize: _normalize } = ctx;
+      return _normalize(["Vous pouvez indiquer un maximum optionnel qui ne pourra être dépassé par les personnages pour cette jauge."]);
+    },
     "step_settings_stats": (ctx) => {
       const { normalize: _normalize } = ctx;
       return _normalize(["Les caractéristiques fonctionnent de la même façon que dans la plupart des jeux de rôle. Quand vous créez une partie, deux caractéristiques sont créées : physique et mental."]);
@@ -22010,6 +22070,10 @@ const messages = {
     "kills_at_0": (ctx) => {
       const { normalize: _normalize } = ctx;
       return _normalize(["Tue à 0"]);
+    },
+    "maximum": (ctx) => {
+      const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+      return _normalize(["Maximum à ", _interpolate(_named("max"))]);
     },
     "submit": (ctx) => {
       const { normalize: _normalize } = ctx;
@@ -22326,6 +22390,18 @@ const messages = {
     "add_all_to_selection": (ctx) => {
       const { normalize: _normalize } = ctx;
       return _normalize(["Tout ajouter à la sélection"]);
+    },
+    "add_to_selected": (ctx) => {
+      const { normalize: _normalize } = ctx;
+      return _normalize(["Ajouter aux sélectionnés"]);
+    },
+    "remove_from_selected": (ctx) => {
+      const { normalize: _normalize } = ctx;
+      return _normalize(["Retirer aux sélectionnés"]);
+    },
+    "filter_list": (ctx) => {
+      const { normalize: _normalize } = ctx;
+      return _normalize(["Filtrer la liste"]);
     },
     "challenged_end_in": (ctx) => {
       const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
@@ -23033,6 +23109,10 @@ const messages = {
       const { normalize: _normalize } = ctx;
       return _normalize(["Puoi fare in modo che il passaggio di una barra a un punteggio di 0 comporti la morte di un personaggio cliccando su questo pulsante (questa azione è reversibile, ma i personaggi già morti non verranno resuscitati!)."]);
     },
+    "step_settings_gauge_max": (ctx) => {
+      const { normalize: _normalize } = ctx;
+      return _normalize(["Puoi specificare un massimo opzionale che i personaggi non possono superare per questa barra."]);
+    },
     "step_settings_stats": (ctx) => {
       const { normalize: _normalize } = ctx;
       return _normalize(["Le statistiche funzionano allo stesso modo di molti giochi di ruolo. Quando crei un gioco, vengono create due statistiche: fisica e mentale."]);
@@ -23132,6 +23212,10 @@ const messages = {
     "kills_at_0": (ctx) => {
       const { normalize: _normalize } = ctx;
       return _normalize(["Uccide a 0"]);
+    },
+    "maximum": (ctx) => {
+      const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+      return _normalize(["Massimo a ", _interpolate(_named("max"))]);
     },
     "submit": (ctx) => {
       const { normalize: _normalize } = ctx;
@@ -23452,6 +23536,18 @@ const messages = {
     "add_all_to_selection": (ctx) => {
       const { normalize: _normalize } = ctx;
       return _normalize(["Aggiungi tutti alla selezione"]);
+    },
+    "add_to_selected": (ctx) => {
+      const { normalize: _normalize } = ctx;
+      return _normalize(["Aggiungi ai selezionati"]);
+    },
+    "remove_from_selected": (ctx) => {
+      const { normalize: _normalize } = ctx;
+      return _normalize(["Rimuovi dai selezionati"]);
+    },
+    "filter_list": (ctx) => {
+      const { normalize: _normalize } = ctx;
+      return _normalize(["Filtrare la lista"]);
     },
     "challenged_end_in": (ctx) => {
       const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
@@ -24131,6 +24227,10 @@ const messages = {
       const { normalize: _normalize } = ctx;
       return _normalize(["Możesz sprawić, że spadek jauges do 0 spowoduje śmierć postaci, klikając na ten przycisk (ta akcja jest odwracalna, ale postacie już martwe nie zostaną wskrzeszone!)."]);
     },
+    "step_settings_gauge_max": (ctx) => {
+      const { normalize: _normalize } = ctx;
+      return _normalize(["Możesz określić opcjonalne maksimum, którego postacie nie mogą przekroczyć dla tej wskaźnika."]);
+    },
     "step_settings_gauge_name": (ctx) => {
       const { normalize: _normalize } = ctx;
       return _normalize(["Możesz zmieniać nazwę wskaźnika w dowolnym momencie."]);
@@ -24254,6 +24354,10 @@ const messages = {
     "kills_at_0": (ctx) => {
       const { normalize: _normalize } = ctx;
       return _normalize(["Zabija przy 0"]);
+    },
+    "maximum": (ctx) => {
+      const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+      return _normalize(["Maksymalny a ", _interpolate(_named("max"))]);
     },
     "submit": (ctx) => {
       const { normalize: _normalize } = ctx;
@@ -24574,6 +24678,18 @@ const messages = {
     "add_all_to_selection": (ctx) => {
       const { normalize: _normalize } = ctx;
       return _normalize(["Dodaj wszystko do wyboru"]);
+    },
+    "add_to_selected": (ctx) => {
+      const { normalize: _normalize } = ctx;
+      return _normalize(["Dodaj do wybranych"]);
+    },
+    "remove_from_selected": (ctx) => {
+      const { normalize: _normalize } = ctx;
+      return _normalize(["Usuń z wybranych"]);
+    },
+    "filter_list": (ctx) => {
+      const { normalize: _normalize } = ctx;
+      return _normalize(["Filtruj listę"]);
     },
     "challenged_end_in": (ctx) => {
       const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
@@ -25269,6 +25385,10 @@ const messages = {
       const { normalize: _normalize } = ctx;
       return _normalize(["Você pode fazer com que a passagem de uma barra para uma pontuação de 0 resulte na morte de um personagem clicando neste botão (esta ação é reversível, mas personagens já mortos não serão ressuscitados!)."]);
     },
+    "step_settings_gauge_max": (ctx) => {
+      const { normalize: _normalize } = ctx;
+      return _normalize(["Você pode especificar um máximo opcional que os personagens não podem exceder para esta barra."]);
+    },
     "step_settings_stats": (ctx) => {
       const { normalize: _normalize } = ctx;
       return _normalize(["As estatísticas funcionam da mesma forma que na maioria dos jogos de interpretação de papéis. Quando você cria um jogo, duas estatísticas são criadas: física e mental."]);
@@ -25376,6 +25496,10 @@ const messages = {
     "kills_at_0": (ctx) => {
       const { normalize: _normalize } = ctx;
       return _normalize(["Mata em 0"]);
+    },
+    "maximum": (ctx) => {
+      const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
+      return _normalize(["Máximo em ", _interpolate(_named("max"))]);
     },
     "submit": (ctx) => {
       const { normalize: _normalize } = ctx;
@@ -25700,6 +25824,18 @@ const messages = {
     "add_all_to_selection": (ctx) => {
       const { normalize: _normalize } = ctx;
       return _normalize(["Adicionar todos à seleção"]);
+    },
+    "add_to_selected": (ctx) => {
+      const { normalize: _normalize } = ctx;
+      return _normalize(["Adicionar aos selecionados"]);
+    },
+    "remove_from_selected": (ctx) => {
+      const { normalize: _normalize } = ctx;
+      return _normalize(["Remover dos selecionados"]);
+    },
+    "filter_list": (ctx) => {
+      const { normalize: _normalize } = ctx;
+      return _normalize(["Filtrar a lista"]);
     },
     "challenged_end_in": (ctx) => {
       const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
@@ -26119,7 +26255,7 @@ const Main = /* @__PURE__ */ _export_sfc(_sfc_main$h, [["render", _sfc_render$f]
 const Home_vue_vue_type_style_index_0_lang = "";
 const _sfc_main$g = {
   setup() {
-    const version2 = "1.2.0";
+    const version2 = "1.2.1";
     return {
       version: version2,
       store: usePlayerStore()
@@ -26268,7 +26404,7 @@ const _sfc_main$f = {
         name: this.name,
         characters: [],
         date: Date.now(),
-        version: "1.2.0",
+        version: "1.2.1",
         init: true,
         tag_groups: []
       };
@@ -29368,12 +29504,15 @@ const _sfc_main$b = {
     return {
       store,
       tag_filter: [],
+      tags_edit: [],
       search_character: "",
       filters: {},
       options_contextual: [{}],
       character_edit: 0,
       temp_character: null,
-      edited_character: null
+      edited_character: null,
+      current_action: null,
+      filtered_characters: []
     };
   },
   computed: {
@@ -29402,6 +29541,10 @@ const _sfc_main$b = {
   },
   mounted() {
     this.$refs["dataset"].showEntries(1e4);
+    let vm = this;
+    document.querySelector("body").addEventListener("click", function(e) {
+      vm.closeEdition(e);
+    });
   },
   methods: {
     getClasses(character) {
@@ -29479,6 +29622,7 @@ const _sfc_main$b = {
       this.filters = {};
       this.tag_filter = [];
       this.search_character = "";
+      this.$refs["dataset"].search();
     },
     sortAsChallenge(challenge) {
       return this.store.last_challenge !== void 0 && this.store.last_challenge.active && challenge !== void 0 && challenge.date === this.store.last_challenge.date;
@@ -29492,6 +29636,13 @@ const _sfc_main$b = {
       }
       this.options_contextual = this.generateOptions(item);
       this.$refs.context_character.showMenu(event, item);
+    },
+    toggleAction(action = null) {
+      if (this.current_action === action || action === null) {
+        this.current_action = null;
+      } else {
+        this.current_action = action;
+      }
     },
     generateOptions(item) {
       let options = [];
@@ -29534,18 +29685,11 @@ const _sfc_main$b = {
       let found = this.store.characters.find((found_character) => found_character.token === character.token);
       found.picked = !found.picked;
     },
-    selectVisible(ds) {
-      ds.dsRows.forEach((row) => ds.dsData[row].picked = true);
+    selectVisible() {
+      this.filtered_characters.forEach((row) => row.picked = true);
     },
-    animateToCenter(character) {
-      if (this.edited_character !== null && this.character_centered !== null && this.character_centered.token !== character.token) {
-        return;
-      }
-      let expand = false;
-      if (this.character_centered === null || this.character_centered.token !== character.token) {
-        expand = true;
-      }
-      if (this.character_centered !== null) {
+    closeEdition(e) {
+      if (e.target.closest(".centered") === null && this.character_centered !== null) {
         this.$refs[this.character_centered.token].style.transform = null;
         this.$refs[this.character_centered.token].classList.remove("centered");
         if (this.edited_character !== null && this.character_centered.token === this.edited_character.token) {
@@ -29553,7 +29697,12 @@ const _sfc_main$b = {
         }
         this.character_centered = null;
       }
-      if (expand && character !== void 0) {
+    },
+    animateToCenter(character) {
+      if (this.character_centered !== null) {
+        return;
+      }
+      if (character !== void 0) {
         this.character_centered = character;
         var rect = this.$refs[character.token].getBoundingClientRect();
         let scale = 2;
@@ -29569,24 +29718,25 @@ const _sfc_main$b = {
     validateCharacterEdition(character) {
       const vm = this;
       for (const [key, gauge] of Object.entries(this.temp_character.gauges)) {
-        if (vm.store.gauges[key] !== void 0) {
+        if (this.store.gauges[key] !== void 0) {
           if (typeof gauge.value === "string" || gauge.value instanceof String) {
             gauge.value = parseInt(gauge.value);
           }
-          if (isNaN(gauge.value) || gauge.value === void 0 || gauge.value <= 0) {
-            this.temp_character.gauges[key].value = vm.store.gauges[key].deadly ? 1 : 0;
+          if (isNaN(gauge.value) || gauge.value === void 0) {
+            gauge.value = 0;
+          }
+          if (this.store.gauges[key].deadly && gauge.value === 0) {
+            gauge.value = 1;
           }
         }
       }
       for (const [key, stat] of Object.entries(this.temp_character.stats)) {
         if (vm.store.stats[key] !== void 0) {
-          if (typeof stat.value === "string" || stat.value instanceof String) {
-            stat.value = parseInt(stat.value);
+          if (typeof this.temp_character.base_stats[key] === "string" || this.temp_character.base_stats[key] instanceof String) {
+            this.temp_character.base_stats[key] = parseInt(this.temp_character.base_stats[key]);
           }
-          if (isNaN(stat.value) || stat.value === void 0 || stat.value <= 0) {
-            this.temp_character.stats[key].value = 1;
-          } else if (stat.value > 20) {
-            this.temp_character.stats[key].value = 20;
+          if (isNaN(this.temp_character.base_stats[key]) || this.temp_character.base_stats[key] === void 0) {
+            this.temp_character.base_stats[key] = 1;
           }
         }
       }
@@ -29595,10 +29745,25 @@ const _sfc_main$b = {
       for (const [key, gauge] of Object.entries(this.temp_character.gauges)) {
         character.gauges[key].value = gauge.value;
       }
-      for (const [key, stat] of Object.entries(this.temp_character.stats)) {
-        character.stats[key].value = stat.value;
+      for (const [key, stat] of Object.entries(this.temp_character.base_stats)) {
+        character.base_stats[key] = stat;
       }
+      character.recalculate = 1;
       this.edited_character = null;
+    },
+    updateTagsOfSelection(add2 = true) {
+      let vm = this;
+      if (this.tags_edit !== void 0) {
+        this.tags_edit.forEach(function(tag) {
+          vm.store.picked_characters.forEach(function(character) {
+            if (add2) {
+              vm.store.addTagToCharacter(character, tag);
+            } else {
+              vm.store.removeTagFromCharacter(character, tag);
+            }
+          });
+        });
+      }
     }
   }
 };
@@ -29617,39 +29782,46 @@ const _hoisted_6$8 = {
   key: 2,
   class: "result-container"
 };
-const _hoisted_7$8 = {
-  key: 1,
+const _hoisted_7$8 = { class: "first-column" };
+const _hoisted_8$7 = {
+  key: 3,
   class: "markers-container"
 };
-const _hoisted_8$7 = { class: "filter-data" };
-const _hoisted_9$7 = { key: 0 };
+const _hoisted_9$7 = { class: "second-column" };
 const _hoisted_10$7 = {
+  key: 0,
+  class: "filter-data"
+};
+const _hoisted_11$7 = { key: 0 };
+const _hoisted_12$7 = {
   key: 2,
   class: "dual-button"
 };
-const _hoisted_11$7 = ["onClick"];
-const _hoisted_12$7 = { class: "wrapper-label" };
-const _hoisted_13$7 = { class: "summary full" };
-const _hoisted_14$7 = ["onClick", "onContextmenu"];
-const _hoisted_15$6 = { class: "character-names" };
-const _hoisted_16$6 = {
+const _hoisted_13$7 = ["placeholder"];
+const _hoisted_14$7 = {
+  key: 1,
+  class: "filter-data"
+};
+const _hoisted_15$6 = ["onClick", "onContextmenu"];
+const _hoisted_16$6 = { class: "character-names" };
+const _hoisted_17$6 = {
   key: 1,
   class: "character-name"
 };
-const _hoisted_17$6 = {
+const _hoisted_18$6 = {
   key: 3,
   class: "pseudo"
 };
-const _hoisted_18$6 = { class: "gauges" };
-const _hoisted_19$6 = { key: 1 };
-const _hoisted_20$6 = { class: "stats" };
-const _hoisted_21$6 = { key: 1 };
-const _hoisted_22$6 = {
+const _hoisted_19$6 = { class: "gauges" };
+const _hoisted_20$6 = { key: 1 };
+const _hoisted_21$6 = { class: "stats" };
+const _hoisted_22$6 = { key: 1 };
+const _hoisted_23$5 = {
   key: 0,
   class: "tags"
 };
-const _hoisted_23$5 = { class: "label-name" };
-const _hoisted_24$4 = {
+const _hoisted_24$4 = { class: "label-name" };
+const _hoisted_25$4 = {
   key: 0,
   class: "no-found"
 };
@@ -29658,7 +29830,6 @@ function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_Slider = resolveComponent("Slider");
   const _component_contenteditable = resolveComponent("contenteditable");
   const _component_vue_multiselect = resolveComponent("vue-multiselect");
-  const _component_dataset_search = resolveComponent("dataset-search");
   const _component_dataset_item = resolveComponent("dataset-item");
   const _component_dataset = resolveComponent("dataset");
   return openBlock(), createElementBlock(Fragment, null, [
@@ -29710,209 +29881,255 @@ function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
             }, toDisplayString$1(_ctx.$t("finish_challenge")), 1)
           ]))
         ])) : createCommentVNode("", true),
-        this.store.markers !== void 0 ? (openBlock(), createElementBlock("div", _hoisted_7$8, [
-          (openBlock(true), createElementBlock(Fragment, null, renderList(this.store.markers, (marker) => {
-            return openBlock(), createElementBlock("div", null, [
-              createBaseVNode("span", null, toDisplayString$1(marker.name), 1),
-              createVNode(_component_contenteditable, {
-                class: "value",
-                tag: "span",
-                contenteditable: "true",
-                modelValue: marker.value,
-                "onUpdate:modelValue": ($event) => marker.value = $event,
-                "no-nl": true,
-                "no-html": true
-              }, null, 8, ["modelValue", "onUpdate:modelValue"])
-            ]);
-          }), 256))
-        ])) : createCommentVNode("", true),
-        createBaseVNode("div", _hoisted_8$7, [
-          $data.store.tags.length ? (openBlock(), createElementBlock("div", _hoisted_9$7, [
-            createVNode(_component_vue_multiselect, {
-              ref: "tag_filter",
-              id: "tag_filter",
-              modelValue: $data.tag_filter,
-              "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => $data.tag_filter = $event),
-              label: "label",
-              "track-by": "code",
-              "group-values": "tags",
-              "group-label": "label",
-              "group-select": true,
-              placeholder: _ctx.$t("select_tag"),
-              tagPlaceholder: _ctx.$t("select_tag"),
-              showNoOptions: false,
-              options: $data.store.tag_groups,
-              multiple: true,
-              taggable: false,
-              hideSelected: true
-            }, null, 8, ["modelValue", "placeholder", "tagPlaceholder", "options"])
-          ])) : createCommentVNode("", true),
+        createBaseVNode("div", _hoisted_7$8, [
           createBaseVNode("button", {
-            onClick: _cache[3] || (_cache[3] = ($event) => $options.switchFilter("dead")),
-            class: normalizeClass({ active: $data.filters.dead !== void 0 })
-          }, toDisplayString$1(_ctx.$t("alive")), 3),
-          createBaseVNode("button", {
-            onClick: _cache[4] || (_cache[4] = ($event) => $options.switchFilter("connected")),
-            class: normalizeClass({ active: $data.filters.connected !== void 0 })
-          }, toDisplayString$1(_ctx.$t("connected")), 3),
+            onClick: _cache[2] || (_cache[2] = ($event) => $options.toggleAction("filter")),
+            class: normalizeClass({ active: $data.current_action === "filter" })
+          }, toDisplayString$1(_ctx.$t("filter_list")), 3),
+          Object.keys($data.filters).length || $data.tag_filter.length || $data.search_character !== "" ? (openBlock(), createElementBlock("button", {
+            key: 0,
+            class: "reset-filters btn-valid",
+            onClick: _cache[3] || (_cache[3] = (...args) => $options.resetFilters && $options.resetFilters(...args))
+          }, "Supprimer les filtres")) : createCommentVNode("", true),
           $data.store.picked_characters !== void 0 && $data.store.picked_characters.length ? (openBlock(), createElementBlock("button", {
             key: 1,
-            onClick: _cache[5] || (_cache[5] = ($event) => $options.switchFilter("picked")),
-            class: normalizeClass({ active: $data.filters.picked !== void 0 })
-          }, toDisplayString$1(_ctx.$t("char_picked")), 3)) : createCommentVNode("", true),
-          $options.current_challenge_rate !== false ? (openBlock(), createElementBlock("div", _hoisted_10$7, [
-            createBaseVNode("button", {
-              onClick: _cache[6] || (_cache[6] = ($event) => $options.switchFilterChallenge("success")),
-              class: normalizeClass(["success-button badge", { active: $data.filters.challenge !== void 0 && $data.filters.challenge === "success" }])
-            }, [
-              createTextVNode(toDisplayString$1(_ctx.$t("passed")), 1),
-              createBaseVNode("span", null, toDisplayString$1($data.store.last_challenge.nb_success), 1)
-            ], 2),
-            createBaseVNode("button", {
-              onClick: _cache[7] || (_cache[7] = ($event) => $options.switchFilterChallenge("failure")),
-              class: normalizeClass(["failure-button badge", { active: $data.filters.challenge !== void 0 && $data.filters.challenge === "failure" }])
-            }, [
-              createTextVNode(toDisplayString$1(_ctx.$t("failed")), 1),
-              createBaseVNode("span", null, toDisplayString$1($data.store.last_challenge.nb_failure), 1)
-            ], 2)
-          ])) : createCommentVNode("", true),
-          Object.keys($data.filters).length || $data.tag_filter.length ? (openBlock(), createElementBlock("button", {
-            key: 3,
-            class: "reset-filters",
-            onClick: _cache[8] || (_cache[8] = (...args) => $options.resetFilters && $options.resetFilters(...args))
-          }, toDisplayString$1(_ctx.$t("show_all_characters")), 1)) : createCommentVNode("", true),
-          $data.store.picked_characters !== void 0 && $data.store.picked_characters.length ? (openBlock(), createElementBlock("button", {
-            key: 4,
             class: "btn-valid clear-selection",
-            onClick: _cache[9] || (_cache[9] = ($event) => this.store.resetPickedCharacters())
-          }, toDisplayString$1(_ctx.$t("clear_selection")), 1)) : createCommentVNode("", true)
-        ]),
-        createVNode(_component_dataset, {
-          "ds-data": $data.store.characters,
-          "ds-sortby": ["-alive", "-challenge", "-connection", "name"],
-          "ds-search-in": ["name"],
-          "ds-filter-fields": { tags: $options.filterOnTag, connection: $options.filterConnected, alive: $options.filterDead, challenge: $options.filterChallenge, picked: $options.filterPicked },
-          "ds-sort-as": { challenge: $options.sortAsChallenge, connection: $options.sortAsConnected },
-          ref: "dataset"
-        }, {
-          default: withCtx(({ ds }) => [
-            createBaseVNode("button", {
-              onClick: ($event) => this.selectVisible(ds)
-            }, toDisplayString$1(_ctx.$t("add_all_to_selection")), 9, _hoisted_11$7),
-            createBaseVNode("button", {
-              ref: "step_characters_1",
-              onClick: _cache[10] || (_cache[10] = ($event) => $data.store.generateCharacters(1))
-            }, toDisplayString$1(_ctx.$t("spawn_npc")), 513),
-            createBaseVNode("div", _hoisted_12$7, [
-              createVNode(_component_dataset_search, {
-                placeholder: _ctx.$t("search_character"),
-                modelValue: $data.search_character,
-                "onUpdate:modelValue": _cache[11] || (_cache[11] = ($event) => $data.search_character = $event),
-                id: "search-character",
-                "ds-search-placeholder": _ctx.$t("start_typing")
-              }, null, 8, ["placeholder", "modelValue", "ds-search-placeholder"])
-            ]),
-            createBaseVNode("div", _hoisted_13$7, toDisplayString$1(_ctx.$t("count_personnage", { count: ds.dsResultsNumber })) + toDisplayString$1(_ctx.$t("characters_on")) + toDisplayString$1($data.store.characters.length), 1),
-            createVNode(_component_dataset_item, {
-              class: "full",
-              id: "character-list"
-            }, {
-              default: withCtx(({ row, rowIndex }) => [
-                (openBlock(), createElementBlock("div", {
-                  onClick: [
-                    withModifiers(($event) => $options.animateToCenter(row), ["exact"]),
-                    withModifiers(($event) => $options.toggleCharacter(row), ["shift", "exact"])
-                  ],
-                  ref: row.token,
-                  key: row.token,
-                  onContextmenu: withModifiers(($event) => $options.handleClick($event, row), ["prevent", "stop"]),
-                  class: normalizeClass(["character", [$options.getClasses(row), !row.alive ? "dead" : ""]])
-                }, [
-                  createBaseVNode("div", _hoisted_15$6, [
-                    $data.edited_character !== null && $data.edited_character.token === row.token ? (openBlock(), createBlock(_component_contenteditable, {
-                      key: 0,
-                      onClick: _cache[12] || (_cache[12] = withModifiers(() => {
-                      }, ["stop"])),
-                      class: "value",
-                      tag: "span",
-                      contenteditable: "true",
-                      modelValue: $data.temp_character.name,
-                      "onUpdate:modelValue": _cache[13] || (_cache[13] = ($event) => $data.temp_character.name = $event),
-                      spellcheck: "false",
-                      "no-nl": true,
-                      "no-html": true
-                    }, null, 8, ["modelValue"])) : (openBlock(), createElementBlock("span", _hoisted_16$6, toDisplayString$1(row.name), 1)),
-                    $data.edited_character !== null && $data.edited_character.token === row.token ? (openBlock(), createBlock(_component_contenteditable, {
-                      key: 2,
-                      onClick: _cache[14] || (_cache[14] = withModifiers(() => {
-                      }, ["stop"])),
-                      class: "value",
-                      tag: "span",
-                      contenteditable: "true",
-                      modelValue: $data.temp_character.pseudo,
-                      "onUpdate:modelValue": _cache[15] || (_cache[15] = ($event) => $data.temp_character.pseudo = $event),
-                      spellcheck: "false",
-                      "no-nl": true,
-                      "no-html": true
-                    }, null, 8, ["modelValue"])) : (openBlock(), createElementBlock("span", _hoisted_17$6, toDisplayString$1(row.pseudo), 1))
-                  ]),
-                  createBaseVNode("div", _hoisted_18$6, [
-                    (openBlock(true), createElementBlock(Fragment, null, renderList(row.gauges, (gauge, key) => {
-                      return openBlock(), createElementBlock("span", null, [
-                        createBaseVNode("span", null, toDisplayString$1(gauge.label), 1),
-                        $data.edited_character !== null && $data.edited_character.token === row.token ? (openBlock(), createBlock(_component_contenteditable, {
-                          key: 0,
-                          onClick: _cache[16] || (_cache[16] = withModifiers(() => {
-                          }, ["stop"])),
-                          class: "value",
-                          tag: "span",
-                          contenteditable: "true",
-                          modelValue: $data.temp_character.gauges[key].value,
-                          "onUpdate:modelValue": ($event) => $data.temp_character.gauges[key].value = $event,
-                          "no-nl": true,
-                          "no-html": true
-                        }, null, 8, ["modelValue", "onUpdate:modelValue"])) : (openBlock(), createElementBlock("span", _hoisted_19$6, toDisplayString$1(gauge.value), 1))
-                      ]);
-                    }), 256))
-                  ]),
-                  createBaseVNode("div", _hoisted_20$6, [
-                    (openBlock(true), createElementBlock(Fragment, null, renderList(row.stats, (stat, key) => {
-                      return openBlock(), createElementBlock("span", null, [
-                        createBaseVNode("span", null, toDisplayString$1(stat.label), 1),
-                        $data.edited_character !== null && $data.edited_character.token === row.token ? (openBlock(), createBlock(_component_contenteditable, {
-                          key: 0,
-                          onClick: _cache[17] || (_cache[17] = withModifiers(() => {
-                          }, ["stop"])),
-                          class: "value",
-                          tag: "span",
-                          contenteditable: "true",
-                          modelValue: $data.temp_character.stats[key].value,
-                          "onUpdate:modelValue": ($event) => $data.temp_character.stats[key].value = $event,
-                          "no-nl": true,
-                          "no-html": true
-                        }, null, 8, ["modelValue", "onUpdate:modelValue"])) : (openBlock(), createElementBlock("span", _hoisted_21$6, toDisplayString$1(stat.value), 1))
-                      ]);
-                    }), 256))
-                  ]),
-                  row.tags !== void 0 && row.tags.length ? (openBlock(), createElementBlock("div", _hoisted_22$6, [
-                    (openBlock(true), createElementBlock(Fragment, null, renderList(row.tags, (tag) => {
-                      return openBlock(), createElementBlock("span", {
-                        class: normalizeClass(["tag", "tag-" + tag.code])
-                      }, [
-                        createBaseVNode("span", _hoisted_23$5, toDisplayString$1(tag.label), 1)
-                      ], 2);
-                    }), 256))
-                  ])) : createCommentVNode("", true)
-                ], 42, _hoisted_14$7))
-              ]),
-              noDataFound: withCtx(() => [
-                $data.store.characters.length > 0 ? (openBlock(), createElementBlock("div", _hoisted_24$4, toDisplayString$1(_ctx.$t("no_characters_to_show_try_different_filter")), 1)) : createCommentVNode("", true)
-              ]),
-              _: 1
+            onClick: _cache[4] || (_cache[4] = ($event) => this.store.resetPickedCharacters())
+          }, toDisplayString$1(_ctx.$t("clear_selection")), 1)) : (openBlock(), createElementBlock("button", {
+            key: 2,
+            onClick: _cache[5] || (_cache[5] = (...args) => $options.selectVisible && $options.selectVisible(...args))
+          }, toDisplayString$1(_ctx.$t("add_all_to_selection")), 1)),
+          createBaseVNode("button", {
+            onClick: _cache[6] || (_cache[6] = ($event) => $options.toggleAction("tags")),
+            class: normalizeClass({ active: $data.current_action === "tags" })
+          }, toDisplayString$1(_ctx.$t("Tag / untag")), 3),
+          createBaseVNode("button", {
+            ref: "step_characters_1",
+            onClick: _cache[7] || (_cache[7] = ($event) => {
+              $options.toggleAction();
+              $data.store.generateNpcCharacters(1);
             })
-          ]),
-          _: 1
-        }, 8, ["ds-data", "ds-filter-fields", "ds-sort-as"])
+          }, toDisplayString$1(_ctx.$t("spawn_npc")), 513),
+          this.store.markers !== void 0 ? (openBlock(), createElementBlock("div", _hoisted_8$7, [
+            (openBlock(true), createElementBlock(Fragment, null, renderList(this.store.markers, (marker) => {
+              return openBlock(), createElementBlock("div", null, [
+                createBaseVNode("span", null, toDisplayString$1(marker.name), 1),
+                createVNode(_component_contenteditable, {
+                  class: "value",
+                  tag: "span",
+                  contenteditable: "true",
+                  modelValue: marker.value,
+                  "onUpdate:modelValue": ($event) => marker.value = $event,
+                  "no-nl": true,
+                  "no-html": true
+                }, null, 8, ["modelValue", "onUpdate:modelValue"])
+              ]);
+            }), 256))
+          ])) : createCommentVNode("", true)
+        ]),
+        createBaseVNode("div", _hoisted_9$7, [
+          $data.current_action === "filter" ? (openBlock(), createElementBlock("div", _hoisted_10$7, [
+            $data.store.tags.length ? (openBlock(), createElementBlock("div", _hoisted_11$7, [
+              createVNode(_component_vue_multiselect, {
+                ref: "tag_filter",
+                id: "tag_filter",
+                modelValue: $data.tag_filter,
+                "onUpdate:modelValue": _cache[8] || (_cache[8] = ($event) => $data.tag_filter = $event),
+                label: "label",
+                "track-by": "code",
+                "group-values": "tags",
+                "group-label": "label",
+                "group-select": true,
+                placeholder: _ctx.$t("select_tag"),
+                tagPlaceholder: _ctx.$t("select_tag"),
+                showNoOptions: false,
+                options: $data.store.tag_groups,
+                multiple: true,
+                taggable: false,
+                hideSelected: true
+              }, null, 8, ["modelValue", "placeholder", "tagPlaceholder", "options"])
+            ])) : createCommentVNode("", true),
+            createBaseVNode("button", {
+              onClick: _cache[9] || (_cache[9] = ($event) => $options.switchFilter("dead")),
+              class: normalizeClass({ active: $data.filters.dead !== void 0 })
+            }, toDisplayString$1(_ctx.$t("alive")), 3),
+            createBaseVNode("button", {
+              onClick: _cache[10] || (_cache[10] = ($event) => $options.switchFilter("connected")),
+              class: normalizeClass({ active: $data.filters.connected !== void 0 })
+            }, toDisplayString$1(_ctx.$t("connected")), 3),
+            $data.store.picked_characters !== void 0 && $data.store.picked_characters.length ? (openBlock(), createElementBlock("button", {
+              key: 1,
+              onClick: _cache[11] || (_cache[11] = ($event) => $options.switchFilter("picked")),
+              class: normalizeClass({ active: $data.filters.picked !== void 0 })
+            }, toDisplayString$1(_ctx.$t("char_picked")), 3)) : createCommentVNode("", true),
+            $options.current_challenge_rate !== false ? (openBlock(), createElementBlock("div", _hoisted_12$7, [
+              createBaseVNode("button", {
+                onClick: _cache[12] || (_cache[12] = ($event) => $options.switchFilterChallenge("success")),
+                class: normalizeClass(["success-button badge", { active: $data.filters.challenge !== void 0 && $data.filters.challenge === "success" }])
+              }, [
+                createTextVNode(toDisplayString$1(_ctx.$t("passed")), 1),
+                createBaseVNode("span", null, toDisplayString$1($data.store.last_challenge.nb_success), 1)
+              ], 2),
+              createBaseVNode("button", {
+                onClick: _cache[13] || (_cache[13] = ($event) => $options.switchFilterChallenge("failure")),
+                class: normalizeClass(["failure-button badge", { active: $data.filters.challenge !== void 0 && $data.filters.challenge === "failure" }])
+              }, [
+                createTextVNode(toDisplayString$1(_ctx.$t("failed")), 1),
+                createBaseVNode("span", null, toDisplayString$1($data.store.last_challenge.nb_failure), 1)
+              ], 2)
+            ])) : createCommentVNode("", true),
+            withDirectives(createBaseVNode("input", {
+              type: "text",
+              "onUpdate:modelValue": _cache[14] || (_cache[14] = ($event) => $data.search_character = $event),
+              placeholder: _ctx.$t("search_character"),
+              onKeyup: _cache[15] || (_cache[15] = ($event) => this.$refs["dataset"].search($data.search_character))
+            }, null, 40, _hoisted_13$7), [
+              [vModelText, $data.search_character]
+            ])
+          ])) : createCommentVNode("", true),
+          $data.current_action === "tags" ? (openBlock(), createElementBlock("div", _hoisted_14$7, [
+            createBaseVNode("div", null, [
+              createVNode(_component_vue_multiselect, {
+                ref: "tags_edit",
+                id: "tags_edit",
+                modelValue: $data.tags_edit,
+                "onUpdate:modelValue": _cache[16] || (_cache[16] = ($event) => $data.tags_edit = $event),
+                label: "label",
+                "track-by": "code",
+                "group-values": "tags",
+                "group-label": "label",
+                "group-select": true,
+                placeholder: _ctx.$t("select_tag"),
+                tagPlaceholder: _ctx.$t("select_tag"),
+                showNoOptions: false,
+                options: $data.store.tag_groups,
+                multiple: true,
+                taggable: false,
+                hideSelected: true
+              }, null, 8, ["modelValue", "placeholder", "tagPlaceholder", "options"])
+            ]),
+            createBaseVNode("button", {
+              onClick: _cache[17] || (_cache[17] = ($event) => $options.updateTagsOfSelection(true))
+            }, toDisplayString$1(_ctx.$t("add_to_selected")), 1),
+            createBaseVNode("button", {
+              onClick: _cache[18] || (_cache[18] = ($event) => $options.updateTagsOfSelection(false))
+            }, toDisplayString$1(_ctx.$t("remove_from_selected")), 1)
+          ])) : createCommentVNode("", true),
+          createVNode(_component_dataset, {
+            "ds-data": $data.store.characters,
+            "ds-sortby": ["-alive", "-challenge", "-connection", "name"],
+            "ds-search-in": ["name"],
+            "ds-filter-fields": { tags: $options.filterOnTag, connection: $options.filterConnected, alive: $options.filterDead, challenge: $options.filterChallenge, picked: $options.filterPicked },
+            "ds-sort-as": { challenge: $options.sortAsChallenge, connection: $options.sortAsConnected },
+            ref: "dataset",
+            "onUpdate:dsData": _cache[25] || (_cache[25] = function(data2) {
+              $data.filtered_characters = data2;
+            })
+          }, {
+            default: withCtx(({ ds }) => [
+              createVNode(_component_dataset_item, {
+                class: "full",
+                id: "character-list"
+              }, {
+                default: withCtx(({ row, rowIndex }) => [
+                  (openBlock(), createElementBlock("div", {
+                    onClick: [
+                      withModifiers(($event) => $options.animateToCenter(row), ["exact"]),
+                      withModifiers(($event) => $options.toggleCharacter(row), ["shift", "exact"])
+                    ],
+                    ref: row.token,
+                    key: row.token,
+                    onContextmenu: withModifiers(($event) => $options.handleClick($event, row), ["prevent", "stop"]),
+                    class: normalizeClass(["character", [$options.getClasses(row), !row.alive ? "dead" : ""]])
+                  }, [
+                    createBaseVNode("div", _hoisted_16$6, [
+                      $data.edited_character !== null && $data.edited_character.token === row.token ? (openBlock(), createBlock(_component_contenteditable, {
+                        key: 0,
+                        onClick: _cache[19] || (_cache[19] = withModifiers(() => {
+                        }, ["stop"])),
+                        class: "value",
+                        tag: "span",
+                        contenteditable: "true",
+                        modelValue: $data.temp_character.name,
+                        "onUpdate:modelValue": _cache[20] || (_cache[20] = ($event) => $data.temp_character.name = $event),
+                        spellcheck: "false",
+                        "no-nl": true,
+                        "no-html": true
+                      }, null, 8, ["modelValue"])) : (openBlock(), createElementBlock("span", _hoisted_17$6, toDisplayString$1(row.name), 1)),
+                      $data.edited_character !== null && $data.edited_character.token === row.token ? (openBlock(), createBlock(_component_contenteditable, {
+                        key: 2,
+                        onClick: _cache[21] || (_cache[21] = withModifiers(() => {
+                        }, ["stop"])),
+                        class: "value",
+                        tag: "span",
+                        contenteditable: "true",
+                        modelValue: $data.temp_character.pseudo,
+                        "onUpdate:modelValue": _cache[22] || (_cache[22] = ($event) => $data.temp_character.pseudo = $event),
+                        spellcheck: "false",
+                        "no-nl": true,
+                        "no-html": true
+                      }, null, 8, ["modelValue"])) : (openBlock(), createElementBlock("span", _hoisted_18$6, toDisplayString$1(row.pseudo), 1))
+                    ]),
+                    createBaseVNode("div", _hoisted_19$6, [
+                      (openBlock(true), createElementBlock(Fragment, null, renderList(row.gauges, (gauge, key) => {
+                        return openBlock(), createElementBlock("span", null, [
+                          createBaseVNode("span", null, toDisplayString$1(gauge.label), 1),
+                          $data.edited_character !== null && $data.edited_character.token === row.token ? (openBlock(), createBlock(_component_contenteditable, {
+                            key: 0,
+                            onClick: _cache[23] || (_cache[23] = withModifiers(() => {
+                            }, ["stop"])),
+                            class: "value",
+                            tag: "span",
+                            contenteditable: "true",
+                            modelValue: $data.temp_character.gauges[key].value,
+                            "onUpdate:modelValue": ($event) => $data.temp_character.gauges[key].value = $event,
+                            "no-nl": true,
+                            "no-html": true
+                          }, null, 8, ["modelValue", "onUpdate:modelValue"])) : (openBlock(), createElementBlock("span", _hoisted_20$6, toDisplayString$1(gauge.value), 1))
+                        ]);
+                      }), 256))
+                    ]),
+                    createBaseVNode("div", _hoisted_21$6, [
+                      (openBlock(true), createElementBlock(Fragment, null, renderList(row.stats, (stat, key) => {
+                        return openBlock(), createElementBlock("span", null, [
+                          createBaseVNode("span", null, toDisplayString$1(stat.label), 1),
+                          $data.edited_character !== null && $data.edited_character.token === row.token ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
+                            createVNode(_component_contenteditable, {
+                              onClick: _cache[24] || (_cache[24] = withModifiers(() => {
+                              }, ["stop"])),
+                              class: "value",
+                              tag: "span",
+                              contenteditable: "true",
+                              modelValue: $data.temp_character.base_stats[key],
+                              "onUpdate:modelValue": ($event) => $data.temp_character.base_stats[key] = $event,
+                              "no-nl": true,
+                              "no-html": true
+                            }, null, 8, ["modelValue", "onUpdate:modelValue"]),
+                            createBaseVNode("span", null, toDisplayString$1(stat.value - $data.edited_character.base_stats[key] >= 0 ? "+" : "") + toDisplayString$1(stat.value - $data.edited_character.base_stats[key]), 1)
+                          ], 64)) : (openBlock(), createElementBlock("span", _hoisted_22$6, toDisplayString$1(stat.value), 1))
+                        ]);
+                      }), 256))
+                    ]),
+                    row.tags !== void 0 && row.tags.length ? (openBlock(), createElementBlock("div", _hoisted_23$5, [
+                      (openBlock(true), createElementBlock(Fragment, null, renderList(row.tags, (tag) => {
+                        return openBlock(), createElementBlock("span", {
+                          class: normalizeClass(["tag", "tag-" + tag.code])
+                        }, [
+                          createBaseVNode("span", _hoisted_24$4, toDisplayString$1(tag.label), 1)
+                        ], 2);
+                      }), 256))
+                    ])) : createCommentVNode("", true)
+                  ], 42, _hoisted_15$6))
+                ]),
+                noDataFound: withCtx(() => [
+                  $data.store.characters.length > 0 ? (openBlock(), createElementBlock("div", _hoisted_25$4, toDisplayString$1(_ctx.$t("no_characters_to_show_try_different_filter")), 1)) : createCommentVNode("", true)
+                ]),
+                _: 1
+              })
+            ]),
+            _: 1
+          }, 8, ["ds-data", "ds-filter-fields", "ds-sort-as"])
+        ])
       ])
     ], 4)
   ], 64);
@@ -30314,7 +30531,7 @@ const _sfc_main$9 = {
         this.store.characters.forEach(function(character) {
           let found = character.tags.findIndex((tag) => tag.group === group.code);
           if (found === -1) {
-            character.tags.push(vm.store.getRandomTagFromGroup(group));
+            vm.store.addTagToCharacter(character, vm.store.getRandomTagFromGroup(group));
           }
         });
       }
@@ -30322,10 +30539,11 @@ const _sfc_main$9 = {
     shuffleGroupTag: function(group) {
       const vm = this;
       this.store.characters.forEach(function(character) {
-        let found = character.tags.findIndex((tag) => tag.group === group.code);
-        if (found > -1) {
-          character.tags.splice(found, 1);
-          character.tags.push(vm.store.getRandomTagFromGroup(group));
+        let found_tag = character.tags.find((tag) => tag.group === group.code);
+        if (found_tag !== null) {
+          if (vm.store.removeTagFromCharacter(character, found_tag, true)) {
+            vm.store.addTagToCharacter(character, vm.store.getRandomTagFromGroup(group));
+          }
         }
       });
     },
@@ -30401,6 +30619,7 @@ const _sfc_main$9 = {
             if (tag.stat_modifiers[event.option.target].value === 0) {
               delete tag.stat_modifiers[event.option.target];
             }
+            this.store.updateStatModifier(tag);
             break;
           case "bonus_gauge":
             if (tag.gauge_modifiers === void 0) {
@@ -30414,6 +30633,7 @@ const _sfc_main$9 = {
             if (tag.gauge_modifiers[event.option.target].value === 0) {
               delete tag.gauge_modifiers[event.option.target];
             }
+            this.store.updateGaugeModifier(tag, event.option.target, event.option.value);
             break;
           case "stat1":
             tag.stat1 = event.option.target;
@@ -30644,7 +30864,7 @@ function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
   ], 512);
 }
 const AdminTabTags = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["render", _sfc_render$8]]);
-const AdminTabSettings_vue_vue_type_style_index_0_scoped_63fc28c9_lang = "";
+const AdminTabSettings_vue_vue_type_style_index_0_scoped_29cda2cb_lang = "";
 const _sfc_main$8 = {
   data() {
     return {
@@ -30652,6 +30872,8 @@ const _sfc_main$8 = {
       change_label_enabled: "",
       change_gauge: "",
       temp_gauge_value: 10,
+      temp_gauge_max: "",
+      temp_gauge_deadly: false,
       add_gauge_enabled: false,
       temp_gauge_name: "",
       add_stat_enabled: false,
@@ -30674,13 +30896,24 @@ const _sfc_main$8 = {
     changeGauge: function(key) {
       let label = this.store.gauges[key].name = this.$refs["gauge_" + key][0].value;
       let test_value = parseInt(this.$refs["gauge_value_" + key][0].value);
+      let test_max = this.$refs["gauge_max_" + key][0].value !== "" ? parseInt(this.$refs["gauge_max_" + key][0].value) : "";
       let deadly = this.store.gauges[key].deadly = this.$refs["gauge_deadly_" + key][0].checked;
       this.store.gauges[key].value = deadly && test_value <= 0 ? 1 : test_value;
+      if (test_max !== "") {
+        this.store.gauges[key].max = test_max < test_value ? test_value : test_max;
+      } else {
+        this.store.gauges[key].max = "";
+      }
       this.store.characters.forEach(function(character) {
         character.gauges[key].label = label;
-        if (deadly && character.gauges[key].value <= 0 && character.alive) {
-          character.gauges[key].value = 1;
+        if (character.alive) {
+          if (deadly && character.gauges[key].value <= 0) {
+            character.gauges[key].value = 1;
+          } else if (test_max !== "" && character.gauges[key].value > test_max) {
+            character.gauges[key].value = test_max;
+          }
         }
+        character.gauges[key].deadly = deadly;
       });
       for (const key_stat of Object.keys(this.store.stats)) {
         if (this.$refs["gauge_" + key + "_spending_" + key_stat][0].checked) {
@@ -30697,6 +30930,11 @@ const _sfc_main$8 = {
     },
     openGauge(key) {
       this.change_gauge = key;
+      this.temp_gauge_spending = this.store.gauges[key].spending;
+      this.temp_gauge_name = this.store.gauges[key].name;
+      this.temp_gauge_value = this.store.gauges[key].value;
+      this.temp_gauge_max = this.store.gauges[key].max;
+      this.temp_gauge_deadly = this.store.gauges[key].deadly;
       this.$nextTick(() => {
         this.$refs["gauge_" + key][0].focus();
       });
@@ -30706,6 +30944,7 @@ const _sfc_main$8 = {
       let new_gauge = {
         name: this.temp_gauge_name,
         value: this.temp_gauge_value,
+        max: this.temp_gauge_max,
         spending: {}
       };
       this.store.gauges[code2] = new_gauge;
@@ -30720,9 +30959,7 @@ const _sfc_main$8 = {
       this.add_gauge_enabled = false;
       this.temp_gauge_name = "";
       this.temp_gauge_value = 10;
-    },
-    hasSpending(gauge, key_stat) {
-      return this.temp_gauge_spending[key_stat] || this.temp_gauge_spending[key_stat] === void 0 && gauge.spending[key_stat] !== void 0 && gauge.spending[key_stat] > 0;
+      this.temp_gauge_max = 10;
     },
     remove: function(key, type) {
       delete this.store[type][key];
@@ -30754,6 +30991,13 @@ const _sfc_main$8 = {
       });
       this.add_stat_enabled = false;
       this.temp_stat_name = "";
+    },
+    setTempGaugeSpending(checked, key_stat) {
+      if (!checked) {
+        delete this.temp_gauge_spending[key_stat];
+      } else {
+        this.temp_gauge_spending[key_stat] = 1;
+      }
     },
     createMarker: function() {
       this.add_marker_enabled = true;
@@ -30794,100 +31038,103 @@ const _hoisted_6$6 = {
 };
 const _hoisted_7$6 = { class: "indicator-name" };
 const _hoisted_8$5 = { key: 0 };
-const _hoisted_9$5 = {
-  key: 1,
+const _hoisted_9$5 = { key: 1 };
+const _hoisted_10$5 = {
+  key: 2,
   class: "stat-list"
 };
-const _hoisted_10$5 = { class: "stat-list-items" };
-const _hoisted_11$5 = {
+const _hoisted_11$5 = { class: "stat-list-items" };
+const _hoisted_12$5 = {
   key: 0,
   class: "stat-list-item"
 };
-const _hoisted_12$5 = {
+const _hoisted_13$5 = {
   key: 1,
   class: "action"
 };
-const _hoisted_13$5 = ["onKeyup", "onClick"];
 const _hoisted_14$5 = ["onKeyup", "onClick"];
-const _hoisted_15$4 = { class: "full" };
-const _hoisted_16$4 = ["for"];
-const _hoisted_17$4 = ["value", "id"];
-const _hoisted_18$4 = ["onClick"];
-const _hoisted_19$4 = ["for"];
-const _hoisted_20$4 = ["value", "id"];
-const _hoisted_21$4 = ["checked", "id"];
+const _hoisted_15$4 = ["onKeyup", "onClick"];
+const _hoisted_16$4 = { class: "full" };
+const _hoisted_17$4 = ["for"];
+const _hoisted_18$4 = ["id"];
+const _hoisted_19$4 = ["onClick"];
+const _hoisted_20$4 = ["for"];
+const _hoisted_21$4 = ["id"];
 const _hoisted_22$4 = ["for"];
-const _hoisted_23$4 = { class: "radio-wrapper" };
-const _hoisted_24$3 = ["id", "onChange", "checked"];
+const _hoisted_23$4 = ["id"];
+const _hoisted_24$3 = ["id"];
 const _hoisted_25$3 = ["for"];
-const _hoisted_26$3 = ["for"];
-const _hoisted_27$3 = { key: 0 };
-const _hoisted_28$3 = ["value"];
-const _hoisted_29$3 = {
+const _hoisted_26$3 = { class: "radio-wrapper" };
+const _hoisted_27$3 = ["id", "onChange", "checked"];
+const _hoisted_28$3 = ["for"];
+const _hoisted_29$3 = ["for"];
+const _hoisted_30$3 = ["onUpdate:modelValue"];
+const _hoisted_31$3 = {
   key: 0,
   class: "action-group"
 };
-const _hoisted_30$3 = { for: "temp_gauge" };
-const _hoisted_31$3 = { for: "temp_gauge_value" };
-const _hoisted_32$3 = {
+const _hoisted_32$3 = { for: "temp_gauge" };
+const _hoisted_33$3 = { for: "temp_gauge_value" };
+const _hoisted_34$3 = { for: "temp_gauge_max" };
+const _hoisted_35$3 = {
   ref: "step_settings_stats",
   class: "wrapper-settings"
 };
-const _hoisted_33$3 = { class: "wrapper-title" };
-const _hoisted_34$3 = { class: "wrapper-list" };
-const _hoisted_35$3 = ["for"];
-const _hoisted_36$3 = ["value"];
-const _hoisted_37$2 = ["onClick"];
-const _hoisted_38$2 = {
+const _hoisted_36$3 = { class: "wrapper-title" };
+const _hoisted_37$2 = { class: "wrapper-list" };
+const _hoisted_38$2 = ["for"];
+const _hoisted_39$2 = ["value"];
+const _hoisted_40$2 = ["onClick"];
+const _hoisted_41$2 = {
   key: 4,
   class: "action"
 };
-const _hoisted_39$2 = ["onClick"];
-const _hoisted_40$2 = ["onKeyup", "onClick"];
-const _hoisted_41$2 = {
+const _hoisted_42$2 = ["onClick"];
+const _hoisted_43$2 = ["onKeyup", "onClick"];
+const _hoisted_44$2 = {
   key: 0,
   class: "action-group"
 };
-const _hoisted_42$2 = { for: "temp_stat" };
-const _hoisted_43$2 = {
+const _hoisted_45$2 = { for: "temp_stat" };
+const _hoisted_46$2 = {
   ref: "step_settings_markers",
   class: "wrapper-settings"
 };
-const _hoisted_44$2 = { class: "wrapper-title" };
-const _hoisted_45$2 = { class: "wrapper-list" };
-const _hoisted_46$2 = {
+const _hoisted_47$1 = { class: "wrapper-title" };
+const _hoisted_48$1 = { class: "wrapper-list" };
+const _hoisted_49$1 = {
   key: 0,
   class: "wrapper-marker-title"
 };
-const _hoisted_47$1 = { class: "indicator-name" };
-const _hoisted_48$1 = ["value", "id"];
-const _hoisted_49$1 = ["value", "id"];
-const _hoisted_50$1 = ["onClick"];
-const _hoisted_51$1 = {
+const _hoisted_50$1 = { class: "indicator-name" };
+const _hoisted_51$1 = ["value", "id"];
+const _hoisted_52$1 = ["value", "id"];
+const _hoisted_53$1 = ["onClick"];
+const _hoisted_54$1 = {
   key: 5,
   class: "action"
 };
-const _hoisted_52$1 = ["onClick"];
-const _hoisted_53$1 = ["onKeyup", "onClick"];
-const _hoisted_54$1 = {
+const _hoisted_55$1 = ["onClick"];
+const _hoisted_56$1 = ["onKeyup", "onClick"];
+const _hoisted_57$1 = {
   key: 0,
   class: "action-group"
 };
-const _hoisted_55$1 = { for: "temp_marker" };
-const _hoisted_56$1 = { for: "temp_marker_value" };
-const _hoisted_57$1 = {
+const _hoisted_58$1 = { for: "temp_marker" };
+const _hoisted_59$1 = { for: "temp_marker_value" };
+const _hoisted_60$1 = {
   key: 0,
   ref: "step_settings_settings",
   class: "wrapper-settings settings-container"
 };
-const _hoisted_58$1 = { class: "wrapper-title" };
-const _hoisted_59$1 = { class: "wrapper-list" };
-const _hoisted_60$1 = { class: "list-item" };
-const _hoisted_61 = { for: "settings-challenge-timer" };
-const _hoisted_62 = { class: "list-item radio-wrapper" };
-const _hoisted_63 = { for: "settings-disconnected-prevent" };
-const _hoisted_64 = { class: "list-item radio-wrapper" };
-const _hoisted_65 = { for: "settings-npc-prevent" };
+const _hoisted_61 = { class: "wrapper-title" };
+const _hoisted_62 = { class: "wrapper-list" };
+const _hoisted_63 = { class: "list-item" };
+const _hoisted_64 = { for: "settings-challenge-timer" };
+const _hoisted_65 = { class: "list-item radio-wrapper" };
+const _hoisted_66 = { for: "settings-disconnected-prevent" };
+const _hoisted_67 = { class: "list-item radio-wrapper" };
+const _hoisted_68 = { for: "settings-npc-prevent" };
 function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock("div", _hoisted_1$7, [
     createBaseVNode("div", _hoisted_2$7, [
@@ -30914,34 +31161,35 @@ function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
                 $data.change_gauge !== key ? (openBlock(), createElementBlock("div", _hoisted_6$6, [
                   createBaseVNode("span", _hoisted_7$6, toDisplayString$1(gauge.name), 1),
                   createBaseVNode("span", null, toDisplayString$1(_ctx.$t("gauge_start", { gauge_value: gauge.value })), 1),
-                  gauge.deadly ? (openBlock(), createElementBlock("span", _hoisted_8$5, toDisplayString$1(_ctx.$t("kills_at_0")), 1)) : createCommentVNode("", true),
-                  Object.keys(gauge.spending).length ? (openBlock(), createElementBlock("div", _hoisted_9$5, [
+                  gauge.max !== void 0 && gauge.max !== "" ? (openBlock(), createElementBlock("span", _hoisted_8$5, toDisplayString$1(_ctx.$t("maximum", { max: gauge.max })), 1)) : createCommentVNode("", true),
+                  gauge.deadly ? (openBlock(), createElementBlock("span", _hoisted_9$5, toDisplayString$1(_ctx.$t("kills_at_0")), 1)) : createCommentVNode("", true),
+                  Object.keys(gauge.spending).length ? (openBlock(), createElementBlock("div", _hoisted_10$5, [
                     createBaseVNode("span", null, toDisplayString$1(_ctx.$t("used_for_challenges")), 1),
-                    createBaseVNode("span", _hoisted_10$5, [
+                    createBaseVNode("span", _hoisted_11$5, [
                       (openBlock(true), createElementBlock(Fragment, null, renderList(gauge.spending, (value, key_stat) => {
                         return openBlock(), createElementBlock(Fragment, null, [
-                          value ? (openBlock(), createElementBlock("span", _hoisted_11$5, toDisplayString$1($data.store.stats[key_stat].name), 1)) : createCommentVNode("", true)
+                          value ? (openBlock(), createElementBlock("span", _hoisted_12$5, toDisplayString$1($data.store.stats[key_stat].name), 1)) : createCommentVNode("", true)
                         ], 64);
                       }), 256))
                     ])
                   ])) : createCommentVNode("", true)
                 ])) : createCommentVNode("", true),
-                $data.change_gauge !== key ? (openBlock(), createElementBlock("div", _hoisted_12$5, [
+                $data.change_gauge !== key ? (openBlock(), createElementBlock("div", _hoisted_13$5, [
                   createBaseVNode("button", {
                     ref_for: true,
                     ref: index === 0 ? "step_settings_gauge_modify" : null,
                     onKeyup: withKeys(($event) => $options.openGauge(key), ["enter"]),
                     onClick: ($event) => $options.openGauge(key)
-                  }, toDisplayString$1(_ctx.$t("modify")), 41, _hoisted_13$5),
+                  }, toDisplayString$1(_ctx.$t("modify")), 41, _hoisted_14$5),
                   createBaseVNode("button", {
                     class: "btn-danger",
                     onKeyup: withKeys(($event) => $options.remove(key, "gauges"), ["enter"]),
                     onClick: ($event) => $options.remove(key, "gauges"),
                     ref_for: true,
                     ref: index === 0 ? "step_settings_gauge_delete" : null
-                  }, toDisplayString$1(_ctx.$t("delete")), 41, _hoisted_14$5)
+                  }, toDisplayString$1(_ctx.$t("delete")), 41, _hoisted_15$4)
                 ])) : (openBlock(), createElementBlock(Fragment, { key: 2 }, [
-                  createBaseVNode("div", _hoisted_15$4, [
+                  createBaseVNode("div", _hoisted_16$4, [
                     createBaseVNode("div", {
                       class: "input-wrapper",
                       ref_for: true,
@@ -30949,24 +31197,26 @@ function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
                     }, [
                       createBaseVNode("label", {
                         for: "gauge_" + key
-                      }, toDisplayString$1(_ctx.$t("name")), 9, _hoisted_16$4),
-                      createBaseVNode("input", {
+                      }, toDisplayString$1(_ctx.$t("name")), 9, _hoisted_17$4),
+                      withDirectives(createBaseVNode("input", {
                         ref_for: true,
                         ref: "gauge_" + key,
-                        value: gauge.name,
+                        "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => $data.temp_gauge_name = $event),
                         id: "gauge_" + key,
                         type: "text"
-                      }, null, 8, _hoisted_17$4)
+                      }, null, 8, _hoisted_18$4), [
+                        [vModelText, $data.temp_gauge_name]
+                      ])
                     ], 512),
                     createBaseVNode("button", {
                       class: "btn-valid",
                       onClick: ($event) => $options.changeGauge(key)
-                    }, toDisplayString$1(_ctx.$t("submit")), 9, _hoisted_18$4),
+                    }, toDisplayString$1(_ctx.$t("submit")), 9, _hoisted_19$4),
                     createBaseVNode("button", {
                       ref_for: true,
                       ref: index === 0 ? "step_settings_gauge_cancel" : null,
-                      onKeyup: _cache[2] || (_cache[2] = withKeys(($event) => $options.cancelGaugeChange(), ["enter"])),
-                      onClick: _cache[3] || (_cache[3] = ($event) => $options.cancelGaugeChange())
+                      onKeyup: _cache[3] || (_cache[3] = withKeys(($event) => $options.cancelGaugeChange(), ["enter"])),
+                      onClick: _cache[4] || (_cache[4] = ($event) => $options.cancelGaugeChange())
                     }, toDisplayString$1(_ctx.$t("cancel")), 545)
                   ]),
                   createBaseVNode("div", {
@@ -30975,32 +31225,55 @@ function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
                   }, [
                     createBaseVNode("label", {
                       for: "gauge_value_" + key
-                    }, toDisplayString$1(_ctx.$t("starts_at")), 9, _hoisted_19$4),
-                    createBaseVNode("input", {
+                    }, toDisplayString$1(_ctx.$t("starts_at")), 9, _hoisted_20$4),
+                    withDirectives(createBaseVNode("input", {
                       ref_for: true,
                       ref: "gauge_value_" + key,
-                      value: gauge.value,
+                      "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => $data.temp_gauge_value = $event),
                       min: "1",
                       id: "gauge_value_" + key,
                       type: "number"
-                    }, null, 8, _hoisted_20$4)
+                    }, null, 8, _hoisted_21$4), [
+                      [vModelText, $data.temp_gauge_value]
+                    ])
+                  ], 512),
+                  createBaseVNode("div", {
+                    ref_for: true,
+                    ref: index === 0 ? "step_settings_gauge_max" : null,
+                    class: "gauge-max"
+                  }, [
+                    createBaseVNode("label", {
+                      for: "gauge_max_" + key
+                    }, toDisplayString$1(_ctx.$t("maximum")), 9, _hoisted_22$4),
+                    withDirectives(createBaseVNode("input", {
+                      ref_for: true,
+                      ref: "gauge_max_" + key,
+                      "onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => $data.temp_gauge_max = $event),
+                      min: "1",
+                      id: "gauge_max_" + key,
+                      type: "number"
+                    }, null, 8, _hoisted_23$4), [
+                      [vModelText, $data.temp_gauge_max]
+                    ])
                   ], 512),
                   createBaseVNode("div", {
                     class: "radio-wrapper",
                     ref_for: true,
                     ref: index === 0 ? "step_settings_gauge_make_deadly" : null
                   }, [
-                    createBaseVNode("input", {
+                    withDirectives(createBaseVNode("input", {
                       ref_for: true,
                       ref: "gauge_deadly_" + key,
-                      checked: gauge.deadly,
+                      "onUpdate:modelValue": _cache[7] || (_cache[7] = ($event) => $data.temp_gauge_deadly = $event),
                       min: "1",
                       id: "gauge_deadly_" + key,
                       type: "checkbox"
-                    }, null, 8, _hoisted_21$4),
+                    }, null, 8, _hoisted_24$3), [
+                      [vModelCheckbox, $data.temp_gauge_deadly]
+                    ]),
                     createBaseVNode("label", {
-                      for: "gauge_deadly_" + key + "_" + _ctx.key_stat
-                    }, toDisplayString$1(_ctx.$t("gauge_deadly_description")), 9, _hoisted_22$4)
+                      for: "gauge_deadly_" + key
+                    }, toDisplayString$1(_ctx.$t("gauge_deadly_description")), 9, _hoisted_25$3)
                   ], 512),
                   createBaseVNode("fieldset", {
                     class: "spending-wrapper",
@@ -31009,35 +31282,36 @@ function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
                   }, [
                     createBaseVNode("legend", null, toDisplayString$1(_ctx.$t("spend_on")), 1),
                     (openBlock(true), createElementBlock(Fragment, null, renderList($data.store.stats, (stat, key_stat) => {
-                      return openBlock(), createElementBlock("div", _hoisted_23$4, [
+                      return openBlock(), createElementBlock("div", _hoisted_26$3, [
                         createBaseVNode("input", {
                           id: "gauge_" + key + "_spending_" + key_stat,
                           type: "checkbox",
                           ref_for: true,
                           ref: "gauge_" + key + "_spending_" + key_stat,
-                          onChange: function($event) {
-                            $data.temp_gauge_spending[key_stat] = $event.target.checked;
-                          },
-                          checked: $options.hasSpending(gauge, key_stat)
-                        }, null, 40, _hoisted_24$3),
+                          onChange: ($event) => $options.setTempGaugeSpending($event.target.checked, key_stat),
+                          checked: $data.temp_gauge_spending[key_stat] !== void 0
+                        }, null, 40, _hoisted_27$3),
                         createBaseVNode("label", {
                           for: "gauge_" + key + "_spending_" + key_stat
                         }, [
                           createBaseVNode("strong", null, toDisplayString$1(stat.name), 1)
-                        ], 8, _hoisted_25$3),
-                        createBaseVNode("label", {
-                          for: "gauge_" + key + "_spending_value_" + key_stat
-                        }, [
-                          $options.hasSpending(gauge, key_stat) ? (openBlock(), createElementBlock("span", _hoisted_27$3, toDisplayString$1(_ctx.$t("spending_diminish")), 1)) : createCommentVNode("", true)
-                        ], 8, _hoisted_26$3),
-                        $options.hasSpending(gauge, key_stat) ? (openBlock(), createElementBlock("input", {
-                          key: 0,
-                          ref_for: true,
-                          ref: "gauge_" + key + "_spending_value_" + key_stat,
-                          value: gauge.spending[key_stat] ?? 1,
-                          min: "1",
-                          type: "number"
-                        }, null, 8, _hoisted_28$3)) : createCommentVNode("", true)
+                        ], 8, _hoisted_28$3),
+                        $data.temp_gauge_spending[key_stat] !== void 0 ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
+                          createBaseVNode("label", {
+                            for: "gauge_" + key + "_spending_value_" + key_stat
+                          }, [
+                            createBaseVNode("span", null, toDisplayString$1(_ctx.$t("spending_diminish")), 1)
+                          ], 8, _hoisted_29$3),
+                          withDirectives(createBaseVNode("input", {
+                            ref_for: true,
+                            ref: "gauge_" + key + "_spending_value_" + key_stat,
+                            "onUpdate:modelValue": ($event) => $data.temp_gauge_spending[key_stat] = $event,
+                            min: "1",
+                            type: "number"
+                          }, null, 8, _hoisted_30$3), [
+                            [vModelText, $data.temp_gauge_spending[key_stat]]
+                          ])
+                        ], 64)) : createCommentVNode("", true)
                       ]);
                     }), 256))
                   ], 512)
@@ -31045,52 +31319,63 @@ function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
               ], 512)) : createCommentVNode("", true)
             ], 64);
           }), 256)),
-          $data.add_gauge_enabled ? (openBlock(), createElementBlock("div", _hoisted_29$3, [
-            createBaseVNode("label", _hoisted_30$3, toDisplayString$1(_ctx.$t("name")), 1),
+          $data.add_gauge_enabled ? (openBlock(), createElementBlock("div", _hoisted_31$3, [
+            createBaseVNode("label", _hoisted_32$3, toDisplayString$1(_ctx.$t("name")), 1),
             withDirectives(createBaseVNode("input", {
               id: "temp_gauge",
               ref: "temp_gauge",
               type: "text",
-              "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => $data.temp_gauge_name = $event),
-              onKeyup: _cache[5] || (_cache[5] = withKeys(($event) => _ctx.$refs["temp_gauge_value"].focus(), ["enter"]))
+              "onUpdate:modelValue": _cache[8] || (_cache[8] = ($event) => $data.temp_gauge_name = $event),
+              onKeyup: _cache[9] || (_cache[9] = withKeys(($event) => _ctx.$refs["temp_gauge_value"].focus(), ["enter"]))
             }, null, 544), [
               [vModelText, $data.temp_gauge_name]
             ]),
-            createBaseVNode("label", _hoisted_31$3, toDisplayString$1(_ctx.$t("starts_at")), 1),
+            createBaseVNode("label", _hoisted_33$3, toDisplayString$1(_ctx.$t("starts_at")), 1),
             withDirectives(createBaseVNode("input", {
               id: "temp_gauge_value",
               ref: "temp_gauge_value",
               type: "number",
               min: "1",
-              "onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => $data.temp_gauge_value = $event),
-              onKeyup: _cache[7] || (_cache[7] = withKeys(($event) => $options.addGauge(), ["enter"]))
+              "onUpdate:modelValue": _cache[10] || (_cache[10] = ($event) => $data.temp_gauge_value = $event),
+              onKeyup: _cache[11] || (_cache[11] = withKeys(($event) => _ctx.$refs["temp_gauge_max"].focus(), ["enter"]))
             }, null, 544), [
               [vModelText, $data.temp_gauge_value]
             ]),
+            createBaseVNode("label", _hoisted_34$3, toDisplayString$1(_ctx.$t("maximum")), 1),
+            withDirectives(createBaseVNode("input", {
+              id: "temp_gauge_max",
+              ref: "temp_gauge_max",
+              type: "number",
+              min: "1",
+              "onUpdate:modelValue": _cache[12] || (_cache[12] = ($event) => $data.temp_gauge_max = $event),
+              onKeyup: _cache[13] || (_cache[13] = withKeys(($event) => $options.addGauge(), ["enter"]))
+            }, null, 544), [
+              [vModelText, $data.temp_gauge_max]
+            ]),
             createBaseVNode("button", {
               class: "btn-valid",
-              onKeyup: _cache[8] || (_cache[8] = withKeys(($event) => $options.addGauge(), ["enter"])),
-              onClick: _cache[9] || (_cache[9] = ($event) => $options.addGauge())
+              onKeyup: _cache[14] || (_cache[14] = withKeys(($event) => $options.addGauge(), ["enter"])),
+              onClick: _cache[15] || (_cache[15] = ($event) => $options.addGauge())
             }, toDisplayString$1(_ctx.$t("submit")), 33),
             createBaseVNode("button", {
-              onKeyup: _cache[10] || (_cache[10] = withKeys(($event) => $data.add_gauge_enabled = false, ["enter"])),
-              onClick: _cache[11] || (_cache[11] = ($event) => $data.add_gauge_enabled = false)
+              onKeyup: _cache[16] || (_cache[16] = withKeys(($event) => $data.add_gauge_enabled = false, ["enter"])),
+              onClick: _cache[17] || (_cache[17] = ($event) => $data.add_gauge_enabled = false)
             }, toDisplayString$1(_ctx.$t("cancel")), 33)
           ])) : createCommentVNode("", true)
         ])
       ], 512),
-      createBaseVNode("div", _hoisted_32$3, [
-        createBaseVNode("div", _hoisted_33$3, [
+      createBaseVNode("div", _hoisted_35$3, [
+        createBaseVNode("div", _hoisted_36$3, [
           createBaseVNode("h2", null, toDisplayString$1(_ctx.$t("stats")), 1),
           !$data.add_stat_enabled ? (openBlock(), createElementBlock("button", {
             key: 0,
             ref: "step_settings_add_stat",
             class: "icon-add btn-valid",
-            onKeyup: _cache[12] || (_cache[12] = withKeys(($event) => $options.createStat(), ["enter"])),
-            onClick: _cache[13] || (_cache[13] = ($event) => $options.createStat())
+            onKeyup: _cache[18] || (_cache[18] = withKeys(($event) => $options.createStat(), ["enter"])),
+            onClick: _cache[19] || (_cache[19] = ($event) => $options.createStat())
           }, toDisplayString$1(_ctx.$t("add")), 545)) : createCommentVNode("", true)
         ]),
-        createBaseVNode("div", _hoisted_34$3, [
+        createBaseVNode("div", _hoisted_37$2, [
           (openBlock(true), createElementBlock(Fragment, null, renderList($data.store.stats, (stat, key, index) => {
             return openBlock(), createElementBlock("div", {
               class: "stat list-item",
@@ -31101,7 +31386,7 @@ function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
                 key: 0,
                 class: "indicator-name",
                 for: "stat_" + key
-              }, toDisplayString$1(stat.name), 9, _hoisted_35$3)) : createCommentVNode("", true),
+              }, toDisplayString$1(stat.name), 9, _hoisted_38$2)) : createCommentVNode("", true),
               $data.change_label_enabled === key ? (openBlock(), createElementBlock("input", {
                 key: 1,
                 ref_for: true,
@@ -31109,35 +31394,35 @@ function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
                 value: stat.name,
                 id: "'stat_'+key",
                 type: "text"
-              }, null, 8, _hoisted_36$3)) : createCommentVNode("", true),
+              }, null, 8, _hoisted_39$2)) : createCommentVNode("", true),
               $data.change_label_enabled === key ? (openBlock(), createElementBlock("button", {
                 key: 2,
                 class: "btn-valid",
                 onClick: ($event) => $options.changeStatLabel(key)
-              }, toDisplayString$1(_ctx.$t("submit")), 9, _hoisted_37$2)) : createCommentVNode("", true),
+              }, toDisplayString$1(_ctx.$t("submit")), 9, _hoisted_40$2)) : createCommentVNode("", true),
               $data.change_label_enabled === key ? (openBlock(), createElementBlock("button", {
                 key: 3,
-                onClick: _cache[14] || (_cache[14] = ($event) => $data.change_label_enabled = "")
+                onClick: _cache[20] || (_cache[20] = ($event) => $data.change_label_enabled = "")
               }, toDisplayString$1(_ctx.$t("cancel")), 1)) : createCommentVNode("", true),
-              $data.change_label_enabled !== key ? (openBlock(), createElementBlock("div", _hoisted_38$2, [
+              $data.change_label_enabled !== key ? (openBlock(), createElementBlock("div", _hoisted_41$2, [
                 createBaseVNode("button", {
                   onClick: ($event) => $data.change_label_enabled = key
-                }, toDisplayString$1(_ctx.$t("rename")), 9, _hoisted_39$2),
+                }, toDisplayString$1(_ctx.$t("rename")), 9, _hoisted_42$2),
                 createBaseVNode("button", {
                   class: "btn-danger",
                   onKeyup: withKeys(($event) => $options.remove(key, "stats"), ["enter"]),
                   onClick: ($event) => $options.remove(key, "stats"),
                   ref_for: true,
                   ref: index === 0 ? "step_settings_stat_delete" : null
-                }, toDisplayString$1(_ctx.$t("delete")), 41, _hoisted_40$2)
+                }, toDisplayString$1(_ctx.$t("delete")), 41, _hoisted_43$2)
               ])) : createCommentVNode("", true)
             ], 512);
           }), 256)),
-          $data.add_stat_enabled ? (openBlock(), createElementBlock("div", _hoisted_41$2, [
-            createBaseVNode("label", _hoisted_42$2, toDisplayString$1(_ctx.$t("name")), 1),
+          $data.add_stat_enabled ? (openBlock(), createElementBlock("div", _hoisted_44$2, [
+            createBaseVNode("label", _hoisted_45$2, toDisplayString$1(_ctx.$t("name")), 1),
             withDirectives(createBaseVNode("input", {
-              onKeydown: _cache[15] || (_cache[15] = withKeys(($event) => $options.addStat(), ["enter"])),
-              "onUpdate:modelValue": _cache[16] || (_cache[16] = ($event) => $data.temp_stat_name = $event),
+              onKeydown: _cache[21] || (_cache[21] = withKeys(($event) => $options.addStat(), ["enter"])),
+              "onUpdate:modelValue": _cache[22] || (_cache[22] = ($event) => $data.temp_stat_name = $event),
               ref: "temp_stat",
               id: "temp_stat",
               type: "text"
@@ -31146,34 +31431,34 @@ function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
             ]),
             createBaseVNode("button", {
               class: "btn-valid",
-              onClick: _cache[17] || (_cache[17] = ($event) => $options.addStat())
+              onClick: _cache[23] || (_cache[23] = ($event) => $options.addStat())
             }, toDisplayString$1(_ctx.$t("submit")), 1),
             createBaseVNode("button", {
-              onClick: _cache[18] || (_cache[18] = ($event) => $data.add_stat_enabled = false)
+              onClick: _cache[24] || (_cache[24] = ($event) => $data.add_stat_enabled = false)
             }, toDisplayString$1(_ctx.$t("cancel")), 1)
           ])) : createCommentVNode("", true)
         ])
       ], 512),
-      createBaseVNode("div", _hoisted_43$2, [
-        createBaseVNode("div", _hoisted_44$2, [
+      createBaseVNode("div", _hoisted_46$2, [
+        createBaseVNode("div", _hoisted_47$1, [
           createBaseVNode("h2", null, toDisplayString$1(_ctx.$t("markers")), 1),
           !$data.add_marker_enabled ? (openBlock(), createElementBlock("button", {
             key: 0,
             ref: "step_settings_add_marker",
             class: "icon-add btn-valid",
-            onClick: _cache[19] || (_cache[19] = ($event) => $options.createMarker()),
-            onKeyup: _cache[20] || (_cache[20] = withKeys(($event) => $options.createMarker(), ["enter"]))
+            onClick: _cache[25] || (_cache[25] = ($event) => $options.createMarker()),
+            onKeyup: _cache[26] || (_cache[26] = withKeys(($event) => $options.createMarker(), ["enter"]))
           }, toDisplayString$1(_ctx.$t("add")), 545)) : createCommentVNode("", true)
         ]),
-        createBaseVNode("div", _hoisted_45$2, [
+        createBaseVNode("div", _hoisted_48$1, [
           (openBlock(true), createElementBlock(Fragment, null, renderList($data.store.markers, (marker, key, index) => {
             return openBlock(), createElementBlock("div", {
               class: "marker list-item",
               ref_for: true,
               ref: index === 0 ? "step_settings_marker" : null
             }, [
-              $data.change_label_enabled !== key ? (openBlock(), createElementBlock("div", _hoisted_46$2, [
-                createBaseVNode("span", _hoisted_47$1, toDisplayString$1(marker.name), 1),
+              $data.change_label_enabled !== key ? (openBlock(), createElementBlock("div", _hoisted_49$1, [
+                createBaseVNode("span", _hoisted_50$1, toDisplayString$1(marker.name), 1),
                 createBaseVNode("span", null, toDisplayString$1(marker.value), 1)
               ])) : createCommentVNode("", true),
               $data.change_label_enabled === key ? (openBlock(), createElementBlock("input", {
@@ -31183,7 +31468,7 @@ function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
                 value: marker.name,
                 id: "marker_" + key,
                 type: "text"
-              }, null, 8, _hoisted_48$1)) : createCommentVNode("", true),
+              }, null, 8, _hoisted_51$1)) : createCommentVNode("", true),
               $data.change_label_enabled === key ? (openBlock(), createElementBlock("input", {
                 key: 2,
                 ref_for: true,
@@ -31192,106 +31477,106 @@ function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
                 min: "1",
                 id: "marker_value_" + key,
                 type: "number"
-              }, null, 8, _hoisted_49$1)) : createCommentVNode("", true),
+              }, null, 8, _hoisted_52$1)) : createCommentVNode("", true),
               $data.change_label_enabled === key ? (openBlock(), createElementBlock("button", {
                 key: 3,
                 class: "btn-valid",
                 onClick: ($event) => $options.changeMarker(key)
-              }, toDisplayString$1(_ctx.$t("submit")), 9, _hoisted_50$1)) : createCommentVNode("", true),
+              }, toDisplayString$1(_ctx.$t("submit")), 9, _hoisted_53$1)) : createCommentVNode("", true),
               $data.change_label_enabled === key ? (openBlock(), createElementBlock("button", {
                 key: 4,
-                onClick: _cache[21] || (_cache[21] = ($event) => $data.change_label_enabled = "")
+                onClick: _cache[27] || (_cache[27] = ($event) => $data.change_label_enabled = "")
               }, toDisplayString$1(_ctx.$t("cancel")), 1)) : createCommentVNode("", true),
-              $data.change_label_enabled !== key ? (openBlock(), createElementBlock("div", _hoisted_51$1, [
+              $data.change_label_enabled !== key ? (openBlock(), createElementBlock("div", _hoisted_54$1, [
                 createBaseVNode("button", {
                   onClick: ($event) => $data.change_label_enabled = key
-                }, toDisplayString$1(_ctx.$t("modify")), 9, _hoisted_52$1),
+                }, toDisplayString$1(_ctx.$t("modify")), 9, _hoisted_55$1),
                 createBaseVNode("button", {
                   class: "btn-danger",
                   onKeyup: withKeys(($event) => $options.remove(key, "markers"), ["enter"]),
                   onClick: ($event) => $options.remove(key, "markers"),
                   ref_for: true,
                   ref: index === 0 ? "step_settings_marker_delete" : null
-                }, toDisplayString$1(_ctx.$t("delete")), 41, _hoisted_53$1)
+                }, toDisplayString$1(_ctx.$t("delete")), 41, _hoisted_56$1)
               ])) : createCommentVNode("", true)
             ], 512);
           }), 256)),
-          $data.add_marker_enabled ? (openBlock(), createElementBlock("div", _hoisted_54$1, [
-            createBaseVNode("label", _hoisted_55$1, toDisplayString$1(_ctx.$t("name")), 1),
+          $data.add_marker_enabled ? (openBlock(), createElementBlock("div", _hoisted_57$1, [
+            createBaseVNode("label", _hoisted_58$1, toDisplayString$1(_ctx.$t("name")), 1),
             withDirectives(createBaseVNode("input", {
               id: "temp_marker",
               ref: "temp_marker",
               type: "text",
-              "onUpdate:modelValue": _cache[22] || (_cache[22] = ($event) => $data.temp_marker_name = $event),
-              onKeyup: _cache[23] || (_cache[23] = withKeys(($event) => _ctx.$refs["temp_marker_value"].focus(), ["enter"]))
+              "onUpdate:modelValue": _cache[28] || (_cache[28] = ($event) => $data.temp_marker_name = $event),
+              onKeyup: _cache[29] || (_cache[29] = withKeys(($event) => _ctx.$refs["temp_marker_value"].focus(), ["enter"]))
             }, null, 544), [
               [vModelText, $data.temp_marker_name]
             ]),
-            createBaseVNode("label", _hoisted_56$1, toDisplayString$1(_ctx.$t("starts_at")), 1),
+            createBaseVNode("label", _hoisted_59$1, toDisplayString$1(_ctx.$t("starts_at")), 1),
             withDirectives(createBaseVNode("input", {
               id: "temp_marker_value",
               type: "number",
               min: "1",
-              "onUpdate:modelValue": _cache[24] || (_cache[24] = ($event) => $data.temp_marker_value = $event),
-              onKeyup: _cache[25] || (_cache[25] = withKeys(($event) => $options.addMarker(), ["enter"]))
+              "onUpdate:modelValue": _cache[30] || (_cache[30] = ($event) => $data.temp_marker_value = $event),
+              onKeyup: _cache[31] || (_cache[31] = withKeys(($event) => $options.addMarker(), ["enter"]))
             }, null, 544), [
               [vModelText, $data.temp_marker_value]
             ]),
             createBaseVNode("button", {
               class: "btn-valid",
-              onClick: _cache[26] || (_cache[26] = ($event) => $options.addMarker())
+              onClick: _cache[32] || (_cache[32] = ($event) => $options.addMarker())
             }, toDisplayString$1(_ctx.$t("submit")), 1),
             createBaseVNode("button", {
-              onClick: _cache[27] || (_cache[27] = ($event) => $data.add_marker_enabled = false)
+              onClick: _cache[33] || (_cache[33] = ($event) => $data.add_marker_enabled = false)
             }, toDisplayString$1(_ctx.$t("cancel")), 1)
           ])) : createCommentVNode("", true)
         ])
       ], 512),
-      this.store.settings !== void 0 ? (openBlock(), createElementBlock("div", _hoisted_57$1, [
-        createBaseVNode("div", _hoisted_58$1, [
+      this.store.settings !== void 0 ? (openBlock(), createElementBlock("div", _hoisted_60$1, [
+        createBaseVNode("div", _hoisted_61, [
           createBaseVNode("h2", null, toDisplayString$1(_ctx.$t("settings")), 1)
         ]),
-        createBaseVNode("div", _hoisted_59$1, [
-          createBaseVNode("div", _hoisted_60$1, [
+        createBaseVNode("div", _hoisted_62, [
+          createBaseVNode("div", _hoisted_63, [
             withDirectives(createBaseVNode("input", {
               ref: "step_settings_challenge_timer",
               id: "settings-challenge-timer",
-              "onUpdate:modelValue": _cache[28] || (_cache[28] = ($event) => this.store.settings.challenge_timer = $event),
+              "onUpdate:modelValue": _cache[34] || (_cache[34] = ($event) => this.store.settings.challenge_timer = $event),
               type: "number"
             }, null, 512), [
               [vModelText, this.store.settings.challenge_timer]
             ]),
-            createBaseVNode("label", _hoisted_61, toDisplayString$1(_ctx.$t("challenge_timer")), 1)
+            createBaseVNode("label", _hoisted_64, toDisplayString$1(_ctx.$t("challenge_timer")), 1)
           ]),
-          createBaseVNode("div", _hoisted_62, [
+          createBaseVNode("div", _hoisted_65, [
             withDirectives(createBaseVNode("input", {
               ref: "step_settings_disconnected_prevent",
               id: "settings-disconnected-prevent",
-              "onUpdate:modelValue": _cache[29] || (_cache[29] = ($event) => this.store.settings.disconnected_prevent = $event),
+              "onUpdate:modelValue": _cache[35] || (_cache[35] = ($event) => this.store.settings.disconnected_prevent = $event),
               type: "checkbox"
             }, null, 512), [
               [vModelCheckbox, this.store.settings.disconnected_prevent]
             ]),
-            createBaseVNode("label", _hoisted_63, toDisplayString$1(_ctx.$t("disconnected_prevent")), 1)
+            createBaseVNode("label", _hoisted_66, toDisplayString$1(_ctx.$t("disconnected_prevent")), 1)
           ]),
-          createBaseVNode("div", _hoisted_64, [
+          createBaseVNode("div", _hoisted_67, [
             withDirectives(createBaseVNode("input", {
               ref: "step_settings_npc_prevent",
               id: "settings-npc-prevent",
-              "onUpdate:modelValue": _cache[30] || (_cache[30] = ($event) => this.store.settings.npc_prevent = $event),
+              "onUpdate:modelValue": _cache[36] || (_cache[36] = ($event) => this.store.settings.npc_prevent = $event),
               type: "checkbox"
             }, null, 512), [
               [vModelCheckbox, this.store.settings.npc_prevent]
             ]),
-            createBaseVNode("label", _hoisted_65, toDisplayString$1(_ctx.$t("npc_prevent")), 1)
+            createBaseVNode("label", _hoisted_68, toDisplayString$1(_ctx.$t("npc_prevent")), 1)
           ])
         ])
       ], 512)) : createCommentVNode("", true)
     ])
   ], 512);
 }
-const AdminTabSettings = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["render", _sfc_render$7], ["__scopeId", "data-v-63fc28c9"]]);
-const AdminTabPoll_vue_vue_type_style_index_0_scoped_eac0054b_lang = "";
+const AdminTabSettings = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["render", _sfc_render$7], ["__scopeId", "data-v-29cda2cb"]]);
+const AdminTabPoll_vue_vue_type_style_index_0_scoped_e1b4dc7f_lang = "";
 const _sfc_main$7 = {
   components: {
     VueMultiselect: script$1
@@ -31373,7 +31658,7 @@ const _sfc_main$7 = {
           if (character.polls[id_poll].answer !== void 0 && vm.store.polls[id_poll].options[character.polls[id_poll].answer].tags !== void 0) {
             let new_tags = vm.store.polls[id_poll].options[character.polls[id_poll].answer].tags;
             new_tags.forEach(function(tag) {
-              character.tags.push(tag);
+              vm.store.addTagToCharacter(character, tag);
             });
           }
           delete character.polls[id_poll];
@@ -31756,7 +32041,7 @@ function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
     ])
   ], 512);
 }
-const AdminTabPoll = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["render", _sfc_render$6], ["__scopeId", "data-v-eac0054b"]]);
+const AdminTabPoll = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["render", _sfc_render$6], ["__scopeId", "data-v-e1b4dc7f"]]);
 const AdminTabChallenge_vue_vue_type_style_index_0_lang = "";
 const _sfc_main$6 = {
   components: { contenteditable: _sfc_main$c, VueMultiselect: script$1, Slider: m },
@@ -32409,7 +32694,7 @@ function _sfc_render$5(_ctx, _cache, $props, $setup, $data, $options) {
   ], 512);
 }
 const AdminTabChallenge = /* @__PURE__ */ _export_sfc(_sfc_main$6, [["render", _sfc_render$5]]);
-const AdminTabPick_vue_vue_type_style_index_0_scoped_875618f1_lang = "";
+const AdminTabPick_vue_vue_type_style_index_0_scoped_d1add040_lang = "";
 const _sfc_main$5 = {
   components: {
     VueMultiselect: script$1
@@ -32470,34 +32755,26 @@ const _sfc_main$5 = {
         let picked_characters = this.store.getRandom(relevant_characters, this.nb_targets);
         this.store.setPickedCharacters(picked_characters);
         picked_characters.forEach(function(character) {
-          character.in_progress = true;
           if (vm.gauge_modifier !== void 0) {
             for (const [key, bonus] of Object.entries(vm.gauge_modifier)) {
-              character.gauges[key].value += bonus;
+              vm.store.modifyGaugeCharacter(character, key, bonus);
             }
           }
           if (vm.stat_modifier !== void 0) {
             for (const [key, bonus] of Object.entries(vm.stat_modifier)) {
-              character.stats[key].value += bonus;
+              vm.store.modifyStatCharacter(character, key, bonus);
             }
           }
           if (vm.chosen_modifier_pick_add !== void 0) {
             vm.chosen_modifier_pick_add.forEach(function(tag) {
-              let found = character.tags.findIndex((character_tag) => character_tag.code === tag.code);
-              if (found === -1) {
-                character.tags.push(tag);
-              }
+              vm.store.addTagToCharacter(character, tag);
             });
           }
           if (vm.chosen_modifier_pick_remove !== void 0) {
             vm.chosen_modifier_pick_remove.forEach(function(tag) {
-              let found = character.tags.findIndex((character_tag) => character_tag.code === tag.code);
-              if (found !== -1) {
-                character.tags.splice(found, 1);
-              }
+              vm.store.removeTagFromCharacter(character, tag);
             });
           }
-          delete character.in_progress;
         });
       }
       this.nb_targets = 1;
@@ -32684,7 +32961,7 @@ function _sfc_render$4(_ctx, _cache, $props, $setup, $data, $options) {
     ])
   ], 512);
 }
-const AdminTabPick = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["render", _sfc_render$4], ["__scopeId", "data-v-875618f1"]]);
+const AdminTabPick = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["render", _sfc_render$4], ["__scopeId", "data-v-d1add040"]]);
 /*! shepherd.js 11.2.0 */
 var isMergeableObject = function isMergeableObject2(value) {
   return isNonNullObject(value) && !isSpecial(value);
@@ -37185,6 +37462,7 @@ const _sfc_main$4 = {
         }
       },
       { parent: "settings", id: "step_settings_gauge_value" },
+      { parent: "settings", id: "step_settings_gauge_max" },
       { parent: "settings", id: "step_settings_gauge_make_deadly" },
       { parent: "settings", id: "step_settings_gauge_spending" },
       {
@@ -38365,10 +38643,11 @@ const _sfc_main$3 = {
       return this.game_name_focused === 0 ? this.$t("game_rename") : this.store.current_game.name;
     },
     shareURL: function() {
-      if (window.location.origin === "null") {
+      let location2 = window.location;
+      if (location2.origin === "null") {
         return "";
       } else {
-        return window.location.href.slice(0, location.href.lastIndexOf("/")) + "join?id=" + this.store.peer.id;
+        return location2.href.slice(0, location2.href.lastIndexOf("/")) + "join?id=" + this.store.peer.id;
       }
     }
   },
@@ -38397,6 +38676,23 @@ const _sfc_main$3 = {
       this.store.current_game.characters.forEach(function(character) {
         character.connection = null;
         character.watched = true;
+        if (character.base_stats === void 0) {
+          let modifiers_stats = [];
+          character.tags.forEach(function(tag) {
+            if (tag.stat_modifiers !== void 0) {
+              for (const [key, stat] of Object.entries(tag.stat_modifiers)) {
+                modifiers_stats[key] = (modifiers_stats[key] ?? 0) + stat.value;
+              }
+            }
+          });
+          character.base_stats = {};
+          for (const [key, stat] of Object.entries(character.stats)) {
+            if (character.base_stats[key] === void 0) {
+              character.base_stats[key] = character.stats[key].value - (modifiers_stats[key] ?? 0);
+            }
+          }
+        }
+        character.recalculate = 1;
         watch(character, vm.store.characterWatch);
       });
     }
@@ -38467,7 +38763,7 @@ const _sfc_main$3 = {
       vm.store.connections[conn.connectionId] = conn;
       conn.on("data", function(data2) {
         if (data2.handshake === "readyForCall") {
-          if (data2.version === void 0 || data2.version !== "1.2.0") {
+          if (data2.version === void 0 || data2.version !== "1.2.1") {
             conn.send({
               handshake: "versionError"
             });
@@ -38516,7 +38812,7 @@ const _sfc_main$3 = {
             conn.send({
               handshake: "displayCharacter",
               game_token: vm.store.current_game.id,
-              character: vm.store.prepareCharacter(new_character)
+              character: new_character
             });
           }
         } else if (data2.handshake === "characterChoices") {
@@ -38543,6 +38839,7 @@ const _sfc_main$3 = {
             }
             character.gauges[data2.code].value -= 1;
             character.challenge.difficulty = adjusted_difficulty;
+            character.recalculate = 1;
           }
         }
       });
@@ -38573,10 +38870,11 @@ const _sfc_main$3 = {
       this.$refs["admin_tab_" + nameRef].$refs["tab"].classList.add("open");
     },
     shareLink() {
-      if (window.location.origin === "null") {
+      let location2 = window.location;
+      if (location2.origin === "null") {
         return this.store.peer.id;
       } else {
-        return window.location.href.slice(0, location.href.lastIndexOf("/")) + "join?id=" + this.store.peer.id;
+        return location2.href.slice(0, location2.href.lastIndexOf("/")) + "join?id=" + this.store.peer.id;
       }
     },
     copyLink(event) {
@@ -38635,7 +38933,7 @@ const _sfc_main$3 = {
       conn.send({
         handshake: "displayCharacter",
         game_token: vm.store.current_game.id,
-        character: vm.store.prepareCharacter(character)
+        character
       });
     },
     validateNumber(objects) {
@@ -38772,7 +39070,7 @@ function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
   ], 64);
 }
 const Admin = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["render", _sfc_render$3]]);
-const Player_vue_vue_type_style_index_0_scoped_ba936217_lang = "";
+const Player_vue_vue_type_style_index_0_scoped_deeb38c1_lang = "";
 const _sfc_main$2 = {
   setup() {
     const character = ref({});
@@ -38842,7 +39140,7 @@ const _sfc_main$2 = {
         return false;
       }
       return Object.entries(this.character.gauges).some(function(gauge) {
-        if (vm.character.challenge.spendable[gauge[0]] !== void 0 && (gauge[1].deadly === void 0 ? gauge[1].value > 1 : gauge[1].value > 0)) {
+        if (vm.character.challenge.spendable[gauge[0]] !== void 0 && (gauge[1].deadly ? gauge[1].value > 1 : gauge[1].value > 0)) {
           return true;
         }
       });
@@ -38876,7 +39174,7 @@ const _sfc_main$2 = {
       console.log(this.store.peer.id);
       this.store.connection.send({
         handshake: "readyForCall",
-        version: "1.2.0"
+        version: "1.2.1"
       });
       console.log("Minotaure : ready for transaction");
       this.store.connection.once("close", function() {
@@ -39037,7 +39335,7 @@ const _sfc_main$2 = {
     }
   }
 };
-const _withScopeId = (n) => (pushScopeId("data-v-ba936217"), n = n(), popScopeId(), n);
+const _withScopeId = (n) => (pushScopeId("data-v-deeb38c1"), n = n(), popScopeId(), n);
 const _hoisted_1$2 = {
   key: 0,
   class: "game-name"
@@ -39204,7 +39502,9 @@ function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
           ]),
           createBaseVNode("div", _hoisted_20, [
             (openBlock(true), createElementBlock(Fragment, null, renderList($setup.character.tags, (tag) => {
-              return openBlock(), createElementBlock("span", null, toDisplayString$1(tag.label), 1);
+              return openBlock(), createElementBlock("span", {
+                style: normalizeStyle({ borderColor: "hsl(" + tag.color[0] + "," + tag.color[1] + "%," + tag.color[2] + "%)" })
+              }, toDisplayString$1(tag.label), 5);
             }), 256))
           ])
         ])) : (openBlock(), createElementBlock("div", _hoisted_21, [
@@ -39241,7 +39541,7 @@ function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
               createBaseVNode("span", null, toDisplayString$1(_ctx.$t("gauge_spending_description")), 1),
               (openBlock(true), createElementBlock(Fragment, null, renderList($setup.character.gauges, (gauge, key) => {
                 return openBlock(), createElementBlock(Fragment, null, [
-                  $setup.character.challenge.spendable[key] !== void 0 && $options.difficulty < 19 && (gauge.deadly === void 0 ? gauge.value > 1 : gauge.value > 0) ? (openBlock(), createElementBlock("button", {
+                  $setup.character.challenge.spendable[key] !== void 0 && (gauge.deadly ? gauge.value > 1 : gauge.value > 0) ? (openBlock(), createElementBlock("button", {
                     key: 0,
                     onClick: ($event) => $options.spendGauge(key),
                     class: "btn-valid"
@@ -39299,11 +39599,11 @@ function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
     ], 2)
   ], 64);
 }
-const Player = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["render", _sfc_render$2], ["__scopeId", "data-v-ba936217"]]);
+const Player = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["render", _sfc_render$2], ["__scopeId", "data-v-deeb38c1"]]);
 const Continue_vue_vue_type_style_index_0_scoped_165cb460_lang = "";
 const _sfc_main$1 = {
   setup() {
-    const version2 = "1.2.0";
+    const version2 = "1.2.1";
     const versions = version2.split(".");
     let games_storage = localStorage.getItem("games");
     games_storage = games_storage == null ? [] : JSON.parse(games_storage);
@@ -42746,7 +43046,7 @@ const usePlayerStore = defineStore("playerStore", {
         picking_array: [],
         label: freetag ? i18n.global.t("other_tags") : i18n.global.t("group_nb", { nb: this.tag_groups.length + 1 })
       };
-      group.code = freetag ? "freetag" : Math.floor(Math.random() * 1e7);
+      group.code = freetag ? "freetag" : (this.tag_groups.length ? this.tag_groups[this.tag_groups.length - 1].code : 0) + Math.floor(Math.random() * 1e7);
       group.start = freetag ? "none" : "random";
       this.tag_groups.push(group);
       return group;
@@ -42792,27 +43092,98 @@ const usePlayerStore = defineStore("playerStore", {
     setCurrentGame(game) {
       this._current_game = game;
     },
-    addCharacter(new_character) {
-      this.characters.push(new_character);
+    /**
+     * Add a new character to the store.
+     * @param {object} character : the character to add.
+     */
+    addCharacter(character) {
+      this.characters.push(character);
     },
-    characterWatch(new_character) {
+    /**
+     * Control and send the current version of a character to the connected
+     * player.
+     * @param {object} character : the character to target.
+     */
+    characterWatch(character) {
       let vm = this;
-      for (const [key, gauge] of Object.entries(new_character.gauges)) {
-        if (vm.gauges[key] !== void 0 && vm.gauges[key].deadly && gauge.value <= 0) {
-          new_character.gauges[key].value = 0;
-          new_character.alive = false;
-        }
-      }
-      if (new_character.connection !== void 0 && new_character.connection != null) {
-        if (vm.connections[new_character.connection] !== void 0 && vm.connections[new_character.connection].open) {
-          vm.connections[new_character.connection].send({
+      this.limitCharacter(character);
+      if (character.connection !== void 0 && character.connection != null) {
+        if (vm.connections[character.connection] !== void 0 && vm.connections[character.connection].open) {
+          vm.connections[character.connection].send({
             handshake: "displayCharacter",
             game_token: vm.current_game.id,
-            character: vm.prepareCharacter(new_character)
+            character
           });
         }
       }
     },
+    /**
+     * Alter the tags, stats and gauges of a character to be valid.
+     * This method is called by a watcher and use character.recalculate to
+     * avoid infinite loop to the modification of the character's data.
+     * @param {object} character : the character to alter.
+     * @param {boolean} creation : are we creating the character ?
+     */
+    limitCharacter(character, creation = false) {
+      if (character.recalculate === 1 || creation) {
+        let vm = this;
+        character.recalculate = 0;
+        let modifiers_stats = {};
+        character.tags.sort(function(a, b) {
+          if (a.group < b.group) {
+            return -1;
+          } else if (a.group > b.group) {
+            return 1;
+          }
+          return 0;
+        });
+        character.tags.forEach(function(tag) {
+          if (tag.stat_modifiers !== void 0) {
+            for (const [key, stat] of Object.entries(tag.stat_modifiers)) {
+              modifiers_stats[key] = (modifiers_stats[key] ?? 0) + stat.value;
+            }
+          }
+        });
+        for (const [key, gauge] of Object.entries(character.gauges)) {
+          if (vm.gauges[key] !== void 0) {
+            if (gauge.value <= 0) {
+              if (vm.gauges[key].deadly) {
+                if (creation) {
+                  character.gauges[key].value = 1;
+                } else {
+                  character.gauges[key].value = 0;
+                  character.alive = false;
+                }
+              } else {
+                character.gauges[key].value = 0;
+              }
+            } else if (vm.gauges[key].max !== "" && gauge.value > vm.gauges[key].max) {
+              character.gauges[key].value = vm.gauges[key].max;
+            }
+          }
+        }
+        for (const [key, stat] of Object.entries(character.stats)) {
+          let temp_stat_value = character.base_stats[key];
+          if (modifiers_stats[key] !== void 0) {
+            temp_stat_value += modifiers_stats[key];
+          }
+          if (vm.stats[key] !== void 0) {
+            if (temp_stat_value <= 0) {
+              character.stats[key].value = 1;
+            } else if (temp_stat_value > 20) {
+              character.stats[key].value = 20;
+            } else {
+              character.stats[key].value = temp_stat_value;
+            }
+          }
+        }
+      }
+    },
+    /**
+     * Retrieve the character associated with a token
+     * @param {string} token
+     * @return {object | null} the character found, or null if not found.
+     */
     retrieveCharacter(token) {
       if (this.current_game.characters.length === void 0) {
         return null;
@@ -42820,6 +43191,13 @@ const usePlayerStore = defineStore("playerStore", {
         return this.current_game.characters.find((element2) => element2.token === token);
       }
     },
+    /**
+     * Generate a character.
+     * @param {object} data : data already choosen by the player.
+     * If data is null, it creates a npc with a random name.
+     * @param {object} conn : a DataConnection from the peerjs library
+     * @return {object} a new character.
+     */
     generateCharacter(data2 = null, conn = null) {
       const vm = this;
       let token = Math.random() + Math.random();
@@ -42832,6 +43210,7 @@ const usePlayerStore = defineStore("playerStore", {
         pseudo: data2 != null ? data2.pseudo : i18n.global.t("non_player"),
         stats: {},
         gauges: {},
+        base_stats: {},
         alive: true,
         challenge: {},
         polls: {},
@@ -42899,37 +43278,24 @@ const usePlayerStore = defineStore("playerStore", {
           die_choice = dice_rolls.splice(choice, 1)[0];
         }
         character.stats[key] = { label: stat.name, value: die_choice };
+        character.base_stats[key] = character.stats[key].value;
       }
       for (const [key, gauge] of Object.entries(this.gauges)) {
-        character.gauges[key] = { label: gauge.name, value: gauge.value };
+        character.gauges[key] = { label: gauge.name, value: gauge.value, deadly: this.gauges[key].deadly ?? false };
       }
+      character.tags = [];
       tags.forEach(function(tag) {
-        if (tag.stat_modifiers !== void 0) {
-          for (const [key, stat] of Object.entries(tag.stat_modifiers)) {
-            if (character.stats[key] !== void 0) {
-              character.stats[key].value += stat.value;
-              if (character.stats[key].value <= 0) {
-                character.stats[key].value = 1;
-              }
-            }
-          }
-        }
-        if (tag.gauge_modifiers !== void 0) {
-          for (const [key, gauge] of Object.entries(tag.gauge_modifiers)) {
-            if (character.gauges[key] !== void 0) {
-              character.gauges[key].value += gauge.value;
-              if (character.gauges[key].value <= 0) {
-                character.gauges[key].value = 1;
-              }
-            }
-          }
-        }
+        vm.addTagToCharacter(character, tag);
       });
-      character.tags = tags;
+      this.limitCharacter(character, true);
       this.addCharacter(character);
       return character;
     },
-    generateCharacters(nb) {
+    /**
+     * Generate a given number of npc characters.
+     * @param {int} nb : the amount to generate.
+     */
+    generateNpcCharacters(nb) {
       for (let i = 0; i < nb; i++) {
         let character = this.generateCharacter();
         let retrieved_character = this.retrieveCharacter(character.token);
@@ -42939,14 +43305,12 @@ const usePlayerStore = defineStore("playerStore", {
         }
       }
     },
-    prepareCharacter(character) {
-      return character;
-    },
-    filterCharacterByTags(character, chosen_tags) {
-      return character.tags.find(
-        (tag) => chosen_tags.find((chosen_tag) => chosen_tag.code === tag.code)
-      );
-    },
+    /**
+     * Retrieve a list of characters filtered by conditions.
+     * @param {boolean} alive : the character is alive.
+     * @param {boolean} connected : a player is connected to the character.
+     * @param {boolean} npc : the character is a npc.
+     */
     getCharacters(alive = true, connected = true, npc = true) {
       const vm = this;
       return this.characters.filter(
@@ -42954,6 +43318,96 @@ const usePlayerStore = defineStore("playerStore", {
           return (alive ? character.alive : true) && (connected ? character.npc !== void 0 || character.connection !== null && vm.connections[character.connection] !== void 0 && vm.connections[character.connection].open === true : true) && (npc ? character.npc === void 0 : true);
         }
       );
+    },
+    /**
+     * Search all characters for the ones with a specific tag. Update their gauge value.
+     * @param {object} target_tag : the searched tag.
+     * @param {int} modifier : the modified value.
+     */
+    updateGaugeModifier(target_tag, key, modifier) {
+      this.characters.forEach(function(character) {
+        let foundIndex = character.tags.findIndex(function(tag) {
+          if (tag.code === target_tag.code) {
+            return true;
+          }
+        });
+        if (foundIndex > -1) {
+          character.gauges[key].value += modifier;
+          character.recalculate = 1;
+        }
+      });
+    },
+    updateStatModifier(target_tag) {
+      this.characters.forEach(function(character) {
+        let foundIndex = character.tags.findIndex(function(tag) {
+          if (tag.code === target_tag.code) {
+            return true;
+          }
+        });
+        if (foundIndex > -1) {
+          character.recalculate = 1;
+        }
+      });
+    },
+    /**
+     * Delete a specific tag from a character tag list if they already have it.
+     * @param {object} character : the character to target.
+     * @param {object} target_tag : the tag to delete.
+     * @param {boolean} inverse_modifier : if true, the gauges bonuses of
+     * the tag will be reversed on the character.
+     */
+    removeTagFromCharacter(character, target_tag, inverse_modifier = false) {
+      let found = character.tags.findIndex((tag) => tag.code === target_tag.code);
+      if (found > -1) {
+        character.tags.splice(found, 1);
+        if (inverse_modifier) {
+          if (target_tag.gauge_modifiers !== void 0) {
+            for (const [key, gauge_modifier] of Object.entries(target_tag.gauge_modifiers)) {
+              character.gauges[key].value -= gauge_modifier.value;
+            }
+          }
+        }
+        character.recalculate = 1;
+      }
+      return found > -1;
+    },
+    /**
+     * Add a specific tag to a character tag list if they already have it.
+     * @param {object} character : the character to target.
+     * @param {object} target_tag : the tag to add.
+     */
+    addTagToCharacter(character, target_tag) {
+      let found = character.tags.findIndex((tag) => tag.code === target_tag.code);
+      if (found === -1) {
+        if (target_tag.gauge_modifiers !== void 0) {
+          for (const [key, gauge_modifier] of Object.entries(target_tag.gauge_modifiers)) {
+            character.gauges[key].value += gauge_modifier.value;
+          }
+        }
+        character.tags.push(target_tag);
+        character.recalculate = 1;
+      }
+      return found === -1;
+    },
+    /**
+     * Modify a base gauge value of a character.
+     * @param {object} character : the character to target.
+     * @param {string} key : the gauge's key.
+     * @param {int} modifier : the bonus or malus to add.
+     */
+    modifyGaugeCharacter(character, key, modifier) {
+      character.gauges[key].value += modifier;
+      character.recalculate = 1;
+    },
+    /**
+     * Modify a base stat value of a character.
+     * @param {object} character : the character to target.
+     * @param {string} key : the stat's key.
+     * @param {int} modifier : the bonus or malus to add.
+     */
+    modifyStatCharacter(character, key, modifier) {
+      character.base_stats[key] += modifier;
+      character.recalculate = 1;
     },
     filterCharacterByTagsAndPicked(character, chosen_tags, select_picked = false) {
       let is_picked = false;
@@ -42994,6 +43448,7 @@ const usePlayerStore = defineStore("playerStore", {
       return group.tags.find((tag) => tag.code === choice_index);
     },
     removeTagFromAll(deleted_tag) {
+      const vm = this;
       this.characters.forEach(function(character) {
         let foundIndex = character.tags.findIndex(function(tag) {
           if (tag.code === deleted_tag.code) {
@@ -43001,7 +43456,7 @@ const usePlayerStore = defineStore("playerStore", {
           }
         });
         if (foundIndex > -1) {
-          character.tags.splice(foundIndex, 1);
+          vm.removeTagFromCharacter(character, deleted_tag);
         }
       });
     },
@@ -43074,7 +43529,7 @@ const usePlayerStore = defineStore("playerStore", {
             if (challenge.stat_group_modifier[result] !== void 0) {
               for (const [key, bonus] of Object.entries(challenge.stat_group_modifier[result])) {
                 character.challenge.message.push(i18n.global.t("result_" + (bonus >= 0 ? "bonus" : "malus"), { points: bonus, name: vm.stats[key].name }));
-                character.stats[key].value += bonus;
+                character.base_stats[key] += bonus;
               }
             }
             if (challenge.marker_group_modifier[result] !== void 0) {
@@ -43085,22 +43540,19 @@ const usePlayerStore = defineStore("playerStore", {
             }
             if (challenge.chosen_group_modifier_tags_add[result] !== void 0) {
               challenge.chosen_group_modifier_tags_add[result].forEach(function(tag) {
-                let found = character.tags.findIndex((character_tag) => character_tag.code === tag.code);
-                if (found === -1) {
-                  character.tags.push(tag);
+                if (vm.addTagToCharacter(character, tag)) {
                   character.challenge.message.push(i18n.global.t("added_tag", { tag_label: tag.label }));
                 }
               });
             }
             if (challenge.chosen_group_modifier_tags_remove[result] !== void 0) {
               challenge.chosen_group_modifier_tags_remove[result].forEach(function(tag) {
-                let found = character.tags.findIndex((character_tag) => character_tag.code === tag.code);
-                if (found !== -1) {
-                  character.tags.splice(found, 1);
+                if (vm.removeTagFromCharacter(character, tag)) {
                   character.challenge.message.push(i18n.global.t("removed_tag", { tag_label: tag.label }));
                 }
               });
             }
+            character.recalculate = 1;
           }
         }
       );
@@ -43129,7 +43581,6 @@ const usePlayerStore = defineStore("playerStore", {
     resolveRoll(character) {
       const vm = this;
       let challenge = this.last_challenge;
-      character.in_progress = true;
       character.challenge.wait_roll = false;
       let messages2 = [];
       let result = "failure";
@@ -43146,13 +43597,13 @@ const usePlayerStore = defineStore("playerStore", {
       if (challenge.gauge_modifier[result] !== void 0) {
         for (const [key, bonus] of Object.entries(challenge.gauge_modifier[result])) {
           messages2.push(i18n.global.t("result_" + (bonus >= 0 ? "bonus" : "malus"), { points: bonus, name: vm.gauges[key].name }));
-          character.gauges[key].value += bonus;
+          this.modifyGaugeCharacter(character, key, bonus);
         }
       }
       if (challenge.stat_modifier[result] !== void 0) {
         for (const [key, bonus] of Object.entries(challenge.stat_modifier[result])) {
           messages2.push(i18n.global.t("result_" + (bonus >= 0 ? "bonus" : "malus"), { points: bonus, name: vm.stats[key].name }));
-          character.stats[key].value += bonus;
+          this.modifyStatCharacter(character, key, bonus);
         }
       }
       if (challenge.marker_modifier[result] !== void 0) {
@@ -43163,18 +43614,14 @@ const usePlayerStore = defineStore("playerStore", {
       }
       if (challenge.chosen_modifier_tags_add[result] !== void 0) {
         challenge.chosen_modifier_tags_add[result].forEach(function(tag) {
-          let found = character.tags.findIndex((character_tag) => character_tag.code === tag.code);
-          if (found === -1) {
-            character.tags.push(tag);
+          if (vm.addTagToCharacter(character, tag)) {
             messages2.push(i18n.global.t("added_tag", { tag_label: tag.label }));
           }
         });
       }
       if (challenge.chosen_modifier_tags_remove[result] !== void 0) {
         challenge.chosen_modifier_tags_remove[result].forEach(function(tag) {
-          let found = character.tags.findIndex((character_tag) => character_tag.code === tag.code);
-          if (found !== -1) {
-            character.tags.splice(found, 1);
+          if (vm.removeTagFromCharacter(character, tag)) {
             messages2.push(i18n.global.t("removed_tag", { tag_label: tag.label }));
           }
         });
@@ -43183,7 +43630,6 @@ const usePlayerStore = defineStore("playerStore", {
       character.challenge.roll = real_die_throw;
       character.challenge.message = messages2;
       character.challenge.group = false;
-      delete character.in_progress;
     },
     saveQuit() {
       let games = localStorage.getItem("games");
@@ -43393,6 +43839,8 @@ router.beforeEach((to, from, next) => {
   --margin-multiselect: 0;
   --tab-border-color: white;
   --character-picked: gold;
+  --player-tag-background: black;
+  --player-tag-color: white;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -43416,6 +43864,8 @@ router.beforeEach((to, from, next) => {
   --border-color: #777;
   --tab-border-color: black;
   --character-picked: black;
+  --player-tag-background: #efefef;
+  --player-tag-color: black;
 }
 [data-theme=light].picker {
   background: #efefef;
@@ -43434,6 +43884,8 @@ router.beforeEach((to, from, next) => {
   --valid-color: #379634;
   --danger-color: #A63A50;
   --tab-border-color: black;
+  --player-tag-background: black;
+  --player-tag-color: white;
 }
 [data-theme=blue].picker {
   background: #5858c4;
@@ -43453,6 +43905,8 @@ router.beforeEach((to, from, next) => {
   --character-picked: #141204;
   --success-background: #159241;
   --failure-background: #AA4538;
+  --player-tag-background: #e5e2da;
+  --player-tag-color: #141204;
 }
 [data-theme=sepia].picker {
   background: #dbc6b8;
@@ -44321,6 +44775,8 @@ button.btn-danger {
   --margin-multiselect: 0;
   --tab-border-color: white;
   --character-picked: gold;
+  --player-tag-background: black;
+  --player-tag-color: white;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -44342,6 +44798,8 @@ button.btn-danger {
   --border-color: #777;
   --tab-border-color: black;
   --character-picked: black;
+  --player-tag-background: #efefef;
+  --player-tag-color: black;
 }
 [data-theme=light].picker {
   background: #efefef;
@@ -44359,6 +44817,8 @@ button.btn-danger {
   --valid-color: #379634;
   --danger-color: #A63A50;
   --tab-border-color: black;
+  --player-tag-background: black;
+  --player-tag-color: white;
 }
 [data-theme=blue].picker {
   background: #5858c4;
@@ -44377,6 +44837,8 @@ button.btn-danger {
   --character-picked: #141204;
   --success-background: #159241;
   --failure-background: #AA4538;
+  --player-tag-background: #e5e2da;
+  --player-tag-color: #141204;
 }
 [data-theme=sepia].picker {
   background: #dbc6b8;
@@ -44499,6 +44961,8 @@ button.btn-danger {
   --margin-multiselect: 0;
   --tab-border-color: white;
   --character-picked: gold;
+  --player-tag-background: black;
+  --player-tag-color: white;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -44520,6 +44984,8 @@ button.btn-danger {
   --border-color: #777;
   --tab-border-color: black;
   --character-picked: black;
+  --player-tag-background: #efefef;
+  --player-tag-color: black;
 }
 [data-theme=light].picker {
   background: #efefef;
@@ -44537,6 +45003,8 @@ button.btn-danger {
   --valid-color: #379634;
   --danger-color: #A63A50;
   --tab-border-color: black;
+  --player-tag-background: black;
+  --player-tag-color: white;
 }
 [data-theme=blue].picker {
   background: #5858c4;
@@ -44555,6 +45023,8 @@ button.btn-danger {
   --character-picked: #141204;
   --success-background: #159241;
   --failure-background: #AA4538;
+  --player-tag-background: #e5e2da;
+  --player-tag-color: #141204;
 }
 [data-theme=sepia].picker {
   background: #dbc6b8;
@@ -44684,6 +45154,8 @@ ul li {
   --margin-multiselect: 0;
   --tab-border-color: white;
   --character-picked: gold;
+  --player-tag-background: black;
+  --player-tag-color: white;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -44705,6 +45177,8 @@ ul li {
   --border-color: #777;
   --tab-border-color: black;
   --character-picked: black;
+  --player-tag-background: #efefef;
+  --player-tag-color: black;
 }
 [data-theme=light].picker[data-v-8706242a] {
   background: #efefef;
@@ -44722,6 +45196,8 @@ ul li {
   --valid-color: #379634;
   --danger-color: #A63A50;
   --tab-border-color: black;
+  --player-tag-background: black;
+  --player-tag-color: white;
 }
 [data-theme=blue].picker[data-v-8706242a] {
   background: #5858c4;
@@ -44740,6 +45216,8 @@ ul li {
   --character-picked: #141204;
   --success-background: #159241;
   --failure-background: #AA4538;
+  --player-tag-background: #e5e2da;
+  --player-tag-color: #141204;
 }
 [data-theme=sepia].picker[data-v-8706242a] {
   background: #dbc6b8;
@@ -44809,6 +45287,8 @@ ul li {
   --margin-multiselect: 0;
   --tab-border-color: white;
   --character-picked: gold;
+  --player-tag-background: black;
+  --player-tag-color: white;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -44830,6 +45310,8 @@ ul li {
   --border-color: #777;
   --tab-border-color: black;
   --character-picked: black;
+  --player-tag-background: #efefef;
+  --player-tag-color: black;
 }
 [data-theme=light].picker {
   background: #efefef;
@@ -44847,6 +45329,8 @@ ul li {
   --valid-color: #379634;
   --danger-color: #A63A50;
   --tab-border-color: black;
+  --player-tag-background: black;
+  --player-tag-color: white;
 }
 [data-theme=blue].picker {
   background: #5858c4;
@@ -44865,6 +45349,8 @@ ul li {
   --character-picked: #141204;
   --success-background: #159241;
   --failure-background: #AA4538;
+  --player-tag-background: #e5e2da;
+  --player-tag-color: #141204;
 }
 [data-theme=sepia].picker {
   background: #dbc6b8;
@@ -44951,6 +45437,8 @@ ul li {
   --margin-multiselect: 0;
   --tab-border-color: white;
   --character-picked: gold;
+  --player-tag-background: black;
+  --player-tag-color: white;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -44972,6 +45460,8 @@ ul li {
   --border-color: #777;
   --tab-border-color: black;
   --character-picked: black;
+  --player-tag-background: #efefef;
+  --player-tag-color: black;
 }
 [data-theme=light].picker {
   background: #efefef;
@@ -44989,6 +45479,8 @@ ul li {
   --valid-color: #379634;
   --danger-color: #A63A50;
   --tab-border-color: black;
+  --player-tag-background: black;
+  --player-tag-color: white;
 }
 [data-theme=blue].picker {
   background: #5858c4;
@@ -45007,6 +45499,8 @@ ul li {
   --character-picked: #141204;
   --success-background: #159241;
   --failure-background: #AA4538;
+  --player-tag-background: #e5e2da;
+  --player-tag-color: #141204;
 }
 [data-theme=sepia].picker {
   background: #dbc6b8;
@@ -45097,6 +45591,8 @@ ul li {
   --margin-multiselect: 0;
   --tab-border-color: white;
   --character-picked: gold;
+  --player-tag-background: black;
+  --player-tag-color: white;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -45118,6 +45614,8 @@ ul li {
   --border-color: #777;
   --tab-border-color: black;
   --character-picked: black;
+  --player-tag-background: #efefef;
+  --player-tag-color: black;
 }
 [data-theme=light].picker {
   background: #efefef;
@@ -45135,6 +45633,8 @@ ul li {
   --valid-color: #379634;
   --danger-color: #A63A50;
   --tab-border-color: black;
+  --player-tag-background: black;
+  --player-tag-color: white;
 }
 [data-theme=blue].picker {
   background: #5858c4;
@@ -45153,6 +45653,8 @@ ul li {
   --character-picked: #141204;
   --success-background: #159241;
   --failure-background: #AA4538;
+  --player-tag-background: #e5e2da;
+  --player-tag-color: #141204;
 }
 [data-theme=sepia].picker {
   background: #dbc6b8;
@@ -45192,7 +45694,7 @@ ul li {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  align-items: flex-end;
+  align-items: flex-start;
   justify-content: space-between;
 }
 #tab-characters-content input:not(.multiselect__input) {
@@ -45205,15 +45707,32 @@ ul li {
   padding: 0 2px;
 }
 #tab-characters-content .markers-container {
-  flex-basis: 100%;
   display: flex;
-  justify-content: center;
-  gap: 30px;
-  font-size: 25px;
+  gap: 10px;
+  flex-direction: column;
+  align-items: end;
+  margin-left: -30px;
+  font-size: 20px;
+  line-height: 20px;
+}
+@media (max-width: 1440px) {
+#tab-characters-content .markers-container {
+    margin-left: -20px;
+}
 }
 #tab-characters-content .markers-container > div {
   display: flex;
-  gap: 10px;
+  gap: 8px;
+  border-radius: 0 8px 8px 0;
+  border: 1px solid var(--tab-border-color);
+  border-left-style: none;
+  padding: 0.5em;
+  align-items: center;
+  flex-direction: column;
+  align-self: stretch;
+}
+#tab-characters-content .markers-container > div > span:first-child {
+  word-break: break-word;
 }
 #tab-characters-content .markers-container > div .value {
   display: flex;
@@ -45334,7 +45853,8 @@ ul li {
   justify-content: center;
 }
 .summary {
-  text-align: left;
+  margin-left: auto;
+  padding: 8px;
 }
 #character-list {
   flex-basis: 100%;
@@ -45399,6 +45919,12 @@ ul li {
   display: flex;
   justify-content: space-between;
 }
+#character-list > .character > .stats .value, #character-list > .character .gauges .value {
+  margin-left: auto;
+}
+#character-list > .character > .stats .value + span, #character-list > .character .gauges .value + span {
+  margin-left: 1px;
+}
 #character-list > .character .character-names {
   display: flex;
   flex-direction: column;
@@ -45410,12 +45936,8 @@ ul li {
 #character-list > .character .character-names .pseudo {
   min-height: 20px;
 }
-.clear-selection {
-  margin-left: auto;
-}
 .filter-data {
   display: flex;
-  flex: 1;
   gap: 15px;
   flex-direction: row;
   align-items: flex-end;
@@ -45423,6 +45945,10 @@ ul li {
 .filter-data > div {
   display: flex;
   flex-direction: column;
+}
+.search-character {
+  margin-right: auto;
+  align-self: flex-end;
 }
 .result-challenge {
   color: yellow;
@@ -45496,6 +46022,38 @@ ul li {
   width: 15px;
   height: 15px;
   border-radius: 100%;
+}
+.first-column {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  position: sticky;
+  top: 85px;
+  max-width: 128px;
+}
+.first-column > button {
+  margin-left: -30px;
+  border-radius: 0 8px 8px 0;
+}
+@media (max-width: 1440px) {
+.first-column > button {
+    margin-left: -20px;
+}
+}
+.first-column > button.active {
+  border: var(--button-border-active);
+}
+.second-column {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  flex: 1;
+  align-items: center;
+  justify-content: flex-end;
+}
+.second-column > * {
+  align-self: flex-end;
+  margin-right: auto;
 }.rcp,.rcp button,.rcp div{-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;-moz-user-select:none;user-select:none;box-sizing:border-box}.rcp{display:block;overflow:hidden;width:280px;height:280px;position:relative;transform:scale(1.001);transition:transform .15s cubic-bezier(.68, 0, .47, 2)}.rcp:focus{outline:0}.rcp:hover .rcp__knob{box-shadow:0 0 20px rgba(0,0,0,.19),0 0 10px rgba(0,0,0,.24)}.rcp.dragging{transform:scale(1.04)}.rcp.disabled{cursor:not-allowed;transform:scale(.96)}.rcp.dragging .rcp__rotator{z-index:1}.rcp__palette{position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100%;background-size:100% 100%;background-image:conic-gradient(red,#ff0,#0f0,#0ff,#00f,#ff00ff,red);-webkit-mask-image:radial-gradient(circle at 50% 50%,transparent 53.5%,black 54%);mask-image:radial-gradient(circle at 50% 50%,transparent 53.5%,black 54%);border-radius:50%;overflow:hidden;will-change:transform,opacity;transition:transform .5s cubic-bezier(.35, 0, .25, 1),opacity .5s cubic-bezier(.35, 0, .25, 1)}.rcp__palette.in{transform:scale(1);opacity:1}.rcp__palette.out{transform:scale(0);opacity:0}.disabled .rcp__palette{filter:contrast(.25)}.rcp__rotator{width:100%;height:100%;position:absolute;transform:rotate(var(--rcp-initial-angle))}.rcp__knob{box-shadow:0 0 10px rgba(0,0,0,.12),0 0 5px rgba(0,0,0,.16);border-radius:50%;position:absolute;width:7%;height:7%;top:2.5%;left:46.5%;background-color:#fff;transition:transform .4s cubic-bezier(.35, 0, .25, 1);outline:0;border-style:none}.rcp__knob.in{transform:scale(1)}.rcp__knob.out{transform:scale(0)}.disabled .rcp__knob{box-shadow:none;pointer-events:none}.rcp__well{position:absolute;width:25%;height:25%;top:37.5%;left:37.5%;padding:0;margin:0;border-radius:50%;background-color:red;outline:0;cursor:pointer;overflow:visible;border:6px solid #fff;box-shadow:0 0 0 1px #b2b2b2}.rcp__well::-moz-focus-inner{border:0}.rcp__well:hover{box-shadow:0 0 1px 1px #333}.rcp__well:focus{box-shadow:0 0 1px 2px #b2b2b2}.rcp__well.pressed{animation:rcp-beat .4s cubic-bezier(.35,0,.25,1) forwards}.disabled .rcp__well{background-color:#bfbfbf!important;pointer-events:none}.rcp__ripple{width:20%;height:20%;border-radius:50%;border:red solid 8px;opacity:0;position:absolute;top:40%;left:40%;z-index:-1}.rcp__ripple.rippling{z-index:0;animation:rcp-ripple .5s cubic-bezier(.35,0,.25,1) forwards}@keyframes rcp-ripple{0%{transform:scale(1);opacity:.3}50%{opacity:.1}100%{opacity:0;border-width:0;transform:scale(3.8)}}@keyframes rcp-beat{0%{transform:scale(1)}25%{transform:scale(.8)}50%{transform:scale(1)}100%{transform:scale(1)}}
 :root {
   font-family: Helvetica, system-ui, Avenir, Inter, Arial, sans-serif;
@@ -45527,6 +46085,8 @@ ul li {
   --margin-multiselect: 0;
   --tab-border-color: white;
   --character-picked: gold;
+  --player-tag-background: black;
+  --player-tag-color: white;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -45548,6 +46108,8 @@ ul li {
   --border-color: #777;
   --tab-border-color: black;
   --character-picked: black;
+  --player-tag-background: #efefef;
+  --player-tag-color: black;
 }
 [data-theme=light].picker {
   background: #efefef;
@@ -45565,6 +46127,8 @@ ul li {
   --valid-color: #379634;
   --danger-color: #A63A50;
   --tab-border-color: black;
+  --player-tag-background: black;
+  --player-tag-color: white;
 }
 [data-theme=blue].picker {
   background: #5858c4;
@@ -45583,6 +46147,8 @@ ul li {
   --character-picked: #141204;
   --success-background: #159241;
   --failure-background: #AA4538;
+  --player-tag-background: #e5e2da;
+  --player-tag-color: #141204;
 }
 [data-theme=sepia].picker {
   background: #dbc6b8;
@@ -45726,7 +46292,7 @@ ul li {
   margin: auto;
   z-index: 1000;
 }
-[data-v-63fc28c9]:root {
+[data-v-29cda2cb]:root {
   font-family: Helvetica, system-ui, Avenir, Inter, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -45756,16 +46322,18 @@ ul li {
   --margin-multiselect: 0;
   --tab-border-color: white;
   --character-picked: gold;
+  --player-tag-background: black;
+  --player-tag-color: white;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
-[data-theme=dark].picker[data-v-63fc28c9] {
+[data-theme=dark].picker[data-v-29cda2cb] {
   background: black;
 }
-[data-theme=light][data-v-63fc28c9] {
+[data-theme=light][data-v-29cda2cb] {
   --font-color: black;
   --inverse-font-color: white;
   --input-font-color: black;
@@ -45777,11 +46345,13 @@ ul li {
   --border-color: #777;
   --tab-border-color: black;
   --character-picked: black;
+  --player-tag-background: #efefef;
+  --player-tag-color: black;
 }
-[data-theme=light].picker[data-v-63fc28c9] {
+[data-theme=light].picker[data-v-29cda2cb] {
   background: #efefef;
 }
-[data-theme=blue][data-v-63fc28c9] {
+[data-theme=blue][data-v-29cda2cb] {
   --font-color: black;
   --inverse-font-color: white;
   --input-font-color: white;
@@ -45794,11 +46364,13 @@ ul li {
   --valid-color: #379634;
   --danger-color: #A63A50;
   --tab-border-color: black;
+  --player-tag-background: black;
+  --player-tag-color: white;
 }
-[data-theme=blue].picker[data-v-63fc28c9] {
+[data-theme=blue].picker[data-v-29cda2cb] {
   background: #5858c4;
 }
-[data-theme=sepia][data-v-63fc28c9] {
+[data-theme=sepia][data-v-29cda2cb] {
   --font-color: #141204;
   --inverse-font-color: white;
   --input-font-color: #4d3f36;
@@ -45812,8 +46384,10 @@ ul li {
   --character-picked: #141204;
   --success-background: #159241;
   --failure-background: #AA4538;
+  --player-tag-background: #e5e2da;
+  --player-tag-color: #141204;
 }
-[data-theme=sepia].picker[data-v-63fc28c9] {
+[data-theme=sepia].picker[data-v-29cda2cb] {
   background: #dbc6b8;
 }
 @font-face {
@@ -45838,18 +46412,18 @@ ul li {
   font-weight: 600;
   font-style: normal;
 }
-#tab-settings-content[data-v-63fc28c9] {
+#tab-settings-content[data-v-29cda2cb] {
   flex-direction: row;
   flex-wrap: wrap;
   display: grid;
   grid-template-columns: 1fr 1fr;
 }
 @media (max-width: 1280px) {
-#tab-settings-content[data-v-63fc28c9] {
+#tab-settings-content[data-v-29cda2cb] {
     display: flex;
 }
 }
-.wrapper-settings[data-v-63fc28c9] {
+.wrapper-settings[data-v-29cda2cb] {
   gap: 15px;
   display: flex;
   flex-direction: row;
@@ -45860,32 +46434,32 @@ ul li {
   align-items: center;
   align-content: flex-start;
 }
-.wrapper-settings input[data-v-63fc28c9] {
+.wrapper-settings input[data-v-29cda2cb] {
   align-self: stretch;
 }
-.wrapper-settings input[type=number][data-v-63fc28c9] {
+.wrapper-settings input[type=number][data-v-29cda2cb] {
   max-width: 60px;
   min-height: 40px;
 }
-.wrapper-settings.settings-container label[data-v-63fc28c9] {
+.wrapper-settings.settings-container label[data-v-29cda2cb] {
   margin-right: auto;
 }
-h2[data-v-63fc28c9] {
+h2[data-v-29cda2cb] {
   margin: 0;
 }
-.wrapper-title[data-v-63fc28c9] {
+.wrapper-title[data-v-29cda2cb] {
   display: flex;
   flex-basis: 100%;
   justify-content: space-between;
   margin-bottom: 30px;
 }
-.wrapper-list[data-v-63fc28c9] {
+.wrapper-list[data-v-29cda2cb] {
   display: flex;
   flex-direction: column;
   gap: 15px;
   flex: 1;
 }
-.wrapper-gauge-title[data-v-63fc28c9] {
+.wrapper-gauge-title[data-v-29cda2cb] {
   display: flex;
   flex-wrap: wrap;
   flex: 1;
@@ -45893,88 +46467,91 @@ h2[data-v-63fc28c9] {
   align-items: center;
   gap: 0 10px;
 }
-.wrapper-gauge-title .action ~ span[data-v-63fc28c9], .wrapper-gauge-title .action div[data-v-63fc28c9] {
+.wrapper-gauge-title .action ~ span[data-v-29cda2cb], .wrapper-gauge-title .action div[data-v-29cda2cb] {
   flex-basis: 100%;
 }
-.wrapper-gauge-title > span[data-v-63fc28c9]:not(.gauge-name),
-.wrapper-gauge-title .stat-list[data-v-63fc28c9] {
+.wrapper-gauge-title > span[data-v-29cda2cb]:not(.gauge-name),
+.wrapper-gauge-title .stat-list[data-v-29cda2cb] {
   font-size: 0.9em;
 }
-.wrapper-gauge-title .stat-list > span[data-v-63fc28c9]:first-child {
+.wrapper-gauge-title .stat-list > span[data-v-29cda2cb]:first-child {
   margin-right: 5px;
 }
-.wrapper-gauge-title .stat-list .stat-list-items .stat-list-item[data-v-63fc28c9]:not(:first-child):before {
+.wrapper-gauge-title .stat-list .stat-list-items .stat-list-item[data-v-29cda2cb]:not(:first-child):before {
   content: " - ";
 }
-.wrapper-marker-title[data-v-63fc28c9] {
+.wrapper-marker-title[data-v-29cda2cb] {
   display: flex;
   gap: 10px;
 }
-.input-wrapper[data-v-63fc28c9] {
+.input-wrapper[data-v-29cda2cb] {
   align-items: center;
   display: flex;
   gap: 10px;
   align-self: stretch;
 }
-.list-item[data-v-63fc28c9] {
+.list-item[data-v-29cda2cb] {
   display: flex;
   gap: 10px;
   align-items: center;
   flex-wrap: wrap;
 }
-.list-item .spending-wrapper[data-v-63fc28c9] {
+.list-item .spending-wrapper[data-v-29cda2cb] {
   flex-basis: 100%;
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
-.list-item .spending-wrapper > div[data-v-63fc28c9] {
+.list-item .spending-wrapper > div[data-v-29cda2cb] {
   gap: 5px;
   align-items: center;
 }
-.list-item .spending-wrapper > div input[type=number][data-v-63fc28c9] {
+.list-item .spending-wrapper > div input[type=number][data-v-29cda2cb] {
   min-height: auto;
 }
-.list-item.gauge > div[data-v-63fc28c9] {
+.list-item.gauge > div[data-v-29cda2cb] {
   display: flex;
   gap: 10px;
   align-items: center;
 }
-.action[data-v-63fc28c9] {
+.list-item.gauge > div.gauge-max[data-v-29cda2cb] {
+  margin-right: auto;
+}
+.action[data-v-29cda2cb] {
   margin-left: auto;
   display: flex;
   gap: 10px;
 }
-.action-group[data-v-63fc28c9] {
+.action-group[data-v-29cda2cb] {
   display: flex;
   gap: 10px;
   align-items: center;
   justify-content: space-between;
 }
-.action-group button[data-v-63fc28c9]:first-of-type {
+.action-group button[data-v-29cda2cb]:first-of-type {
   margin-left: auto;
 }
-.temp-stat-group[data-v-63fc28c9] {
+.temp-stat-group[data-v-29cda2cb] {
   display: flex;
   gap: 15px;
 }
-.list-item[data-v-63fc28c9] {
+.list-item[data-v-29cda2cb] {
   flex-basis: 100%;
   justify-content: space-between;
 }
-.list-item[data-v-63fc28c9]:first-of-type {
+.list-item[data-v-29cda2cb]:first-of-type {
   margin-top: auto;
 }
-.list-item button[data-v-63fc28c9] {
+.list-item button[data-v-29cda2cb] {
   white-space: nowrap;
 }
-.list-item .btn-valid[data-v-63fc28c9] {
+.list-item .btn-valid[data-v-29cda2cb] {
   margin-left: auto;
 }
-.indicator-name[data-v-63fc28c9] {
+.indicator-name[data-v-29cda2cb] {
   font-weight: bold;
 }
-[data-v-eac0054b]:root {
+[data-v-e1b4dc7f]:root {
   font-family: Helvetica, system-ui, Avenir, Inter, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -46004,16 +46581,18 @@ h2[data-v-63fc28c9] {
   --margin-multiselect: 0;
   --tab-border-color: white;
   --character-picked: gold;
+  --player-tag-background: black;
+  --player-tag-color: white;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
-[data-theme=dark].picker[data-v-eac0054b] {
+[data-theme=dark].picker[data-v-e1b4dc7f] {
   background: black;
 }
-[data-theme=light][data-v-eac0054b] {
+[data-theme=light][data-v-e1b4dc7f] {
   --font-color: black;
   --inverse-font-color: white;
   --input-font-color: black;
@@ -46025,11 +46604,13 @@ h2[data-v-63fc28c9] {
   --border-color: #777;
   --tab-border-color: black;
   --character-picked: black;
+  --player-tag-background: #efefef;
+  --player-tag-color: black;
 }
-[data-theme=light].picker[data-v-eac0054b] {
+[data-theme=light].picker[data-v-e1b4dc7f] {
   background: #efefef;
 }
-[data-theme=blue][data-v-eac0054b] {
+[data-theme=blue][data-v-e1b4dc7f] {
   --font-color: black;
   --inverse-font-color: white;
   --input-font-color: white;
@@ -46042,11 +46623,13 @@ h2[data-v-63fc28c9] {
   --valid-color: #379634;
   --danger-color: #A63A50;
   --tab-border-color: black;
+  --player-tag-background: black;
+  --player-tag-color: white;
 }
-[data-theme=blue].picker[data-v-eac0054b] {
+[data-theme=blue].picker[data-v-e1b4dc7f] {
   background: #5858c4;
 }
-[data-theme=sepia][data-v-eac0054b] {
+[data-theme=sepia][data-v-e1b4dc7f] {
   --font-color: #141204;
   --inverse-font-color: white;
   --input-font-color: #4d3f36;
@@ -46060,8 +46643,10 @@ h2[data-v-63fc28c9] {
   --character-picked: #141204;
   --success-background: #159241;
   --failure-background: #AA4538;
+  --player-tag-background: #e5e2da;
+  --player-tag-color: #141204;
 }
-[data-theme=sepia].picker[data-v-eac0054b] {
+[data-theme=sepia].picker[data-v-e1b4dc7f] {
   background: #dbc6b8;
 }
 @font-face {
@@ -46086,15 +46671,15 @@ h2[data-v-63fc28c9] {
   font-weight: 600;
   font-style: normal;
 }
-.vertical-wrapper.wrapper-poll-draft[data-v-eac0054b] {
+.vertical-wrapper.wrapper-poll-draft[data-v-e1b4dc7f] {
   counter-set: poll;
 }
-.vertical-wrapper.wrapper-poll-draft > div .title[data-v-eac0054b] {
+.vertical-wrapper.wrapper-poll-draft > div .title[data-v-e1b4dc7f] {
   display: flex;
   gap: 10px;
   align-items: center;
 }
-.vertical-wrapper.wrapper-poll-draft > div .title[data-v-eac0054b]:before {
+.vertical-wrapper.wrapper-poll-draft > div .title[data-v-e1b4dc7f]:before {
   content: counter(poll);
   counter-increment: poll;
   padding: 5px;
@@ -46109,7 +46694,7 @@ h2[data-v-63fc28c9] {
   align-items: center;
   justify-content: center;
 }
-.vertical-wrapper > div[data-v-eac0054b] {
+.vertical-wrapper > div[data-v-e1b4dc7f] {
   background: var(--background-card-color);
   padding: 10px;
   border-radius: 10px;
@@ -46117,64 +46702,64 @@ h2[data-v-63fc28c9] {
   flex-direction: column;
   gap: 15px;
 }
-.vertical-wrapper > div.poll-group-btn[data-v-eac0054b] {
+.vertical-wrapper > div.poll-group-btn[data-v-e1b4dc7f] {
   flex-direction: row;
   align-items: center;
 }
-.vertical-wrapper > div.poll-group-btn input[data-v-eac0054b], .vertical-wrapper > div.poll-group-btn button[data-v-eac0054b] {
+.vertical-wrapper > div.poll-group-btn input[data-v-e1b4dc7f], .vertical-wrapper > div.poll-group-btn button[data-v-e1b4dc7f] {
   flex: 0 0 auto;
 }
-.vertical-wrapper > div.poll-group-btn .cancel-poll[data-v-eac0054b] {
+.vertical-wrapper > div.poll-group-btn .cancel-poll[data-v-e1b4dc7f] {
   margin-left: auto;
 }
-.vertical-wrapper input[type=text][data-v-eac0054b] {
+.vertical-wrapper input[type=text][data-v-e1b4dc7f] {
   height: 40px;
 }
-.poll-choice[data-v-eac0054b] {
+.poll-choice[data-v-e1b4dc7f] {
   display: flex;
   gap: 10px;
   align-items: center;
 }
-.poll-choice > div[data-v-eac0054b] {
+.poll-choice > div[data-v-e1b4dc7f] {
   display: flex;
   gap: 10px;
   align-items: center;
 }
-.add-poll[data-v-eac0054b] {
+.add-poll[data-v-e1b4dc7f] {
   text-align: left;
   flex-direction: row;
   flex-wrap: wrap;
 }
-.add-poll #question-wrapper[data-v-eac0054b] {
+.add-poll #question-wrapper[data-v-e1b4dc7f] {
   justify-content: space-between;
   order: -2;
   flex: 1;
 }
-.add-poll #targets-wrapper[data-v-eac0054b] {
+.add-poll #targets-wrapper[data-v-e1b4dc7f] {
   order: -1;
   flex: 1;
 }
-.add-poll > div[data-v-eac0054b] {
+.add-poll > div[data-v-e1b4dc7f] {
   flex-basis: 100%;
 }
-.list-polls[data-v-eac0054b] {
+.list-polls[data-v-e1b4dc7f] {
   display: flex;
   gap: 10px;
 }
-.list-polls > .wrapper-title[data-v-eac0054b] {
+.list-polls > .wrapper-title[data-v-e1b4dc7f] {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 10px;
 }
-.list-polls > .wrapper-title > .title[data-v-eac0054b] {
+.list-polls > .wrapper-title > .title[data-v-e1b4dc7f] {
   font-weight: bold;
 }
-.list-polls .full_attendance[data-v-eac0054b] {
+.list-polls .full_attendance[data-v-e1b4dc7f] {
   color: var(--success-color);
   font-weight: bold;
 }
-.list-polls.poll-active[data-v-eac0054b] {
+.list-polls.poll-active[data-v-e1b4dc7f] {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -46186,34 +46771,34 @@ h2[data-v-63fc28c9] {
   transition: all 0.5s ease-in-out;
   transform-origin: top right;
 }
-.list-polls.poll-active > span[data-v-eac0054b], .list-polls.poll-active .results[data-v-eac0054b] {
+.list-polls.poll-active > span[data-v-e1b4dc7f], .list-polls.poll-active .results[data-v-e1b4dc7f] {
   font-size: 1.5em;
 }
-.list-polls.poll-active .results[data-v-eac0054b] {
+.list-polls.poll-active .results[data-v-e1b4dc7f] {
   flex-basis: 100%;
   filter: blur(10px);
   transition: all 1s ease;
 }
-.list-polls.poll-active.show .results[data-v-eac0054b] {
+.list-polls.poll-active.show .results[data-v-e1b4dc7f] {
   filter: blur(0px);
 }
-.list-polls.poll-past[data-v-eac0054b] {
+.list-polls.poll-past[data-v-e1b4dc7f] {
   flex-direction: column;
   align-items: stretch;
   gap: 15px;
 }
-.list-polls.poll-past .title[data-v-eac0054b] {
+.list-polls.poll-past .title[data-v-e1b4dc7f] {
   margin-right: auto;
 }
-.list-polls.poll-past > div[data-v-eac0054b]:not(.wrapper-title) {
+.list-polls.poll-past > div[data-v-e1b4dc7f]:not(.wrapper-title) {
   display: none;
 }
-.list-polls.poll-past.open[data-v-eac0054b] {
+.list-polls.poll-past.open[data-v-e1b4dc7f] {
   background: var(--background-card-color);
   padding: 10px;
   border-radius: 10px;
 }
-.list-polls.poll-past.open > div[data-v-eac0054b] {
+.list-polls.poll-past.open > div[data-v-e1b4dc7f] {
   display: flex;
 }
 :root {
@@ -46246,6 +46831,8 @@ h2[data-v-63fc28c9] {
   --margin-multiselect: 0;
   --tab-border-color: white;
   --character-picked: gold;
+  --player-tag-background: black;
+  --player-tag-color: white;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -46267,6 +46854,8 @@ h2[data-v-63fc28c9] {
   --border-color: #777;
   --tab-border-color: black;
   --character-picked: black;
+  --player-tag-background: #efefef;
+  --player-tag-color: black;
 }
 [data-theme=light].picker {
   background: #efefef;
@@ -46284,6 +46873,8 @@ h2[data-v-63fc28c9] {
   --valid-color: #379634;
   --danger-color: #A63A50;
   --tab-border-color: black;
+  --player-tag-background: black;
+  --player-tag-color: white;
 }
 [data-theme=blue].picker {
   background: #5858c4;
@@ -46302,6 +46893,8 @@ h2[data-v-63fc28c9] {
   --character-picked: #141204;
   --success-background: #159241;
   --failure-background: #AA4538;
+  --player-tag-background: #e5e2da;
+  --player-tag-color: #141204;
 }
 [data-theme=sepia].picker {
   background: #dbc6b8;
@@ -46679,7 +47272,7 @@ h2[data-v-63fc28c9] {
 :root {
   --slider-height: 40px;
 }
-[data-v-875618f1]:root {
+[data-v-d1add040]:root {
   font-family: Helvetica, system-ui, Avenir, Inter, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -46709,16 +47302,18 @@ h2[data-v-63fc28c9] {
   --margin-multiselect: 0;
   --tab-border-color: white;
   --character-picked: gold;
+  --player-tag-background: black;
+  --player-tag-color: white;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
-[data-theme=dark].picker[data-v-875618f1] {
+[data-theme=dark].picker[data-v-d1add040] {
   background: black;
 }
-[data-theme=light][data-v-875618f1] {
+[data-theme=light][data-v-d1add040] {
   --font-color: black;
   --inverse-font-color: white;
   --input-font-color: black;
@@ -46730,11 +47325,13 @@ h2[data-v-63fc28c9] {
   --border-color: #777;
   --tab-border-color: black;
   --character-picked: black;
+  --player-tag-background: #efefef;
+  --player-tag-color: black;
 }
-[data-theme=light].picker[data-v-875618f1] {
+[data-theme=light].picker[data-v-d1add040] {
   background: #efefef;
 }
-[data-theme=blue][data-v-875618f1] {
+[data-theme=blue][data-v-d1add040] {
   --font-color: black;
   --inverse-font-color: white;
   --input-font-color: white;
@@ -46747,11 +47344,13 @@ h2[data-v-63fc28c9] {
   --valid-color: #379634;
   --danger-color: #A63A50;
   --tab-border-color: black;
+  --player-tag-background: black;
+  --player-tag-color: white;
 }
-[data-theme=blue].picker[data-v-875618f1] {
+[data-theme=blue].picker[data-v-d1add040] {
   background: #5858c4;
 }
-[data-theme=sepia][data-v-875618f1] {
+[data-theme=sepia][data-v-d1add040] {
   --font-color: #141204;
   --inverse-font-color: white;
   --input-font-color: #4d3f36;
@@ -46765,8 +47364,10 @@ h2[data-v-63fc28c9] {
   --character-picked: #141204;
   --success-background: #159241;
   --failure-background: #AA4538;
+  --player-tag-background: #e5e2da;
+  --player-tag-color: #141204;
 }
-[data-theme=sepia].picker[data-v-875618f1] {
+[data-theme=sepia].picker[data-v-d1add040] {
   background: #dbc6b8;
 }
 @font-face {
@@ -46791,7 +47392,7 @@ h2[data-v-63fc28c9] {
   font-weight: 600;
   font-style: normal;
 }
-#tab-pick-content input[type=number][data-v-875618f1] {
+#tab-pick-content input[type=number][data-v-d1add040] {
   width: 60px;
   height: 60px;
   border-radius: 100%;
@@ -46800,7 +47401,7 @@ h2[data-v-63fc28c9] {
   color: black;
   font-size: 1.1em;
 }
-#tab-pick-content > div[data-v-875618f1] {
+#tab-pick-content > div[data-v-d1add040] {
   flex: 1;
   flex-wrap: wrap;
   justify-content: flex-start;
@@ -46810,36 +47411,36 @@ h2[data-v-63fc28c9] {
   border-radius: 15px;
   gap: 15px;
 }
-#tab-pick-content > div .label-wrapper[data-v-875618f1] {
+#tab-pick-content > div .label-wrapper[data-v-d1add040] {
   flex-basis: 100%;
   font-weight: bold;
 }
-#tab-pick-content > div .modifiers[data-v-875618f1] {
+#tab-pick-content > div .modifiers[data-v-d1add040] {
   display: flex;
   align-items: center;
   gap: 30px;
 }
-#tab-pick-content > div .modifiers > .modifiers-buttons[data-v-875618f1] {
+#tab-pick-content > div .modifiers > .modifiers-buttons[data-v-d1add040] {
   text-align: center;
 }
-#admin_pick_button[data-v-875618f1] {
+#admin_pick_button[data-v-d1add040] {
   align-self: flex-start;
 }
-.vertical-wrapper[data-v-875618f1] {
+.vertical-wrapper[data-v-d1add040] {
   flex-direction: row;
 }
-.multiselect[data-v-875618f1] {
+.multiselect[data-v-d1add040] {
   width: auto;
 }
-#consequences > div[data-v-875618f1] {
+#consequences > div[data-v-d1add040] {
   display: flex;
   align-items: center;
   gap: 30px;
 }
-#consequences > div.full[data-v-875618f1] {
+#consequences > div.full[data-v-d1add040] {
   flex-basis: 100%;
 }
-#consequences > div > div.modifiers-buttons[data-v-875618f1] {
+#consequences > div > div.modifiers-buttons[data-v-d1add040] {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -46847,15 +47448,15 @@ h2[data-v-63fc28c9] {
   gap: 10px;
   flex-wrap: wrap;
 }
-#consequences > div > div.modifiers-buttons > div[data-v-875618f1] {
+#consequences > div > div.modifiers-buttons > div[data-v-d1add040] {
   display: flex;
   gap: 10px;
   align-items: center;
 }
-#consequences > div > div.modifiers-buttons > div > .modifier-value[data-v-875618f1] {
+#consequences > div > div.modifiers-buttons > div > .modifier-value[data-v-d1add040] {
   flex: 1;
 }
-#consequences > div > div.modifiers-buttons > div > button[data-v-875618f1] {
+#consequences > div > div.modifiers-buttons > div > button[data-v-d1add040] {
   text-align: center;
   display: inline-block;
   border-radius: 100%;
@@ -46864,7 +47465,7 @@ h2[data-v-63fc28c9] {
   padding: 0;
   flex: 1;
 }
-#consequences > div > div.modifiers-buttons > .modifier-label[data-v-875618f1] {
+#consequences > div > div.modifiers-buttons > .modifier-label[data-v-d1add040] {
   flex-basis: 100%;
   text-align: center;
 }
@@ -46898,6 +47499,8 @@ h2[data-v-63fc28c9] {
   --margin-multiselect: 0;
   --tab-border-color: white;
   --character-picked: gold;
+  --player-tag-background: black;
+  --player-tag-color: white;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -46919,6 +47522,8 @@ h2[data-v-63fc28c9] {
   --border-color: #777;
   --tab-border-color: black;
   --character-picked: black;
+  --player-tag-background: #efefef;
+  --player-tag-color: black;
 }
 [data-theme=light].picker {
   background: #efefef;
@@ -46936,6 +47541,8 @@ h2[data-v-63fc28c9] {
   --valid-color: #379634;
   --danger-color: #A63A50;
   --tab-border-color: black;
+  --player-tag-background: black;
+  --player-tag-color: white;
 }
 [data-theme=blue].picker {
   background: #5858c4;
@@ -46954,6 +47561,8 @@ h2[data-v-63fc28c9] {
   --character-picked: #141204;
   --success-background: #159241;
   --failure-background: #AA4538;
+  --player-tag-background: #e5e2da;
+  --player-tag-color: #141204;
 }
 [data-theme=sepia].picker {
   background: #dbc6b8;
@@ -47100,6 +47709,10 @@ h2[data-v-63fc28c9] {
   flex-wrap: wrap;
   align-content: flex-start;
   margin-bottom: 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: var(--background-color);
 }
 .tabs > .tab-label {
   display: flex;
@@ -47212,11 +47825,6 @@ h2[data-v-63fc28c9] {
 .vue-simple-context-menu li {
   padding-top: 0;
 }
-.summary {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
 .select {
   height: 49px;
   background: var(--font-color);
@@ -47274,6 +47882,7 @@ h2[data-v-63fc28c9] {
 #invite-overlay > div > div {
   flex: 1;
   background: white;
+  color: black;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -47285,7 +47894,7 @@ h2[data-v-63fc28c9] {
 #invite-overlay > div > canvas {
   border: 10px solid white;
 }
-[data-v-ba936217]:root {
+[data-v-deeb38c1]:root {
   font-family: Helvetica, system-ui, Avenir, Inter, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -47315,16 +47924,18 @@ h2[data-v-63fc28c9] {
   --margin-multiselect: 0;
   --tab-border-color: white;
   --character-picked: gold;
+  --player-tag-background: black;
+  --player-tag-color: white;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
-[data-theme=dark].picker[data-v-ba936217] {
+[data-theme=dark].picker[data-v-deeb38c1] {
   background: black;
 }
-[data-theme=light][data-v-ba936217] {
+[data-theme=light][data-v-deeb38c1] {
   --font-color: black;
   --inverse-font-color: white;
   --input-font-color: black;
@@ -47336,11 +47947,13 @@ h2[data-v-63fc28c9] {
   --border-color: #777;
   --tab-border-color: black;
   --character-picked: black;
+  --player-tag-background: #efefef;
+  --player-tag-color: black;
 }
-[data-theme=light].picker[data-v-ba936217] {
+[data-theme=light].picker[data-v-deeb38c1] {
   background: #efefef;
 }
-[data-theme=blue][data-v-ba936217] {
+[data-theme=blue][data-v-deeb38c1] {
   --font-color: black;
   --inverse-font-color: white;
   --input-font-color: white;
@@ -47353,11 +47966,13 @@ h2[data-v-63fc28c9] {
   --valid-color: #379634;
   --danger-color: #A63A50;
   --tab-border-color: black;
+  --player-tag-background: black;
+  --player-tag-color: white;
 }
-[data-theme=blue].picker[data-v-ba936217] {
+[data-theme=blue].picker[data-v-deeb38c1] {
   background: #5858c4;
 }
-[data-theme=sepia][data-v-ba936217] {
+[data-theme=sepia][data-v-deeb38c1] {
   --font-color: #141204;
   --inverse-font-color: white;
   --input-font-color: #4d3f36;
@@ -47371,8 +47986,10 @@ h2[data-v-63fc28c9] {
   --character-picked: #141204;
   --success-background: #159241;
   --failure-background: #AA4538;
+  --player-tag-background: #e5e2da;
+  --player-tag-color: #141204;
 }
-[data-theme=sepia].picker[data-v-ba936217] {
+[data-theme=sepia].picker[data-v-deeb38c1] {
   background: #dbc6b8;
 }
 @font-face {
@@ -47397,14 +48014,14 @@ h2[data-v-63fc28c9] {
   font-weight: 600;
   font-style: normal;
 }
-input[data-v-ba936217] {
+input[data-v-deeb38c1] {
   height: auto;
 }
-.game-name[data-v-ba936217] {
+.game-name[data-v-deeb38c1] {
   font-size: 1.2em;
   margin-top: 20px;
 }
-#player-sheet[data-v-ba936217] {
+#player-sheet[data-v-deeb38c1] {
   display: grid;
   border-radius: 10px;
   color: var(--font-color);
@@ -47414,19 +48031,19 @@ input[data-v-ba936217] {
   transition: all 1s ease-in-out;
   rotate: y 0deg;
 }
-#player-sheet > .frontface[data-v-ba936217] {
+#player-sheet > .frontface[data-v-deeb38c1] {
   rotate: y 0deg;
   translate: 0 0 1px;
   align-items: center;
 }
-#player-sheet > .backface[data-v-ba936217] {
+#player-sheet > .backface[data-v-deeb38c1] {
   rotate: y 180deg;
   translate: 0 0 -1px;
   align-items: stretch;
   display: flex;
   flex-direction: column;
 }
-#player-sheet > .backface[data-v-ba936217], #player-sheet > .frontface[data-v-ba936217] {
+#player-sheet > .backface[data-v-deeb38c1], #player-sheet > .frontface[data-v-deeb38c1] {
   grid-area: 1/1;
   background: var(--background-card-color);
   padding: 10px;
@@ -47437,7 +48054,7 @@ input[data-v-ba936217] {
   min-width: 280px;
   backface-visibility: hidden;
 }
-#player-sheet > .backface[data-v-ba936217]:after, #player-sheet > .frontface[data-v-ba936217]:after {
+#player-sheet > .backface[data-v-deeb38c1]:after, #player-sheet > .frontface[data-v-deeb38c1]:after {
   content: "";
   background: var(--background-card-color);
   width: 100%;
@@ -47449,94 +48066,96 @@ input[data-v-ba936217] {
   transform-style: preserve-3d;
   border-radius: 30px;
 }
-#player-sheet.flipped[data-v-ba936217] {
+#player-sheet.flipped[data-v-deeb38c1] {
   rotate: y 180deg;
 }
-#player-sheet input[data-v-ba936217] {
+#player-sheet input[data-v-deeb38c1] {
   border: 1px solid var(--border-color);
 }
-#player-sheet .character-names[data-v-ba936217] {
+#player-sheet .character-names[data-v-deeb38c1] {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
 }
-#player-sheet .character-names .character-name[data-v-ba936217] {
+#player-sheet .character-names .character-name[data-v-deeb38c1] {
   font-size: 1.5em;
 }
-#player-sheet .tags[data-v-ba936217] {
+#player-sheet .tags[data-v-deeb38c1] {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
   gap: 10px;
 }
-#player-sheet .tags > span[data-v-ba936217] {
+#player-sheet .tags > span[data-v-deeb38c1] {
   border-radius: 10px;
-  background: var(--background-color);
-  color: var(--font-color);
+  background: var(--player-tag-background);
+  color: var(--player-tag-color);
   padding: 5px;
   text-align: center;
   text-transform: capitalize;
+  border-style: solid;
+  border-width: 4px;
 }
-#player-sheet .waiting[data-v-ba936217] {
+#player-sheet .waiting[data-v-deeb38c1] {
   align-items: center;
 }
-#player-sheet #sheet[data-v-ba936217] {
+#player-sheet #sheet[data-v-deeb38c1] {
   width: 90%;
 }
-#player-sheet #sheet > div[data-v-ba936217]:not(.tags) {
+#player-sheet #sheet > div[data-v-deeb38c1]:not(.tags) {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
-#player-sheet #sheet > div:not(.tags) > span[data-v-ba936217] {
+#player-sheet #sheet > div:not(.tags) > span[data-v-deeb38c1] {
   display: flex;
   justify-content: space-between;
   gap: 15px;
   align-items: center;
 }
-#player-sheet .indicator[data-v-ba936217] {
+#player-sheet .indicator[data-v-deeb38c1] {
   padding: 5px;
   border-radius: 15px;
   background: var(--button-background);
   color: var(--button-color);
   min-width: 24px;
 }
-#player-sheet.disabled[data-v-ba936217] {
+#player-sheet.disabled[data-v-deeb38c1] {
   background: none;
   border: none;
 }
-#player-sheet.disabled .vertical-wrapper[data-v-ba936217]:not(.waiting) {
+#player-sheet.disabled .vertical-wrapper[data-v-deeb38c1]:not(.waiting) {
   display: none;
 }
-#player-sheet.disabled .ripple[data-v-ba936217] {
+#player-sheet.disabled .ripple[data-v-deeb38c1] {
   display: inline-block;
 }
-#player-sheet #challenge[data-v-ba936217] {
+#player-sheet #challenge[data-v-deeb38c1] {
   display: grid;
   grid-auto-rows: 1fr;
 }
-#player-sheet #challenge + .polls[data-v-ba936217] {
+#player-sheet #challenge + .polls[data-v-deeb38c1] {
   border-top: 2px solid white;
   padding-top: 15px;
 }
-#player-sheet #challenge .challenge-done[data-v-ba936217],
-#player-sheet #challenge .challenge-in-progress[data-v-ba936217] {
+#player-sheet #challenge .challenge-done[data-v-deeb38c1],
+#player-sheet #challenge .challenge-in-progress[data-v-deeb38c1] {
   display: flex;
   flex: 1;
   flex-direction: column;
   justify-content: flex-end;
   gap: 10px;
 }
-#player-sheet #challenge .challenge-done[data-v-ba936217] {
+#player-sheet #challenge .challenge-done[data-v-deeb38c1] {
   justify-content: flex-start;
 }
-#player-sheet #challenge .die-wrapper[data-v-ba936217] {
+#player-sheet #challenge .die-wrapper[data-v-deeb38c1] {
   display: flex;
   align-items: center;
   justify-content: center;
 }
-#player-sheet #challenge .die-wrapper .die[data-v-ba936217] {
+#player-sheet #challenge .die-wrapper .die[data-v-deeb38c1] {
   display: inline-block;
   transform-style: preserve-3d;
   perspective: 200px;
@@ -47548,15 +48167,15 @@ input[data-v-ba936217] {
   border-radius: 50%;
   background: #c7c7c7;
 }
-#player-sheet #challenge .die-wrapper .die.challenge-success[data-v-ba936217] {
+#player-sheet #challenge .die-wrapper .die.challenge-success[data-v-deeb38c1] {
   background: var(--success-background);
 }
-#player-sheet #challenge .die-wrapper .die.challenge-failure[data-v-ba936217] {
+#player-sheet #challenge .die-wrapper .die.challenge-failure[data-v-deeb38c1] {
   background: var(--failure-background);
 }
-#player-sheet #challenge .die-wrapper .die.wait-roll .frontface[data-v-ba936217]:after {
+#player-sheet #challenge .die-wrapper .die.wait-roll .frontface[data-v-deeb38c1]:after {
   content: "";
-  animation: 0.5s linear 1s infinite alternate wait_roll-ba936217;
+  animation: 0.5s linear 1s infinite alternate wait_roll-deeb38c1;
   width: 120%;
   height: 120%;
   background: var(--font-color);
@@ -47566,16 +48185,16 @@ input[data-v-ba936217] {
   border-radius: 100%;
   opacity: 0;
 }
-#player-sheet #challenge .die-wrapper .die.wait-roll:hover .frontface[data-v-ba936217]:after {
+#player-sheet #challenge .die-wrapper .die.wait-roll:hover .frontface[data-v-deeb38c1]:after {
   animation-play-state: paused;
   translate: 0 0 -2px !important;
   transition: all 0.3s linear;
   opacity: 1;
 }
-#player-sheet #challenge .die-wrapper .die.received[data-v-ba936217] {
+#player-sheet #challenge .die-wrapper .die.received[data-v-deeb38c1] {
   rotate: y 180deg;
 }
-#player-sheet #challenge .die-wrapper .die > div[data-v-ba936217] {
+#player-sheet #challenge .die-wrapper .die > div[data-v-deeb38c1] {
   position: absolute;
   display: flex;
   width: 100px;
@@ -47586,15 +48205,15 @@ input[data-v-ba936217] {
   transform-style: preserve-3d;
   transition: all 1s ease-in-out;
 }
-#player-sheet #challenge .die-wrapper .die > div.frontface[data-v-ba936217] {
+#player-sheet #challenge .die-wrapper .die > div.frontface[data-v-deeb38c1] {
   rotate: y 0deg;
 }
-#player-sheet #challenge .die-wrapper .die > div.backface[data-v-ba936217] {
+#player-sheet #challenge .die-wrapper .die > div.backface[data-v-deeb38c1] {
   rotate: y 180deg;
   font-size: 53px;
 }
-#player-sheet #challenge .die-wrapper .die > div > button[data-v-ba936217],
-#player-sheet #challenge .die-wrapper .die > div > span[data-v-ba936217] {
+#player-sheet #challenge .die-wrapper .die > div > button[data-v-deeb38c1],
+#player-sheet #challenge .die-wrapper .die > div > span[data-v-deeb38c1] {
   font-weight: bold;
   width: 100%;
   height: 100%;
@@ -47604,10 +48223,10 @@ input[data-v-ba936217] {
   transform: translateZ(30px);
   transform-style: preserve-3d;
 }
-#player-sheet #challenge .die-wrapper .die > div > span[data-v-ba936217] {
+#player-sheet #challenge .die-wrapper .die > div > span[data-v-deeb38c1] {
   color: white;
 }
-#player-sheet #challenge .die-wrapper .die > div > button[data-v-ba936217] {
+#player-sheet #challenge .die-wrapper .die > div > button[data-v-deeb38c1] {
   font-size: 19px;
   color: black;
   border: unset;
@@ -47617,27 +48236,27 @@ input[data-v-ba936217] {
   transition: unset;
   outline: none;
 }
-#player-sheet .ripple[data-v-ba936217] {
+#player-sheet .ripple[data-v-deeb38c1] {
   display: none;
   position: relative;
   width: 80px;
   height: 80px;
 }
-#player-sheet .ripple div[data-v-ba936217] {
+#player-sheet .ripple div[data-v-deeb38c1] {
   position: absolute;
   border: 4px solid var(--font-color);
   opacity: 1;
   border-radius: 50%;
-  animation: lds-ripple-ba936217 1s ease-in-out infinite;
+  animation: lds-ripple-deeb38c1 1s ease-in-out infinite;
 }
-#player-sheet .ripple div[data-v-ba936217]:nth-child(2) {
+#player-sheet .ripple div[data-v-deeb38c1]:nth-child(2) {
   animation-delay: -0.5s;
 }
-#player-sheet .wrapper-label[data-v-ba936217] {
+#player-sheet .wrapper-label[data-v-deeb38c1] {
   font-size: 1.2em;
   font-weight: bold;
 }
-@keyframes lds-ripple-ba936217 {
+@keyframes lds-ripple-deeb38c1 {
 0% {
     top: 36px;
     left: 36px;
@@ -47667,34 +48286,34 @@ input[data-v-ba936217] {
     opacity: 0;
 }
 }
-.poll-wrapper[data-v-ba936217] {
+.poll-wrapper[data-v-deeb38c1] {
   display: flex;
   flex-direction: column;
   align-items: stretch;
   gap: 10px;
 }
-.poll-wrapper[data-v-ba936217]:not(.waiting) {
+.poll-wrapper[data-v-deeb38c1]:not(.waiting) {
   display: none;
 }
-.poll-wrapper.waiting + .poll-wrapper[data-v-ba936217] {
+.poll-wrapper.waiting + .poll-wrapper[data-v-deeb38c1] {
   border-top: 2px solid white;
   padding-top: 15px;
 }
-.poll-wrapper > .poll-content[data-v-ba936217] {
+.poll-wrapper > .poll-content[data-v-deeb38c1] {
   display: flex;
   flex-direction: column;
   align-self: center;
   gap: 30px;
 }
-.poll-wrapper > .poll-content > span[data-v-ba936217] {
+.poll-wrapper > .poll-content > span[data-v-deeb38c1] {
   display: flex;
   align-items: center;
 }
-.poll-wrapper > .poll-content > .title[data-v-ba936217] {
+.poll-wrapper > .poll-content > .title[data-v-deeb38c1] {
   font-weight: bold;
   align-self: center;
 }
-.group-choice select[data-v-ba936217] {
+.group-choice select[data-v-deeb38c1] {
   -webkit-appearance: none;
   -moz-appearance: none;
   background: white;
@@ -47704,18 +48323,18 @@ input[data-v-ba936217] {
   padding: 0 25px 0 5px;
   border: 1px solid var(--border-color);
 }
-.container-modifiers[data-v-ba936217] {
+.container-modifiers[data-v-deeb38c1] {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
   gap: 10px;
   align-items: stretch;
 }
-.container-modifiers > span[data-v-ba936217] {
+.container-modifiers > span[data-v-deeb38c1] {
   max-width: 230px;
   margin: auto;
 }
-@keyframes wait_roll-ba936217 {
+@keyframes wait_roll-deeb38c1 {
 from {
     opacity: 1;
     translate: 0 0 -30px;
@@ -47725,7 +48344,7 @@ to {
     translate: 0 0 -3px;
 }
 }
-.radios-wrapper[data-v-ba936217] {
+.radios-wrapper[data-v-deeb38c1] {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -47760,6 +48379,8 @@ to {
   --margin-multiselect: 0;
   --tab-border-color: white;
   --character-picked: gold;
+  --player-tag-background: black;
+  --player-tag-color: white;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -47781,6 +48402,8 @@ to {
   --border-color: #777;
   --tab-border-color: black;
   --character-picked: black;
+  --player-tag-background: #efefef;
+  --player-tag-color: black;
 }
 [data-theme=light].picker[data-v-165cb460] {
   background: #efefef;
@@ -47798,6 +48421,8 @@ to {
   --valid-color: #379634;
   --danger-color: #A63A50;
   --tab-border-color: black;
+  --player-tag-background: black;
+  --player-tag-color: white;
 }
 [data-theme=blue].picker[data-v-165cb460] {
   background: #5858c4;
@@ -47816,6 +48441,8 @@ to {
   --character-picked: #141204;
   --success-background: #159241;
   --failure-background: #AA4538;
+  --player-tag-background: #e5e2da;
+  --player-tag-color: #141204;
 }
 [data-theme=sepia].picker[data-v-165cb460] {
   background: #dbc6b8;
@@ -47949,6 +48576,8 @@ to {
   --margin-multiselect: 0;
   --tab-border-color: white;
   --character-picked: gold;
+  --player-tag-background: black;
+  --player-tag-color: white;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -47970,6 +48599,8 @@ to {
   --border-color: #777;
   --tab-border-color: black;
   --character-picked: black;
+  --player-tag-background: #efefef;
+  --player-tag-color: black;
 }
 [data-theme=light].picker {
   background: #efefef;
@@ -47987,6 +48618,8 @@ to {
   --valid-color: #379634;
   --danger-color: #A63A50;
   --tab-border-color: black;
+  --player-tag-background: black;
+  --player-tag-color: white;
 }
 [data-theme=blue].picker {
   background: #5858c4;
@@ -48005,6 +48638,8 @@ to {
   --character-picked: #141204;
   --success-background: #159241;
   --failure-background: #AA4538;
+  --player-tag-background: #e5e2da;
+  --player-tag-color: #141204;
 }
 [data-theme=sepia].picker {
   background: #dbc6b8;
