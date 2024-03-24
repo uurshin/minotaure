@@ -47,6 +47,7 @@ export default {
         }
       },
       {parent: 'settings', id: 'step_settings_gauge_value'},
+      {parent: 'settings', id: 'step_settings_gauge_max'},
       {parent: 'settings', id: 'step_settings_gauge_make_deadly'},
       {parent: 'settings', id: 'step_settings_gauge_spending'},
       {parent: 'settings', id: 'step_settings_gauge_cancel',

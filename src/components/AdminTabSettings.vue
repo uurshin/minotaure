@@ -8,6 +8,8 @@ export default {
       change_label_enabled: '',
       change_gauge: '',
       temp_gauge_value: 10,
+      temp_gauge_max: '',
+      temp_gauge_deadly: false,
       add_gauge_enabled: false,
       temp_gauge_name: '',
       add_stat_enabled: false,
@@ -31,13 +33,27 @@ export default {
     changeGauge: function(key) {
       let label = this.store.gauges[key].name = this.$refs['gauge_' + key][0].value;
       let test_value = parseInt(this.$refs['gauge_value_' + key][0].value);
+      let test_max = this.$refs['gauge_max_' + key][0].value !== '' ? parseInt(this.$refs['gauge_max_' + key][0].value) : '';
       let deadly = this.store.gauges[key].deadly = this.$refs['gauge_deadly_' + key][0].checked;
       this.store.gauges[key].value = (deadly && test_value <= 0) ? 1 : test_value;
+      if (test_max !== '') {
+        this.store.gauges[key].max = (test_max < test_value) ? test_value : test_max;
+      }
+      else {
+        this.store.gauges[key].max = '';
+      }
+
       this.store.characters.forEach(function(character) {
         character.gauges[key].label = label;
-        if (deadly && character.gauges[key].value <= 0 && character.alive) {
-          character.gauges[key].value = 1;
+        if (character.alive) {
+          if (deadly && character.gauges[key].value <= 0) {
+            character.gauges[key].value = 1;
+          }
+          else if (test_max !== '' && character.gauges[key].value > test_max) {
+            character.gauges[key].value = test_max;
+          }
         }
+        character.gauges[key].deadly = deadly;
       });
       for (const key_stat of Object.keys(this.store.stats)) {
         if (this.$refs['gauge_' + key + '_spending_' + key_stat][0].checked) {
@@ -55,6 +71,12 @@ export default {
     },
     openGauge(key) {
       this.change_gauge = key;
+      this.temp_gauge_spending = this.store.gauges[key].spending;
+      this.temp_gauge_name = this.store.gauges[key].name;
+      this.temp_gauge_value = this.store.gauges[key].value;
+      this.temp_gauge_max = this.store.gauges[key].max;
+      this.temp_gauge_deadly = this.store.gauges[key].deadly;
+
       this.$nextTick(() => {
         this.$refs['gauge_' + key][0].focus();
       });
@@ -64,6 +86,7 @@ export default {
       let new_gauge = {
         name: this.temp_gauge_name,
         value: this.temp_gauge_value,
+        max: this.temp_gauge_max,
         spending: {}
       };
       this.store.gauges[code] = new_gauge;
@@ -78,9 +101,7 @@ export default {
       this.add_gauge_enabled = false;
       this.temp_gauge_name = '';
       this.temp_gauge_value = 10;
-    },
-    hasSpending(gauge, key_stat) {
-      return (this.temp_gauge_spending[key_stat] || (this.temp_gauge_spending[key_stat] === undefined && gauge.spending[key_stat] !== undefined && gauge.spending[key_stat] > 0));
+      this.temp_gauge_max = 10;
     },
     remove: function(key, type) {
       delete this.store[type][key];
@@ -112,6 +133,14 @@ export default {
       });
       this.add_stat_enabled = false;
       this.temp_stat_name = '';
+    },
+    setTempGaugeSpending(checked, key_stat) {
+      if (!checked) {
+        delete this.temp_gauge_spending[key_stat];
+      }
+      else {
+        this.temp_gauge_spending[key_stat] = 1;
+      }
     },
     createMarker: function() {
       this.add_marker_enabled = true
@@ -152,6 +181,7 @@ export default {
               <div v-if="change_gauge !== key" class="wrapper-gauge-title">
                 <span class="indicator-name">{{ gauge.name }}</span>
                 <span>{{ $t('gauge_start', {gauge_value: gauge.value}) }}</span>
+                <span v-if="gauge.max !== undefined && gauge.max !== ''">{{ $t('maximum',  {max: gauge.max}) }}</span>
                 <span v-if="gauge.deadly">{{ $t('kills_at_0') }}</span>
                 <div class="stat-list" v-if="Object.keys(gauge.spending).length">
                   <span>{{ $t('used_for_challenges')}}</span>
@@ -172,30 +202,36 @@ export default {
                 <div class="full">
                   <div class="input-wrapper" :ref="index === 0 ? 'step_settings_gauge_name' : null">
                     <label :for="'gauge_' + key">{{ $t('name') }}</label>
-                    <input :ref="'gauge_' + key" :value="gauge.name" :id="'gauge_'+ key" type="text">
+                    <input :ref="'gauge_' + key" v-model="temp_gauge_name" :id="'gauge_'+ key" type="text">
                   </div>
                   <button class="btn-valid" @click="changeGauge(key)">{{ $t('submit') }}</button>
                   <button :ref="index === 0 ? 'step_settings_gauge_cancel' : null" @keyup.enter="cancelGaugeChange()" @click="cancelGaugeChange()">{{ $t('cancel') }}</button>
                 </div>
                 <div :ref="index === 0 ? 'step_settings_gauge_value' : null">
                   <label :for="'gauge_value_'+key">{{ $t('starts_at') }}</label>
-                  <input :ref="'gauge_value_' + key" :value="gauge.value" min="1" :id="'gauge_value_'+key" type="number">
+                  <input :ref="'gauge_value_' + key" v-model="temp_gauge_value" min="1" :id="'gauge_value_'+key" type="number">
+                </div>
+                <div :ref="index === 0 ? 'step_settings_gauge_max' : null" class="gauge-max">
+                  <label :for="'gauge_max_'+key">{{ $t('maximum') }}</label>
+                  <input :ref="'gauge_max_' + key" v-model="temp_gauge_max" min="1" :id="'gauge_max_'+key" type="number">
                 </div>
                 <div class="radio-wrapper" :ref="index === 0 ? 'step_settings_gauge_make_deadly' : null">
-                  <input :ref="'gauge_deadly_' + key" :checked="gauge.deadly" min="1" :id="'gauge_deadly_'+ key " type="checkbox">
-                  <label :for="'gauge_deadly_' + key + '_' + key_stat">{{ $t('gauge_deadly_description') }}</label>
+                  <input :ref="'gauge_deadly_' + key" v-model="temp_gauge_deadly" min="1" :id="'gauge_deadly_'+ key " type="checkbox">
+                  <label :for="'gauge_deadly_' + key">{{ $t('gauge_deadly_description') }}</label>
                 </div>
                 <fieldset class="spending-wrapper" :ref="index === 0 ? 'step_settings_gauge_spending' : null">
                   <legend>{{ $t('spend_on') }}</legend>
                   <div class="radio-wrapper" v-for="(stat, key_stat) in store.stats">
-                    <input :id="'gauge_' + key + '_spending_' + key_stat" type="checkbox" :ref="'gauge_' + key + '_spending_' + key_stat" @change="function($event) { temp_gauge_spending[key_stat] = $event.target.checked }" :checked="hasSpending(gauge, key_stat)">
+                    <input :id="'gauge_' + key + '_spending_' + key_stat" type="checkbox" :ref="'gauge_' + key + '_spending_' + key_stat" @change="setTempGaugeSpending($event.target.checked, key_stat)" :checked="(temp_gauge_spending[key_stat] !== undefined)">
                     <label :for="'gauge_' + key + '_spending_' + key_stat">
                       <strong>{{ stat.name }}</strong>
                     </label>
-                    <label :for="'gauge_' + key + '_spending_value_' + key_stat">
-                      <span v-if="hasSpending(gauge, key_stat)">{{ $t('spending_diminish') }}</span>
-                    </label>
-                    <input v-if="hasSpending(gauge, key_stat)" :ref="'gauge_' + key + '_spending_value_' + key_stat" :value="gauge.spending[key_stat] ?? 1" min="1" type="number">
+                    <template v-if="temp_gauge_spending[key_stat] !== undefined">
+                      <label :for="'gauge_' + key + '_spending_value_' + key_stat">
+                        <span>{{ $t('spending_diminish') }}</span>
+                      </label>
+                      <input :ref="'gauge_' + key + '_spending_value_' + key_stat" v-model="temp_gauge_spending[key_stat]" min="1" type="number">
+                    </template>
                   </div>
                 </fieldset>
               </template>
@@ -205,7 +241,9 @@ export default {
             <label for="temp_gauge">{{ $t('name') }}</label>
             <input id="temp_gauge" ref="temp_gauge" type="text" v-model="temp_gauge_name" @keyup.enter="$refs['temp_gauge_value'].focus()">
             <label for="temp_gauge_value">{{ $t('starts_at') }}</label>
-            <input id="temp_gauge_value" ref="temp_gauge_value" type="number" min="1" v-model="temp_gauge_value" @keyup.enter="addGauge()">
+            <input id="temp_gauge_value" ref="temp_gauge_value" type="number" min="1" v-model="temp_gauge_value" @keyup.enter="$refs['temp_gauge_max'].focus()">
+            <label for="temp_gauge_max">{{ $t('maximum') }}</label>
+            <input id="temp_gauge_max" ref="temp_gauge_max" type="number" min="1" v-model="temp_gauge_max" @keyup.enter="addGauge()">
             <button class="btn-valid" @keyup.enter="addGauge()" @click="addGauge()">{{ $t('submit') }}</button>
             <button @keyup.enter="add_gauge_enabled = false" @click="add_gauge_enabled = false">{{ $t('cancel') }}</button>
           </div>
@@ -432,6 +470,10 @@ export default {
         display: flex;
         gap: 10px;
         align-items: center;
+
+        &.gauge-max {
+          margin-right: auto;
+        }
       }
     }
   }

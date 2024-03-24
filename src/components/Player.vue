@@ -75,7 +75,7 @@ export default {
         return false;
       }
       return Object.entries(this.character.gauges).some(function(gauge) {
-        if (vm.character.challenge.spendable[gauge[0]] !== undefined && (gauge[1].deadly === undefined ? gauge[1].value > 1 : gauge[1].value > 0)) {
+        if (vm.character.challenge.spendable[gauge[0]] !== undefined && (gauge[1].deadly ? gauge[1].value > 1 : gauge[1].value > 0)) {
           return true;
         }
       });
@@ -363,7 +363,7 @@ export default {
           <span>{{ stat.label }}</span><span class="indicator">{{ stat.value }}</span></span>
         </div>
         <div class="tags">
-          <span v-for="tag in character.tags">{{ tag.label }}</span>
+          <span :style="{ borderColor: 'hsl(' + tag.color[0] + ',' + tag.color[1] + '%' + ',' + tag.color[2] + '%)' }" v-for="tag in character.tags">{{ tag.label }}</span>
         </div>
       </div>
       <div class="vertical-wrapper" v-else>
@@ -397,7 +397,7 @@ export default {
           <div v-if="challengeInProgress && hasSpendingButtons" class="container-modifiers">
             <span>{{ $t('gauge_spending_description') }}</span>
             <template v-for="(gauge, key) in character.gauges">
-              <button v-if="character.challenge.spendable[key] !== undefined && difficulty < 19 && (gauge.deadly === undefined ? gauge.value > 1 : gauge.value > 0)" @click="spendGauge(key)" class="btn-valid" >
+              <button v-if="character.challenge.spendable[key] !== undefined && (gauge.deadly ? gauge.value > 1 : gauge.value > 0)" @click="spendGauge(key)" class="btn-valid" >
                 {{ $t('gauge_spending_button_text', {label: gauge.label, current: gauge.value, modifier: character.challenge.spendable[key] }) }}
               </button>
             </template>
@@ -513,11 +513,13 @@ export default {
 
       > span {
         border-radius: 10px;
-        background: var(--background-color);
-        color: var(--font-color);
+        background: var(--player-tag-background);
+        color: var(--player-tag-color);
         padding: 5px;
         text-align: center;
         text-transform: capitalize;
+        border-style: solid;
+        border-width: 4px;
       }
     }
 

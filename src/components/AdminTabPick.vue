@@ -78,42 +78,31 @@ export default {
         this.store.setPickedCharacters(picked_characters);
 
         picked_characters.forEach(function(character) {
-          character.in_progress = true;
-          let messages = [];
+          //let messages = [];
           // messages.push(vm.$t('challenge_' + result, {stat: vm.store.current_game.stats[vm.chosen_stat].name}));
 
           if (vm.gauge_modifier !== undefined) {
             for (const [key, bonus] of Object.entries(vm.gauge_modifier)) {
               // messages.push(vm.$t('result_' + (bonus >= 0 ? 'bonus' : 'malus'), {points: bonus, name: vm.store.current_game.gauges[key].name}));
-              character.gauges[key].value += bonus;
+              vm.store.modifyGaugeCharacter(character, key, bonus);
             }
           }
           if (vm.stat_modifier !== undefined) {
             for (const [key, bonus] of Object.entries(vm.stat_modifier)) {
               // messages.push(vm.$t('result_' + (bonus >= 0 ? 'bonus' : 'malus'), {points: bonus, name: vm.store.current_game.stats[key].name}));
-              character.stats[key].value += bonus;
+              vm.store.modifyStatCharacter(character, key, bonus);
             }
           }
           if (vm.chosen_modifier_pick_add !== undefined) {
             vm.chosen_modifier_pick_add.forEach(function(tag) {
-              let found = character.tags.findIndex((character_tag) => character_tag.code === tag.code);
-              if (found === -1) {
-                character.tags.push(tag);
-                // messages.push(vm.$t('added_tag', {tag_label: tag.label}) );
-              }
+              vm.store.addTagToCharacter(character, tag);
             });
           }
           if (vm.chosen_modifier_pick_remove !== undefined) {
             vm.chosen_modifier_pick_remove.forEach(function(tag) {
-              let found = character.tags.findIndex((character_tag) => character_tag.code === tag.code);
-              if (found !== -1) {
-                character.tags.splice(found, 1);
-                // messages.push(vm.$t('removed_tag', {tag_label: tag.label}) );
-              }
+              vm.store.removeTagFromCharacter(character, tag);
             });
           }
-
-          delete character.in_progress;
         })
       }
 

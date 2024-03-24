@@ -67,7 +67,7 @@ export default {
           // Check if the character already has a tag from this group.
           let found = character.tags.findIndex((tag) => tag.group === group.code);
           if (found === -1) {
-            character.tags.push(vm.store.getRandomTagFromGroup(group));
+            vm.store.addTagToCharacter(character, vm.store.getRandomTagFromGroup(group));
           }
         })
       }
@@ -76,10 +76,11 @@ export default {
       const vm = this;
       this.store.characters.forEach(function(character) {
         // Check if the character already has a tag from this group.
-        let found = character.tags.findIndex((tag) => tag.group === group.code);
-        if (found > -1) {
-          character.tags.splice(found, 1);
-          character.tags.push(vm.store.getRandomTagFromGroup(group));
+        let found_tag = character.tags.find((tag) => tag.group === group.code);
+        if (found_tag !== null) {
+          if (vm.store.removeTagFromCharacter(character, found_tag, true)) {
+            vm.store.addTagToCharacter(character, vm.store.getRandomTagFromGroup(group));
+          }
         }
       })
     },
@@ -166,6 +167,7 @@ export default {
             if (tag.stat_modifiers[event.option.target].value === 0) {
               delete tag.stat_modifiers[event.option.target];
             }
+            this.store.updateStatModifier(tag);
             break;
           case 'bonus_gauge':
             if (tag.gauge_modifiers === undefined) {
@@ -180,6 +182,7 @@ export default {
             if (tag.gauge_modifiers[event.option.target].value === 0) {
               delete tag.gauge_modifiers[event.option.target];
             }
+            this.store.updateGaugeModifier(tag, event.option.target, event.option.value);
             break;
           case 'stat1':
             tag.stat1 = event.option.target;

@@ -106,6 +106,8 @@ step_settings_gauge_delete:
 step_settings_gauge_make_deadly:
   "Możesz sprawić, że spadek jauges do 0 spowoduje śmierć postaci, klikając
   na ten przycisk (ta akcja jest odwracalna, ale postacie już martwe nie zostaną wskrzeszone!)."
+step_settings_gauge_max:
+  "Możesz określić opcjonalne maksimum, którego postacie nie mogą przekroczyć dla tej wskaźnika."
 step_settings_gauge_name: "Możesz zmieniać nazwę wskaźnika w dowolnym momencie."
 step_settings_gauge_value: "Ta liczba określa bazową wartość wskaźnika dla postaci przy jej tworzeniu."
 step_settings_gauge_spending:
@@ -173,6 +175,7 @@ tab_label_pick:
 add: "Dodaj"
 gauge_start: "Zaczyna się od {gauge_value}"
 kills_at_0: "Zabija przy 0"
+maximum: "Maksymalny a {max}"
 submit: "Zatwierdź"
 modify: "Modyfikuj"
 delete: "Usuń"
@@ -257,6 +260,9 @@ start_typing: "Zacznij pisać"
 clear_selection: "Wyczyść wybór"
 char_picked: "Wybrane"
 add_all_to_selection: "Dodaj wszystko do wyboru"
+add_to_selected: "Dodaj do wybranych"
+remove_from_selected: "Usuń z wybranych"
+filter_list: "Filtruj listę"
 challenged_end_in: "Koniec wyzwania za {timer}s"
 finish_challenge: "Zakończ wyzwanie"
 challenge_scale_label: "{scale}% = sukces"

@@ -114,6 +114,8 @@ step_settings_gauge_delete:
 step_settings_gauge_make_deadly:
   "Puoi fare in modo che il passaggio di una barra a un punteggio di 0 comporti la morte di un personaggio cliccando 
   su questo pulsante (questa azione è reversibile, ma i personaggi già morti non verranno resuscitati!)."
+step_settings_gauge_max:
+  "Puoi specificare un massimo opzionale che i personaggi non possono superare per questa barra."
 step_settings_stats:
   "Le statistiche funzionano allo stesso modo di molti giochi di ruolo. Quando crei un gioco, vengono create due statistiche: fisica e mentale."
 step_settings_add_stat: "Puoi aggiungere quante statistiche desideri."
@@ -165,6 +167,7 @@ tab_label_pick:
 add: "Aggiungi"
 gauge_start: "Inizia a {gauge_value}"
 kills_at_0: "Uccide a 0"
+maximum: "Massimo a {max}"
 submit: "Invia"
 modify: "Modifica"
 delete: "Elimina"
@@ -249,6 +252,9 @@ start_typing: "Inizia a digitare"
 clear_selection: "Cancella selezione"
 char_picked: "Personaggi selezionati"
 add_all_to_selection: "Aggiungi tutti alla selezione"
+add_to_selected: "Aggiungi ai selezionati"
+remove_from_selected: "Rimuovi dai selezionati"
+filter_list: "Filtrare la lista"
 challenged_end_in: "Fine della sfida tra {timer}s"
 finish_challenge: "Concludi la sfida"
 challenge_scale_label: "{scale}% = successo"

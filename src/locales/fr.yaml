@@ -112,6 +112,8 @@ step_settings_gauge_delete:
 step_settings_gauge_make_deadly:
   "Vous pouvez faire en sorte que le passage d'une jauge à un score de 0 entraine la mort d'un personnage en cliquant 
   sur ce bouton (cette action est réversible mais les personnages déjà morts ne seront pas ressuscités pour autant !)."
+step_settings_gauge_max:
+  "Vous pouvez indiquer un maximum optionnel qui ne pourra être dépassé par les personnages pour cette jauge."
 step_settings_stats:
   "Les caractéristiques fonctionnent de la même façon que dans la plupart des jeux de rôle. 
   Quand vous créez une partie, deux caractéristiques sont créées : physique et mental."
@@ -178,6 +180,7 @@ tab_label_pick:
 add: "Ajouter"
 gauge_start: "Démarre à {gauge_value}"
 kills_at_0: "Tue à 0"
+maximum: "Maximum à {max}"
 submit: "Valider"
 modify: "Modifier"
 delete: "Supprimer"
@@ -261,6 +264,9 @@ start_typing: "Commencez à taper"
 clear_selection: "Effacer la sélection"
 char_picked: "Sélectionnés"
 add_all_to_selection: "Tout ajouter à la sélection"
+add_to_selected: "Ajouter aux sélectionnés"
+remove_from_selected: "Retirer aux sélectionnés"
+filter_list: "Filtrer la liste"
 challenged_end_in: "Fin de l'épreuve dans {timer}s"
 finish_challenge: "Terminer l'épreuve"
 need_challenge_end: "Vous devez terminer l'épreuve en cours pour en démarrer une nouvelle."
