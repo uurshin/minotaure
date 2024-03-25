@@ -18985,6 +18985,10 @@ const messages = {
       const { normalize: _normalize } = ctx;
       return _normalize(["Liste filtern"]);
     },
+    "tag_untag": (ctx) => {
+      const { normalize: _normalize } = ctx;
+      return _normalize(["Markieren / Entmarkieren"]);
+    },
     "challenged_end_in": (ctx) => {
       const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
       return _normalize(["Herausforderung endet in ", _interpolate(_named("timer")), "s"]);
@@ -20122,6 +20126,14 @@ const messages = {
     "remove_from_selected": (ctx) => {
       const { normalize: _normalize } = ctx;
       return _normalize(["Remove from selected"]);
+    },
+    "filter_list": (ctx) => {
+      const { normalize: _normalize } = ctx;
+      return _normalize(["Filter the list"]);
+    },
+    "tag_untag": (ctx) => {
+      const { normalize: _normalize } = ctx;
+      return _normalize(["Tag / Untag"]);
     },
     "challenged_end_in": (ctx) => {
       const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
@@ -21265,6 +21277,10 @@ const messages = {
       const { normalize: _normalize } = ctx;
       return _normalize(["Filtrar la lista"]);
     },
+    "tag_untag": (ctx) => {
+      const { normalize: _normalize } = ctx;
+      return _normalize(["Etiquetar / Desetiquetar"]);
+    },
     "challenged_end_in": (ctx) => {
       const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
       return _normalize(["Fin del desafío en ", _interpolate(_named("timer")), "s"]);
@@ -22402,6 +22418,10 @@ const messages = {
     "filter_list": (ctx) => {
       const { normalize: _normalize } = ctx;
       return _normalize(["Filtrer la liste"]);
+    },
+    "tag_untag": (ctx) => {
+      const { normalize: _normalize } = ctx;
+      return _normalize(["Taguer / Détagger"]);
     },
     "challenged_end_in": (ctx) => {
       const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
@@ -23549,6 +23569,10 @@ const messages = {
       const { normalize: _normalize } = ctx;
       return _normalize(["Filtrare la lista"]);
     },
+    "tag_untag": (ctx) => {
+      const { normalize: _normalize } = ctx;
+      return _normalize(["Tagga / Untagga"]);
+    },
     "challenged_end_in": (ctx) => {
       const { normalize: _normalize, interpolate: _interpolate, named: _named } = ctx;
       return _normalize(["Fine della sfida tra ", _interpolate(_named("timer")), "s"]);
@@ -24686,6 +24710,10 @@ const messages = {
     "remove_from_selected": (ctx) => {
       const { normalize: _normalize } = ctx;
       return _normalize(["Usuń z wybranych"]);
+    },
+    "tag_untag": (ctx) => {
+      const { normalize: _normalize } = ctx;
+      return _normalize(["Otaguj / Odtaguj"]);
     },
     "filter_list": (ctx) => {
       const { normalize: _normalize } = ctx;
@@ -25832,6 +25860,10 @@ const messages = {
     "remove_from_selected": (ctx) => {
       const { normalize: _normalize } = ctx;
       return _normalize(["Remover dos selecionados"]);
+    },
+    "tag_untag": (ctx) => {
+      const { normalize: _normalize } = ctx;
+      return _normalize(["Marcar / Desmarcar"]);
     },
     "filter_list": (ctx) => {
       const { normalize: _normalize } = ctx;
@@ -29909,7 +29941,7 @@ function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
           createBaseVNode("button", {
             onClick: _cache[6] || (_cache[6] = ($event) => $options.toggleAction("tags")),
             class: normalizeClass({ active: $data.current_action === "tags" })
-          }, toDisplayString$1(_ctx.$t("Tag / untag")), 3),
+          }, toDisplayString$1(_ctx.$t("tag_untag")), 3),
           createBaseVNode("button", {
             ref: "step_characters_1",
             onClick: _cache[7] || (_cache[7] = ($event) => {
