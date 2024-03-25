@@ -937,6 +937,7 @@ export default {
     position: sticky;
     top: 85px;
     max-width: 128px;
+    font-size: clamp(16px, 0.7vw, 0.9vw);
 
     > button {
       margin-left: -30px;
