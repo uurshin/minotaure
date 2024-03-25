@@ -18945,9 +18945,9 @@ const messages = {
       const { normalize: _normalize } = ctx;
       return _normalize(["NPC erstellen"]);
     },
-    "characters_on": (ctx) => {
-      const { normalize: _normalize } = ctx;
-      return _normalize([" auf "]);
+    "character_count": (ctx) => {
+      const { normalize: _normalize, interpolate: _interpolate, named: _named, plural: _plural } = ctx;
+      return _plural([_normalize(["0 Charakter"]), _normalize(["1 Charakter"]), _normalize([_interpolate(_named("count")), " Charaktere"])]);
     },
     "no_characters_to_show_try_different_filter": (ctx) => {
       const { normalize: _normalize } = ctx;
@@ -20087,9 +20087,9 @@ const messages = {
       const { normalize: _normalize } = ctx;
       return _normalize(["Spawn NPC"]);
     },
-    "characters_on": (ctx) => {
-      const { normalize: _normalize } = ctx;
-      return _normalize([" on "]);
+    "character_count": (ctx) => {
+      const { normalize: _normalize, interpolate: _interpolate, named: _named, plural: _plural } = ctx;
+      return _plural([_normalize(["0 characters"]), _normalize(["1 character"]), _normalize([_interpolate(_named("count")), " characters"])]);
     },
     "no_characters_to_show_try_different_filter": (ctx) => {
       const { normalize: _normalize } = ctx;
@@ -21225,9 +21225,9 @@ const messages = {
       const { normalize: _normalize } = ctx;
       return _normalize(["Generar un PNJ"]);
     },
-    "characters_on": (ctx) => {
-      const { normalize: _normalize } = ctx;
-      return _normalize([" en "]);
+    "character_count": (ctx) => {
+      const { normalize: _normalize, interpolate: _interpolate, named: _named, plural: _plural } = ctx;
+      return _plural([_normalize(["0 personaje"]), _normalize(["1 personaje"]), _normalize([_interpolate(_named("count")), " personajes"])]);
     },
     "no_characters_to_show_try_different_filter": (ctx) => {
       const { normalize: _normalize } = ctx;
@@ -22363,9 +22363,9 @@ const messages = {
       const { normalize: _normalize } = ctx;
       return _normalize(["Générer un PNJ"]);
     },
-    "characters_on": (ctx) => {
-      const { normalize: _normalize } = ctx;
-      return _normalize([" sur "]);
+    "character_count": (ctx) => {
+      const { normalize: _normalize, interpolate: _interpolate, named: _named, plural: _plural } = ctx;
+      return _plural([_normalize(["0 personnage"]), _normalize(["1 personnage"]), _normalize([_interpolate(_named("count")), " personnages"])]);
     },
     "no_characters_to_show_try_different_filter": (ctx) => {
       const { normalize: _normalize } = ctx;
@@ -23509,9 +23509,9 @@ const messages = {
       const { normalize: _normalize } = ctx;
       return _normalize(["Genera NPC"]);
     },
-    "characters_on": (ctx) => {
-      const { normalize: _normalize } = ctx;
-      return _normalize([" su "]);
+    "character_count": (ctx) => {
+      const { normalize: _normalize, interpolate: _interpolate, named: _named, plural: _plural } = ctx;
+      return _plural([_normalize(["0 personaggio"]), _normalize(["1 personaggio"]), _normalize([_interpolate(_named("count")), " personaggi"])]);
     },
     "no_characters_to_show_try_different_filter": (ctx) => {
       const { normalize: _normalize } = ctx;
@@ -24651,9 +24651,9 @@ const messages = {
       const { normalize: _normalize } = ctx;
       return _normalize(["Generuj NPC"]);
     },
-    "characters_on": (ctx) => {
-      const { normalize: _normalize } = ctx;
-      return _normalize([" na "]);
+    "character_count": (ctx) => {
+      const { normalize: _normalize, interpolate: _interpolate, named: _named, plural: _plural } = ctx;
+      return _plural([_normalize(["0 postać"]), _normalize(["1 postać"]), _normalize([_interpolate(_named("count")), " postaci"])]);
     },
     "no_characters_to_show_try_different_filter": (ctx) => {
       const { normalize: _normalize } = ctx;
@@ -25797,9 +25797,9 @@ const messages = {
       const { normalize: _normalize } = ctx;
       return _normalize(["Gerar NPC"]);
     },
-    "characters_on": (ctx) => {
-      const { normalize: _normalize } = ctx;
-      return _normalize([" em "]);
+    "character_count": (ctx) => {
+      const { normalize: _normalize, interpolate: _interpolate, named: _named, plural: _plural } = ctx;
+      return _plural([_normalize(["0 personagem"]), _normalize(["1 personagem"]), _normalize([_interpolate(_named("count")), " personagens"])]);
     },
     "no_characters_to_show_try_different_filter": (ctx) => {
       const { normalize: _normalize } = ctx;
@@ -29512,7 +29512,8 @@ const _sfc_main$b = {
       temp_character: null,
       edited_character: null,
       current_action: null,
-      filtered_characters: []
+      filtered_characters: [],
+      count_characters: 0
     };
   },
   computed: {
@@ -29764,6 +29765,10 @@ const _sfc_main$b = {
           });
         });
       }
+    },
+    updateData(data2) {
+      this.filtered_characters = data2;
+      this.count_characters = this.filtered_characters.length;
     }
   }
 };
@@ -29783,45 +29788,46 @@ const _hoisted_6$8 = {
   class: "result-container"
 };
 const _hoisted_7$8 = { class: "first-column" };
-const _hoisted_8$7 = {
+const _hoisted_8$7 = { class: "character-count" };
+const _hoisted_9$7 = {
   key: 3,
   class: "markers-container"
 };
-const _hoisted_9$7 = { class: "second-column" };
-const _hoisted_10$7 = {
+const _hoisted_10$7 = { class: "second-column" };
+const _hoisted_11$7 = {
   key: 0,
   class: "filter-data"
 };
-const _hoisted_11$7 = { key: 0 };
-const _hoisted_12$7 = {
+const _hoisted_12$7 = { key: 0 };
+const _hoisted_13$7 = {
   key: 2,
   class: "dual-button"
 };
-const _hoisted_13$7 = ["placeholder"];
-const _hoisted_14$7 = {
+const _hoisted_14$7 = ["placeholder"];
+const _hoisted_15$6 = {
   key: 1,
   class: "filter-data"
 };
-const _hoisted_15$6 = ["onClick", "onContextmenu"];
-const _hoisted_16$6 = { class: "character-names" };
-const _hoisted_17$6 = {
+const _hoisted_16$6 = ["onClick", "onContextmenu"];
+const _hoisted_17$6 = { class: "character-names" };
+const _hoisted_18$6 = {
   key: 1,
   class: "character-name"
 };
-const _hoisted_18$6 = {
+const _hoisted_19$6 = {
   key: 3,
   class: "pseudo"
 };
-const _hoisted_19$6 = { class: "gauges" };
-const _hoisted_20$6 = { key: 1 };
-const _hoisted_21$6 = { class: "stats" };
-const _hoisted_22$6 = { key: 1 };
-const _hoisted_23$5 = {
+const _hoisted_20$6 = { class: "gauges" };
+const _hoisted_21$6 = { key: 1 };
+const _hoisted_22$6 = { class: "stats" };
+const _hoisted_23$5 = { key: 1 };
+const _hoisted_24$4 = {
   key: 0,
   class: "tags"
 };
-const _hoisted_24$4 = { class: "label-name" };
-const _hoisted_25$4 = {
+const _hoisted_25$4 = { class: "label-name" };
+const _hoisted_26$4 = {
   key: 0,
   class: "no-found"
 };
@@ -29882,6 +29888,7 @@ function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
           ]))
         ])) : createCommentVNode("", true),
         createBaseVNode("div", _hoisted_7$8, [
+          createBaseVNode("div", _hoisted_8$7, toDisplayString$1(_ctx.$t("character_count", this.count_characters)), 1),
           createBaseVNode("button", {
             onClick: _cache[2] || (_cache[2] = ($event) => $options.toggleAction("filter")),
             class: normalizeClass({ active: $data.current_action === "filter" })
@@ -29910,7 +29917,7 @@ function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
               $data.store.generateNpcCharacters(1);
             })
           }, toDisplayString$1(_ctx.$t("spawn_npc")), 513),
-          this.store.markers !== void 0 ? (openBlock(), createElementBlock("div", _hoisted_8$7, [
+          this.store.markers !== void 0 ? (openBlock(), createElementBlock("div", _hoisted_9$7, [
             (openBlock(true), createElementBlock(Fragment, null, renderList(this.store.markers, (marker) => {
               return openBlock(), createElementBlock("div", null, [
                 createBaseVNode("span", null, toDisplayString$1(marker.name), 1),
@@ -29927,9 +29934,9 @@ function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
             }), 256))
           ])) : createCommentVNode("", true)
         ]),
-        createBaseVNode("div", _hoisted_9$7, [
-          $data.current_action === "filter" ? (openBlock(), createElementBlock("div", _hoisted_10$7, [
-            $data.store.tags.length ? (openBlock(), createElementBlock("div", _hoisted_11$7, [
+        createBaseVNode("div", _hoisted_10$7, [
+          $data.current_action === "filter" ? (openBlock(), createElementBlock("div", _hoisted_11$7, [
+            $data.store.tags.length ? (openBlock(), createElementBlock("div", _hoisted_12$7, [
               createVNode(_component_vue_multiselect, {
                 ref: "tag_filter",
                 id: "tag_filter",
@@ -29962,7 +29969,7 @@ function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
               onClick: _cache[11] || (_cache[11] = ($event) => $options.switchFilter("picked")),
               class: normalizeClass({ active: $data.filters.picked !== void 0 })
             }, toDisplayString$1(_ctx.$t("char_picked")), 3)) : createCommentVNode("", true),
-            $options.current_challenge_rate !== false ? (openBlock(), createElementBlock("div", _hoisted_12$7, [
+            $options.current_challenge_rate !== false ? (openBlock(), createElementBlock("div", _hoisted_13$7, [
               createBaseVNode("button", {
                 onClick: _cache[12] || (_cache[12] = ($event) => $options.switchFilterChallenge("success")),
                 class: normalizeClass(["success-button badge", { active: $data.filters.challenge !== void 0 && $data.filters.challenge === "success" }])
@@ -29983,11 +29990,11 @@ function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
               "onUpdate:modelValue": _cache[14] || (_cache[14] = ($event) => $data.search_character = $event),
               placeholder: _ctx.$t("search_character"),
               onKeyup: _cache[15] || (_cache[15] = ($event) => this.$refs["dataset"].search($data.search_character))
-            }, null, 40, _hoisted_13$7), [
+            }, null, 40, _hoisted_14$7), [
               [vModelText, $data.search_character]
             ])
           ])) : createCommentVNode("", true),
-          $data.current_action === "tags" ? (openBlock(), createElementBlock("div", _hoisted_14$7, [
+          $data.current_action === "tags" ? (openBlock(), createElementBlock("div", _hoisted_15$6, [
             createBaseVNode("div", null, [
               createVNode(_component_vue_multiselect, {
                 ref: "tags_edit",
@@ -30023,7 +30030,7 @@ function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
             "ds-sort-as": { challenge: $options.sortAsChallenge, connection: $options.sortAsConnected },
             ref: "dataset",
             "onUpdate:dsData": _cache[25] || (_cache[25] = function(data2) {
-              $data.filtered_characters = data2;
+              $options.updateData(data2);
             })
           }, {
             default: withCtx(({ ds }) => [
@@ -30042,7 +30049,7 @@ function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
                     onContextmenu: withModifiers(($event) => $options.handleClick($event, row), ["prevent", "stop"]),
                     class: normalizeClass(["character", [$options.getClasses(row), !row.alive ? "dead" : ""]])
                   }, [
-                    createBaseVNode("div", _hoisted_16$6, [
+                    createBaseVNode("div", _hoisted_17$6, [
                       $data.edited_character !== null && $data.edited_character.token === row.token ? (openBlock(), createBlock(_component_contenteditable, {
                         key: 0,
                         onClick: _cache[19] || (_cache[19] = withModifiers(() => {
@@ -30055,7 +30062,7 @@ function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
                         spellcheck: "false",
                         "no-nl": true,
                         "no-html": true
-                      }, null, 8, ["modelValue"])) : (openBlock(), createElementBlock("span", _hoisted_17$6, toDisplayString$1(row.name), 1)),
+                      }, null, 8, ["modelValue"])) : (openBlock(), createElementBlock("span", _hoisted_18$6, toDisplayString$1(row.name), 1)),
                       $data.edited_character !== null && $data.edited_character.token === row.token ? (openBlock(), createBlock(_component_contenteditable, {
                         key: 2,
                         onClick: _cache[21] || (_cache[21] = withModifiers(() => {
@@ -30068,9 +30075,9 @@ function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
                         spellcheck: "false",
                         "no-nl": true,
                         "no-html": true
-                      }, null, 8, ["modelValue"])) : (openBlock(), createElementBlock("span", _hoisted_18$6, toDisplayString$1(row.pseudo), 1))
+                      }, null, 8, ["modelValue"])) : (openBlock(), createElementBlock("span", _hoisted_19$6, toDisplayString$1(row.pseudo), 1))
                     ]),
-                    createBaseVNode("div", _hoisted_19$6, [
+                    createBaseVNode("div", _hoisted_20$6, [
                       (openBlock(true), createElementBlock(Fragment, null, renderList(row.gauges, (gauge, key) => {
                         return openBlock(), createElementBlock("span", null, [
                           createBaseVNode("span", null, toDisplayString$1(gauge.label), 1),
@@ -30085,11 +30092,11 @@ function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
                             "onUpdate:modelValue": ($event) => $data.temp_character.gauges[key].value = $event,
                             "no-nl": true,
                             "no-html": true
-                          }, null, 8, ["modelValue", "onUpdate:modelValue"])) : (openBlock(), createElementBlock("span", _hoisted_20$6, toDisplayString$1(gauge.value), 1))
+                          }, null, 8, ["modelValue", "onUpdate:modelValue"])) : (openBlock(), createElementBlock("span", _hoisted_21$6, toDisplayString$1(gauge.value), 1))
                         ]);
                       }), 256))
                     ]),
-                    createBaseVNode("div", _hoisted_21$6, [
+                    createBaseVNode("div", _hoisted_22$6, [
                       (openBlock(true), createElementBlock(Fragment, null, renderList(row.stats, (stat, key) => {
                         return openBlock(), createElementBlock("span", null, [
                           createBaseVNode("span", null, toDisplayString$1(stat.label), 1),
@@ -30106,23 +30113,23 @@ function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
                               "no-html": true
                             }, null, 8, ["modelValue", "onUpdate:modelValue"]),
                             createBaseVNode("span", null, toDisplayString$1(stat.value - $data.edited_character.base_stats[key] >= 0 ? "+" : "") + toDisplayString$1(stat.value - $data.edited_character.base_stats[key]), 1)
-                          ], 64)) : (openBlock(), createElementBlock("span", _hoisted_22$6, toDisplayString$1(stat.value), 1))
+                          ], 64)) : (openBlock(), createElementBlock("span", _hoisted_23$5, toDisplayString$1(stat.value), 1))
                         ]);
                       }), 256))
                     ]),
-                    row.tags !== void 0 && row.tags.length ? (openBlock(), createElementBlock("div", _hoisted_23$5, [
+                    row.tags !== void 0 && row.tags.length ? (openBlock(), createElementBlock("div", _hoisted_24$4, [
                       (openBlock(true), createElementBlock(Fragment, null, renderList(row.tags, (tag) => {
                         return openBlock(), createElementBlock("span", {
                           class: normalizeClass(["tag", "tag-" + tag.code])
                         }, [
-                          createBaseVNode("span", _hoisted_24$4, toDisplayString$1(tag.label), 1)
+                          createBaseVNode("span", _hoisted_25$4, toDisplayString$1(tag.label), 1)
                         ], 2);
                       }), 256))
                     ])) : createCommentVNode("", true)
-                  ], 42, _hoisted_15$6))
+                  ], 42, _hoisted_16$6))
                 ]),
                 noDataFound: withCtx(() => [
-                  $data.store.characters.length > 0 ? (openBlock(), createElementBlock("div", _hoisted_25$4, toDisplayString$1(_ctx.$t("no_characters_to_show_try_different_filter")), 1)) : createCommentVNode("", true)
+                  $data.store.characters.length > 0 ? (openBlock(), createElementBlock("div", _hoisted_26$4, toDisplayString$1(_ctx.$t("no_characters_to_show_try_different_filter")), 1)) : createCommentVNode("", true)
                 ]),
                 _: 1
               })
@@ -45705,6 +45712,18 @@ ul li {
   color: black;
   border-radius: 2px;
   padding: 0 2px;
+}
+#tab-characters-content .character-count {
+  border-radius: 0 8px 8px 0;
+  border: 1px solid var(--tab-border-color);
+  border-left-style: none;
+  padding: 0.5em;
+  margin-left: -30px;
+}
+@media (max-width: 1440px) {
+#tab-characters-content .character-count {
+    margin-left: -20px;
+}
 }
 #tab-characters-content .markers-container {
   display: flex;
