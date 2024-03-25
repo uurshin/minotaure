@@ -935,7 +935,7 @@ export default {
     flex-direction: column;
     gap: 15px;
     position: sticky;
-    top: 85px;
+    top: 75px;
     max-width: 128px;
     font-size: clamp(16px, 0.7vw, 0.9vw);
 
