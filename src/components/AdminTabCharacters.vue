@@ -5,6 +5,7 @@ import {Dataset, DatasetItem, DatasetSearch, DatasetInfo, DatasetShow} from "vue
 import VueSimpleContextMenu from 'vue-simple-context-menu';
 import Slider from "@vueform/slider"
 import contenteditable from 'vue-contenteditable';
+import { watch } from 'vue';
 
 export default {
   components: {
@@ -38,7 +39,8 @@ export default {
       temp_character: null,
       edited_character: null,
       current_action: null,
-      filtered_characters: []
+      filtered_characters: [],
+      count_characters: 0
     }
   },
   computed: {
@@ -315,6 +317,10 @@ export default {
           });
         });
       }
+    },
+    updateData(data) {
+      this.filtered_characters = data;
+      this.count_characters = this.filtered_characters.length;
     }
   },
 }
@@ -371,6 +377,7 @@ export default {
       </div>
 
       <div class="first-column">
+        <div class="character-count">{{ $t('character_count', this.count_characters) }}</div>
         <button @click="toggleAction('filter')" :class="{ active: current_action === 'filter'}">
           {{ $t('filter_list') }}
         </button>
@@ -455,7 +462,7 @@ export default {
             :ds-filter-fields="{ tags: filterOnTag, connection: filterConnected, alive: filterDead, challenge: filterChallenge, picked: filterPicked }"
             :ds-sort-as="{ challenge: sortAsChallenge, connection: sortAsConnected }"
             ref="dataset"
-            @update:dsData="function(data) { filtered_characters = data }"
+            @update:dsData="function(data) { updateData(data) }"
         >
           <dataset-item class="full" id="character-list">
             <template #default="{ row, rowIndex }">
@@ -536,6 +543,18 @@ export default {
       color: black;
       border-radius: 2px;
       padding: 0 2px;
+    }
+
+    .character-count {
+      border-radius: 0 8px 8px 0;
+      border: 1px solid var(--tab-border-color);
+      border-left-style: none;
+      padding: 0.5em;
+      margin-left: -30px;
+
+      @include media("<=desktop") {
+        margin-left: -20px;
+      }
     }
 
     .markers-container {
