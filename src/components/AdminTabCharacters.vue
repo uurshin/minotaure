@@ -385,7 +385,7 @@ export default {
         <button class='btn-valid clear-selection' v-if="store.picked_characters !== undefined && store.picked_characters.length" @click="this.store.resetPickedCharacters()">{{ $t('clear_selection') }}</button>
         <button v-else @click="selectVisible">{{ $t('add_all_to_selection') }}</button>
         <button @click="toggleAction('tags')" :class="{ active: current_action === 'tags'}">
-          {{ $t('Tag / untag') }}
+          {{ $t('tag_untag') }}
         </button>
         <button ref="step_characters_1" @click="toggleAction(); store.generateNpcCharacters(1)">{{ $t('spawn_npc') }}</button>
 
