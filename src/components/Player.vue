@@ -17,6 +17,7 @@ export default {
       option_picked: [],
       name_picked: '',
       pseudo_picked: '',
+      number_picked: '',
       creation_form: false,
       gameStart: false,
       answers: [],
@@ -244,7 +245,8 @@ export default {
           choices: this.option_picked,
           name: this.name_picked,
           pseudo: this.pseudo_picked,
-          token: vm.character.token
+          token: vm.character.token,
+          number: this.number_picked
         });
       }
 
@@ -335,6 +337,8 @@ export default {
         <input maxlength="12" type="text" id="name" v-model="name_picked" @keyup.enter="this.$refs['pseudo'].focus()" />
         <label for="pseudo">{{ $t("user_name") }}</label>
         <input ref="pseudo" maxlength="12" type="text" id="pseudo" v-model="pseudo_picked" @keyup.enter="sendCharacter()" />
+        <label for="number">Numéro de badge</label>
+        <input ref="number" type="number" v-model="number_picked" @keyup.enter="sendCharacter()" />
 
         <template v-for="(option, group_key) in creation_form.options">
           <div class="group-choice">

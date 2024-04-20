@@ -20,7 +20,8 @@ export default {
         alpha: 1,
       }),
       color_picked: null,
-      group_selected: null
+      group_selected: null,
+      coloring: false,
     }
   },
   mounted() {
@@ -31,8 +32,18 @@ export default {
       this.color.hue = hue;
     },
     onColorSelect(hue) {
-      if (this.color_picked != null) {
-        this.color_picked.color = [hue,71,50];
+      const vm = this;
+      if (vm.color_picked != null) {
+        vm.color_picked.color = [hue,71,50];
+
+        vm.store.characters.forEach(function(character) {
+          character.tags.forEach(function(tag) {
+            if (tag.code === vm.color_picked.code) {
+              tag.color = vm.color_picked.color;
+            }
+          });
+        })
+
         this.store.generateCss();
       }
     },
@@ -83,6 +94,37 @@ export default {
           }
         }
       })
+    },
+    uncolorAll: function() {
+      const vm = this;
+      this.coloring = false;
+      this.store.characters.forEach(function(character) {
+        delete character.color;
+      })
+    },
+    colorGroupTag: function(group) {
+      const vm = this;
+      this.coloring = true;
+      this.store.characters.forEach(function(character) {
+        // Check if the character already has a tag from this group.
+        let found_tag = character.tags.find((tag) => tag.group === group.code);
+        if (found_tag !== undefined) {
+          character.color = vm.hslToRgb(found_tag.color[0], found_tag.color[1], found_tag.color[2]);
+        }
+        else {
+          delete character.color;
+        }
+      })
+    },
+    hslToRgb(h, s, l) {
+      l /= 100;
+      const a = s * Math.min(l, 1 - l) / 100;
+      const f = n => {
+        const k = (n + h / 30) % 12;
+        const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+        return Math.round(255 * color);   // convert to Hex and prefix "0" if needed
+      };
+      return [`${f(0)}`, `${f(8)}`, `${f(4)}`];
     },
     focusLabelGroup(event, key) {
       this.group_selected = key;
@@ -285,6 +327,9 @@ export default {
             </select>
             <button @click="distributeGroupTag(group)" :title="$t('a_tag_will_be_assigned_to_char')" :ref="key === 0 ? 'step_tags_group_distribute' : null">{{ $t("distribute") }}</button>
             <button @click="shuffleGroupTag(group)" :title="$t('shuffle_help')" :ref="key === 0 ? 'step_tags_group_shuffle' : null">{{ $t("shuffle") }}</button>
+
+            <button v-if="!coloring" @click="colorGroupTag(group)">Colorer</button>
+            <button v-else @click="uncolorAll()">Décolorer</button>
 
             <button class="btn-danger" @click="removeGroupTag(key)" :title="$t('delete_groupe_tags_and_remove_from_chars')" :ref="key === 0 ? 'step_tags_group_delete' : null">{{ $t("delete") }}</button>
           </div>

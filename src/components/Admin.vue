@@ -124,9 +124,14 @@ export default {
       this.store.current_game.characters = [];
     }
     else {
+      this.store.scanDevices();
       this.store.current_game.characters.forEach(function(character) {
         character.connection = null;
         character.watched = true;
+
+        if (character.device === undefined) {
+          character.device = 0;
+        }
 
         // The character should be updated to the new system.
         if (character.base_stats === undefined) {

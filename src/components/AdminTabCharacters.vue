@@ -40,7 +40,8 @@ export default {
       edited_character: null,
       current_action: null,
       filtered_characters: [],
-      count_characters: 0
+      count_characters: 0,
+      show_devices: false
     }
   },
   computed: {
@@ -196,11 +197,13 @@ export default {
       let options = [];
       if (item.picked === undefined || !item.picked) {
         options.push({name: this.$t('context_add_selection_character'), effect: 'toggle'});
-      } else {
+      }
+      else {
         options.push({name: this.$t('context_remove_selection_character'), effect: 'toggle'});
       }
       options.push({name: this.$t('context_edit_character'), effect: 'edit'});
       options.push({name: this.$t('context_delete_character'), effect: 'delete'});
+      options.push({name: "Color", effect: 'color'});
       return options;
     },
     optionClicked(event) {
@@ -291,6 +294,7 @@ export default {
           }
         }
       }
+      character.device = this.temp_character.device;
       character.name = this.temp_character.name;
       character.pseudo = this.temp_character.pseudo;
       for (const [key, gauge] of Object.entries(this.temp_character.gauges)) {
@@ -321,6 +325,13 @@ export default {
     updateData(data) {
       this.filtered_characters = data;
       this.count_characters = this.filtered_characters.length;
+    },
+    scanDevices() {
+      this.store.scanDevices();
+      this.show_devices = true;
+      setTimeout(function() {
+        this.show_devices = false;
+      }, 15000)
     }
   },
 }
@@ -388,6 +399,7 @@ export default {
           {{ $t('tag_untag') }}
         </button>
         <button ref="step_characters_1" @click="toggleAction(); store.generateNpcCharacters(1)">{{ $t('spawn_npc') }}</button>
+        <button @click="scanDevices()">Scanner</button>
 
         <div v-if="this.store.markers !== undefined" class="markers-container">
           <div v-for="marker in this.store.markers">
@@ -464,18 +476,24 @@ export default {
             ref="dataset"
             @update:dsData="function(data) { updateData(data) }"
         >
-          <dataset-item class="full" id="character-list">
+          <dataset-item :class="['full', show_devices ? 'show-devices' : '']" id="character-list">
             <template #default="{ row, rowIndex }">
               <div @click.exact="animateToCenter(row)" :ref="row.token" :key="row.token" @click.shift.exact="toggleCharacter(row)" @contextmenu.prevent.stop="handleClick($event, row)" class="character" :class="[getClasses(row), !row.alive ? 'dead' : '']">
+                <div class="character-device" v-if="show_devices">
+                  <contenteditable @click.stop v-if="edited_character !== null && edited_character.token === row.token" class="value" tag="span" contenteditable="true" v-model="temp_character.device" spellcheck="false" :no-nl="true" :no-html="true" />
+                  <span v-else-if="row.device !== undefined" :class="{'connected':this.store.devices[row.device] !== undefined}">
+                    {{ row.device }}
+                  </span>
+                </div>
                 <div class="character-names">
                   <contenteditable @click.stop v-if="edited_character !== null && edited_character.token === row.token" class="value" tag="span" contenteditable="true" v-model="temp_character.name" spellcheck="false" :no-nl="true" :no-html="true" />
                   <span v-else class="character-name">
-                  {{ row.name }}
-                </span>
+                    {{ row.name }}
+                  </span>
                   <contenteditable @click.stop v-if="edited_character !== null && edited_character.token === row.token" class="value" tag="span" contenteditable="true" v-model="temp_character.pseudo" spellcheck="false" :no-nl="true" :no-html="true" />
                   <span v-else class="pseudo">
-                  {{ row.pseudo }}
-                </span>
+                    {{ row.pseudo }}
+                  </span>
                 </div>
                 <div class="gauges">
                 <span v-for="(gauge, key) in row.gauges">
@@ -817,6 +835,33 @@ export default {
         }
         .pseudo {
           min-height: 20px;
+        }
+      }
+    }
+
+    .character-device {
+      position: relative;
+
+      > span {
+        visibility: hidden;
+        padding: 0 6px;
+        background: white;
+        font-size: 23px;
+        font-weight: bold;
+        display: block;
+        border-radius: 10px;
+
+        &.connected {
+          background: var(--success-background);
+        }
+      }
+    }
+
+    &.show-devices {
+      .character-device {
+        > span {
+          visibility: visible;
+          white-space: pre;
         }
       }
     }

@@ -13,7 +13,7 @@ export default {
       themes: ['dark', 'light', 'blue', 'sepia'],
       current_theme: current_theme ?? 'dark',
       theme_picker_open: false,
-      root: null
+      root: null,
     };
   },
   mounted: function() {
@@ -42,6 +42,7 @@ export default {
     <div class="main-wrapper" ref="main">
       <router-view></router-view>
     </div>
+
     <div class="options-switch">
       <div class="picker current-theme" :data-theme='this.current_theme' @click="this.theme_picker_open = !this.theme_picker_open"></div>
       <div id="theme-switch" :class="{open: this.theme_picker_open}">

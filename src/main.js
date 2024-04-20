@@ -58,9 +58,11 @@ export const usePlayerStore = defineStore('playerStore', {
         _reconnect_interval: null,
         _reconnect_timeout: null,
         _message: '',
-        _temp_connections: []
+        _temp_connections: [],
+        _devices: {}
     }),
     getters: {
+        devices: (state) => state._devices,
         peer: (state) => state._user_peer,
         connection : (state) => state._player_connection,
         connections : (state) => state._connections,
@@ -263,6 +265,21 @@ export const usePlayerStore = defineStore('playerStore', {
                     });
                 }
             }
+            if (character.device !== undefined && character.device !== 0 && vm.devices[character.device] !== undefined ) {
+                let color = [0,0,0];
+                let blinking = 0;
+                if (!character.color) {
+                    if (character.picked) {
+                        color = [255,255,255];
+                        blinking = 1;
+                    }
+                }
+                else {
+                    color = character.color;
+                }
+                let start_ip = localStorage.getItem('start_ip');
+                fetch('http://' + start_ip + '.' + vm.devices[character.device] + '?action=color&blink=' + blinking + '&r=' + color[0] + '&g=' + color[1] + '&b=' + color[2] ,{ method: 'GET'})
+            }
         },
         /**
          * Alter the tags, stats and gauges of a character to be valid.
@@ -383,6 +400,7 @@ export const usePlayerStore = defineStore('playerStore', {
                 picked: false,
                 connection: conn != null ? conn : false,
                 watched: false,
+                device: data != null ? (data.number ?? 0) : 0
             }
 
             // Gather the tags selected by the player.
@@ -781,6 +799,7 @@ export const usePlayerStore = defineStore('playerStore', {
                 function(character) {
                     if (character.challenge !== undefined) {
                         character.challenge = {};
+                        character.color = false;
                     }
                 }
             )
@@ -856,6 +875,10 @@ export const usePlayerStore = defineStore('playerStore', {
             character.challenge.roll = real_die_throw;
             character.challenge.message = messages;
             character.challenge.group = false;
+
+            if (character.device !== undefined && character.device !== 0 && vm.devices[character.device] !== undefined ) {
+                character.color = (result === "failure" ? [255, 0, 0] : [0, 255, 0]);
+            }
         },
         saveQuit() {
             let games = localStorage.getItem('games');
@@ -1011,6 +1034,38 @@ export const usePlayerStore = defineStore('playerStore', {
         stopReconnect() {
             clearInterval(this._reconnect_interval);
             clearInterval(this._reconnect_timeout);
+        },
+        scanDevices() {
+            let start_ip = localStorage.getItem('start_ip');
+            let vm = this;
+            this._devices = {};
+            function timeout(ms, promise) {
+                return new Promise((resolve, reject) => {
+                    const timer = setTimeout(() => {
+                        reject(new Error('TIMEOUT'))
+                    }, ms)
+
+                    promise
+                      .then(value => {
+                          clearTimeout(timer)
+                          resolve(value)
+                      })
+                      .catch(reason => {
+                          clearTimeout(timer)
+                          reject(reason)
+                      })
+                })
+            }
+            for(let i = 0; i < 255; i++) {
+                timeout(3000,
+                  fetch('http://' + start_ip + '.' + i + '?action=ping', { method: 'GET' }))
+                  .then((response) => response.text())
+                  .then((id) => {
+                      vm.devices[id] = i;
+                  })
+                  .catch(function (error) {
+                  })
+            }
         }
     },
 })
