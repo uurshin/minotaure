@@ -21,28 +21,26 @@ Les épreuves et les sondages pourront avoir, en plus de leurs conséquences sur
 
 Vous voulez en savoir plus ? Vous cherchez des exemples de situation de parties ? Tout est sur le [wiki](https://github.com/uurshin/minotaure/wiki).
 
-[Utiliser le site de démo](https://uurshin.github.io/minotaure)
-
 ## Comment utiliser Minotaure ?
 
-### Installation
+### Option 1 - Utiliser le site officiel
+
+La dernière version de Minotaure tourne en permanence à cette adresse : https://uurshin.github.io/minotaure
+
+### Option 2 - Installer votre propre site
 
 [Téléchargez la dernière version](https://github.com/uurshin/minotaure/releases/latest/download/index.html)
 
-Ce fichier est prévu pour être utilisé de 2 façons, au choix :
-
-1. en hébergeant le fichier index.html sur un serveur puis en naviguant vers l'adresse de ce fichier. Très pratique, vous n'avez ensuite qu'à partager aux participants le lien fourni lors du démarrage de partie.
-2. en lancant le fichier index.html dans votre navigateur. Cette méthode ne nécessite aucune connaissance technique mais ne fonctionne pas sur certains navigateurs mobile. Les participants doivent tous avoir le fichier pour entrer vos identifiant de partie à la main.
-
-Consultez le wiki pour des suggestions d'hébergement gratuit pour la 1ère méthode.
+Hébergez le fichier index.html sur un serveur puis naviguez vers l'adresse de ce fichier. Très pratique, vous n'avez ensuite qu'à partager aux participants le lien fourni lors du démarrage de partie.
+Des solutions comme surge.sh ou les pages github peuvent être utilisées pour héberger votre site gratuitement.
 
 ### Où sont conservés les parties et personnages ?
 
-Minotaure fonctionne **sans serveur distant** pour stocker des données.
+Minotaure fonctionne **sans serveur distant** pour stocker vos données.
 Si vous créez une partie, ses données (y compris les fiches de personnages créées par les participants) sont conservées dans le stockage local de **votre navigateur** .
 Si vous avez rejoint une partie, l'identifiant de votre personnages est conservé dans le stockage local de **votre navigateur**.  
-Lors que vous rejoignez une partie distante dans laquelle vous avez déjà un personnage, la partie vous réattribuera le même personnage si vous la rejoignez avec le même appareil et navigateur.
-Vous pouvez exporter vos parties et vos personnages pour jouer à partir d'autres appareils ou navigateurs.
+Lors que vous rejoignez une partie dans laquelle vous avez déjà un personnage, la partie vous réattribuera le même personnage si vous la rejoignez avec **le même navigateur et le même appareil (téléphone, ordinateur, etc.) * que vous avez utilisé la 1ère fois.
+Vous pouvez exporter vos personnages pour jouer à partir d'autres appareils ou navigateurs.
 
 ### Créer une partie
 
