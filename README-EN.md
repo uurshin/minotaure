@@ -21,26 +21,26 @@ Want to learn more? Looking for examples of game situations? Everything is on th
 
 [Use the demo site](https://uurshin.github.io/minotaure)
 
-## How to use Minotaure?
+## How do I use Minotaure?
 
-### Installation
+### Option 1 - Use the official site
 
+The latest version of Minotaure runs permanently at this address: https://uurshin.github.io/minotaure
 
-[Download the last version](https://github.com/uurshin/minotaure/releases/latest/download/index.html)
+### Option 2 - Install your own site
 
-This file is designed to be used in two ways, as you prefer:
+[Download the latest version](https://github.com/uurshin/minotaure/releases/latest/download/index.html)
 
-1. By hosting the index.html file on a server and then navigating to the address of this file. Very convenient, as you only need to share the link provided at the start of the game with participants.
-2. By launching the index.html file in your browser. This method does not require any technical knowledge but may not work on some mobile browsers. Participants will need to have the file to enter your game identifier manually.
-   
-Check the wiki for suggestions on free hosting for the first method.
+Host the index.html file on a server, then navigate to the file's address. Very practical, you then only need to share with participants the link provided at game start-up.
+Solutions such as surge.sh or github pages can be used to host your site free of charge.
 
 ### Where are games and characters stored?
-Minotaure operates **without a remote server** for data storage. 
-If you create a game, its data (including character sheets created by participants) is stored in the local storage of **your browser**. 
-If you have joined a game, your character's identifier is stored in the local storage of **your browser**.  
-When you join a remote game in which you already have a character, the game will reassign you the same character if you join with the same device and browser.
-You can export your games and characters to play from other devices or browsers.
+
+Minotaure works **without a remote server** to store your data.
+If you create a game, its data (including the character sheets created by participants) is stored locally in **your browser** .
+If you have joined a game, your character ID is kept in **your browser** local storage.  
+When you join a game in which you already have a character, the game will reassign you the same character if you join with **the same browser and the same device (phone, computer, etc.) * that you used the 1st time.
+You can export your characters to play from other devices or browsers.
 
 ### Creating a Game
 
