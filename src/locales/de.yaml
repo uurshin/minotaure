@@ -48,6 +48,8 @@ warning_version: "Spiele, die mit einem <span class='danger'>*</span> markiert s
 delete_all_games: 'Alle Spiele löschen'
 confirm_question: 'Bestätigen?'
 clone: "Duplizieren"
+import_game: "Spiel importieren"
+export: "Exportieren"
 
 #Create
 game_name_invite: 'Name Ihres Spiels. Sie können ihn später ändern.'

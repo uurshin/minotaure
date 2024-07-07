@@ -14,7 +14,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-button[class^="icon-"] {
+button[class^="icon-"],
+button[class*=" icon-"],
+{
   display: flex;
   align-content: center;
   gap: 10px;
@@ -43,6 +45,18 @@ button[class^="icon-"] {
 }
 .icon-character:before {
   content: "\e908";
+}
+.icon-upload:before {
+  content: "\e90a";
+}
+.icon-download:before {
+  content: "\e909";
+}
+.icon-clone:before {
+  content: "\e90b";
+}
+.icon-trash:before {
+  content: "\e90c";
 }
 
 body {

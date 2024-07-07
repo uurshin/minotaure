@@ -48,6 +48,8 @@ warning_version: "The game marked with <span class='danger'>*</span> are not com
 delete_all_games: "Delete all games"
 confirm_question: "Are you sure?"
 clone: "Duplicate"
+import_game: "Import game"
+export: "Export"
 
 #Create
 game_name_invite: "Name your game. You can change it later."

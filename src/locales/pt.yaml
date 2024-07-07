@@ -48,6 +48,8 @@ warning_version: "O jogo marcado com <span class='danger'>*</span> não é compa
 delete_all_games: "Excluir todos os jogos"
 confirm_question: "Você tem certeza?"
 clone: "Clonar"
+import_game: "Importar um jogo"
+export: "Exportar"
 
 #Create
 game_name_invite: "Nomeie seu jogo. Você pode mudá-lo depois."

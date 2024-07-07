@@ -48,6 +48,8 @@ warning_version: "Gry oznaczone gwiazdką <span class='danger'>*</span> nie są 
 delete_all_games: 'Usuń wszystkie gry'
 confirm_question: 'Potwierdzić?'
 clone: "Duplikat"
+import_game: "Importuj grę"
+export: "Eksportuj"
 
 #Create
 game_name_invite: 'Nazwa twojej gry. Możesz ją później zmienić.'
