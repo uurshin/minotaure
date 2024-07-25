@@ -21,7 +21,7 @@ Les épreuves et les sondages pourront avoir, en plus de leurs conséquences sur
 
 Vous voulez en savoir plus ? Vous cherchez des exemples de situation de parties ? Tout est sur le https://github.com/uurshin/minotaure/wiki[wiki].
 
-== Comment utiliser Minotaure ?
+== Comment installer Minotaure ?
 
 === Option 1 - Utiliser le site officiel
 
@@ -36,21 +36,22 @@ Des solutions comme surge.sh ou les pages github peuvent être utilisées pour h
 
 === Où sont conservés les parties et personnages ?
 
-Minotaure fonctionne **sans serveur distant** pour stocker vos données.
-Si vous créez une partie, ses données (y compris les fiches de personnages créées par les participants) sont conservées dans le stockage local de **votre navigateur** .
-Si vous avez rejoint une partie, l'identifiant de votre personnages est conservé dans le stockage local de **votre navigateur**.  
-Lors que vous rejoignez une partie dans laquelle vous avez déjà un personnage, la partie vous réattribuera le même personnage si vous la rejoignez avec **le même navigateur et le même appareil (téléphone, ordinateur, etc.) * que vous avez utilisé la 1ère fois.
-Vous pouvez exporter vos personnages pour jouer à partir d'autres appareils ou navigateurs.
+Si vous créez une partie, vos données (y compris les fiches de personnages créées par les participants) sont conservées dans **votre navigateur** .
+Si vous avez rejoint une partie, l'identifiant de votre personnage est conservé dans le stockage local de **votre navigateur**.
+Lors que vous rejoignez une partie dans laquelle vous avez déjà un personnage, la partie vous réattribuera le même personnage si vous la rejoignez avec **le même navigateur et le même appareil (téléphone, ordinateur, etc.) **.
+Vous pouvez exporter vos personnages et vos parties pour jouer à partir d'autres appareils et/ou navigateurs.
+
+== Comment utiliser Minotaure ?
 
 === Créer une partie
 
 1. Dans le menu principal, cliquez sur **créer une partie**.
-2. Après avoir choisi le nom, un identifiant unique vous sera attribué (il servira à rejoindre votre partie pour vos participants). Vous pouvez changer cet identifiant ou le garder. Cliquez sur **Lancer la partie**
-3. Une fois dans la partie, cliquez sur **Inviter à rejoindre**. Votre presse-papiers contiendra alors le lien à partager à vos participants (lorsque vous utilisez la version "offline", votre presse papier contient à la place l'identifiant à coller pour vos participants dans la page **Rejoindre une partie**).
+2. Après avoir choisi le nom, un identifiant unique vous sera attribué (il servira à rejoindre votre partie pour vos participants). Cliquez sur **Lancer la partie**
+3. Une fois dans la partie, cliquez sur **Inviter à rejoindre**. Votre presse-papiers contiendra alors le lien à partager à vos participants.
 4. Cliquez sur **Démarrer** pour que les participants puissent créer leurs personnages.
 5. Vous pouvez modifier les paramètres de vos parties à tout moment, qu'elle soit démarrée ou non. Si vous ne savez pas utiliser Minotaure, vous pouvez consulter le wiki. Vous pouvez également cliquer sur **Aide** dans l'écran de votre partie pour lancer un didacticiel.
-  
-### Continuer une partie créée
+
+=== Continuer une partie
 
 Si vous avez créé une partie, vous pouvez la continuer à l'état où vous l'avez quittée.
 
