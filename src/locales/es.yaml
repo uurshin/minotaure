@@ -48,6 +48,8 @@ warning_version: "Las partidas marcadas con un <span class='danger'>*</span> no 
 delete_all_games: "Eliminar todas las partidas"
 confirm_question: "¿Confirmar?"
 clone: "Duplicar"
+import_game: "Importar una partida"
+export: "Exportar"
 
 #Create
 game_name_invite: "Nombre de tu partida. Puedes cambiarlo más tarde."

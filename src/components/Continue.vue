@@ -2,6 +2,7 @@
 import router, { usePlayerStore }  from '../main';
 import { ref } from 'vue'
 import { Peer } from "peerjs";
+import { saveAs } from 'file-saver';
 
 export default {
   setup() {
@@ -124,6 +125,27 @@ export default {
         this.store.current_game.game_started = false;
         router.push('/admin');
       }
+    },
+    exportGame(id) {
+      let found = this.games.find((element) => element.id === id);
+      if (found) {
+        let blob = new Blob([JSON.stringify(found)], { type: "text/json;charset=utf-8" });
+        saveAs(blob, "game_export.json");
+      }
+    },
+    importGame(event) {
+      let reader = new FileReader();
+      reader.onload = (e)=>{
+        let new_game = JSON.parse(e.target.result);
+        this.games.push(new_game);
+        localStorage.setItem('games', JSON.stringify(this.games));
+      }
+      reader.readAsText(event.target.files[0]);
+      // const reader = new FileReader();
+      // reader.onload = e => console.log(e.target.result);
+      // reader.readAsText(file);
+
+      //
     }
   }
 }
@@ -133,6 +155,11 @@ export default {
   <h1>{{ titleContinue }}</h1>
   <div class="small-wrapper menu-wrapper">
     <span v-html="$t('warning_version', {version: version})" v-if="hasDeprecatedGames"></span>
+    <div class="general-actions">
+      <input class="invisible" ref="file" @change="importGame" type="file">
+      <button v-if="!ask_id" type="button" class="icon-download" @click="$refs.file.click()">{{ $t('import_game') }}</button>
+      <button v-if="games.length > 1 && !ask_id" class="btn-danger delete-all" @click="deleteAllGames($event)">{{ $t('delete_all_games') }}</button>
+    </div>
     <div class="game" v-for="(game, key) in games" v-if="!ask_id">
       <div class="title">
         <span>{{ game.name }}<span class="danger" v-if="game.version !== undefined && versionIsDeprecated(game.version)">*</span></span>
@@ -141,8 +168,9 @@ export default {
       <span v-if="activated !== key">{{ $t('count_personnage', game.characters.length, {count: game.characters.length}) }}</span>
       <div class="hidden-mobile options" :class="{active: activated === key}">
         <button class="btn-valid" @click="askPublicId(game.id)">{{ $t('continue') }}</button>
-        <button @click="cloneGame(game.id)">{{ $t('clone') }}</button>
-        <button class="btn-danger" @click="deleteGame(game.id, $event)">{{ game.id === confirmDelete ? this.$t('confirm_question') : $t('delete') }}</button>
+        <button class="icon-clone" :aria-label="$t('clone')" @click="cloneGame(game.id)">{{ $t('clone') }}</button>
+        <button class="icon-upload" :aria-label="$t('export')" @click="exportGame(game.id)" >{{ $t('export') }}</button>
+        <button class="btn-danger icon-trash" :aria-label="game.id === confirmDelete ? this.$t('confirm_question') : $t('delete')" @click="deleteGame(game.id, $event)">{{ game.id === confirmDelete ? this.$t('confirm_question') : $t('delete') }}</button>
       </div>
       <button class="visible-mobile" @click="activated = key;" v-if="activated !== key">{{ $t('see_more') }}</button>
     </div>
@@ -150,7 +178,6 @@ export default {
       <span>{{ $t("any_game") }}</span>
       <router-link to="/create">{{ $t("game_create") }}</router-link>
     </div>
-    <button v-if="games.length > 1 && !ask_id" class="btn-danger delete-all" @click="deleteAllGames($event)">{{ $t('delete_all_games') }}</button>
     <div class="continue-game" v-if="ask_id">
       <button :disabled="id_admin === ''" class="btn-valid" @click="continueGame()">{{ id_admin === '' ? $t('please_wait') : $t('start_game') }}</button>
       <button @click="cancelContinue()" >{{ $t('cancel') }}</button>
@@ -224,6 +251,22 @@ export default {
       }
     }
 
+    button[class^="icon-"],
+    button[class*=" icon-"] {
+      align-items: center;
+
+      @include media("<phone") {
+        font-size: 0;
+        gap: 0;
+
+        &:before {
+          margin: 10px;
+          font-size: 30px;
+          align-self: center;
+        }
+      }
+    }
+
     @include media("<laptop") {
       display: flex;
       flex-wrap: wrap;
@@ -241,8 +284,27 @@ export default {
     }
   }
 
-  .delete-all {
-    margin-top: 30px;
-    align-self: center;
+  .invisible {
+    display: none;
+  }
+
+  .icon-download {
+    justify-content: center;
+
+    @include media(">tablet") {
+      align-self: flex-start;
+    }
+  }
+
+  .general-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    @include media("<tablet") {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 10px;
+    }
   }
 </style>

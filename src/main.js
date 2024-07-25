@@ -110,7 +110,7 @@ export const usePlayerStore = defineStore('playerStore', {
             Object.fromEntries(Object.entries(state._current_game.polls)
                 .filter((poll) => poll[1].active === 0)
                 .sort(function(a, b) {
-                    return b[0] - a[0];
+                    return a[0] - b[0];
                 })) : [],
         past_polls: (state) => state._current_game.polls !== undefined ?
             Object.fromEntries(Object.entries(state._current_game.polls)

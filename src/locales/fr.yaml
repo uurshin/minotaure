@@ -46,8 +46,10 @@ please_wait: "Veuillez patienter"
 start_game: "Lancer la partie"
 warning_version: "Les parties marquées d'un <span class='danger'>*</span> ne sont pas compatibles avec votre version de Minotaure ({version}), elles pourraient ne pas fonctionner correctement."
 delete_all_games: "Supprimer toutes les parties"
-confirm_question: "Confirmer ?"
+confirm_question: "Confirmer\xa0?"
 clone: "Dupliquer"
+import_game: "Importer une partie"
+export: "Exporter"
 
 #Create
 game_name_invite: "Nom de votre partie. Vous pourrez le changer plus tard."

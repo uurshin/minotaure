@@ -307,11 +307,11 @@ export default {
                       <div class="modifiers-buttons" v-for="(object, key) in store.current_game[key_name + 's']">
                         <span class="modifier-label">{{ object.name }}</span>
                         <div>
-                          <button @mouseup="stopModifierChange()" @keyup.enter="modifierChange(this[key_name + '_modifier'], type, key, 1)" @mousedown="startModifierChange(this[key_name + '_modifier'], type, key, 1)">-</button>
+                          <button @mouseup="stopModifierChange()" @keyup.enter="modifierChange(this[key_name + '_modifier'], type, key, 1)" @mousedown.left="startModifierChange(this[key_name + '_modifier'], type, key, 1)">-</button>
                           <span class="modifier-value" :class="getModifierClass(this[key_name + '_modifier'][type][key])">
                             {{ this[key_name + '_modifier'][type][key] === undefined ? '0' : this[key_name + '_modifier'][type][key] }}
                           </span>
-                          <button @mouseup="stopModifierChange()" @keyup.enter="modifierChange(this[key_name + '_modifier'], type, key, -1)" @mousedown="startModifierChange(this[key_name + '_modifier'], type, key, -1)">+</button>
+                          <button @mouseup="stopModifierChange()" @keyup.enter="modifierChange(this[key_name + '_modifier'], type, key, -1)" @mousedown.left="startModifierChange(this[key_name + '_modifier'], type, key, -1)">+</button>
                         </div>
                       </div>
                     </template>
@@ -373,11 +373,11 @@ export default {
                       <div class="modifiers-buttons" v-for="(object, key) in store.current_game[key_name + 's']">
                         <span class="modifier-label">{{ object.name }}</span>
                         <div>
-                          <button @mouseup="stopModifierChange()" @keyup.enter="modifierChange(this[key_name + '_group_modifier'], type, key, 1)" @mousedown="startModifierChange(this[key_name + '_group_modifier'], type, key, 1)">-</button>
+                          <button @mouseup="stopModifierChange()" @keyup.enter="modifierChange(this[key_name + '_group_modifier'], type, key, 1)" @mousedown.left="startModifierChange(this[key_name + '_group_modifier'], type, key, 1)">-</button>
                           <span class="modifier-value" :class="getModifierClass(this[key_name + '_group_modifier'][type][key])">
                             {{ this[key_name + '_group_modifier'][type][key] === undefined ? '0' : this[key_name + '_group_modifier'][type][key] }}
                           </span>
-                          <button @mouseup="stopModifierChange()" @keyup.enter="modifierChange(this[key_name + '_group_modifier'], type, key, -1)" @mousedown="startModifierChange(this[key_name + '_group_modifier'], type, key, -1)">+</button>
+                          <button @mouseup="stopModifierChange()" @keyup.enter="modifierChange(this[key_name + '_group_modifier'], type, key, -1)" @mousedown.left="startModifierChange(this[key_name + '_group_modifier'], type, key, -1)">+</button>
                         </div>
                       </div>
                     </template>

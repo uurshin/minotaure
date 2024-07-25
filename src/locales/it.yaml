@@ -48,6 +48,8 @@ warning_version: "Il gioco contrassegnato con <span class='danger'>*</span> non 
 delete_all_games: "Elimina tutti i giochi"
 confirm_question: "Sei sicuro?"
 clone: "Clona"
+import_game: "Importa gioco"
+export: "Esporta"
 
 #Create
 game_name_invite: "Dai un nome al tuo gioco. Puoi cambiarlo in seguito."
