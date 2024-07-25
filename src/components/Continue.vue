@@ -141,11 +141,6 @@ export default {
         localStorage.setItem('games', JSON.stringify(this.games));
       }
       reader.readAsText(event.target.files[0]);
-      // const reader = new FileReader();
-      // reader.onload = e => console.log(e.target.result);
-      // reader.readAsText(file);
-
-      //
     }
   }
 }
@@ -159,6 +154,9 @@ export default {
       <input class="invisible" ref="file" @change="importGame" type="file">
       <button v-if="!ask_id" type="button" class="icon-download" @click="$refs.file.click()">{{ $t('import_game') }}</button>
       <button v-if="games.length > 1 && !ask_id" class="btn-danger delete-all" @click="deleteAllGames($event)">{{ $t('delete_all_games') }}</button>
+      <button v-if="games.length === 0 && !ask_id" class="btn-valid icon-add">
+        <router-link to="/create">{{ $t("game_create") }}</router-link>
+      </button>
     </div>
     <div class="game" v-for="(game, key) in games" v-if="!ask_id">
       <div class="title">
@@ -176,7 +174,6 @@ export default {
     </div>
     <div class="vertical-wrapper" v-if="!games.length">
       <span>{{ $t("any_game") }}</span>
-      <router-link to="/create">{{ $t("game_create") }}</router-link>
     </div>
     <div class="continue-game" v-if="ask_id">
       <button :disabled="id_admin === ''" class="btn-valid" @click="continueGame()">{{ id_admin === '' ? $t('please_wait') : $t('start_game') }}</button>
