@@ -20,6 +20,7 @@ button[class*=" icon-"],
   display: flex;
   align-content: center;
   gap: 10px;
+  align-items: center;
 }
 
 .icon-add:before {
@@ -110,6 +111,10 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 
+  a {
+    color: var(--button-color);
+    font-weight: normal;
+  }
   &:disabled {
     color: darkgrey;
   }
