@@ -65,7 +65,7 @@ If you access a game where you already have a character, it will be automaticall
 
 === Where can I find a game?
 
-[link=https://discord.gg/zQBTAXE8]
+[link=https://discord.gg/Ty6UbCXEah]
 image::https://discordapp.com/api/guilds/828320530444451880/widget.png?style=banner2[Discord Banner 1]
 
 == Contributing to development
