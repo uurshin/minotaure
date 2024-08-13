@@ -68,7 +68,7 @@ Si vous accédez à une partie où vous possédez déjà un personnage, il vous 
 
 === Où trouver des parties ?
 
-[link=https://discord.gg/zQBTAXE8]
+[link=https://discord.gg/Ty6UbCXEah]
 image::https://discordapp.com/api/guilds/828320530444451880/widget.png?style=banner2[Discord Banner 1]
 
 == Contribuer au développement
