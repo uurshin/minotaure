@@ -32448,6 +32448,7 @@ var _sfc_main$6 = {
 		startModifierChange(object, type, key, value) {
 			const vm = this;
 			vm.modifierChange(object, type, key, value);
+			clearInterval(this.modifier_interval);
 			this.modifier_interval = setInterval(function() {
 				vm.modifier_interval_step += 1;
 				vm.modifierChange(object, type, key, value * Math.floor(vm.modifier_interval_step / 10 + 1));
@@ -32740,13 +32741,15 @@ function _sfc_render$5(_ctx, _cache, $props, $setup, $data, $options) {
 						return openBlock(), createElementBlock(Fragment, null, [(openBlock(true), createElementBlock(Fragment, null, renderList($data.store.current_game[key_name + "s"], (object, key) => {
 							return openBlock(), createElementBlock("div", _hoisted_22$2, [createBaseVNode("span", _hoisted_23$2, toDisplayString$1(object.name), 1), createBaseVNode("div", null, [
 								createBaseVNode("button", {
-									onMouseup: _cache[8] || (_cache[8] = ($event) => $options.stopModifierChange()),
+									onMouseout: _cache[8] || (_cache[8] = ($event) => $options.stopModifierChange()),
+									onMouseup: _cache[9] || (_cache[9] = ($event) => $options.stopModifierChange()),
 									onKeyup: withKeys(($event) => $options.modifierChange(this[key_name + "_modifier"], type, key, 1), ["enter"]),
 									onMousedown: withModifiers(($event) => $options.startModifierChange(this[key_name + "_modifier"], type, key, 1), ["left"])
 								}, "-", 40, _hoisted_24$1),
 								createBaseVNode("span", { class: normalizeClass(["modifier-value", $options.getModifierClass(this[key_name + "_modifier"][type][key])]) }, toDisplayString$1(this[key_name + "_modifier"][type][key] === void 0 ? "0" : this[key_name + "_modifier"][type][key]), 3),
 								createBaseVNode("button", {
-									onMouseup: _cache[9] || (_cache[9] = ($event) => $options.stopModifierChange()),
+									onMouseout: _cache[10] || (_cache[10] = ($event) => $options.stopModifierChange()),
+									onMouseup: _cache[11] || (_cache[11] = ($event) => $options.stopModifierChange()),
 									onKeyup: withKeys(($event) => $options.modifierChange(this[key_name + "_modifier"], type, key, -1), ["enter"]),
 									onMousedown: withModifiers(($event) => $options.startModifierChange(this[key_name + "_modifier"], type, key, -1), ["left"])
 								}, "+", 40, _hoisted_25$1)
@@ -32818,13 +32821,15 @@ function _sfc_render$5(_ctx, _cache, $props, $setup, $data, $options) {
 						return openBlock(), createElementBlock(Fragment, null, [(openBlock(true), createElementBlock(Fragment, null, renderList($data.store.current_game[key_name + "s"], (object, key) => {
 							return openBlock(), createElementBlock("div", _hoisted_36$1, [createBaseVNode("span", _hoisted_37$1, toDisplayString$1(object.name), 1), createBaseVNode("div", null, [
 								createBaseVNode("button", {
-									onMouseup: _cache[10] || (_cache[10] = ($event) => $options.stopModifierChange()),
+									onMouseout: _cache[12] || (_cache[12] = ($event) => $options.stopModifierChange()),
+									onMouseup: _cache[13] || (_cache[13] = ($event) => $options.stopModifierChange()),
 									onKeyup: withKeys(($event) => $options.modifierChange(this[key_name + "_group_modifier"], type, key, 1), ["enter"]),
 									onMousedown: withModifiers(($event) => $options.startModifierChange(this[key_name + "_group_modifier"], type, key, 1), ["left"])
 								}, "-", 40, _hoisted_38$1),
 								createBaseVNode("span", { class: normalizeClass(["modifier-value", $options.getModifierClass(this[key_name + "_group_modifier"][type][key])]) }, toDisplayString$1(this[key_name + "_group_modifier"][type][key] === void 0 ? "0" : this[key_name + "_group_modifier"][type][key]), 3),
 								createBaseVNode("button", {
-									onMouseup: _cache[11] || (_cache[11] = ($event) => $options.stopModifierChange()),
+									onMouseout: _cache[14] || (_cache[14] = ($event) => $options.stopModifierChange()),
+									onMouseup: _cache[15] || (_cache[15] = ($event) => $options.stopModifierChange()),
 									onKeyup: withKeys(($event) => $options.modifierChange(this[key_name + "_group_modifier"], type, key, -1), ["enter"]),
 									onMousedown: withModifiers(($event) => $options.startModifierChange(this[key_name + "_group_modifier"], type, key, -1), ["left"])
 								}, "+", 40, _hoisted_39$1)
@@ -32941,13 +32946,13 @@ function _sfc_render$5(_ctx, _cache, $props, $setup, $data, $options) {
 			createBaseVNode("button", {
 				class: "btn-valid",
 				disabled: $data.chosen_stat === "",
-				onClick: _cache[12] || (_cache[12] = ($event) => $options.startChallenge())
+				onClick: _cache[16] || (_cache[16] = ($event) => $options.startChallenge())
 			}, toDisplayString$1(_ctx.$t("start_challenge")), 9, _hoisted_58)
 		])
 	])) : (openBlock(), createElementBlock("div", _hoisted_59, [createBaseVNode("div", null, toDisplayString$1(_ctx.$t("need_challenge_end")), 1), this.store.last_challenge.result === void 0 ? (openBlock(), createElementBlock("div", _hoisted_60, toDisplayString$1(_ctx.$t("challenged_end_in", { timer: this.store.last_challenge.timer })), 1)) : (openBlock(), createElementBlock("button", {
 		key: 1,
 		class: "btn-valid btn-finish-challenge",
-		onClick: _cache[13] || (_cache[13] = ($event) => this.store.finishChallenge())
+		onClick: _cache[17] || (_cache[17] = ($event) => this.store.finishChallenge())
 	}, toDisplayString$1(_ctx.$t("finish_challenge")), 1))]))], 512)) : createCommentVNode("", true)], 512);
 }
 var AdminTabChallenge_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$6, [["render", _sfc_render$5]]);
