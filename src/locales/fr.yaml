@@ -1,364 +1,293 @@
-game_create: 'Créer une partie'
-game_manage: 'Gérer vos parties'
-game_join: 'Rejoindre une partie'
-character_manage: 'Gérer vos personnages'
-read_more: "En savoir plus"
-character_help: "Vos personnages sont conservés dans votre navigateur, ce qui permet de les retrouver lors d'une connexion à une partie rejointe auparavant. Vous pouvez jouer sur un autre navigateur en exportant vos personnages."
-character_nb: "Vous n'avez aucun personnage à exporter | Vous avez un personnage à exporter | Vous avez { count } personnages à exporter"
-version: "Version : {version}"
-
-#Admin
-characters: "Personnages"
-bars: "Jauges"
-polls: "Sondages"
-markers: "Marqueurs"
-challenge: "Épreuve"
-stats: "Caractéristiques"
-settings: "Paramètres"
-tags: "Tags"
-draw: "Tirage"
-help: "Aide"
-start: "Démarrer"
-invite_to_play: "Inviter à jouer"
-invite_link_copied: "Lien d'invitation copié !"
-game_id_copied: "Identifiant de partie copié !"
-strength: "Physique"
-mind: "Mental"
-health: "Vie"
-will: "Volonté"
-game_rename: "Renommer la partie"
-selected: "Sélectionnés"
-share_invite_id: "Copier l'identifiant de partie"
-share_invite_link: "Copier le lien d'invitation"
-qr_code_download: "Télécharger un QR code pour l'intégrer ensuite à votre overlay."
-copy: "Copier"
-download: "Télécharger"
-
-#Continue
-continue_game: "Continuer - {name}"
-count_personnage: "1 personnage | {count} personnages"
-continue: "Continuer"
-see_more: "Voir plus"
-any_game: "Vous n'avez créé aucune partie."
-cancel: "Annuler"
-waiting_name: "En attente de votre nom de partie"
-please_wait: "Veuillez patienter"
-start_game: "Lancer la partie"
-warning_version: "Les parties marquées d'un <span class='danger'>*</span> ne sont pas compatibles avec votre version de Minotaure ({version}), elles pourraient ne pas fonctionner correctement."
-delete_all_games: "Supprimer toutes les parties"
-confirm_question: "Confirmer\xa0?"
-clone: "Dupliquer"
-import_game: "Importer une partie"
-export: "Exporter"
-
-#Create
-game_name_invite: "Nom de votre partie. Vous pourrez le changer plus tard."
-my_game: "Ma partie"
-game_id_help: "Cet identifiant sera inclus dans votre lien d'invitation. Vous pouvez choisir le vôtre."
-
-#AdminTabPoll
-add_poll: "Ajouter un sondage"
-active_polls: "Voir les sondages actifs"
-past_polls: "Voir les sondages passés"
-question: "Question"
-question_label: "Question : "
-possible_choices: "Choix possibles"
-add_poll_choice: "Ajouter un choix"
-start_poll: "Lancer le sondage"
-show_poll_results: "Montrer les résultats"
-close_poll: "Terminer le sondage"
-nb_choice: "Choix {nb}"
-nb_choice_label: "Choix {nb} : "
-choice_gives_tag: "Ce choix donnera les tags suivant"
-turnout: "Participation : "
-other_tags: "Divers"
-choose_name_draft: "Vous pouvez choisir un nom pour votre brouillon"
-save_draft_poll: "Enregistrer comme brouillon"
-drafted_polls: "Voir les brouillons"
-load_poll: "Charger le sondage"
-show_poll_details: "Voir les détails"
-see_less: "Voir moins"
-
-#AdminTabIntro
-minotaure_welcome: "Bienvenue dans Minotaure"
-tutorial_help_1: "Vous pouvez démarrer le didacticiel à tout moment en cliquant sur le bouton <strong class='icon-question'>Aide</strong> (le didacticiel complet sera disponible dans une version future)."
-tutorial_help_2: "Avant de démarrer votre partie, vous pouvez modifier les <strong>paramètres</strong> et les <strong>tags</strong> dans les onglets correspondants."
-tutorial_help_3: "Vous pouvez dès maintenant inviter vos joueurs dans la partie en cliquant sur le bouton <strong class='icon-email'>Invitation à jouer</strong>."
-tutorial_help_4: "Tant que vous n'aurez pas cliqué sur <strong class='icon-play'>Démarrer</strong> ils seront en salle d'attente."
-
-#AdminTour
-next: "Suivant"
-end_tour: "Terminer la visite"
-end_tab_tour: "Terminer la visite de cet onglet"
-step_help: "Souhaitez-vous suivre la visite complète ou obtenir uniquement l'aide pour cet onglet ?"
-see_all_tutorial: "Visite complète"
-see_page_tutorial: "Visite de cet onglet"
-step_game_name: "Vous pouvez changer le nom de la partie à tout moment."
-step_invite: "En cliquant sur ce bouton un lien d'invitation sera copié et vous permettra d'inviter à rejoindre à votre partie."
-step_start: "Tant que vous ne cliquez pas sur ce bouton, vos invités patienteront sur un écran d'attente."
-tab_label_settings: "Les paramètres sont les réglages de la partie que nous vous conseillons de modifier avant son démarrage, mais que vous pourrez toujours changer en cours de partie."
-step_settings_gauges:
-  "Les jauges sont des réserves de points pour chaque personnage. Quand vous créez une partie, deux jauges sont créées par défaut : vie et volonté."
-step_settings_add_gauge: "Vous pouvez ajouter autant de jauge que vous le souhaitez."
-step_settings_gauge_name: "Vous pouvez changer le nom d'une jauge à tout moment."
-step_settings_gauge_value: "Ce nombre détermine la valeur de base d'une jauge pour un personnage à sa création."
-step_settings_gauge_spending:
-  "Cochez la case des caractéristiques pour lesquelles vous souhaitez permettre aux joueurs de dépenser des points de jauge pour diminuer la difficulté des épreuves correspondantes 
-  (vous pouvez ensuite choisir la valeur de réduction de la difficulté par point dépensé)."
-step_settings_gauge_cancel: "Vous n'êtes pas obligé de valider vos modifications, vous pouvez valider ou annuler tous les changements."
-step_settings_gauge:
-  "Tous les personnages possèdent ces jauges à leur création, avec un nombre de points de départ que 
-  vous pouvez modifier."
-step_settings_gauge_delete:
-  "Vous pouvez supprimer une jauge à tout moment."
-step_settings_gauge_make_deadly:
-  "Vous pouvez faire en sorte que le passage d'une jauge à un score de 0 entraine la mort d'un personnage en cliquant 
-  sur ce bouton (cette action est réversible mais les personnages déjà morts ne seront pas ressuscités pour autant !)."
-step_settings_gauge_max:
-  "Vous pouvez indiquer un maximum optionnel qui ne pourra être dépassé par les personnages pour cette jauge."
-step_settings_stats:
-  "Les caractéristiques fonctionnent de la même façon que dans la plupart des jeux de rôle. 
-  Quand vous créez une partie, deux caractéristiques sont créées : physique et mental."
-step_settings_add_stat: "Vous pouvez ajouter autant de caractéristiques que vous le souhaitez."
-step_settings_stat:
-  "Tous les personnages possèdent ces caractéristiques à leur création, avec un nombre de points de départ de 10 + un nombre aléatoire entre -9 et +9. <br>
-  Le total des caractéristiques d'un personnage à sa création est toujours de 10 x le nombre de caractéristiques, pour garantir le même total de points à tous les participants."
-step_settings_stat_delete:
-  "Vous pouvez supprimer une caractéristique à tout moment."
-step_settings_markers:
-  "Les marqueurs sont des compteurs globaux pour la partie.
-  Leur valeur peut être modifiée depuis cet écran mais également augmentée ou diminuée automatiquement suite à une réussite ou un échec du groupe lors d'une épreuve."
-step_settings_settings:
-  "Vous pouvez ajuster certains réglages de la partie."
-step_settings_challenge_timer:
-  "Réglez le temps accordé aux joueurs pour faire des choix et lancer leur dé après le démarrage d'une épreuve."
-step_settings_disconnected_prevent: "Vous pouvez choisir que les personnages déconnectés ne soient jamais pris en compte lors des épreuves et tirages que vous lancez."
-step_settings_npc_prevent: "Vous pouvez également choisir que les personnages non-joueurs (que vous pouvez créer dans l'onglet Personnages) ne soient jamais pris en compte lors des épreuves et tirages que vous lancez."
-tab_label_tags:
-  "Les tags sont des étiquettes attribuées aux personnages et font la grande force de Minotaure.<br>"
-step_tags:
-  "Chaque tag fait partie d'un groupe de tag, qui peut être nommé (exemple: métiers, genre, peuple, avantages, défauts, etc.).
-  Un tag peut servir comme une classe de personnage, mais est suffisamment polyvalent pour permettre d'autres utilisations."
-step_tags_group_add:
-  "Vous pouvez ajouter autant de groupes de tags que vous le souhaitez"
-step_tags_group:
-  "Commencez à taper du texte et validez pour créer un tag. Une couleur lui sera associée."
-step_tags_group_distribution:
-  "Pour chaque groupe de tags, vous pouvez choisir un mode de répartition des tags :
-  <ul>
-  <li>- choisis par le joueur à la création du personnage</li>
-  <li>- attribués aléatoirement</li>
-  <li>- attribués équitablement (le système choisira parmi les tags les moins attribués pour équilibrer les tags distribués)</li>
-  <li>- non attribués à la création (vous vous en servirez autrement qu'à la création)</li>
-  </ul>"
-step_tags_group_distribute:
-  "Cliquez ici pour distribuer un tag de ce groupe à tous les personnages qui n'en ont pas déjà un. Utile si vous avez créé le groupe en cours de partie."
-step_tags_group_shuffle:
-  "Cliquez ici pour distribuer un tag de ce groupe à tous les personnages qui en ont déjà un. Le nouveau tag remplacera l'ancien. Utile si vous n'êtes pas satisfait de la répartition actuelle."
-step_tags_group_rename:
-  "Vous pouvez renommer à tout moment un groupe de tag."
-step_tags_tag:
-  "Chaque tag peut influer sur les jauges et les caractéristiques d'un personnage à sa création. En cliquant sur un tag, vous pouvez:
-    <ul>
-    <li>- lui associer une <strong>caractéristique principale</strong>. Si un personnage obtient ce tag à la création, ce sera automatiquement sa plus forte caractéristique. Exemple: un tag \"magicien\" pourrait avoir la caractéristique principale \"Magie\".</li>
-    <li>- lui associer une <strong>caractéristique secondaire</strong>. Si un personnage obtient ce tag à la création, ce sera automatiquement sa deuxième plus forte caractéristique.</li>
-    <li>- lui associer des <strong>bonus</strong> et des <strong>malus</strong> qui viennent modifier le tirage des caractéristiques de départ, ou la valeur de départ de certaines jauges.</li>
-    <li>- augmenter ou diminuer sa <strong>probabilité</strong> d'attribution aléatoire.</li>
-    <li>- changer sa <strong>couleur</strong></li>
-    </ul>"
-example: 'exemple'
-step_tags_group_delete:
-  "Vous pouvez supprimer un groupe de tags à tout moment. Cela supprimera les tags correspondants pour les personnages."
-tab_label_characters:
-  "C'est l'onglet que vous montrerez le plus pendant la partie : il présente l'ensemble des personnages créés et résume ses propriétés (nom du personnage, pseudo du joueur, jauges, caractéristiques, tags, etc.). Vous pouvez y rechercher les personnages selon de nombreux critères."
-tab_label_poll:
-  "Vous pouvez déclencher un sondage qui vous permettra de savoir dans quel sens faire évoluer la partie. Vous pouvez également ajouter des tags aux personnages en fonction des choix de chaque joueur au sondage."
-tab_label_challenge:
-  "Vous pouvez déclencher l'équivalent de jets de dés qui entraîneront pour chaque personnage concerné des conséquences selon sa réussite ou son échec."
-tab_label_pick:
-  "Les tirages au sort vous permettent de sélectionner un nombre de personnages de votre choix au hasard parmi tout ou partie de la population. Vous pouvez également appliquer des conséquences aux personnages tirés au sort."
-
-#AdminTabSettings
-add: "Ajouter"
-gauge_start: "Démarre à {gauge_value}"
-kills_at_0: "Tue à 0"
-maximum: "Maximum à {max}"
-submit: "Valider"
-modify: "Modifier"
-delete: "Supprimer"
-name: "Nom"
-starts_at: "Démarre à"
-used_for_challenges: "Utilisé pour les épreuves de :"
-rename: "Renommer"
-challenge_timer: "secondes d'attente avant la fin d'une épreuve"
-disconnected_prevent: "Empêcher les déconnectés de participer aux épreuves et tirages"
-npc_prevent: "Empêcher les personnages non-joueur de participer aux épreuves et tirages"
-spend_on: "Les joueurs peuvent dépenser ces points pour faciliter les épreuves de"
-gauge_deadly_description: "Les personnages meurent si cette jauge arrive à 0"
-spending_diminish: " : 1 point dépensé diminue la difficulté de "
-
-#AdminTabChallenge
-dif_cake: "Trivial"
-dif_ext_easy: "Aisé"
-dif_very_easy: "Facile"
-dif_easy: "Assez facile"
-dif_moderate: "Modéré"
-dif_hard: "Assez difficile"
-dif_very_hard: "Difficile"
-dif_extreme: "Ardu"
-dif_impossible: "Cauchemardesque"
-added_tag: "tag ajouté : {tag_label}"
-removed_tag: "tag enlevé : {tag_label}"
-must_first: "Vous devez d'abord "
-add_stat: "créer une caractéristique"
-tested_stat: "Caractéristique à tester"
-choose_stat: "Choisissez une caractéristique"
-difficulty: "Difficulté : "
-targets: "Cibles"
-add_target: "Ajouter une cible"
-everyone: "Tout le monde"
-positive_csq: "Conséquences de réussite"
-negative_csq: "Conséquences d'échec"
-add_tags: "Ajouter les tags"
-add_tag: "Ajouter un tag"
-input_word: "Tapez un mot"
-no_tag_create: "Aucun autre tag, inventez-en un !"
-remove_tag: "Retirer les tags"
-this_will_test: "Vous allez déclencher une épreuve de "
-for_everyone: "Pour tout le monde"
-for_every: "Pour chaque : "
-challenge_characters: "Les personnages "
-that_pass: "réussissant"
-that_fail: "échouant"
-will_have: " obtiendront : "
-get_following_tags: "Ces tags en plus : "
-lose_following_tags: "Ces tags en moins : "
-start_challenge: "Lancer l'épreuve !"
-group_consequences_summary_failure: "Si moins de {rate}% de personnages réussissent, tous les personnages obtiendront :"
-group_consequences_summary_success: "Si plus de {rate}% de personnages réussissent, tous les personnages obtiendront :"
-success_threshold: "Seuil de succès du groupe"
-remove_neutral_zone: "Retirer la zone sans effet"
-add_neutral_zone: "Ajouter une zone sans effet"
-individual_consequences_description: "Chaque personnage lancera un dé, auquel sera ajoutée la difficulté, et devra faire moins que la caractéristique testée."
-group_consequences_description: "Chaque personnage subira les conséquences selon le pourcentage de réussite du groupe."
-consequences_per_character: "Conséquences par personnage"
-consequences_for_group: "Conséquences pour le groupe"
-global_marker: "(partagé pour tout le monde)"
-please_select_stat: "Sélectionnez une caractéristique pour lancer l'épreuve"
-
-#AdminTabCharacters
-context_add_selection_character: "Ajouter à la sélection (maj + clic gauche)"
-context_remove_selection_character: "Retirer de la sélection (maj + clic gauche)"
-context_delete_character: "Supprimer le personnage"
-context_edit_character: "Modifier le personnage"
-last_challenge_success_rate: "La dernière épreuve a connu un pourcentage de réussite de "
-select_tag: "Choisir un tag"
-alive: "Vivants"
-connected: "Connectés"
-passed: "Réussites"
-failed: "Échecs"
-show_all_characters: "Montrer tout"
-spawn_npc: "Générer un PNJ"
-character_count: "0 personnage | 1 personnage | {count} personnages"
-no_characters_to_show_try_different_filter: "Aucun personnage ne correspond à ces filtres"
-search_character: "Rechercher un personnage"
-start_typing: "Commencez à taper"
-clear_selection: "Effacer la sélection"
-char_picked: "Sélectionnés"
-add_all_to_selection: "Tout ajouter à la sélection"
-add_to_selected: "Ajouter aux sélectionnés"
-remove_from_selected: "Retirer aux sélectionnés"
-filter_list: "Filtrer la liste"
-tag_untag: "Taguer / Détagger"
-challenged_end_in: "Fin de l'épreuve dans {timer}s"
-finish_challenge: "Terminer l'épreuve"
-need_challenge_end: "Vous devez terminer l'épreuve en cours pour en démarrer une nouvelle."
-challenge_scale_label: "{scale}% = réussite"
-challenge_scale_label_neutral: "{scale}% = sans effet"
-challenge_result_success: "Réussite du groupe !"
-challenge_result_neutral: "Ni échec, ni réussite du groupe..."
-challenge_result_failure: "Échec du groupe !"
-non_player: "Non-joueur"
-
-#AdminTabTags
-group_nb: "Groupe {nb}"
-bonus_gauge: "Augmenter la jauge {name}"
-malus_gauge: "Diminuer la jauge {name}"
-bonus_stat: "Augmenter la caractéristique {name}"
-malus_stat: "Diminuer la caractéristique {name}"
-linkStatToTag: "Associer à {statname} comme carac principale"
-unlinkStatToTag: "Ne plus associer à {statname} comme carac principale"
-link2StatToTag: "Associer à {statname} comme carac secondaire"
-unlink2StatToTag: "Ne plus associer à {statname} comme carac secondaire"
-change_tag_color: "Changer la couleur"
-add_groug_of_tag: "Ajouter un groupe de tags"
-distribution_mode: "Règle d'attribution : "
-randomly_distributed_at_creation: "Répartis aléatoirement à la création"
-equitably_distributed_at_creation: "Répartis équitablement à la création"
-chosen_at_char_creation: "A choisir à la création du personnage"
-not_autodistributed: "Pas de règle"
-distribute: "Distribuer"
-shuffle: "Mélanger"
-shuffle_help: "Pour chaque personnage ayant déjà un tag de ce groupe, un tag du groupe lui sera attribué au hasard à la place"
-main_stat: " Carac principale : "
-secondary_stat: " Carac secondaire : "
-tags_submit: "Terminer"
-a_tag_will_be_assigned_to_char: "Pour chaque personnage n'ayant pas encore de tag de ce groupe, un tag lui sera attribué au hasard"
-delete_groupe_tags_and_remove_from_chars: "Tous les tags de ce groupe seront supprimés, et retirés des personnages"
-increase_probability: "Augmenter la probabilité"
-decrease_probability: "Diminuer la probabilité"
-tag_probability: "1 chance sur {total} | {count} chances sur {total}"
-
-#Characters
-count_char_import: "1 personnage importé | {count} personnages importés"
-invalid_qr_code: "QR code invalide"
-export_char: "Exporter vos personnages"
-import_char: "Importer vos personnages"
-delete_all_chars: "Supprimer tous vos personnages"
-
-#AdminTabPick
-admin_pick_one: "parmi les personnages ayant un de ces tags :"
-admin_pick_all: "parmi les personnages ayant tous ces tags :"
-admin_pick_none: "parmi les personnages n'ayant aucun de ces tags :"
-admin_pick_each: "personnages par tag :"
-admin_pick_launch: "Lancer le tirage"
-future_feature: "future fonctionnalité"
-admin_pick_add_csq: "Conséquences supplémentaires du tirage"
-
-#Join
-game_id: "ID de la partie"
-waiting: "En attente"
-join: "Rejoindre"
-
-#Main
-back_to_home: "Retourner à l'accueil"
-
-#Player
-waiting_for_game_start: "En attente du démarrage de la partie"
-char_name: "Nom de votre personnage"
-user_name: "Votre pseudo (optionnel)"
-your_char: "Votre personnage est "
-submit_your_char: "Valider votre personnage"
-send_answer: "Envoyer mon choix"
-is_dead: "{charname} est mort"
-poll_pending: "Sondage {pollnb} en attente"
-create_new_char: "Créer un nouveau personnage"
-roll: "Lancer"
-temporary_disconnected: "Déconnexion temporaire"
-challenge_success: "Vous avez réussi une épreuve de {stat}."
-challenge_failure: "Vous avez raté une épreuve de {stat}."
-result_bonus: "Vous gagnez {points} points de {name}."
-result_malus: "Vous perdez {points} points de {name}."
-result_group_success: "L'épreuve a été réussie par le groupe"
-result_group_neutral: "L'épreuve est sans effet pour le groupe"
-result_group_failure: "L'épreuve a été ratée par le groupe"
-challenge_in_progress: "Épreuve de {label} en cours"
-challenge_done: "Épreuve de {label} terminée"
-difficulty_threshold: "Vous devez faire {difficulty} ou moins pour réussir"
-difficulty_threshold_past: "Vous deviez faire {difficulty} ou moins pour réussir"
-challenge_ends_in: "L'épreuve se termine dans {timer}s"
-poll_in_progress: "Sondage en cours"
-gauge_spending_description: "Diminuez la difficulté en dépensant un points de jauge"
-gauge_spending_button_text: "-{modifier} pour -1 {label} ({current} restants)"
-marker_result_bonus: "Le groupe gagne {points} de {name}"
-marker_result_malus: "Le groupe perd {points} de {name}"
+a_tag_will_be_assigned_to_char: Pour chaque personnage n'ayant pas encore de tag de ce groupe, un tag lui sera attribué au hasard
+active_polls: Voir les sondages actifs
+add: Ajouter
+add_all_to_selection: Tout ajouter à la sélection
+add_groug_of_tag: Ajouter un groupe de tags
+add_neutral_zone: Ajouter une zone sans effet
+add_poll: Ajouter un sondage
+add_poll_choice: Ajouter un choix
+add_stat: créer une caractéristique
+add_tag: Ajouter un tag
+add_tags: Ajouter les tags
+add_target: Ajouter une cible
+add_to_selected: Ajouter aux sélectionnés
+added_tag: 'tag ajouté : {tag_label}'
+admin_pick_add_csq: Conséquences supplémentaires du tirage
+admin_pick_all: 'parmi les personnages ayant tous ces tags :'
+admin_pick_each: 'personnages par tag :'
+admin_pick_launch: Lancer le tirage
+admin_pick_none: 'parmi les personnages n''ayant aucun de ces tags :'
+admin_pick_one: 'parmi les personnages ayant un de ces tags :'
+alive: Vivants
+any_game: Vous n'avez créé aucune partie.
+back_to_home: Retourner à l'accueil
+bars: Jauges
+bonus_gauge: Augmenter la jauge {name}
+bonus_stat: Augmenter la caractéristique {name}
+cancel: Annuler
+challenge: Épreuve
+challenge_characters: 'Les personnages '
+challenge_done: Épreuve de {label} terminée
+challenge_ends_in: L'épreuve se termine dans {timer}s
+challenge_failure: Vous avez raté une épreuve de {stat}.
+challenge_in_progress: Épreuve de {label} en cours
+challenge_result_failure: Échec du groupe !
+challenge_result_neutral: Ni échec, ni réussite du groupe...
+challenge_result_success: Réussite du groupe !
+challenge_scale_label: '{scale}% = réussite'
+challenge_scale_label_neutral: '{scale}% = sans effet'
+challenge_success: Vous avez réussi une épreuve de {stat}.
+challenge_timer: secondes d'attente avant la fin d'une épreuve
+challenged_end_in: Fin de l'épreuve dans {timer}s
+change_tag_color: Changer la couleur
+char_name: Nom de votre personnage
+char_picked: Sélectionnés
+character_count: 0 personnage | 1 personnage | {count} personnages
+character_help: Vos personnages sont conservés dans votre navigateur, ce qui permet de les retrouver lors d'une connexion à une partie rejointe auparavant. Vous pouvez jouer sur un autre navigateur en exportant vos personnages.
+character_manage: Gérer vos personnages
+character_nb: Vous n'avez aucun personnage à exporter | Vous avez un personnage à exporter | Vous avez { count } personnages à exporter
+characters: Personnages
+choice_gives_tag: Ce choix donnera les tags suivant
+choose_name_draft: Vous pouvez choisir un nom pour votre brouillon
+choose_stat: Choisissez une caractéristique
+chosen_at_char_creation: A choisir à la création du personnage
+clear_selection: Effacer la sélection
+clone: Dupliquer
+close_poll: Terminer le sondage
+confirm_question: Confirmer ?
+connected: Connectés
+consequences_for_group: Conséquences pour le groupe
+consequences_per_character: Conséquences par personnage
+context_add_selection_character: Ajouter à la sélection (maj + clic gauche)
+context_delete_character: Supprimer le personnage
+context_edit_character: Modifier le personnage
+context_remove_selection_character: Retirer de la sélection (maj + clic gauche)
+continue: Continuer
+continue_game: Continuer - {name}
+copy: Copier
+count_char_import: 1 personnage importé | {count} personnages importés
+count_personnage: 1 personnage | {count} personnages
+create_new_char: Créer un nouveau personnage
+decrease_probability: Diminuer la probabilité
+delete: Supprimer
+delete_all_chars: Supprimer tous vos personnages
+delete_all_games: Supprimer toutes les parties
+delete_groupe_tags_and_remove_from_chars: Tous les tags de ce groupe seront supprimés, et retirés des personnages
+dif_cake: Trivial
+dif_easy: Assez facile
+dif_ext_easy: Aisé
+dif_extreme: Ardu
+dif_hard: Assez difficile
+dif_impossible: Cauchemardesque
+dif_moderate: Modéré
+dif_very_easy: Facile
+dif_very_hard: Difficile
+difficulty: 'Difficulté : '
+difficulty_threshold: Vous devez faire plus de {difficulty} pour réussir
+difficulty_threshold_20: Vous devez faire 20 pour réussir
+difficulty_threshold_20_past: Vous deviez faire 20 pour réussir
+difficulty_threshold_past: Vous deviez faire plus de {difficulty} pour réussir
+disconnected_prevent: Empêcher les déconnectés de participer aux épreuves et tirages
+distribute: Distribuer
+distribution_mode: 'Règle d''attribution : '
+download: Télécharger
+drafted_polls: Voir les brouillons
+draw: Tirage
+end_tab_tour: Terminer la visite de cet onglet
+end_tour: Terminer la visite
+equitably_distributed_at_creation: Répartis équitablement à la création
+everyone: Tout le monde
+example: exemple
+export: Exporter
+export_char: Exporter vos personnages
+failed: Échecs
+filter_list: Filtrer la liste
+finish_challenge: Terminer l'épreuve
+for_every: 'Pour chaque : '
+for_everyone: Pour tout le monde
+future_feature: future fonctionnalité
+game_create: Créer une partie
+game_id: ID de la partie
+game_id_copied: Identifiant de partie copié !
+game_id_help: Cet identifiant sera inclus dans votre lien d'invitation. Vous pouvez choisir le vôtre.
+game_join: Rejoindre une partie
+game_manage: Gérer vos parties
+game_name_invite: Nom de votre partie. Vous pourrez le changer plus tard.
+game_rename: Renommer la partie
+gauge_deadly_description: Les personnages meurent si cette jauge arrive à 0
+gauge_spending_button_details: 1 clic pour passer à {goal} | {count} clics pour passer à {goal}
+gauge_spending_button_text: '{label} ({current} restants) | {label} ({current} restant)'
+gauge_spending_description: Diminuez la difficulté en dépensant un point de jauge
+gauge_start: Démarre à {gauge_value}
+get_following_tags: 'Ces tags en plus : '
+global_marker: (partagé pour tout le monde)
+group_consequences_description: Chaque personnage subira les conséquences selon le pourcentage de réussite du groupe.
+group_consequences_summary_failure: 'Si moins de {rate}% de personnages réussissent, tous les personnages obtiendront :'
+group_consequences_summary_success: 'Si plus de {rate}% de personnages réussissent, tous les personnages obtiendront :'
+group_nb: Groupe {nb}
+health: Vie
+help: Aide
+import_char: Importer vos personnages
+import_game: Importer une partie
+increase_probability: Augmenter la probabilité
+individual_consequences_description: Chaque personnage lancera un dé, auquel sera ajoutée la difficulté, et devra faire moins que la caractéristique testée.
+input_word: Tapez un mot
+invalid_qr_code: QR code invalide
+invite_link_copied: Lien d'invitation copié !
+invite_to_play: Inviter à jouer
+is_dead: '{charname} est mort'
+join: Rejoindre
+kills_at_0: Tue à 0
+last_challenge_success_rate: 'La dernière épreuve a connu un pourcentage de réussite de '
+link2StatToTag: Associer à {statname} comme carac secondaire
+linkStatToTag: Associer à {statname} comme carac principale
+load_poll: Charger le sondage
+lose_following_tags: 'Ces tags en moins : '
+main_stat: ' Carac principale : '
+malus_gauge: Diminuer la jauge {name}
+malus_stat: Diminuer la caractéristique {name}
+marker_result_bonus: Le groupe gagne {points} de {name}
+marker_result_malus: Le groupe perd {points} de {name}
+markers: Marqueurs
+maximum: Maximum à {max}
+mind: Mental
+minotaure_welcome: Bienvenue dans Minotaure
+modify: Modifier
+must_first: 'Vous devez d''abord '
+my_game: Ma partie
+name: Nom
+nb_choice: Choix {nb}
+nb_choice_label: 'Choix {nb} : '
+need_challenge_end: Vous devez terminer l'épreuve en cours pour en démarrer une nouvelle.
+negative_csq: Conséquences d'échec
+next: Suivant
+no_characters_to_show_try_different_filter: Aucun personnage ne correspond à ces filtres
+no_tag_create: Aucun autre tag, inventez-en un !
+non_player: Non-joueur
+not_autodistributed: Pas de règle
+npc_prevent: Empêcher les personnages non-joueur de participer aux épreuves et tirages
+other_tags: Divers
+passed: Réussites
+past_polls: Voir les sondages passés
+please_select_stat: Sélectionnez une caractéristique pour lancer l'épreuve
+please_wait: Veuillez patienter
+poll_in_progress: Sondage en cours
+poll_pending: Sondage {pollnb} en attente
+polls: Sondages
+positive_csq: Conséquences de réussite
+possible_choices: Choix possibles
+qr_code_download: Télécharger un QR code pour l'intégrer ensuite à votre overlay.
+question: Question
+question_label: 'Question : '
+randomly_distributed_at_creation: Répartis aléatoirement à la création
+read_more: En savoir plus
+remove_from_selected: Retirer aux sélectionnés
+remove_neutral_zone: Retirer la zone sans effet
+remove_tag: Retirer les tags
+removed_tag: 'tag enlevé : {tag_label}'
+rename: Renommer
+result_bonus: Vous gagnez {points} points de {name}.
+result_group_failure: L'épreuve a été ratée par le groupe
+result_group_neutral: L'épreuve est sans effet pour le groupe
+result_group_success: L'épreuve a été réussie par le groupe
+result_malus: Vous perdez {points} points de {name}.
+roll: Lancer
+save_draft_poll: Enregistrer comme brouillon
+search_character: Rechercher un personnage
+secondary_stat: ' Carac secondaire : '
+see_all_tutorial: Visite complète
+see_less: Voir moins
+see_more: Voir plus
+see_page_tutorial: Visite de cet onglet
+select_tag: Choisir un tag
+selected: Sélectionnés
+send_answer: Envoyer mon choix
+settings: Paramètres
+share_invite_id: Copier l'identifiant de partie
+share_invite_link: Copier le lien d'invitation
+show_all_characters: Montrer tout
+show_poll_details: Voir les détails
+show_poll_results: Montrer les résultats
+shuffle: Mélanger
+shuffle_help: Pour chaque personnage ayant déjà un tag de ce groupe, un tag du groupe lui sera attribué au hasard à la place
+spawn_npc: Générer un PNJ
+spend_on: Les joueurs peuvent dépenser ces points pour faciliter les épreuves de
+spending_diminish: ' : 1 point dépensé diminue la difficulté de '
+start: Démarrer
+start_challenge: Lancer l'épreuve !
+start_game: Lancer la partie
+start_poll: Lancer le sondage
+start_typing: Commencez à taper
+starts_at: Démarre à
+stats: Caractéristiques
+stats_max: Maximum pour une caractéristique
+step_game_name: Vous pouvez changer le nom de la partie à tout moment.
+step_help: Souhaitez-vous suivre la visite complète ou obtenir uniquement l'aide pour cet onglet ?
+step_invite: En cliquant sur ce bouton un lien d'invitation sera copié et vous permettra d'inviter à rejoindre à votre partie.
+step_settings_add_gauge: Vous pouvez ajouter autant de jauge que vous le souhaitez.
+step_settings_add_stat: Vous pouvez ajouter autant de caractéristiques que vous le souhaitez.
+step_settings_challenge_timer: Réglez le temps accordé aux joueurs pour faire des choix et lancer leur dé après le démarrage d'une épreuve.
+step_settings_disconnected_prevent: Vous pouvez choisir que les personnages déconnectés ne soient jamais pris en compte lors des épreuves et tirages que vous lancez.
+step_settings_gauge: Tous les personnages possèdent ces jauges à leur création, avec un nombre de points de départ que vous pouvez modifier.
+step_settings_gauge_cancel: Vous n'êtes pas obligé de valider vos modifications, vous pouvez valider ou annuler tous les changements.
+step_settings_gauge_delete: Vous pouvez supprimer une jauge à tout moment.
+step_settings_gauge_make_deadly: Vous pouvez faire en sorte que le passage d'une jauge à un score de 0 entraine la mort d'un personnage en cliquant sur ce bouton (cette action est réversible mais les personnages déjà morts ne seront pas ressuscités pour autant !).
+step_settings_gauge_max: Vous pouvez indiquer un maximum optionnel qui ne pourra être dépassé par les personnages pour cette jauge.
+step_settings_gauge_name: Vous pouvez changer le nom d'une jauge à tout moment.
+step_settings_gauge_spending: Cochez la case des caractéristiques pour lesquelles vous souhaitez permettre aux joueurs de dépenser des points de jauge pour diminuer la difficulté des épreuves correspondantes (vous pouvez ensuite choisir la valeur de réduction de la difficulté par point dépensé).
+step_settings_gauge_value: Ce nombre détermine la valeur de base d'une jauge pour un personnage à sa création.
+step_settings_gauges: 'Les jauges sont des réserves de points pour chaque personnage. Quand vous créez une partie, deux jauges sont créées par défaut : vie et volonté.'
+step_settings_markers: Les marqueurs sont des compteurs globaux pour la partie. Leur valeur peut être modifiée depuis cet écran mais également augmentée ou diminuée automatiquement suite à une réussite ou un échec du groupe lors d'une épreuve.
+step_settings_npc_prevent: Vous pouvez également choisir que les personnages non-joueurs (que vous pouvez créer dans l'onglet Personnages) ne soient jamais pris en compte lors des épreuves et tirages que vous lancez.
+step_settings_settings: Vous pouvez ajuster certains réglages de la partie.
+step_settings_stat: Tous les personnages possèdent ces caractéristiques à leur création, avec un nombre de points de départ de 10 + un nombre aléatoire entre -9 et +9. <br> Le total des caractéristiques d'un personnage à sa création est toujours de 10 x le nombre de caractéristiques, pour garantir le même total de points à tous les participants.
+step_settings_stat_delete: Vous pouvez supprimer une caractéristique à tout moment.
+step_settings_stats: 'Les caractéristiques fonctionnent de la même façon que dans la plupart des jeux de rôle. Quand vous créez une partie, deux caractéristiques sont créées : physique et mental.'
+step_settings_stats_max: Vous pouvez limiter le maximum possible à atteindre pour une caractéristique à la création d'un personnage. Ce maximum peut être dépassé selon les bonus attribués aux tags d'un personnage.
+step_start: Tant que vous ne cliquez pas sur ce bouton, vos invités patienteront sur un écran d'attente.
+step_tags: 'Chaque tag fait partie d''un groupe de tag, qui peut être nommé (exemple: métiers, genre, peuple, avantages, défauts, etc.). Un tag peut servir comme une classe de personnage, mais est suffisamment polyvalent pour permettre d''autres utilisations.'
+step_tags_group: Commencez à taper du texte et validez pour créer un tag. Une couleur lui sera associée.
+step_tags_group_add: Vous pouvez ajouter autant de groupes de tags que vous le souhaitez
+step_tags_group_delete: Vous pouvez supprimer un groupe de tags à tout moment. Cela supprimera les tags correspondants pour les personnages.
+step_tags_group_distribute: Cliquez ici pour distribuer un tag de ce groupe à tous les personnages qui n'en ont pas déjà un. Utile si vous avez créé le groupe en cours de partie.
+step_tags_group_distribution: 'Pour chaque groupe de tags, vous pouvez choisir un mode de répartition des tags : <ul> <li>- choisis par le joueur à la création du personnage</li> <li>- attribués aléatoirement</li> <li>- attribués équitablement (le système choisira parmi les tags les moins attribués pour équilibrer les tags distribués)</li> <li>- non attribués à la création (vous vous en servirez autrement qu''à la création)</li> </ul>'
+step_tags_group_rename: Vous pouvez renommer à tout moment un groupe de tag.
+step_tags_group_shuffle: Cliquez ici pour distribuer un tag de ce groupe à tous les personnages qui en ont déjà un. Le nouveau tag remplacera l'ancien. Utile si vous n'êtes pas satisfait de la répartition actuelle.
+step_tags_tag: 'Chaque tag peut influer sur les jauges et les caractéristiques d''un personnage à sa création. En cliquant sur un tag, vous pouvez: <ul> <li>- lui associer une <strong>caractéristique principale</strong>. Si un personnage obtient ce tag à la création, ce sera automatiquement sa plus forte caractéristique. Exemple: un tag "magicien" pourrait avoir la caractéristique principale "Magie".</li> <li>- lui associer une <strong>caractéristique secondaire</strong>. Si un personnage obtient ce tag à la création, ce sera automatiquement sa deuxième plus forte caractéristique.</li> <li>- lui associer des <strong>bonus</strong> et des <strong>malus</strong> qui viennent modifier le tirage des caractéristiques de départ, ou la valeur de départ de certaines jauges.</li> <li>- augmenter ou diminuer sa <strong>probabilité</strong> d''attribution aléatoire.</li> <li>- changer sa <strong>couleur</strong></li> </ul>'
+strength: Physique
+submit: Valider
+submit_your_char: Valider votre personnage
+success_threshold: Seuil de succès du groupe
+tab_label_challenge: Vous pouvez déclencher l'équivalent de jets de dés qui entraîneront pour chaque personnage concerné des conséquences selon sa réussite ou son échec.
+tab_label_characters: 'C''est l''onglet que vous montrerez le plus pendant la partie : il présente l''ensemble des personnages créés et résume ses propriétés (nom du personnage, pseudo du joueur, jauges, caractéristiques, tags, etc.). Vous pouvez y rechercher les personnages selon de nombreux critères.'
+tab_label_pick: Les tirages au sort vous permettent de sélectionner un nombre de personnages de votre choix au hasard parmi tout ou partie de la population. Vous pouvez également appliquer des conséquences aux personnages tirés au sort.
+tab_label_poll: Vous pouvez déclencher un sondage qui vous permettra de savoir dans quel sens faire évoluer la partie. Vous pouvez également ajouter des tags aux personnages en fonction des choix de chaque joueur au sondage.
+tab_label_settings: Les paramètres sont les réglages de la partie que nous vous conseillons de modifier avant son démarrage, mais que vous pourrez toujours changer en cours de partie.
+tab_label_tags: Les tags sont des étiquettes attribuées aux personnages et font la grande force de Minotaure.<br>
+tag_probability: 1 chance sur {total} | {count} chances sur {total}
+tag_untag: Taguer / Détagger
+tags: Tags
+tags_submit: Terminer
+targets: Cibles
+temporary_disconnected: Déconnexion temporaire
+tested_stat: Caractéristique à tester
+that_fail: échouant
+that_pass: réussissant
+this_will_test: 'Vous allez déclencher une épreuve de '
+turnout: 'Participation : '
+tutorial_help_1: Vous pouvez démarrer le didacticiel à tout moment en cliquant sur le bouton <strong class='icon-question'>Aide</strong> (le didacticiel complet sera disponible dans une version future).
+tutorial_help_2: Avant de démarrer votre partie, vous pouvez modifier les <strong>paramètres</strong> et les <strong>tags</strong> dans les onglets correspondants.
+tutorial_help_3: Vous pouvez dès maintenant inviter vos joueurs dans la partie en cliquant sur le bouton <strong class='icon-email'>Invitation à jouer</strong>.
+tutorial_help_4: Tant que vous n'aurez pas cliqué sur <strong class='icon-play'>Démarrer</strong> ils seront en salle d'attente.
+unlink2StatToTag: Ne plus associer à {statname} comme carac secondaire
+unlinkStatToTag: Ne plus associer à {statname} comme carac principale
+used_for_challenges: 'Utilisé pour les épreuves de :'
+user_name: Votre pseudo (optionnel)
+version: 'Version : {version}'
+waiting: En attente
+waiting_for_game_start: En attente du démarrage de la partie
+waiting_name: En attente de votre nom de partie
+warning_version: Les parties marquées d'un <span class='danger'>*</span> ne sont pas compatibles avec votre version de Minotaure ({version}), elles pourraient ne pas fonctionner correctement.
+will: Volonté
+will_have: ' obtiendront : '
+your_char: 'Votre personnage est '

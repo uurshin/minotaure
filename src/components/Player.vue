@@ -59,27 +59,7 @@ export default {
       return this.challengeTimer > 0 && this.character.challenge.wait_roll;
     },
     difficulty() {
-      let difficulty = this.character.stats[this.character.challenge.stat].value - this.character.challenge.difficulty;
-      // 1 is always a success.
-      if (difficulty < 1) {
-        return 1;
-      }
-      // 20 is always a failure.
-      else if (difficulty > 19) {
-        return 19;
-      }
-      return difficulty;
-    },
-    hasSpendingButtons() {
-      const vm = this;
-      if (this.difficulty === 19) {
-        return false;
-      }
-      return Object.entries(this.character.gauges).some(function(gauge) {
-        if (vm.character.challenge.spendable[gauge[0]] !== undefined && (gauge[1].deadly ? gauge[1].value > 1 : gauge[1].value > 0)) {
-          return true;
-        }
-      });
+      return 20 - this.character.stats[this.character.challenge.stat].value + this.character.challenge.difficulty;
     }
   },
   mounted() {
@@ -336,7 +316,17 @@ export default {
         code: key,
         token: vm.character.token,
       });
-    }
+    },
+    /**
+     * Return what would the new difficulty be if the player spent the modifier value any number of times necessary
+     * to go below 20. Example : if the difficulty is currently 24, if the modifier is 2, the user need to click
+     * 3 times to go below 20 and will reach 18, so we return 18.
+     * @param modifier int
+     * @return int
+     */
+    next_below_20(modifier) {
+      return this.difficulty - Math.ceil((this.difficulty - 20) / modifier) * modifier;
+    },
   },
 }
 </script>
@@ -398,8 +388,8 @@ export default {
             {{ $t(challengeInProgress ? 'challenge_in_progress' : 'challenge_done', {label: character.stats[character.challenge.stat].label}) }}
           </span>
           <span v-if="challengeInProgress" class="timer">{{ $t('challenge_ends_in', {timer: challengeTimer}) }}</span>
-          <span v-if="challengeInProgress">{{ $t('difficulty_threshold' , {difficulty: difficulty}) }}</span>
-          <span v-else>{{ $t('difficulty_threshold_past', {difficulty: character.challenge.locked_difficulty}) }}</span>
+          <span v-if="challengeInProgress">{{ $t('difficulty_threshold' , {difficulty: Math.min(Math.max(difficulty, 2), 20) }) }}</span>
+          <span v-else>{{ $t('difficulty_threshold_past', {difficulty: Math.min(Math.max(difficulty, 2), 20) }) }}</span>
         </div>
         <div class="die-wrapper">
           <div class="die" :class="classesChallenge()">
@@ -414,11 +404,17 @@ export default {
           </div>
         </div>
         <div class="challenge-done">
-          <div v-if="challengeInProgress && hasSpendingButtons" class="container-modifiers">
+          <div v-if="challengeInProgress && difficulty > 1" class="container-modifiers">
             <span>{{ $t('gauge_spending_description') }}</span>
             <template v-for="(gauge, key) in character.gauges">
               <button v-if="character.challenge.spendable[key] !== undefined && (gauge.deadly ? gauge.value > 1 : gauge.value > 0)" @click="spendGauge(key)" class="btn-valid" >
                 {{ $t('gauge_spending_button_text', {label: gauge.label, current: gauge.value, modifier: character.challenge.spendable[key] }) }}
+                <span v-if="(difficulty - character.challenge.spendable[key]) > 20">
+                  {{ $t('gauge_spending_button_details', {count: Math.floor((difficulty - 20) / character.challenge.spendable[key]) + 1, goal: this.next_below_20(character.challenge.spendable[key]) }) }}
+                </span>
+                <span v-else>
+                  1 clic pour passer à {{ difficulty  - character.challenge.spendable[key] }}
+                </span>
               </button>
             </template>
           </div>
@@ -604,6 +600,13 @@ export default {
 
       .challenge-done {
         justify-content: flex-start;
+        border: 1px solid white;
+        border-radius: 13px;
+        padding: 8px 16px;
+
+        &:empty {
+          display: none;
+        }
       }
 
       .die-wrapper {
@@ -814,9 +817,23 @@ export default {
     gap: 10px;
     align-items: stretch;
 
+    &:not(:has(button)) {
+      display: none;
+    }
+
     > span {
       max-width: 230px;
       margin: auto;
+    }
+
+    button {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+
+      > span {
+        font-size: 80%;
+      }
     }
   }
 

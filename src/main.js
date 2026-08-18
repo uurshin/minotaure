@@ -321,6 +321,7 @@ export const usePlayerStore = defineStore('playerStore', {
                         }
                     }
                 }
+
                 // Update the character stats values.
                 for (const [key, stat] of Object.entries(character.stats)) {
                     let temp_stat_value = character.base_stats[key];
@@ -409,25 +410,14 @@ export const usePlayerStore = defineStore('playerStore', {
             // Roll the dices to determine the character's stats.
             // The sum of all dice rolls should be (10 * number of stats).
             let dice_rolls = [];
-            let pool_max = 9; // Stores the distance between the last roll and 10.
+            let pool_max = Object.keys(this.stats).length * 10; // Stores the distance between the last roll and 10.
+            console.log("init : " + pool_max);
+
             for(let i = 0; i < Object.keys(this.stats).length; ++i) {
-                // The first roll is not corrected and serve has to base for the next roll corrections.
-                if (i === 0) {
-                    let roll = Math.floor(Math.random() * pool_max);
-                    pool_max = - roll;
-                    dice_rolls.push(10 + roll);
-                }
-                // Each roll between the first and the last rolls are corrected.
-                // That prevents producing often a single extreme last roll (closer to 1 or 20).
-                else if (i < Object.keys(this.stats).length - 1) {
-                    let roll = Math.floor(Math.random() * pool_max);
-                    pool_max = pool_max - roll;
-                    dice_rolls.push(10 + roll);
-                }
-                // The last roll is corrected to make the sum of all rolls equal to (10 * number of stats).
-                else {
-                    dice_rolls.push(10 + pool_max);
-                }
+                let roll = Math.floor(Math.random() * (Math.min((vm.settings.stats_max ?? 19) - 1, pool_max)) + 1);
+                pool_max -= roll;
+                console.log("after roll " + roll + " : " + pool_max);
+                dice_rolls.push(roll);
             }
 
             // Determine if some tags have stat priorities.
@@ -440,8 +430,21 @@ export const usePlayerStore = defineStore('playerStore', {
                 }
             });
 
-            // Store the two best dice rolls so they can be assigned to tags that prioritize these stats.
             dice_rolls.sort(function(a, b){return a - b})
+            let index = 0;
+            while(pool_max > 0) {
+                if (index > Object.keys(this.stats).length) {
+                    index = 0;
+                }
+                if (dice_rolls[index] < vm.settings.stats_max) {
+                    dice_rolls[index] += 1;
+                    pool_max -= 1;
+                    console.log(pool_max);
+                }
+                index++;
+            }
+
+            // Store the two best dice rolls so they can be assigned to tags that prioritize these stats.
             let max_rolls = [];
             if (ranking_stat[0] !== undefined) {
                 max_rolls.push(dice_rolls.pop());
@@ -522,7 +525,6 @@ export const usePlayerStore = defineStore('playerStore', {
         /**
          * Search all characters for the ones with a specific tag. Update their gauge value.
          * @param {object} target_tag : the searched tag.
-         * @param {int} modifier : the modified value.
          */
         updateGaugeModifier(target_tag, key, modifier) {
             this.characters.forEach(function(character) {
@@ -545,7 +547,8 @@ export const usePlayerStore = defineStore('playerStore', {
                     }
                 });
                 if (foundIndex > -1) {
-                  character.recalculate = 1;
+                    character.tags[foundIndex] = target_tag;
+                    character.recalculate = 1;
                 }
             })
         },
@@ -803,14 +806,15 @@ export const usePlayerStore = defineStore('playerStore', {
             let messages = [];
             let result = 'failure';
             // The "real" die throw is always between 1 and 20.
-            let real_die_throw = Math.floor(Math.random() * 20 + 1);
-            let die_throw = real_die_throw + character.challenge.difficulty;
+            let die_throw = Math.floor(Math.random() * 20 + 1);
+            //let die_throw = real_die_throw + character.challenge.difficulty;
 
             // Used to lock the number to beat of the character sheet.
-            character.challenge.locked_difficulty = Math.min(Math.max(character.stats[character.challenge.stat].value - character.challenge.difficulty, 1), 19);
+            //character.challenge.locked_difficulty = Math.min(Math.max(character.stats[character.challenge.stat].value - character.challenge.difficulty, 1), 19);
+            let locked_difficulty = Math.max((20 - character.stats[character.challenge.stat].value + character.challenge.difficulty), 1);
 
-            // There is always a possibility to fail or succeed on any difficulty level.
-            if (real_die_throw !== 20 && (real_die_throw === 1 || die_throw <= character.stats[challenge.stat].value)) {
+            // There is always one possibility to fail or succeed on any difficulty level.
+            if (die_throw !== 1 && (die_throw === 20 || die_throw > locked_difficulty)) {
                 result = 'success';
                 challenge.nb_success += 1;
             }
@@ -853,7 +857,7 @@ export const usePlayerStore = defineStore('playerStore', {
                 });
             }
             character.challenge.result = result;
-            character.challenge.roll = real_die_throw;
+            character.challenge.roll = die_throw;
             character.challenge.message = messages;
             character.challenge.group = false;
         },

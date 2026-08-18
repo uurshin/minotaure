@@ -70,6 +70,7 @@ export default {
         }
       },
       {parent: 'settings', id: 'step_settings_stats'},
+      {parent: 'settings', id: 'step_settings_stats_max'},
       {parent: 'settings', id: 'step_settings_add_stat'},
       {parent: 'settings', id: 'step_settings_stat', position: 'right'},
       {parent: 'settings', id: 'step_settings_stat_delete'},
