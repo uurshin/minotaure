@@ -48,6 +48,7 @@ character_manage: Gestisci i tuoi personaggi
 character_nb: Non hai personaggi da esportare | Hai un personaggio da esportare | Hai { count } personaggi da esportare
 characters: Personaggi
 choice_gives_tag: Aggiungi i seguenti tag per questa scelta
+choice_title_placeholder: Titolo della scelta {nb}
 choose_name_draft: Puoi scegliere un nome per la tua bozza
 choose_stat: Scegli statistica
 chosen_at_char_creation: Scelto durante la creazione del personaggio
@@ -69,6 +70,8 @@ count_char_import: 1 personaggio importato | {count} personaggi importati
 count_personnage: 1 personaggio | {count} personaggi
 create_new_char: Crea un nuovo personaggio
 decrease_probability: Diminuisci la probabilità
+default_choice: Scelta predefinita
+default_choice_header: Scelta predefinita per l’astensione
 delete: Elimina
 delete_all_chars: Elimina tutti i tuoi personaggi
 delete_all_games: Elimina tutti i giochi
@@ -256,6 +259,7 @@ step_tags_group_distribution: 'Per ogni gruppo di tag, puoi scegliere una modali
 step_tags_group_rename: Puoi rinominare un gruppo di tag in qualsiasi momento.
 step_tags_group_shuffle: Fai clic qui per distribuire un tag da questo gruppo a tutti i personaggi che ne hanno già uno. Il nuovo tag sostituirà il vecchio. Utile se non sei soddisfatto della distribuzione attuale.
 step_tags_tag: 'Ogni tag può influenzare le barre e le statistiche di un personaggio alla sua creazione. Cliccando su un tag, puoi: <ul> <li>- associarlo a una <strong>statistica principale</strong>. Se un personaggio ottiene questo tag alla creazione, sarà automaticamente la loro statistica più forte. Ad esempio, un tag "mago" potrebbe avere la statistica principale "Magia".</li> <li>- associarlo a una <strong>statistica secondaria</strong>. Se un personaggio ottiene questo tag alla creazione, sarà automaticamente la loro seconda statistica più forte.</li> <li>- associarlo a <strong>bonus</strong> e <strong>penalità</strong> che modificano il tiro iniziale delle statistiche o il valore iniziale di alcune barre.</li> <li>- aumentare o diminuire la <strong>probabilità</strong> di assegnazione casuale.</li> <li>- cambiare il suo <strong>colore</strong>.</li> </ul>'
+step_tags_tag_rename: Puoi rinominare un tag in qualsiasi momento cliccando sul suo nome
 strength: Forza
 submit: Invia
 submit_your_char: Invia il tuo personaggio

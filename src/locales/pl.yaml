@@ -48,6 +48,7 @@ character_manage: Zarządzaj swoimi postaciami
 character_nb: Nie masz postaci do wyeksportowania | Masz jedną postać do wyeksportowania | Masz { count } postaci do wyeksportowania
 characters: Postacie
 choice_gives_tag: Dodaj następujące tagi dla tego wyboru
+choice_title_placeholder: Nazwa opcji {nb}
 choose_name_draft: Możesz wybrać nazwę dla swojego szkicu
 choose_stat: Wybierz cechę
 chosen_at_char_creation: Do wyboru przy tworzeniu postaci
@@ -69,6 +70,8 @@ count_char_import: 1 zaimportowana postać | {count} zaimportowane postacie
 count_personnage: 1 postać | {count} postacie
 create_new_char: Stwórz nową postać
 decrease_probability: Zmniejsz szansę
+default_choice: Opcja domyślna
+default_choice_header: Opcja domyślna dla wstrzymania się
 delete: Usuń
 delete_all_chars: Usuń wszystkie postacie
 delete_all_games: Usuń wszystkie gry
@@ -256,6 +259,7 @@ step_tags_group_distribution: 'Dla każdej grupy tagów możesz wybrać tryb dys
 step_tags_group_rename: Możesz zmienić nazwę grupy tagów w dowolnym momencie.
 step_tags_group_shuffle: Kliknij tutaj, aby przydzielić tag tej grupy wszystkim postaciom, które już mają tag. Nowy tag zastąpi stary. Przydatne, jeśli nie jesteś zadowolony z obecnej dystrybucji.
 step_tags_tag: 'Każdy tag może wpływać na jauges i cechy postaci podczas jej tworzenia. Klikając na tag, możesz: <ul> <li>- przypisać mu <strong>główną cechę</strong>. Jeśli postać otrzyma ten tag podczas tworzenia, będzie to automatycznie jej najwyższa cecha. Przykład: tag "magik" może mieć główną cechę "Magia".</li> <li>- przypisać mu <strong>drugorzędną cechę</strong>. Jeśli postać otrzyma ten tag podczas tworzenia, będzie to automatycznie jej druga najwyższa cecha.</li> <li>- przypisać mu <strong>bonusy</strong> i <strong>kary</strong>, które zmieniają losowanie początkowych cech lub początkową wartość niektórych jauges.</li> <li>- zwiększyć lub zmniejszyć jego <strong>prawdopodobieństwo</strong> przydzielania losowego.</li> <li>- zmienić jego <strong>kolor</strong></li> </ul>'
+step_tags_tag_rename: Możesz w dowolnym momencie zmienić nazwę tagu, klikając jego nazwę
 strength: Siła
 submit: Zatwierdź
 submit_your_char: Zatwierdź swoją postać

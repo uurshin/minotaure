@@ -48,6 +48,7 @@ character_manage: Gestionar personajes
 character_nb: No tienes personajes para exportar | Tienes un personaje para exportar | Tienes { count } personajes para exportar
 characters: Personajes
 choice_gives_tag: Agregar las siguientes etiquetas para esta opción
+choice_title_placeholder: Título de la opción {nb}
 choose_name_draft: Puedes elegir un nombre para tu borrador
 choose_stat: Elegir una característica
 chosen_at_char_creation: Elegido al crear el personaje
@@ -69,6 +70,8 @@ count_char_import: 1 personaje importado | {count} personajes importados
 count_personnage: 1 personaje | {count} personajes
 create_new_char: Crear un nuevo personaje
 decrease_probability: Disminuir la probabilidad
+default_choice: Opción predeterminada
+default_choice_header: Opción predeterminada para la abstención
 delete: Eliminar
 delete_all_chars: Eliminar todos tus personajes
 delete_all_games: Eliminar todas las partidas
@@ -256,6 +259,7 @@ step_tags_group_distribution: 'Para cada grupo de etiquetas, puedes elegir un mo
 step_tags_group_rename: Puedes renombrar un grupo de etiquetas en cualquier momento.
 step_tags_group_shuffle: Haz clic aquí para distribuir una etiqueta de este grupo a todos los personajes que ya tengan una. La nueva etiqueta reemplazará la anterior. Útil si no estás satisfecho con la distribución actual.
 step_tags_tag: 'Cada etiqueta puede influir en las barras y características de un personaje al ser creado. Al hacer clic en una etiqueta, puedes: <ul> <li>- asociarle una <strong>característica principal</strong>. Si un personaje obtiene esta etiqueta al ser creado, automáticamente será su característica principal más alta. Ejemplo: una etiqueta ''mago'' podría tener la característica principal ''Magia''.</li> <li>- asociarle una <strong>característica secundaria</strong>. Si un personaje obtiene esta etiqueta al ser creado, automáticamente será su segunda característica más alta.</li> <li>- asociarle <strong>bonificaciones</strong> y <strong>penalizaciones</strong> que modificarán el resultado de las características iniciales o el valor inicial de algunas barras.</li> <li>- aumentar o disminuir su <strong>probabilidad</strong> de asignación aleatoria.</li> <li>- cambiar su <strong>color</strong></li> </ul>'
+step_tags_tag_rename: Puedes cambiar el nombre de una etiqueta en cualquier momento haciendo clic en su nombre
 strength: Fuerza
 submit: Aceptar
 submit_your_char: Enviar tu personaje

@@ -48,6 +48,7 @@ character_manage: Gerenciar seus personagens
 character_nb: Você não tem personagens para exportar | Você tem um personagem para exportar | Você tem { count } personagens para exportar
 characters: Personagens
 choice_gives_tag: Adicionar as seguintes tags para esta escolha
+choice_title_placeholder: Título da opção {nb}
 choose_name_draft: Você pode escolher um nome para o seu rascunho
 choose_stat: Escolher estatística
 chosen_at_char_creation: Escolhido na criação do personagem
@@ -69,6 +70,8 @@ count_char_import: 1 personagem importado | {count} personagens importados
 count_personnage: 1 personagem | {count} personagens
 create_new_char: Criar um novo personagem
 decrease_probability: Diminuir probabilidade
+default_choice: Opção predefinida
+default_choice_header: Opção predefinida para a abstenção
 delete: Excluir
 delete_all_chars: Excluir todos os seus personagens
 delete_all_games: Excluir todos os jogos
@@ -256,6 +259,7 @@ step_tags_group_distribution: 'Para cada grupo de tags, você pode escolher um m
 step_tags_group_rename: Você pode renomear um grupo de tags a qualquer momento.
 step_tags_group_shuffle: Clique aqui para distribuir uma tag deste grupo para todos os personagens que já têm uma. A nova tag substituirá a antiga. Útil se você não estiver satisfeito com a distribuição atual.
 step_tags_tag: 'Cada tag pode influenciar as barras e estatísticas de um personagem em sua criação. Clicando em uma tag, você pode: <ul> <li>- associá-la a uma <strong>estatística principal</strong>. Se um personagem receber esta tag na criação, ela será automaticamente sua estatística mais forte. Por exemplo, uma tag "mago" pode ter a estatística principal "Magia".</li> <li>- associá-la a uma <strong>estatística secundária</strong>. Se um personagem receber esta tag na criação, ela será automaticamente sua segunda estatística mais forte.</li> <li>- associá-la a <strong>bonificações</strong> e <strong>penalidades</strong> que modificam o rolar inicial de estatísticas ou o valor inicial de certas barras.</li> <li>- aumentar ou diminuir sua <strong>probabilidade</strong> de atribuição aleatória.</li> <li>- mudar sua <strong>cor</strong>.</li> </ul>'
+step_tags_tag_rename: Pode renomear uma etiqueta a qualquer momento clicando no seu nome
 strength: Força
 submit: Enviar
 submit_your_char: Enviar seu personagem

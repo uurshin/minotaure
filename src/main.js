@@ -163,11 +163,7 @@ export const usePlayerStore = defineStore('playerStore', {
                 this.current_game.current_basic_color = this.current_game.basic_color;
             }
 
-            let code;
-            do {
-                code = tag_label.substring(0, 2) + Math.floor((Math.random() * 10000000));
-            } while (this.tags.findIndex((tag) => tag.code === code) !== -1);
-
+            let code = tag_label.substring(0, 2) + Math.floor((Math.random() * 10000000));
             const tag = {
                 label: tag_label,
                 code: code,
@@ -177,8 +173,7 @@ export const usePlayerStore = defineStore('playerStore', {
 
             group.tags.push(tag);
             group.picking_array.push(tag.code);
-
-            // Refresh the css rules to display the color fo the new tag.
+            // Refresh the css rules to display the color for the new tag.
             this.generateCss();
             return tag;
         },
@@ -189,7 +184,7 @@ export const usePlayerStore = defineStore('playerStore', {
                 label: freetag ? i18n.global.t('other_tags') : i18n.global.t('group_nb', {nb: this.tag_groups.length + 1})
             }
             group.code = freetag ? 'freetag' : (this.tag_groups.length ? this.tag_groups[this.tag_groups.length - 1].code : 0) + Math.floor(Math.random() * 10000000);
-            group.start =  freetag ? 'none' : 'random';
+            group.start = freetag ? 'none' : 'random';
             this.tag_groups.push(group);
             return group;
         },

@@ -133,6 +133,10 @@ button:focus-visible {
   }
 }
 
+input[type="text"]:not(.multiselect__input) {
+  padding: 0 6px;
+}
+
 input[type="text"]:not(.multiselect__input),
 input[type="number"],
 select {

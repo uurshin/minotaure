@@ -317,7 +317,7 @@ export default {
                   <div>
                     <div class="label-name">
                       <span tabindex="0" @keyup.enter="handleClick($event, tag.option, group)" @click.prevent.stop="handleClick($event, tag.option, group)" class="icon-settings hover-only"></span>
-                      <input @change="this.store.updateStatModifier(tag.option)" type="text" v-model="tag.option.label"/>
+                      <input @change="this.store.updateStatModifier(tag.option)" type="text" v-model="tag.option.label" :ref="key === 0 ? 'step_tags_tag_rename' : null"/>
                     </div>
                     <span v-if="tag.option.stat1">{{ tag.option.stat1 !== undefined ? $t('main_stat') + store.stats[tag.option.stat1].name : '' }}</span>
                     <span v-if="tag.option.stat2">{{ tag.option.stat2 !== undefined ? $t('secondary_stat') + store.stats[tag.option.stat2].name : '' }}</span>

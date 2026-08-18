@@ -19,6 +19,7 @@ export default {
       poll_show: [],
       tags_poll: [],
       chosen_tags: [],
+      default_choice: [],
       name_draft: '',
       draft_in_progress: false
     }
@@ -46,18 +47,14 @@ export default {
       const vm = this;
       let poll = this.addPoll();
 
-      let selectedCharacters
-
       let has_picked = false;
       if (vm.chosen_tags.findIndex((tag) => tag.code === 'targets') > -1) {
         has_picked = true;
       }
 
+      let selectedCharacters = this.store.getCharacters(true, this.store.settings.disconnected_prevent, this.store.settings.npc_prevent)
       if (poll.targets.length) {
-        selectedCharacters = this.store.connected_characters(true).filter((character) => vm.store.filterCharacterByTagsAndPicked(character, poll.targets, has_picked));
-      }
-      else {
-        selectedCharacters = this.store.connected_characters(true);
+        selectedCharacters = selectedCharacters.filter((character) => vm.store.filterCharacterByTagsAndPicked(character, poll.targets, has_picked));
       }
 
       poll.nb_targets = selectedCharacters.length;
@@ -80,18 +77,27 @@ export default {
     },
     finishPoll(id_poll) {
       const vm = this;
-      this.store.polls[id_poll].active = -1;
+      vm.store.polls[id_poll].active = -1;
+      let default_choice = null;
 
       let options = Object.entries(vm.store.polls[id_poll].options);
       options.forEach(function(option) {
         if (option[1].tags !== undefined) {
           option[1].tags = option[1].tags.filter((tag) => vm.store.getTagFromCode(tag.code) !== undefined);
         }
+        if (vm.store.polls[id_poll].default_choice[option[0]] === true) {
+          default_choice = option[0];
+        }
       });
 
       this.store.polls[id_poll].options = Object.fromEntries(options);
+
       this.store.characters.forEach(function(character) {
         if (character.polls[id_poll] !== undefined) {
+          if (default_choice && character.polls[id_poll].answer === undefined) {
+            vm.store.polls[id_poll].options[default_choice].count++;
+            character.polls[id_poll].answer = default_choice;
+          }
           if (character.polls[id_poll].answer !== undefined && vm.store.polls[id_poll].options[character.polls[id_poll].answer].tags !== undefined) {
             let new_tags = vm.store.polls[id_poll].options[character.polls[id_poll].answer].tags;
             new_tags.forEach(function(tag) {
@@ -130,7 +136,8 @@ export default {
         active: draft ? 0 : 1,
         name: draft ? this.name_draft : '',
         options: {},
-        targets: this.tags_poll
+        targets: this.tags_poll,
+        default_choice: this.default_choice
       };
 
       for (const key in this.answers) {
@@ -138,7 +145,7 @@ export default {
           this.store.polls[date].options[key] = {
             label: this.answers[key],
             count: 0,
-            tags: this.chosen_tags[key]
+            tags: this.chosen_tags[key],
           }
         }
       }
@@ -156,9 +163,11 @@ export default {
       this.name_draft = '';
     },
     loadPoll(code, destroy = true) {
+      this.resetPoll();
       const vm = this;
       let poll = this.store.polls[code];
       this.label = poll.label;
+      this.default_choice = {...poll.default_choice};
       Object.entries(poll.options).forEach(function(option) {
         vm.answers[option[0]] = option[1].label;
         if (option[1].tags !== undefined) {
@@ -177,6 +186,7 @@ export default {
       this.tags_poll = [];
       this.chosen_tags = [];
       this.answers = {};
+      this.default_choice = [];
     },
     addTag(tag_label, key) {
       let group = this.store.tag_groups.find((element) => (element.code === 'freetag'));
@@ -197,6 +207,15 @@ export default {
       let tag = this.store.addTag(tag_label, group);
       option.tags.push(tag);
     },
+    radioUncheck(e) {
+      if (e.target.checked) {
+        for (let i = 1; i <= this.nb_options; i++) {
+          if (this.$refs['default_choice_' + i][0].value !== e.target.value) {
+            this.$refs['default_choice_' + i][0].checked = false;
+          }
+        }
+      }
+    }
   }
 }
 </script>
@@ -217,32 +236,43 @@ export default {
           <input @keyup.enter="focus(0)" id="question" v-model=label type='text'>
         </div>
         <div id="answers-wrapper">
-          <span>{{ $t('possible_choices') }}</span>
-          <div v-for="n in nb_options" class="poll-choice">
-            <div>
-              <label :for="'choice_' + n">{{ $t('nb_choice', {'nb': n}) }}</label>
-              <input :id="'choice_' + n" :ref="'choice_' + n" @keyup.enter="focus(n)" v-model=answers[n] type='text'>
+          <span v-if="nb_options === 0">{{ $t('possible_choices') }}</span>
+          <div v-else class="answers-grid" ref="answers_grid">
+            <div class="answers-header">
+              <div>{{ $t('possible_choices') }}</div>
+              <div>{{ $t('choice_gives_tag') }}</div>
+              <div>{{ $t('default_choice_header') }}</div>
             </div>
-            <div>
-              <label :for="'chosen_tags_' + n">{{ $t('choice_gives_tag') }}</label>
-              <vue-multiselect
-                  :id="'chosen_tags_' + n"
-                  v-model="chosen_tags[n]"
-                  class="left-multiselect"
-                  label="label"
-                  track-by="code"
-                  :tag-placeholder="$t('add_tag')"
-                  :placeholder="$t('input_word')"
-                  :showNoOptions="false"
-                  group-values="tags"
-                  group-label="label"
-                  :group-select="false"
-                  :options=store.tag_groups
-                  :multiple="true"
-                  :taggable="true"
-                  :hideSelected="true"
-                  @tag="addTag($event, n)"
-              ></vue-multiselect>
+            <div v-for="n in nb_options" class="poll-choice">
+              <div>
+                <label class="sr-only" :for="'choice_' + n">{{ $t('nb_choice', {'nb': n}) }}</label>
+                <input :id="'choice_' + n" :ref="'choice_' + n" @keyup.enter="focus(n)" v-model=answers[n] type='text' :placeholder="$t('choice_title_placeholder', {'nb': n})">
+              </div>
+              <div>
+                <label class="sr-only" :for="'chosen_tags_' + n">{{ $t('choice_gives_tag') }}</label>
+                <vue-multiselect
+                    :id="'chosen_tags_' + n"
+                    v-model="chosen_tags[n]"
+                    class="left-multiselect"
+                    label="label"
+                    track-by="code"
+                    :tag-placeholder="$t('add_tag')"
+                    :placeholder="$t('input_word')"
+                    :showNoOptions="false"
+                    group-values="tags"
+                    group-label="label"
+                    :group-select="false"
+                    :options=store.tag_groups
+                    :multiple="true"
+                    :taggable="true"
+                    :hideSelected="true"
+                    @tag="addTag($event, n)"
+                ></vue-multiselect>
+              </div>
+              <div class="radio-wrapper">
+                <input @click="radioUncheck" type="checkbox" :value=n v-model="default_choice[n]" :ref="'default_choice_' + n" :id="'default_choice_' + n">
+                <label :for="'default_choice_' + n">{{ $t('default_choice') }}</label>
+              </div>
             </div>
           </div>
           <button @click="nb_options += 1">{{ $t('add_poll_choice') }}</button>
@@ -353,6 +383,32 @@ export default {
 </template>
 
 <style scoped lang="scss">
+  .answers-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+
+    > div {
+      display: grid;
+      grid-template-columns: subgrid;
+      grid-column: auto / span 3;
+      align-items: flex-end;
+      padding: 10px;
+
+      .multiselect, input[type="text"] {
+        flex: 1;
+      }
+
+      .radio-wrapper {
+        position: relative;
+        height: 43px;
+        align-items: center;
+      }
+    }
+  }
+  .sr-only {
+    display: none;
+  }
   .vertical-wrapper {
     &.wrapper-poll-draft {
       counter-set: poll;
@@ -407,10 +463,14 @@ export default {
     }
   }
 
+  .answers-header {
+    font-weight: bold;
+  }
   .poll-choice {
     display: flex;
     gap: 10px;
     align-items: center;
+    background: rgba(255, 255, 255, 0.1803921569);
 
     > div {
       display: flex;

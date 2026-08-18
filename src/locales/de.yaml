@@ -48,6 +48,7 @@ character_manage: Charaktere verwalten
 character_nb: Sie haben keinen Charakter zu exportieren | Sie haben einen Charakter zu exportieren | Sie haben { count } Charaktere zu exportieren
 characters: Charaktere
 choice_gives_tag: Füge für diese Auswahl die folgenden Tags hinzu
+choice_title_placeholder: Bezeichnung der Auswahl {nb}
 choose_name_draft: Sie können einen Namen für Ihren Entwurf wählen
 choose_stat: Wählen Sie ein Merkmal
 chosen_at_char_creation: Bei der Charaktererstellung auswählen
@@ -69,6 +70,8 @@ count_char_import: 1 importierter Charakter | {count} importierte Charaktere
 count_personnage: 1 Charakter | {count} Charaktere
 create_new_char: Neuen Charakter erstellen
 decrease_probability: Wahrscheinlichkeit verringern
+default_choice: Standardauswahl
+default_choice_header: Standardauswahl für Enthaltung
 delete: Löschen
 delete_all_chars: Alle Charaktere löschen
 delete_all_games: Alle Spiele löschen
@@ -256,6 +259,7 @@ step_tags_group_distribution: 'Für jede Tag-Gruppe können Sie einen Verteilung
 step_tags_group_rename: Sie können eine Tag-Gruppe jederzeit umbenennen.
 step_tags_group_shuffle: Klicken Sie hier, um einem Tag dieser Gruppe alle Charaktere zuzuweisen, die bereits eines haben. Das neue Tag ersetzt das alte. Nützlich, wenn Sie mit der aktuellen Verteilung nicht zufrieden sind.
 step_tags_tag: 'Jeder Tag kann die Anzeigen und Attribute eines Charakters bei seiner Erstellung beeinflussen. Durch Klicken auf einen Tag können Sie: <ul> <li>- ihm eine <strong>Hauptattribute</strong> zuweisen. Wenn ein Charakter diesen Tag bei der Erstellung erhält, wird es automatisch sein stärkstes Attribut sein. Beispiel: Ein Tag ''Magier'' könnte das Hauptattribut ''Magie'' haben.</li> <li>- ihm ein <strong>Nebenattribute</strong> zuweisen. Wenn ein Charakter diesen Tag bei der Erstellung erhält, wird es automatisch sein zweitstärkstes Attribut sein.</li> <li>- ihm <strong>Boni</strong> und <strong>Mali</strong> zuweisen, die den Wurf der Startattribute oder den Startwert einiger Anzeigen ändern.</li> <li>- die <strong>Wahrscheinlichkeit</strong> seiner zufälligen Zuweisung erhöhen oder verringern.</li> <li>- die <strong>Farbe</strong> ändern.</li> </ul>'
+step_tags_tag_rename: Du kannst einen Tag jederzeit umbenennen, indem du auf seinen Namen klickst
 strength: Physisch
 submit: Bestätigen
 submit_your_char: Charakter bestätigen

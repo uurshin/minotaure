@@ -48,6 +48,7 @@ character_manage: Manage your characters
 character_nb: You have no character to export | You have one character to export | You have { count } characters to export
 characters: Characters
 choice_gives_tag: Add the following tags for this choice
+choice_title_placeholder: Label for choice number {nb}
 choose_name_draft: You can choose a name for your draft
 choose_stat: Choose stat
 chosen_at_char_creation: Chosen at character creation
@@ -69,6 +70,8 @@ count_char_import: 1 imported character | {count} imported characters
 count_personnage: 1 character | {count} characters
 create_new_char: Create a new character
 decrease_probability: Decrease probability
+default_choice: Default choice
+default_choice_header: Default choice for abstention
 delete: Delete
 delete_all_chars: Delete all your characters
 delete_all_games: Delete all games
@@ -256,6 +259,7 @@ step_tags_group_distribution: 'For each tag group, you can choose a tag distribu
 step_tags_group_rename: You can rename a tag group at any time.
 step_tags_group_shuffle: Click here to distribute a tag from this group to all characters that already have one. The new tag will replace the old one. Useful if you are not satisfied with the current distribution.
 step_tags_tag: 'Each tag can influence a character''s bars and stats at their creation. By clicking on a tag, you can: <ul> <li>- associate it with a <strong>main stat</strong>. If a character gets this tag at creation, it will automatically be their strongest stat. For example, a "wizard" tag could have the main stat "Magic."</li> <li>- associate it with a <strong>secondary stat</strong>. If a character gets this tag at creation, it will automatically be their second-strongest stat.</li> <li>- associate it with <strong>bonuses</strong> and <strong>penalties</strong> that modify the initial stats roll or the starting value of certain bars.</li> <li>- increase or decrease its random attribution <strong>probability</strong>.</li> <li>- change its <strong>color</strong>.</li> </ul>'
+step_tags_tag_rename: You can rename a tag at any time by clicking on its name
 strength: Strength
 submit: Submit
 submit_your_char: Submit your character

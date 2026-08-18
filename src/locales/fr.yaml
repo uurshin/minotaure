@@ -48,6 +48,7 @@ character_manage: Gérer vos personnages
 character_nb: Vous n'avez aucun personnage à exporter | Vous avez un personnage à exporter | Vous avez { count } personnages à exporter
 characters: Personnages
 choice_gives_tag: Ce choix donnera les tags suivant
+choice_title_placeholder: Intitulé du choix numéro {nb}
 choose_name_draft: Vous pouvez choisir un nom pour votre brouillon
 choose_stat: Choisissez une caractéristique
 chosen_at_char_creation: A choisir à la création du personnage
@@ -69,6 +70,8 @@ count_char_import: 1 personnage importé | {count} personnages importés
 count_personnage: 1 personnage | {count} personnages
 create_new_char: Créer un nouveau personnage
 decrease_probability: Diminuer la probabilité
+default_choice: Choix par défaut
+default_choice_header: Choix par défaut en cas d'abstention
 delete: Supprimer
 delete_all_chars: Supprimer tous vos personnages
 delete_all_games: Supprimer toutes les parties
@@ -256,6 +259,7 @@ step_tags_group_distribution: 'Pour chaque groupe de tags, vous pouvez choisir u
 step_tags_group_rename: Vous pouvez renommer à tout moment un groupe de tag.
 step_tags_group_shuffle: Cliquez ici pour distribuer un tag de ce groupe à tous les personnages qui en ont déjà un. Le nouveau tag remplacera l'ancien. Utile si vous n'êtes pas satisfait de la répartition actuelle.
 step_tags_tag: 'Chaque tag peut influer sur les jauges et les caractéristiques d''un personnage à sa création. En cliquant sur un tag, vous pouvez: <ul> <li>- lui associer une <strong>caractéristique principale</strong>. Si un personnage obtient ce tag à la création, ce sera automatiquement sa plus forte caractéristique. Exemple: un tag "magicien" pourrait avoir la caractéristique principale "Magie".</li> <li>- lui associer une <strong>caractéristique secondaire</strong>. Si un personnage obtient ce tag à la création, ce sera automatiquement sa deuxième plus forte caractéristique.</li> <li>- lui associer des <strong>bonus</strong> et des <strong>malus</strong> qui viennent modifier le tirage des caractéristiques de départ, ou la valeur de départ de certaines jauges.</li> <li>- augmenter ou diminuer sa <strong>probabilité</strong> d''attribution aléatoire.</li> <li>- changer sa <strong>couleur</strong></li> </ul>'
+step_tags_tag_rename: Vous pouvez renommer un tag à tout moment en cliquant sur son nom
 strength: Physique
 submit: Valider
 submit_your_char: Valider votre personnage
