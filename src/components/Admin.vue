@@ -273,6 +273,9 @@ export default {
             new_character = vm.store.retrieveCharacter(data.token);
             // The character exists and should be sent to the player.
             if (new_character !== undefined) {
+              if (new_character.last_connection !== undefined) {
+                delete new_character.last_connection;
+              }
               // It's not a character requested after the death or a previous one.
               if (data.reset === undefined) {
                 new_character.connection = conn.connectionId;
@@ -346,6 +349,11 @@ export default {
       });
 
       conn.on('close', function() {
+        vm.store.current_game.characters.forEach(function(character) {
+          if (character.connection === conn.connectionId) {
+            character.last_connection = Date.now();
+          }
+        });
         console.log('Minotaure : PJ disconnected');
       })
 

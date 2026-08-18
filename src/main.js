@@ -498,22 +498,23 @@ export const usePlayerStore = defineStore('playerStore', {
         /**
          * Retrieve a list of characters filtered by conditions.
          * @param {boolean} alive : the character is alive.
-         * @param {boolean} connected : a player is connected to the character.
+         * @param {boolean} connected : a player is connected to the game or not disconnected for more than one minute.
          * @param {boolean} npc : the character is a npc.
          */
         getCharacters(alive = true, connected = true, npc = true) {
+            const now = Date.now();
             const vm = this;
             return this.characters.filter(
-              function (character) {
-                  return (
-                    (alive ? character.alive : true) &&
-                    (connected ? (
-                      character.npc !== undefined ||
-                      (character.connection !== null &&
-                      vm.connections[character.connection] !== undefined &&
-                      vm.connections[character.connection].open === true)
-                    ) : true) &&
-                    (npc ? character.npc === undefined : true)
+                function (character) {
+                    return (
+                        (alive ? character.alive : true) &&
+                        (connected ?
+                            (character.npc !== undefined ||
+                            (character.connection !== null && vm.connections[character.connection] !== undefined &&
+                            vm.connections[character.connection].open === true &&
+                            character.last_connection === undefined || now - character.last_connection < 60000)) : true
+                        ) &&
+                        (npc ? character.npc === undefined : true)
                   )
               })
         },
