@@ -167,7 +167,7 @@ export default {
       if (!isNaN(value) && value >= 10 && value <= 20) {
         this.store.settings.stats_max = value;
       }
-      this.$refs['stat_max'].value = this.store.settings.stats_max;
+      this.$refs['stat_max'].value = this.store.settings.stats_max ?? 20;
     }
   }
 }
@@ -263,8 +263,8 @@ export default {
           <button ref="step_settings_add_stat"  class="icon-add btn-valid" v-if="!add_stat_enabled" @keyup.enter="createStat()" @click="createStat()">{{ $t('add') }}</button>
         </div>
         <div class="wrapper-list">
-          <div class="list-item" ref="step_settings_stats_max">
-            <label :for="stat_max">{{ $t('stats_max') }}</label>
+          <div v-if="this.store.settings !== undefined" class="list-item" ref="step_settings_stats_max">
+            <label for="stat_max">{{ $t('stats_max') }}</label>
             <input :value="this.store.settings.stats_max" @change="validateStatsMax" ref="stat_max" id="stat_max" type="number" min="10" max="20">
           </div>
           <template v-for="(stat, key, index) in store.stats">
