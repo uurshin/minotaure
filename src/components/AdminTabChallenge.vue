@@ -42,6 +42,7 @@ export default {
   computed: {
     labelDifficulty: function() {
       let levels = [
+        {value:-10, label:this.$t('dif_unmissable')},
         {value:-8, label:this.$t('dif_cake')},
         {value:-6, label:this.$t('dif_ext_easy')},
         {value:-4, label:this.$t('dif_very_easy')},
@@ -51,12 +52,37 @@ export default {
         {value:4, label:this.$t('dif_very_hard')},
         {value:6, label:this.$t('dif_extreme')},
         {value:8, label:this.$t('dif_impossible')},
+        {value:10, label:this.$t('dif_legendary')},
       ]
       for (let level of levels) {
         if (this.challenge_difficulty <= level.value) {
           return level.label;
         }
       }
+    },
+    nb_targets: function() {
+      let vm = this;
+      let selectedCharacters;
+      let has_picked = false;
+      if (this.chosen_tags.findIndex((tag) => tag.code === 'targets') > -1) {
+        has_picked = true;
+      }
+
+      if (has_picked) {
+        selectedCharacters = this.store.alive_characters;
+      }
+      else {
+        selectedCharacters = this.store.getCharacters(true, this.store.settings.disconnected_prevent, this.store.settings.npc_prevent)
+      }
+
+      if (this.chosen_tags.length) {
+        selectedCharacters = selectedCharacters.filter(
+            function(character) {
+              return vm.store.filterCharacterByTagsAndPicked(character, vm.chosen_tags, has_picked);
+            }
+        )
+      }
+      return selectedCharacters.length;
     }
   },
   methods: {
@@ -257,7 +283,7 @@ export default {
                 :min="0"
                 :max="100"
                 :format="function (value) {
-            return Math.round(value) + '%';
+            return Math.round(value) + '% (' + Math.ceil(nb_targets / 100 * value)  + ')';
           }"
             />
             <button @click="toggleNeutralZone">{{ has_neutral_zone ? $t('remove_neutral_zone') : $t('add_neutral_zone') }}</button>
@@ -442,6 +468,7 @@ export default {
                 {{ tag.label }}
               </span>
             </div>
+            <span>{{ $t('summary_target_count', nb_targets) }}</span>
           </div>
           <div v-if="chosen_stat !== ''">
             <template v-for="type in types">

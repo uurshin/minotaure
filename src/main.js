@@ -163,11 +163,7 @@ export const usePlayerStore = defineStore('playerStore', {
                 this.current_game.current_basic_color = this.current_game.basic_color;
             }
 
-            let code;
-            do {
-                code = tag_label.substring(0, 2) + Math.floor((Math.random() * 10000000));
-            } while (this.tags.findIndex((tag) => tag.code === code) !== -1);
-
+            let code = tag_label.substring(0, 2) + Math.floor((Math.random() * 10000000));
             const tag = {
                 label: tag_label,
                 code: code,
@@ -177,8 +173,7 @@ export const usePlayerStore = defineStore('playerStore', {
 
             group.tags.push(tag);
             group.picking_array.push(tag.code);
-
-            // Refresh the css rules to display the color fo the new tag.
+            // Refresh the css rules to display the color for the new tag.
             this.generateCss();
             return tag;
         },
@@ -189,7 +184,7 @@ export const usePlayerStore = defineStore('playerStore', {
                 label: freetag ? i18n.global.t('other_tags') : i18n.global.t('group_nb', {nb: this.tag_groups.length + 1})
             }
             group.code = freetag ? 'freetag' : (this.tag_groups.length ? this.tag_groups[this.tag_groups.length - 1].code : 0) + Math.floor(Math.random() * 10000000);
-            group.start =  freetag ? 'none' : 'random';
+            group.start = freetag ? 'none' : 'random';
             this.tag_groups.push(group);
             return group;
         },
@@ -290,13 +285,13 @@ export const usePlayerStore = defineStore('playerStore', {
 
                 // Calculate the bonuses for stats values given by each tag of
                 // the character.
-                character.tags.forEach(function (tag) {
+                for (const [key, tag] of Object.entries(character.tags)) {
                     if (tag.stat_modifiers !== undefined) {
                         for (const [key, stat] of Object.entries(tag.stat_modifiers)) {
                             modifiers_stats[key] = (modifiers_stats[key] ?? 0) + stat.value;
                         }
                     }
-                });
+                };
 
                 // Update the character gauges values.
                 for (const [key, gauge] of Object.entries(character.gauges)) {
@@ -321,6 +316,7 @@ export const usePlayerStore = defineStore('playerStore', {
                         }
                     }
                 }
+
                 // Update the character stats values.
                 for (const [key, stat] of Object.entries(character.stats)) {
                     let temp_stat_value = character.base_stats[key];
@@ -409,25 +405,14 @@ export const usePlayerStore = defineStore('playerStore', {
             // Roll the dices to determine the character's stats.
             // The sum of all dice rolls should be (10 * number of stats).
             let dice_rolls = [];
-            let pool_max = 9; // Stores the distance between the last roll and 10.
+            let pool_max = Object.keys(this.stats).length * 10; // Stores the distance between the last roll and 10.
+            console.log("init : " + pool_max);
+
             for(let i = 0; i < Object.keys(this.stats).length; ++i) {
-                // The first roll is not corrected and serve has to base for the next roll corrections.
-                if (i === 0) {
-                    let roll = Math.floor(Math.random() * pool_max);
-                    pool_max = - roll;
-                    dice_rolls.push(10 + roll);
-                }
-                // Each roll between the first and the last rolls are corrected.
-                // That prevents producing often a single extreme last roll (closer to 1 or 20).
-                else if (i < Object.keys(this.stats).length - 1) {
-                    let roll = Math.floor(Math.random() * pool_max);
-                    pool_max = pool_max - roll;
-                    dice_rolls.push(10 + roll);
-                }
-                // The last roll is corrected to make the sum of all rolls equal to (10 * number of stats).
-                else {
-                    dice_rolls.push(10 + pool_max);
-                }
+                let roll = Math.floor(Math.random() * (Math.min((vm.settings.stats_max ?? 19) - 1, pool_max)) + 1);
+                pool_max -= roll;
+                console.log("after roll " + roll + " : " + pool_max);
+                dice_rolls.push(roll);
             }
 
             // Determine if some tags have stat priorities.
@@ -440,8 +425,21 @@ export const usePlayerStore = defineStore('playerStore', {
                 }
             });
 
-            // Store the two best dice rolls so they can be assigned to tags that prioritize these stats.
             dice_rolls.sort(function(a, b){return a - b})
+            let index = 0;
+            while(pool_max > 0) {
+                if (index > Object.keys(this.stats).length) {
+                    index = 0;
+                }
+                if (dice_rolls[index] < vm.settings.stats_max) {
+                    dice_rolls[index] += 1;
+                    pool_max -= 1;
+                    console.log(pool_max);
+                }
+                index++;
+            }
+
+            // Store the two best dice rolls so they can be assigned to tags that prioritize these stats.
             let max_rolls = [];
             if (ranking_stat[0] !== undefined) {
                 max_rolls.push(dice_rolls.pop());
@@ -500,29 +498,29 @@ export const usePlayerStore = defineStore('playerStore', {
         /**
          * Retrieve a list of characters filtered by conditions.
          * @param {boolean} alive : the character is alive.
-         * @param {boolean} connected : a player is connected to the character.
+         * @param {boolean} connected : a player is connected to the game or not disconnected for more than one minute.
          * @param {boolean} npc : the character is a npc.
          */
         getCharacters(alive = true, connected = true, npc = true) {
+            const now = Date.now();
             const vm = this;
             return this.characters.filter(
-              function (character) {
-                  return (
-                    (alive ? character.alive : true) &&
-                    (connected ? (
-                      character.npc !== undefined ||
-                      (character.connection !== null &&
-                      vm.connections[character.connection] !== undefined &&
-                      vm.connections[character.connection].open === true)
-                    ) : true) &&
-                    (npc ? character.npc === undefined : true)
+                function (character) {
+                    return (
+                        (alive ? character.alive : true) &&
+                        (connected ?
+                            (character.npc !== undefined ||
+                            (character.connection !== null && vm.connections[character.connection] !== undefined &&
+                            vm.connections[character.connection].open === true &&
+                            character.last_connection === undefined || now - character.last_connection < 60000)) : true
+                        ) &&
+                        (npc ? character.npc === undefined : true)
                   )
               })
         },
         /**
          * Search all characters for the ones with a specific tag. Update their gauge value.
          * @param {object} target_tag : the searched tag.
-         * @param {int} modifier : the modified value.
          */
         updateGaugeModifier(target_tag, key, modifier) {
             this.characters.forEach(function(character) {
@@ -545,7 +543,8 @@ export const usePlayerStore = defineStore('playerStore', {
                     }
                 });
                 if (foundIndex > -1) {
-                  character.recalculate = 1;
+                    character.tags[foundIndex] = target_tag;
+                    character.recalculate = 1;
                 }
             })
         },
@@ -803,14 +802,15 @@ export const usePlayerStore = defineStore('playerStore', {
             let messages = [];
             let result = 'failure';
             // The "real" die throw is always between 1 and 20.
-            let real_die_throw = Math.floor(Math.random() * 20 + 1);
-            let die_throw = real_die_throw + character.challenge.difficulty;
+            let die_throw = Math.floor(Math.random() * 20 + 1);
+            //let die_throw = real_die_throw + character.challenge.difficulty;
 
             // Used to lock the number to beat of the character sheet.
-            character.challenge.locked_difficulty = Math.min(Math.max(character.stats[character.challenge.stat].value - character.challenge.difficulty, 1), 19);
+            //character.challenge.locked_difficulty = Math.min(Math.max(character.stats[character.challenge.stat].value - character.challenge.difficulty, 1), 19);
+            let locked_difficulty = Math.max((20 - character.stats[character.challenge.stat].value + character.challenge.difficulty), 1);
 
-            // There is always a possibility to fail or succeed on any difficulty level.
-            if (real_die_throw !== 20 && (real_die_throw === 1 || die_throw <= character.stats[challenge.stat].value)) {
+            // There is always one possibility to fail or succeed on any difficulty level.
+            if (die_throw !== 1 && (die_throw === 20 || die_throw > locked_difficulty)) {
                 result = 'success';
                 challenge.nb_success += 1;
             }
@@ -853,7 +853,7 @@ export const usePlayerStore = defineStore('playerStore', {
                 });
             }
             character.challenge.result = result;
-            character.challenge.roll = real_die_throw;
+            character.challenge.roll = die_throw;
             character.challenge.message = messages;
             character.challenge.group = false;
         },
@@ -884,9 +884,9 @@ export const usePlayerStore = defineStore('playerStore', {
 
             peer_client.on('open', function () {
                 let conn = peer_client.connect(id);
-                vm.stopReconnect();
 
                 conn.on('open', function() {
+                    vm.stopReconnect();
                     console.log('Minotaure : connection opened');
                     vm.setShouldReconnect(0);
                     vm.setPeer(peer_client);
@@ -903,7 +903,7 @@ export const usePlayerStore = defineStore('playerStore', {
                 });
             })
 
-            peer_client.once("disconnected", function(){
+            peer_client.on("disconnected", function(){
                 vm.stopReconnect();
                 console.log('Minotaure : peer client disconnected');
                 if (vm.should_reconnect === -1) {
@@ -913,41 +913,43 @@ export const usePlayerStore = defineStore('playerStore', {
                 else if (vm.should_reconnect === 0) {
                     vm.setMessage('Minotaure - starting attempts to reconnect after disconnect');
                     attempting_reconnect = true;
-                    let interval = setInterval(function() {
-                        if (vm.should_reconnect === -1) {
-                            console.log('Minotaure : Disconnected but should not reconnect');
-                            peer_client.destroy();
-                            attempting_reconnect = false;
-                        }
-                        else {
-                            if (peer_client.open === true) {
-                                console.log('Minotaure : reconnection attempt successful :) !');
-                                router.push('/player');
-                                attempting_reconnect = false;
-                            }
-                            else if (peer_client.destroyed === true) {
-                                console.log('Minotaure : reconnection attempt unsuccessful :( !');
-                                attempting_reconnect = false;
-                            }
-                            else if (vm.should_reconnect < 10) {
-                                vm.setShouldReconnect(vm.should_reconnect + 1);
-                                console.log('Minotaure : reconnection attempt number ' + vm.should_reconnect);
-                                peer_client.reconnect();
-                            }
-                            else if (router.currentRoute.value.path === '/player') {
-                                router.push('/join');
-                                vm.setMessage('Déconnexion imprévue');
-                                attempting_reconnect = false;
-                            }
+                    if (!attempting_reconnect) {
+                        let interval = setInterval(function() {
+                              if (vm.should_reconnect === -1) {
+                                  console.log('Minotaure : Disconnected but should not reconnect');
+                                  peer_client.destroy();
+                                  attempting_reconnect = false;
+                              }
+                              else {
+                                  if (peer_client.open === true) {
+                                      console.log('Minotaure : reconnection attempt successful :) !');
+                                      router.push('/player');
+                                      attempting_reconnect = false;
+                                  }
+                                  else if (peer_client.destroyed === true) {
+                                      console.log('Minotaure : reconnection attempt unsuccessful :( !');
+                                      attempting_reconnect = false;
+                                  }
+                                  else if (vm.should_reconnect < 10) {
+                                      vm.setShouldReconnect(vm.should_reconnect + 1);
+                                      console.log('Minotaure : reconnection attempt number ' + vm.should_reconnect);
+                                      peer_client.reconnect();
+                                  }
+                                  else if (router.currentRoute.value.path === '/player') {
+                                      router.push('/join');
+                                      vm.setMessage('Déconnexion imprévue');
+                                      attempting_reconnect = false;
+                                  }
 
-                            if (!attempting_reconnect) {
-                                clearInterval(interval);
-                                vm.setShouldReconnect(0);
-                            }
-                        }
-                        },
-                        3000
-                    )
+                                  if (!attempting_reconnect) {
+                                      clearInterval(interval);
+                                      vm.setShouldReconnect(0);
+                                  }
+                              }
+                          },
+                          3000
+                        )
+                    }
                 }
             });
 
@@ -997,15 +999,16 @@ export const usePlayerStore = defineStore('playerStore', {
         // Reconnects the player after the connection closed, in 1s if possible, or repeat until 10s.
         startReconnect() {
             const vm = this;
+            vm.stopReconnect();
             vm.setMessage('Minotaure - starting attempts to reconnect after connection closed.');
             this._reconnect_timeout = setTimeout(function() {
                 console.log('Minotaure : reconnection attempts unsuccessful');
                 vm.stopReconnect();
-            }, 10000);
+            }, 24000);
             this._reconnect_interval = setInterval(function() {
                 console.log('Minotaure : trying to reconnect after connection closed');
                 vm.join(vm.connection.peer, true);
-            }, 2000);
+            }, 4000);
         },
         // Interrupts reconnection attempts after connection closed (it's not related to peer disconnection).
         stopReconnect() {

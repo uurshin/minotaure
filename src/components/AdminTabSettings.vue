@@ -162,6 +162,13 @@ export default {
       this.store.markers[key].value = parseInt(this.$refs['marker_value_' + key][0].value);
       this.change_label_enabled = '';
     },
+    validateStatsMax: function(value) {
+      value = Number.parseInt(this.$refs['stat_max'].value);
+      if (!isNaN(value) && value >= 10 && value <= 20) {
+        this.store.settings.stats_max = value;
+      }
+      this.$refs['stat_max'].value = this.store.settings.stats_max ?? 20;
+    }
   }
 }
 </script>
@@ -256,6 +263,10 @@ export default {
           <button ref="step_settings_add_stat"  class="icon-add btn-valid" v-if="!add_stat_enabled" @keyup.enter="createStat()" @click="createStat()">{{ $t('add') }}</button>
         </div>
         <div class="wrapper-list">
+          <div v-if="this.store.settings !== undefined" class="list-item" ref="step_settings_stats_max">
+            <label for="stat_max">{{ $t('stats_max') }}</label>
+            <input :value="this.store.settings.stats_max" @change="validateStatsMax" ref="stat_max" id="stat_max" type="number" min="10" max="20">
+          </div>
           <template v-for="(stat, key, index) in store.stats">
             <div class="stat list-item" :ref="index === 0 ? 'step_settings_stat' : null">
               <label class="indicator-name" :for="'stat_' + key" v-if="change_label_enabled !== key">{{ stat.name }}</label>

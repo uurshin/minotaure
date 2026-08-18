@@ -70,6 +70,7 @@ export default {
         }
       },
       {parent: 'settings', id: 'step_settings_stats'},
+      {parent: 'settings', id: 'step_settings_stats_max'},
       {parent: 'settings', id: 'step_settings_add_stat'},
       {parent: 'settings', id: 'step_settings_stat', position: 'right'},
       {parent: 'settings', id: 'step_settings_stat_delete'},
@@ -111,11 +112,13 @@ export default {
         }
       },
       {parent: 'tags', id: 'step_tags_tag'},
+      {parent: 'tags', id: 'step_tags_tag_rename', position: 'right'},
       {parent: 'tags', id: 'step_tags_group_rename'},
       {parent: 'tags', id: 'step_tags_group_distribution'},
       {parent: 'tags', id: 'step_tags_group_distribute'},
       {parent: 'tags', id: 'step_tags_group_shuffle'},
       {parent: 'tags', id: 'step_tags_group_delete', group_finish: true},
+      // Todo complete the tutorial for others tabs.
       {id: 'tab_label_characters', goto: 'characters', group_finish: true},
       {id: 'tab_label_poll', goto: 'poll', group_finish: true},
       {id: 'tab_label_challenge', goto: 'challenge', group_finish: true},
