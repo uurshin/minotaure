@@ -79,7 +79,9 @@ dif_ext_easy: Estremamente facile
 dif_extreme: Estremo
 dif_hard: Difficile
 dif_impossible: Impossibile
+dif_legendary: Leggendario
 dif_moderate: Moderato
+dif_unmissable: Imperdibile
 dif_very_easy: Molto facile
 dif_very_hard: Molto difficile
 difficulty: 'Difficoltà: '

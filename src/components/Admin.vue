@@ -174,6 +174,7 @@ export default {
       vm.store.current_game.initialized = true;
       vm.store.current_game.settings = {};
       vm.store.current_game.settings.challenge_timer = 15;
+      vm.store.current_game.settings.stats_max = 20;
       vm.store.current_game.settings.disconnected_prevent = true;
       vm.store.current_game.settings.npc_prevent = false;
     }

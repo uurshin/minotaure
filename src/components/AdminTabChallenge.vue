@@ -42,6 +42,7 @@ export default {
   computed: {
     labelDifficulty: function() {
       let levels = [
+        {value:-10, label:this.$t('dif_unmissable')},
         {value:-8, label:this.$t('dif_cake')},
         {value:-6, label:this.$t('dif_ext_easy')},
         {value:-4, label:this.$t('dif_very_easy')},
@@ -51,6 +52,7 @@ export default {
         {value:4, label:this.$t('dif_very_hard')},
         {value:6, label:this.$t('dif_extreme')},
         {value:8, label:this.$t('dif_impossible')},
+        {value:10, label:this.$t('dif_legendary')},
       ]
       for (let level of levels) {
         if (this.challenge_difficulty <= level.value) {

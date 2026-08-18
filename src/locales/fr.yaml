@@ -79,7 +79,9 @@ dif_ext_easy: Aisé
 dif_extreme: Ardu
 dif_hard: Assez difficile
 dif_impossible: Cauchemardesque
+dif_legendary: Légendaire
 dif_moderate: Modéré
+dif_unmissable: Immanquable
 dif_very_easy: Facile
 dif_very_hard: Difficile
 difficulty: 'Difficulté : '
