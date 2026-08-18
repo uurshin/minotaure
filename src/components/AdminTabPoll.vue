@@ -535,6 +535,19 @@ export default {
         flex-basis: 100%;
         filter: blur(10px);
         transition: all 1s ease;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        > div {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          justify-content: space-between;
+          background: rgba(255, 255, 255, 0.1803921569);
+          padding: 10px;
+          border-radius: 10px;
+        }
       }
       &.show .results {
         filter: blur(0px);
@@ -563,9 +576,6 @@ export default {
         > div {
           display: flex;
         }
-        //.see-more {
-        //  display: none;
-        //}
       }
     }
   }
