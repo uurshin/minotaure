@@ -884,9 +884,9 @@ export const usePlayerStore = defineStore('playerStore', {
 
             peer_client.on('open', function () {
                 let conn = peer_client.connect(id);
-                vm.stopReconnect();
 
                 conn.on('open', function() {
+                    vm.stopReconnect();
                     console.log('Minotaure : connection opened');
                     vm.setShouldReconnect(0);
                     vm.setPeer(peer_client);
@@ -903,7 +903,7 @@ export const usePlayerStore = defineStore('playerStore', {
                 });
             })
 
-            peer_client.once("disconnected", function(){
+            peer_client.on("disconnected", function(){
                 vm.stopReconnect();
                 console.log('Minotaure : peer client disconnected');
                 if (vm.should_reconnect === -1) {
@@ -913,41 +913,43 @@ export const usePlayerStore = defineStore('playerStore', {
                 else if (vm.should_reconnect === 0) {
                     vm.setMessage('Minotaure - starting attempts to reconnect after disconnect');
                     attempting_reconnect = true;
-                    let interval = setInterval(function() {
-                        if (vm.should_reconnect === -1) {
-                            console.log('Minotaure : Disconnected but should not reconnect');
-                            peer_client.destroy();
-                            attempting_reconnect = false;
-                        }
-                        else {
-                            if (peer_client.open === true) {
-                                console.log('Minotaure : reconnection attempt successful :) !');
-                                router.push('/player');
-                                attempting_reconnect = false;
-                            }
-                            else if (peer_client.destroyed === true) {
-                                console.log('Minotaure : reconnection attempt unsuccessful :( !');
-                                attempting_reconnect = false;
-                            }
-                            else if (vm.should_reconnect < 10) {
-                                vm.setShouldReconnect(vm.should_reconnect + 1);
-                                console.log('Minotaure : reconnection attempt number ' + vm.should_reconnect);
-                                peer_client.reconnect();
-                            }
-                            else if (router.currentRoute.value.path === '/player') {
-                                router.push('/join');
-                                vm.setMessage('Déconnexion imprévue');
-                                attempting_reconnect = false;
-                            }
+                    if (!attempting_reconnect) {
+                        let interval = setInterval(function() {
+                              if (vm.should_reconnect === -1) {
+                                  console.log('Minotaure : Disconnected but should not reconnect');
+                                  peer_client.destroy();
+                                  attempting_reconnect = false;
+                              }
+                              else {
+                                  if (peer_client.open === true) {
+                                      console.log('Minotaure : reconnection attempt successful :) !');
+                                      router.push('/player');
+                                      attempting_reconnect = false;
+                                  }
+                                  else if (peer_client.destroyed === true) {
+                                      console.log('Minotaure : reconnection attempt unsuccessful :( !');
+                                      attempting_reconnect = false;
+                                  }
+                                  else if (vm.should_reconnect < 10) {
+                                      vm.setShouldReconnect(vm.should_reconnect + 1);
+                                      console.log('Minotaure : reconnection attempt number ' + vm.should_reconnect);
+                                      peer_client.reconnect();
+                                  }
+                                  else if (router.currentRoute.value.path === '/player') {
+                                      router.push('/join');
+                                      vm.setMessage('Déconnexion imprévue');
+                                      attempting_reconnect = false;
+                                  }
 
-                            if (!attempting_reconnect) {
-                                clearInterval(interval);
-                                vm.setShouldReconnect(0);
-                            }
-                        }
-                        },
-                        3000
-                    )
+                                  if (!attempting_reconnect) {
+                                      clearInterval(interval);
+                                      vm.setShouldReconnect(0);
+                                  }
+                              }
+                          },
+                          3000
+                        )
+                    }
                 }
             });
 
@@ -997,15 +999,16 @@ export const usePlayerStore = defineStore('playerStore', {
         // Reconnects the player after the connection closed, in 1s if possible, or repeat until 10s.
         startReconnect() {
             const vm = this;
+            vm.stopReconnect();
             vm.setMessage('Minotaure - starting attempts to reconnect after connection closed.');
             this._reconnect_timeout = setTimeout(function() {
                 console.log('Minotaure : reconnection attempts unsuccessful');
                 vm.stopReconnect();
-            }, 10000);
+            }, 24000);
             this._reconnect_interval = setInterval(function() {
                 console.log('Minotaure : trying to reconnect after connection closed');
                 vm.join(vm.connection.peer, true);
-            }, 2000);
+            }, 4000);
         },
         // Interrupts reconnection attempts after connection closed (it's not related to peer disconnection).
         stopReconnect() {

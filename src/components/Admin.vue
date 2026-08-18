@@ -225,7 +225,7 @@ export default {
             console.log('Minotaure : reconnection attempt number ' + count);
             vm.peer.reconnect();
           }
-        }, 4000)
+        }, 5000)
       }
     });
 

@@ -6,8 +6,9 @@ export default {
   setup() {
     const character = ref({});
     const freeze = ref(false);
+    const wakeLock = ref(null);
     return {
-      freeze, character
+      freeze, character, wakeLock
     }
   },
   data() {
@@ -83,6 +84,16 @@ export default {
   },
   mounted() {
     const vm = this;
+
+    vm.startWakeLock();
+
+    const handleVisibilityChange = async () => {
+      if (document.visibilityState === 'visible') {
+        await vm.startWakeLock() ;
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
     this.store.stopReconnect();
     this.freeze = true;
     this.store._leaving = false;
@@ -109,6 +120,15 @@ export default {
     setInterval(vm.updateClock, 1000);
   },
   methods: {
+    async startWakeLock() {
+      try {
+        let vm = this;
+        vm.wakeLock = await navigator.wakeLock.request("screen");
+      } catch (err) {
+        // the wake lock request fails - usually system related, such being low on battery
+        console.log(`${err.name}, ${err.message}`);
+      }
+    },
     handshake() {
       let vm = this;
       this.store._leaving = false;
