@@ -260,6 +260,7 @@ strength: Siła
 submit: Zatwierdź
 submit_your_char: Zatwierdź swoją postać
 success_threshold: Próg sukcesu grupy
+summary_target_count: czyli 1 postać | czyli {count} postaci
 tab_label_challenge: Możesz uruchomić odpowiednik rzutów kostką, które spowodują dla każdej postaci objętej wyzwaniem konsekwencje w zależności od jej sukcesu lub porażki.
 tab_label_characters: 'To jest karta, którą najczęściej pokazujesz podczas gry: przedstawia wszystkie stworzone postacie i podsumowuje ich właściwości (imię postaci, pseudonim gracza, jauges, cechy, tagi, itp.). Możesz w niej szukać postaci według wielu kryteriów.'
 tab_label_pick: Losowania pozwalają ci losowo wybrać określoną liczbę postaci według własnego wyboru spośród całej populacji lub jej części. Możesz także nałożyć konsekwencje na wylosowane postacie.

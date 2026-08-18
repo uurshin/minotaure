@@ -260,6 +260,7 @@ strength: Physique
 submit: Valider
 submit_your_char: Valider votre personnage
 success_threshold: Seuil de succès du groupe
+summary_target_count: soit 1 personnage | soit {count} personnages
 tab_label_challenge: Vous pouvez déclencher l'équivalent de jets de dés qui entraîneront pour chaque personnage concerné des conséquences selon sa réussite ou son échec.
 tab_label_characters: 'C''est l''onglet que vous montrerez le plus pendant la partie : il présente l''ensemble des personnages créés et résume ses propriétés (nom du personnage, pseudo du joueur, jauges, caractéristiques, tags, etc.). Vous pouvez y rechercher les personnages selon de nombreux critères.'
 tab_label_pick: Les tirages au sort vous permettent de sélectionner un nombre de personnages de votre choix au hasard parmi tout ou partie de la population. Vous pouvez également appliquer des conséquences aux personnages tirés au sort.

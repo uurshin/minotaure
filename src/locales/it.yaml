@@ -260,6 +260,7 @@ strength: Forza
 submit: Invia
 submit_your_char: Invia il tuo personaggio
 success_threshold: Soglia di successo del gruppo
+summary_target_count: ovvero 1 personaggio | ovvero {count} personaggi
 tab_label_challenge: Puoi avviare l'equivalente di tiri di dado che avranno conseguenze per ogni personaggio coinvolto, a seconda del loro successo o fallimento.
 tab_label_characters: 'Questa è la scheda che userai di più durante il gioco: presenta tutti i personaggi creati e ne riassume le proprietà (nome del personaggio, pseudonimo del giocatore, pipistrelli, statistiche, tag, ecc.). Puoi cercare personaggi in base a vari criteri.'
 tab_label_pick: Le pesche casuali ti consentono di selezionare un numero di personaggi a tua scelta a caso da tutta la popolazione o da una porzione di essa. Puoi anche applicare conseguenze ai personaggi pescati.

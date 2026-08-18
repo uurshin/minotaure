@@ -260,6 +260,7 @@ strength: Força
 submit: Enviar
 submit_your_char: Enviar seu personagem
 success_threshold: Limiar de sucesso do grupo
+summary_target_count: ou seja, 1 personagem | ou seja, {count} personagens
 tab_label_challenge: Você pode acionar o equivalente a rolagens de dados que resultarão em consequências para cada personagem envolvido, dependendo de seu sucesso ou fracasso.
 tab_label_characters: 'Esta é a aba que você mais usará durante o jogo: apresenta todos os personagens criados e resume suas propriedades (nome do personagem, pseudônimo do jogador, barras, estatísticas, tags, etc.). Você pode procurar personagens com base em vários critérios.'
 tab_label_pick: Sorteios aleatórios permitem que você selecione um número de personagens de sua escolha aleatoriamente de toda a população ou de uma parte dela. Você também pode aplicar consequências aos personagens sorteados.

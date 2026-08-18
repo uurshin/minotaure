@@ -260,6 +260,7 @@ strength: Physisch
 submit: Bestätigen
 submit_your_char: Charakter bestätigen
 success_threshold: Erfolgsschwelle der Gruppe
+summary_target_count: also 1 Charakter | also {count} Charaktere
 tab_label_challenge: Sie können das Äquivalent von Würfelwürfen auslösen, die für jeden betroffenen Charakter Konsequenzen je nach Erfolg oder Misserfolg haben.
 tab_label_characters: 'Dies ist der Tab, den Sie während des Spiels am häufigsten zeigen werden: Er zeigt alle erstellten Charaktere an und fasst deren Eigenschaften zusammen (Charaktername, Spielername, Anzeigen, Attribute, Tags, etc.). Sie können Charaktere nach vielen Kriterien suchen.'
 tab_label_pick: Die Auswahlen ermöglichen es Ihnen, eine beliebige Anzahl von Charakteren Ihrer Wahl zufällig aus der gesamten oder einem Teil der Bevölkerung auszuwählen. Sie können auch Konsequenzen für die ausgewählten Charaktere anwenden.

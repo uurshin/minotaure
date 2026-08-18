@@ -260,6 +260,7 @@ strength: Strength
 submit: Submit
 submit_your_char: Submit your character
 success_threshold: Group success threshold
+summary_target_count: that is 1 character | that is {count} characters
 tab_label_challenge: You can trigger the equivalent of dice rolls that will result in consequences for each character involved, depending on their success or failure.
 tab_label_characters: 'This is the tab you will use most during the game: it presents all created characters and summarizes their properties (character name, player''s pseudonym, bats, stats, tags, etc.). You can search for characters based on various criteria.'
 tab_label_pick: Random draws allow you to select a number of characters of your choice at random from the entire or a portion of the population. You can also apply consequences to the characters drawn.
