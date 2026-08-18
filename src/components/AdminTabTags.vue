@@ -311,12 +311,14 @@ export default {
                 <div
                     class="multiselect__tag"
                     :class="'tag tag-' + tag.option.code"
-                    tabindex="0" @keyup.enter="handleClick($event, tag.option, group)" @click.prevent.stop="handleClick($event, tag.option, group)" title="Paramétrer ce tag"
+                     title="Paramétrer ce tag"
                     :ref="key === 0 && Object.entries(group.tags)[0].code === tag.code ? 'step_tags_tag' : null"
                     >
                   <div>
-                    <span class="icon-settings hover-only"></span>
-                    <span class="label-name">{{ tag.option.label }}</span>
+                    <div class="label-name">
+                      <span tabindex="0" @keyup.enter="handleClick($event, tag.option, group)" @click.prevent.stop="handleClick($event, tag.option, group)" class="icon-settings hover-only"></span>
+                      <input @change="this.store.updateStatModifier(tag.option)" type="text" v-model="tag.option.label"/>
+                    </div>
                     <span v-if="tag.option.stat1">{{ tag.option.stat1 !== undefined ? $t('main_stat') + store.stats[tag.option.stat1].name : '' }}</span>
                     <span v-if="tag.option.stat2">{{ tag.option.stat2 !== undefined ? $t('secondary_stat') + store.stats[tag.option.stat2].name : '' }}</span>
                     <span v-if="tag.option.gauge_modifiers !== undefined" v-for="(modifier, key) in tag.option.gauge_modifiers">
@@ -409,6 +411,11 @@ export default {
             color: var(--font-color);
           }
 
+          input {
+            background: inherit;
+            color: inherit;
+          }
+
           > div {
             display: flex;
             flex-direction: column;
@@ -418,7 +425,7 @@ export default {
               font-weight: bold;
               display: flex;
               align-items: center;
-              gap: 3px;
+              gap: 8px;
 
               &:before {
                 display: block;

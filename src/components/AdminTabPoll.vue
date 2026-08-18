@@ -189,6 +189,14 @@ export default {
       }
       this.chosen_tags[key].push(tag);
     },
+    addTagToOption(tag_label, option) {
+      let group = this.store.tag_groups.find((element) => (element.code === 'freetag'));
+      if (group === undefined) {
+        group = this.store.addGroupTag(true);
+      }
+      let tag = this.store.addTag(tag_label, group);
+      option.tags.push(tag);
+    },
   }
 }
 </script>
@@ -281,8 +289,28 @@ export default {
             <span  :class="{full_attendance: attendance(poll) === '100.00'}">{{ attendance(poll) }}%</span>
           </span>
           <div class="results">
-            <div v-for="option in Object.entries(poll.options).sort(function(a, b) { return b[1].count - a[1].count} )">
+            <div v-for="(option, index) in Object.entries(poll.options).sort(function(a, b) { return b[1].count - a[1].count} )">
               {{ option[1].label }} : {{ option[1].count > 0 ? (100 / poll.nb_targets * option[1].count).toFixed(2) : 0 }}%
+              <div>
+                <vue-multiselect
+                    :id="'poll_tag_' + index"
+                    v-model="option[1].tags"
+                    class="left-multiselect"
+                    label="label"
+                    track-by="code"
+                    :tag-placeholder="$t('add_tag')"
+                    :placeholder="$t('input_word')"
+                    :showNoOptions="false"
+                    group-values="tags"
+                    group-label="label"
+                    :group-select="false"
+                    :options=store.tag_groups
+                    :multiple="true"
+                    :taggable="true"
+                    :hideSelected="true"
+                    @tag="addTagToOption($event, option[1])">
+                </vue-multiselect>
+              </div>
             </div>
           </div>
           <div class="actions">

@@ -290,13 +290,13 @@ export const usePlayerStore = defineStore('playerStore', {
 
                 // Calculate the bonuses for stats values given by each tag of
                 // the character.
-                character.tags.forEach(function (tag) {
+                for (const [key, tag] of Object.entries(character.tags)) {
                     if (tag.stat_modifiers !== undefined) {
                         for (const [key, stat] of Object.entries(tag.stat_modifiers)) {
                             modifiers_stats[key] = (modifiers_stats[key] ?? 0) + stat.value;
                         }
                     }
-                });
+                };
 
                 // Update the character gauges values.
                 for (const [key, gauge] of Object.entries(character.gauges)) {
