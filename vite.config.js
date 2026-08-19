@@ -10,7 +10,7 @@ let default_config = {
     include: [path.resolve(import.meta.dirname, './src/locales/**')]
   }),],
   define: {
-    APP_VERSION: JSON.stringify("1.2.3"),
+    APP_VERSION: JSON.stringify("1.3.0"),
   },
   css: {
     preprocessorOptions: {
