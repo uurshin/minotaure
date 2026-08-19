@@ -26650,7 +26650,7 @@ var Main_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$17,
 //#region src/components/Home.vue
 var _sfc_main$16 = { setup() {
 	return {
-		version: "1.2.3",
+		version: "1.3.0",
 		store: usePlayerStore()
 	};
 } };
@@ -26760,7 +26760,7 @@ var _sfc_main$15 = {
 				name: this.name,
 				characters: [],
 				date: Date.now(),
-				version: "1.2.3",
+				version: "1.3.0",
 				init: true,
 				tag_groups: []
 			};
@@ -38575,7 +38575,7 @@ var _sfc_main$3 = {
 			vm.store.connections[conn.connectionId] = conn;
 			conn.on("data", function(data) {
 				if (data.handshake === "readyForCall") {
-					if (data.version === void 0 || data.version !== "1.2.3") conn.send({ handshake: "versionError" });
+					if (data.version === void 0 || data.version !== "1.3.0") conn.send({ handshake: "versionError" });
 					else if (vm.store.current_game.game_started) conn.send({
 						handshake: "gameStart",
 						game_token: vm.store.current_game.id
@@ -38937,7 +38937,7 @@ var _sfc_main$2 = {
 			console.log(this.store.peer.id);
 			this.store.connection.send({
 				handshake: "readyForCall",
-				version: "1.2.3"
+				version: "1.3.0"
 			});
 			console.log("Minotaure : ready for transaction");
 			this.store.connection.once("close", function() {
@@ -39278,7 +39278,7 @@ var Player_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$2
 //#region src/components/Continue.vue
 var _sfc_main$1 = {
 	setup() {
-		const version = "1.2.3";
+		const version = "1.3.0";
 		const versions = version.split(".");
 		let games_storage = localStorage.getItem("games");
 		games_storage = games_storage == null ? [] : JSON.parse(games_storage);
